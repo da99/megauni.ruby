@@ -1,3 +1,5 @@
+require 'rubygems'
+require "highline/import"
 
 def print_this(*args)
   args.each {|new_line|
@@ -66,4 +68,19 @@ namespace :git do
 end # ==== namespace :git
 
 
+namespace :run do
+  # These use 'exec', which replaces the current process (i.e. Rake)
+  # More info: http://blog.jayfields.com/2006/06/ruby-kernel-system-exec-and-x.html
+  task :light do
+    exec "sudo /etc/init.d/lighttpd start"
+  end
 
+  task :dev do
+    exec  "thin start --rackup config.ru -p 4567"
+  end
+  
+  task :tests do
+    exec 'DATABASE_URL=postgres://da01:xd19yzxkrp10@localhost/newsprint-db-test'
+  end
+
+end

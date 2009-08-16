@@ -5,5 +5,4 @@ markaby --version '>= 0.5'
 mattetti-multibyte --source http://gems.github.com
 htmlentities
 rest-client
-pony
-rack_hoptoad
+
