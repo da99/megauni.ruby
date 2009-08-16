@@ -1,0 +1,34 @@
+# Ignore sensitive info. in /config dir.
+config/secret*
+secret*
+
+# A few more files used only for development
+# and not important.
+doc/*
+coverage/*
+spec/coverage
+test/coverage
+.sass-cache
+views/skins/jinx/sass/.sass-cache/*
+
+# Ignore these files too.
+tmp/*
+log
+tmp
+db/*.sqlite3
+db/data.yml
+
+# Ignore VIM swap files.
+*.swp
+*.swo
+
+# Ignore Gedit backup files.
+*.*~
+
+# Ignore Emacs backup files.
+\#*
+
+# Ignore Shoes and Shotgun
+shoes2.run
+shoes-and-a-shotgun.rb
+
