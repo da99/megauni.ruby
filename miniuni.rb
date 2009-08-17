@@ -22,7 +22,7 @@ configure :development do
 end
 
 configure do
-
+  # APP_TIME = Time.now.utc.to_s
   LOG_IN_USERNAME = 'da01'
   LOG_IN_PASS = "iluvhnkng4hkrs4vr"
   API_KEY = 'luv.4all.29bal--w0l3mg930--3'
@@ -112,7 +112,7 @@ end # === helpers
 
 
 before do 
-  require_ssl! unless ['/', '/test', '/log-out', '/favicon.ico', '/robots.txt'].include?(request.path_info)
+  require_ssl! unless ['/', '/rss.xml', '/test', '/log-out', '/favicon.ico', '/robots.txt'].include?(request.path_info)
   halt('Unknown error') if FailedAttempts.too_many?(remote_addr)
 end
 
@@ -196,4 +196,45 @@ get('/unresolve/:id') do
   redirect('/admin')
 end
 
-
+get('/rss.xml') do
+  @issues = Issue.filter(:resolved=>false)
+  last_issue =  [ Issue.order(:id).last, MiniIssue.order(:id).last 
+                    ].compact.sort_by { |i|
+                                      i.created_at.to_i 
+                                  }.first 
+  @last_issue_time = last_issue ? last_issue.created_at.to_s : 'Mon Aug 17 15:20:11 UTC 2009'
+    
+  
+  response['Content-Type'] = 'application/rss+xml; charset=UTF-8'
+  builder do |xml|
+    xml.instruct! :xml, :version => '1.0'
+    xml.rss :version => "2.0" do
+      xml.channel do
+        xml.title "mini uni news"
+        xml.description "Wheeeee.... personal news..."
+        xml.link "http://#{env['HTTP_HOST']}/"
+        
+        if @issues.empty?
+          xml.item do
+            xml.title "On Vacation."
+            xml.link "http://#{env['HTTP_HOST']}/"
+            xml.description "Diego has nothing on his schedule."
+            xml.pubDate Time.parse(@last_issue_time).rfc822()
+            # xml.guid "http://#{env['HTTP_HOST']}/#{rand(10000)}"
+          end # === xml.item        
+        end
+        
+        @issues.each do |post|
+          xml.item do
+            xml.title post.created_at
+            xml.link "http://#{env['HTTP_HOST']}/"
+            xml.description "Diego is working on website... unless he is goofing off with organic, programmable tech!"
+            xml.pubDate Time.parse(post.created_at.to_s).rfc822()
+            # xml.guid "http://#{env['HTTP_HOST']}/#{rand(10000)}"
+          end # === xml.item
+        end # === each
+      end
+    end
+  end
+  
+end
