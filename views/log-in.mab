@@ -1,0 +1,23 @@
+xhtml_transitional {
+
+  head {
+    title 'Log-in'
+  }
+
+  body {
+    form.log_in_form!(:action=>"#{request.path_info}", :method=>:post, :name=>'test' ) {
+      fieldset {
+        label 'Username:'
+        input.text(:type=>:text, :value=>'', :name=>'username')
+      }
+      fieldset {
+        label 'Password:'
+        input.text(:type=>:password, :value=>'', :name=>'password')
+      }      
+      div.buttons {
+        button.create 'Log-in', :onclick=>"document.getElementById('log_in_form').submit(); return false;" 
+      }
+    } # === form
+  } # === body
+
+} # === tag! :html

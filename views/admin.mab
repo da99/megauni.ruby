@@ -1,0 +1,41 @@
+xhtml_transitional {
+
+  head {
+    title mab_data[:title]
+  }
+
+  body {
+    a('Log-out', :href=>"/log-out")
+    p.title "Unresolved:"
+    ul {
+      if mab_data[:issues].empty?
+        li.empty "No issues posted."
+      else
+        mab_data[:issues].each { |i| 
+          li {
+            p.title "#{i.app_name} - #{i.environment}: #{i.title}"
+            p.body "#{i.body}"
+            a.resolve('Mark as resolved.', :href=>'/resolve/'+i[:id])
+          }
+        }
+      end
+    }
+    
+    if !mab_data[:resolved].empty?
+      p.title "Resolved:"
+      ul {
+
+        mab_data[:resolved].each { |i| 
+          li {
+            p.title "#{i.app_name} - #{i.environment}: #{i.title}"
+            p.body "#{i.body}"
+            a.resolve('Mark as unresolved.', :href=>'/unresolve/'+i[:id])
+          }
+        }
+
+      }  
+    end  
+
+  } # === body
+
+} # === tag! :html

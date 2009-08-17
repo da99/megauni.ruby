@@ -1,5 +1,10 @@
 require 'rubygems'
 require "highline/import"
+require 'pow'
+
+def dev?
+  !ENV.keys.include?('HEROKU_ENV') && ENV.keys.include?('DESKTOP_SESSION')
+end
 
 def print_this(*args)
   args.each {|new_line|
@@ -11,6 +16,8 @@ def print_this(*args)
   }
 end
 
+print_this ''
+
 def exec_this(command)
   `#{command} 2>&1`
 end
@@ -21,7 +28,35 @@ def raise_this( error_str )
 end
 
 
+namespace :db do
+  task :connect do
+    require 'sequel'
+    require 'sequel/extensions/migration'     
+    require(Pow('~/.miniuni')) if Pow('~/.miniuni.rb').file?
+    DB = Sequel.connect ENV['DATABASE_URL']
+  end
+end
 
+namespace :migrate do
+  desc "Migrate to latest version."
+  task :up do
+		print_this "Migrating..."
+		Rake::Task['db:connect'].invoke
+		Sequel::Migrator.apply( DB, Pow!('migrations') )
+		print_this "Done."	
+  end
+  
+  desc 'Migrate to version 0'
+  task :down do
+    raise ArgumentError, "This task not allowed in :production" unless dev?
+
+    print_this "Reseting database..."
+    Rake::Task['db:connect'].invoke
+
+    Sequel::Migrator.apply( DB, Pow!('migrations'), 0 )
+    print_this "Done."
+  end
+end # === namespace
 
 namespace :git do
 
