@@ -6,6 +6,20 @@ xhtml_transitional {
 
   body {
     a('Log-out', :href=>"/log-out")
+    
+    if !mab_data[:mini_issues].empty?
+      p.title "Mini-issues:"
+      ul {
+        mab_data[:mini_issues].each { |i| 
+          li {
+            p.title i[:title]
+            pre { i[:body] }
+            a.resolve('Mark as resolved.', :href=>"/mini/resolve/#{i[:id]}")
+          }
+        }
+      }
+    end
+    
     p.title "Unresolved:"
     ul {
       if mab_data[:issues].empty?

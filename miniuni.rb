@@ -43,6 +43,25 @@ configure do
     end
   end # === class
   
+  class MiniIssue < Sequel::Model
+    def self.create(title, body)
+      r = new
+      coder = HTMLEntities.new
+      r[:title] = coder.encode( title, :named )
+      r[:body]  = coder.encode( body, :named )
+      r[:created_at] = Time.now.utc
+      r.save
+    end
+    def before_save 
+      self[:created_at]= Time.now.utc
+      super
+    end    
+    def resolve
+      self[:resolved] = true
+      safe_save(:changed=>true)
+    end
+  end
+  
   class Issue < Sequel::Model
     def self.required_cols
       @required_cols ||= [ :app_name, :title,
@@ -81,21 +100,29 @@ configure do
           rec[k] = rec[k][0,250]
         end
       }
-      rec.save
+      rec.safe_save
     end
-    
+
+    def safe_save(*args)
+      begin
+        save(*args)
+      rescue
+        MiniIssue.create($!.message, $!.backtrace.join("\m"))
+      end
+    end
+        
     def before_save 
       self[:created_at]= Time.now.utc
       super
     end
     def resolve
       self[:resolved] = true
-      save(:changed=>true)
+      safe_save(:changed=>true)
     end
     
     def unresolve
       self[:resolved] = false
-      save(:changed=>true)
+      safe_save(:changed=>true)
     end
     
     def self.miniuni_error(env, app_env)
@@ -228,7 +255,8 @@ end
 get('/admin') do
   @mab_data = { :title=>'MegaUni Exceptions', 
                 :issues=>Issue.filter(:resolved=>false),
-                :resolved=>Issue.filter(:resolved=>true)
+                :resolved=>Issue.filter(:resolved=>true),
+                :mini_issues=>MiniIssue.all
               }
   require_log_in!
   render_mab('admin')
@@ -250,7 +278,7 @@ post('/error') do
   rescue
     development? ? 
       $!.message :
-      "error"
+      Issue.miniuni_error(env, options.environment) && "error"
   end
 end
 
@@ -258,6 +286,13 @@ get('/resolve/:id') do
   require_log_in!
   i_id = params[:id].to_i
   Issue[:id=>i_id].resolve
+  redirect('/admin')
+end
+
+get('/mini/resolve/:id') do
+  require_log_in!
+  i_id = params[:id].to_i
+  MiniIssue[:id=>i_id].resolve
   redirect('/admin')
 end
 
