@@ -13,9 +13,11 @@ xhtml_transitional {
       else
         mab_data[:issues].each { |i| 
           li {
-            p.title "#{i.app_name} - #{i.environment}: #{i.title}"
-            p.body "#{i.body}"
-            a.resolve('Mark as resolved.', :href=>'/resolve/'+i[:id])
+            p.project "#{i.app_name} - #{i.environment}"
+            p.path_info i.path_info
+            p.title i.title
+            pre { i.body }
+            a.resolve('Mark as resolved.', :href=>"/resolve/#{i[:id]}")
           }
         }
       end
@@ -27,9 +29,11 @@ xhtml_transitional {
 
         mab_data[:resolved].each { |i| 
           li {
-            p.title "#{i.app_name} - #{i.environment}: #{i.title}"
-            p.body "#{i.body}"
-            a.resolve('Mark as unresolved.', :href=>'/unresolve/'+i[:id])
+            p.project "#{i.app_name} - #{i.environment}"
+            p.path_info i.path_info
+            p.title i.title
+            pre { i.body }
+            a.resolve('Mark as unresolved.', :href=>"/unresolve/#{i[:id]}")
           }
         }
 

@@ -25,20 +25,21 @@ configure do
 
   LOG_IN_USERNAME = 'da01'
   LOG_IN_PASS = "iluvhnkng4hkrs4vr"
+  API_KEY = 'luv.4all.29bal--w0l3mg930--3'
   
   class FailedAttempts
-    
-    def self.fails
-      @fails ||= 0
+    def self.fails(env)
+      @fails ||= {}
+      @fails[ env ] ||= 0
     end
       
-    def self.increase
-      fails += 1
+    def self.increase(env)
+      fails( env ) 
+      @fails[env] += 1
     end
 
-    
-    def self.too_many?
-      fails > 3
+    def self.too_many?(env)
+      fails(env) > 3
     end
   end # === class
   
@@ -46,7 +47,8 @@ configure do
     def self.required_cols
       @required_cols ||= [ :app_name, :title,
                       :body, 
-                      :category, 
+                      :environment, 
+                      :path_info,
                       :user_agent, 
                       :ip_address ]
     end 
@@ -64,17 +66,24 @@ configure do
       invalid_cols = cols.keys.map {|k| k.to_sym } - valid_cols
       raise "Hacker attempt: Invalid columns: #{invalid_cols.inspect}" if !invalid_cols.empty? 
       
-      missing_cols = cols.keys - valid_cols
+      missing_cols = valid_cols - cols.keys
       raise "Missing cols: #{missing_cols.inspect}" if !missing_cols.empty?
         
       coder = HTMLEntities.new
       rec = new
       cols.each { |k,v| 
-        rec[k.to_sym] = coder.encode( v, :named )      
+        rec[k] = coder.encode( v, :named )
+        if k == :ip_address && v.is_a?(String)
+          rec[k] = v.sub(/\A\:\:ffff\:/, '')
+        end     
       }
       rec.save
     end
     
+    def before_save 
+      self[:created_at]= Time.now.utc
+      super
+    end
     def resolve
       self[:resolved] = true
       save(:changed=>true)
@@ -85,13 +94,14 @@ configure do
       save(:changed=>true)
     end
     
-    def self.miniuni_error(sin)
+    def self.miniuni_error(env, app_env)
       data = data_template.merge({  :app_name=>'mini uni',
-                                    :title=>env['sinatra.error'].msg, 
+                                    :title=>env['sinatra.error'].message, 
+                                    :path_info=>env['PATH_INFO'],
                                     :body=>env['sinatra.error'].backtrace.join("\n"),
-                                    :category=>sin.environment.to_s,
-                                    :user_agent=>sin.env['HTTP_USER_AGENT'].to_s,
-                                    :ip_address=>sin.env['REMOTE_ADDR']
+                                    :environment=> app_env.to_s,
+                                    :user_agent=> env['HTTP_USER_AGENT'].to_s,
+                                    :ip_address=> env['REMOTE_ADDR']
       })
       create(data)
     end
@@ -114,6 +124,10 @@ end # === configure
 
 
 helpers do
+    def remote_addr
+      env['REMOTE_ADDR']
+    end
+    
     def using_ssl?
       env['HTTPS'] == 'on' || 
         env['HTTP_X_FORWARDED_PROTO'] =='https' || 
@@ -146,7 +160,7 @@ helpers do
     def authenticate?(mem, pass)
       mem ==  LOG_IN_USERNAME && pass == LOG_IN_PASS ?
         log_in(mem) :
-        FailedAttempts.increase && log_out ;
+        FailedAttempts.increase(remote_addr) && log_out ;
     end
     
     def render_error_msg(msg)
@@ -163,7 +177,7 @@ helpers do
       response['Accept-Charset'] = 'utf-8'   
       
       sin = SinatraMabWrapper.new
-      sin.app_scope= self     
+      sin.app_scope=self
       
       Markaby::Builder.new( {:mab_data=>@mab_data} , sin ) {
         instance_eval( file.read,  file.to_s, 1  )
@@ -173,13 +187,14 @@ helpers do
 end # === helpers
 
 
-before do
-  require_ssl! unless ['/', '/log-out', '/favicon.ico', '/robots.txt'].include?(request.path_info)
+before do 
+  require_ssl! unless ['/', '/test', '/log-out', '/favicon.ico', '/robots.txt'].include?(request.path_info)
+  halt('Unknown error') if FailedAttempts.too_many?(remote_addr)
 end
 
 
 error do
-  Issue.miniuni_error(self)
+  Issue.miniuni_error(env, options.environment)
   "Error."
 end
 
@@ -208,18 +223,30 @@ end
 
 get('/admin') do
   @mab_data = { :title=>'MegaUni Exceptions', 
-                :issues=>Issue.filter(:resolved=>false)
+                :issues=>Issue.filter(:resolved=>false),
+                :resolved=>Issue.filter(:resolved=>true)
               }
   require_log_in!
   render_mab('admin')
 end
 
 post('/error') do
+  if params[:api_key] != API_KEY
+    FailedAttempts.increase(remote_addr)
+    halt( development? ? 'wrong api key' : 'error' ) 
+  end
+  
   begin
-    Issue.create(params)
+    data = (params.keys - [:api_key, 'api_key']).inject({}) { |m,k|
+      m[k.to_sym] = params[k]
+      m
+    }
+    Issue.create(data)
     "success"
   rescue
-    "error"
+    development? ? 
+      $!.message :
+      "error"
   end
 end
 
@@ -227,10 +254,39 @@ get('/resolve/:id') do
   require_log_in!
   i_id = params[:id].to_i
   Issue[:id=>i_id].resolve
+  redirect('/admin')
 end
 
 get('/unresolve/:id') do
   require_log_in!
   i_id = params[:id].to_i
   Issue[:id=>i_id].unresolve
+  redirect('/admin')
+end
+
+get '/test' do
+  # halt(env.inject(""){ |m, kv| m += "#{kv.first} = #{kv.last}<br />"; m })
+  require 'rest_client'
+  begin
+    raise "something"
+
+  rescue
+    begin
+      RestClient.post( 
+        # Pow().to_s['/home/da01'] ? 
+        'https://localhost/error', #: 'https://miniuni.heroku.com/errors', 
+        :api_key=>API_KEY,
+        :path_info=>env['PATH_INFO'],
+        :app_name   => 'Mega Uni', 
+        :title      => ($! || env['sinatra.error']).message,
+        :body       => ($! || env['sinatra.error']).backtrace.join("\n"), 
+        :environment   => options.environment.to_s, 
+        :user_agent => env['HTTP_USER_AGENT'],
+        :ip_address => env['REMOTE_ADDR']
+      )
+    rescue RestClient::RequestTimeout
+      "timed out"
+    end      
+  end
+
 end

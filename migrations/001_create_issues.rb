@@ -7,9 +7,10 @@ class CreateIssues < Sequel::Migration
       primary_key :id
       
       varchar :app_name, :null=>false, :size=>25
+      varchar :environment, :null=>false
       varchar :title, :size=>255, :null=>false
       text    :body, :null=>false
-      varchar :category, :null=>false
+      varchar :path_info, :null=>false
       varchar :user_agent, :null=>false
       cidr    :ip_address, :null=>false
       boolean :resolved, :null=>false, :default=>false
