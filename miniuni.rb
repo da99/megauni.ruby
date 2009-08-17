@@ -96,9 +96,9 @@ configure do
           rec[k] = v.sub(/\A\:\:ffff\:/, '')
         end     
         
-        #if k != :body && v.is_a?(String) && v.size > 200
-        #  rec[k] = rec[k][0,250]
-        #end
+        if k != :body && v.is_a?(String) && v.size > 200
+          rec[k] = rec[k][0,250]
+        end
       }
       rec.safe_save
     end
