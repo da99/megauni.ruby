@@ -14,6 +14,7 @@ xhtml_transitional {
         mab_data[:issues].each { |i| 
           li {
             p.project "#{i[:app_name]} - #{i[:environment]}"
+            p.user_agent { i[:user_agent] }
             p.path_info i.path_info
             p.title i.title
             pre { i.body }
@@ -30,6 +31,7 @@ xhtml_transitional {
         mab_data[:resolved].each { |i| 
           li {
             p.project "#{i[:app_name]} - #{i[:environment]}"
+            p.user_agent { i[:user_agent] }            
             p.path_info i[:path_info]
             p.title i[:title]
             pre { i[:body] }
