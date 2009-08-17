@@ -37,6 +37,15 @@ namespace :db do
   end
 end
 
+namespace :production do
+  task :up do
+		print_this "Migrating..."
+		Rake::Task['db:connect'].invoke
+		Sequel::Migrator.apply( DB, Pow('migrations') )
+		print_this "Done."	
+  end
+end
+
 namespace :migrate do
   desc "Migrate to latest version."
   task :up do

@@ -12,7 +12,7 @@ class CreateIssues < Sequel::Migration
       text    :body, :null=>false
       varchar :path_info, :null=>false
       varchar :user_agent, :null=>false
-      cidr    :ip_address, :null=>false
+      varchar :ip_address, :null=>false
       boolean :resolved, :null=>false, :default=>false
 
       # === Date Times

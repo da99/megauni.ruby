@@ -63,7 +63,7 @@ configure do
     
       valid_cols = required_cols
 
-      invalid_cols = cols.keys.map {|k| k.to_sym } - valid_cols
+      invalid_cols = cols.keys - valid_cols
       raise "Hacker attempt: Invalid columns: #{invalid_cols.inspect}" if !invalid_cols.empty? 
       
       missing_cols = valid_cols - cols.keys
@@ -264,29 +264,4 @@ get('/unresolve/:id') do
   redirect('/admin')
 end
 
-get '/test' do
-  # halt(env.inject(""){ |m, kv| m += "#{kv.first} = #{kv.last}<br />"; m })
-  require 'rest_client'
-  begin
-    raise "something"
 
-  rescue
-    begin
-      RestClient.post( 
-        # Pow().to_s['/home/da01'] ? 
-        'https://localhost/error', #: 'https://miniuni.heroku.com/errors', 
-        :api_key=>API_KEY,
-        :path_info=>env['PATH_INFO'],
-        :app_name   => 'Mega Uni', 
-        :title      => ($! || env['sinatra.error']).message,
-        :body       => ($! || env['sinatra.error']).backtrace.join("\n"), 
-        :environment   => options.environment.to_s, 
-        :user_agent => env['HTTP_USER_AGENT'],
-        :ip_address => env['REMOTE_ADDR']
-      )
-    rescue RestClient::RequestTimeout
-      "timed out"
-    end      
-  end
-
-end
