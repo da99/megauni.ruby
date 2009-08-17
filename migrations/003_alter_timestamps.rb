@@ -6,12 +6,8 @@ class AlterTimestamps < Sequel::Migration
   end
 
   def down
-    if table_exists?(:issues)
-      set_column_type :issues, :created_at, :"timestamp without time zone"      
-    end
-    if table_exists?(:mini_issues)
-      set_column_type :mini_issues, :created_at, :"timestamp without time zone"  
-    end
+    set_column_type :issues, :created_at, :"timestamp without time zone"      
+    set_column_type :mini_issues, :created_at, :"timestamp without time zone"  
   end
 
 end # ---------- end CreateMembers

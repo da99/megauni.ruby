@@ -26,7 +26,8 @@ configure do
   LOG_IN_USERNAME = 'da01'
   LOG_IN_PASS = "iluvhnkng4hkrs4vr"
   API_KEY = 'luv.4all.29bal--w0l3mg930--3'
-  
+
+  require Pow('models/sequel_model') 
   require Pow('models/mini_issue')  
   require Pow('models/issue')
   require Pow('models/failed_attempts')
@@ -120,6 +121,11 @@ end
 error do
   Issue.miniuni_error(env, options.environment)
   "Error."
+end
+
+not_found do
+  Issue.miniuni_error(env, options.environment)
+  "Does not exist."
 end
 
 get('/') do
@@ -238,3 +244,7 @@ get('/rss.xml') do
   end
   
 end
+
+
+__END__
+

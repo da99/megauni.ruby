@@ -1,4 +1,5 @@
 class Issue < Sequel::Model
+
   def self.required_cols
     @required_cols ||= [ :app_name, :title,
                     :body, 

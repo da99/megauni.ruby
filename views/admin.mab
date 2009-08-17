@@ -28,6 +28,7 @@ xhtml_transitional {
         mab_data[:issues].each { |i| 
           li {
             p.project "#{i[:app_name]} - #{i[:environment]}"
+            p.datetime i[:created_at]
             p.user_agent { i[:user_agent] }
             p.path_info i.path_info
             p.title i.title

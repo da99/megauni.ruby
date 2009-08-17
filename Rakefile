@@ -65,6 +65,16 @@ namespace :migrate do
     Sequel::Migrator.apply( DB, Pow!('migrations'), 0 )
     print_this "Done."
   end
+  
+  desc 'Migrate to a specific version.'
+  task :specify do
+    raise ArgumentError, "This task not allowed in :production" unless dev?
+
+    Rake::Task['migrate:down'].invoke
+
+    Sequel::Migrator.apply( DB, Pow!('migrations'), ask('Specify version:').to_i )
+    print_this "Done."
+  end
 end # === namespace
 
 namespace :git do
@@ -107,6 +117,19 @@ namespace :git do
     else
       raise_this "Uncommited code: \n\n #{status_results}"
     end
+  end
+  
+  task :push_and_migrate do
+    
+    Rake::Task['git:push'].invoke
+    
+    print_this 'Migrating on Heroku...'
+    migrate_results = `heroku rake migrate:up`
+    raise "Problem on executing migrate:up on Heroku." if migrate_results['aborted']
+    print_this migrate_results
+    
+    print_this 'Restarting app servers.'
+    print_this `heroku restart`
   end
 
 end # ==== namespace :git
@@ -170,7 +193,10 @@ class #{m}_#{i} < Sequel::Migration
 
 end # === end Create#{m}
 EOF
-    write_this_file(file_path, txt)
+
+    file_path.create { |f|
+      f.puts txt
+    }
 	end # === task :create_migration => "__setup__:env"
 
 end # === namespace :migration
