@@ -76,6 +76,10 @@ configure do
         if k == :ip_address && v.is_a?(String)
           rec[k] = v.sub(/\A\:\:ffff\:/, '')
         end     
+        
+        if k != :body && v.is_a?(String) && v.size > 200
+          rec[k] = rec[k][0,250]
+        end
       }
       rec.save
     end
