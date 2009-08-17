@@ -58,7 +58,7 @@ configure do
     end    
     def resolve
       self[:resolved] = true
-      safe_save(:changed=>true)
+      save(:changed=>true)
     end
   end
   
@@ -96,9 +96,9 @@ configure do
           rec[k] = v.sub(/\A\:\:ffff\:/, '')
         end     
         
-        if k != :body && v.is_a?(String) && v.size > 200
-          rec[k] = rec[k][0,250]
-        end
+        #if k != :body && v.is_a?(String) && v.size > 200
+        #  rec[k] = rec[k][0,250]
+        #end
       }
       rec.safe_save
     end
@@ -107,7 +107,7 @@ configure do
       begin
         save(*args)
       rescue
-        MiniIssue.create($!.message, $!.backtrace.join("\m"))
+        MiniIssue.create($!.message, $!.backtrace.join("\n"))
       end
     end
         
@@ -255,8 +255,8 @@ end
 get('/admin') do
   @mab_data = { :title=>'MegaUni Exceptions', 
                 :issues=>Issue.filter(:resolved=>false),
-                :resolved=>Issue.filter(:resolved=>true),
-                :mini_issues=>MiniIssue.all
+                :resolved=> [], #Issue.filter(:resolved=>true),
+                :mini_issues=>MiniIssue.filter(:resolved=>false)
               }
   require_log_in!
   render_mab('admin')
