@@ -115,12 +115,13 @@ namespace :git do
       push_results = `git push heroku master 2>&1`
       print_this push_results
     else
-      raise_this "Uncommited code: \n\n #{status_results}"
+      print_this status_results, "You can *not* push this code. <<<<<<<<<<<<<<<<<<<"
+      raise_this "Before you can push, you must commit. <<<<<<<<<<<"
     end
   end  
   
   task :push do
-    Rake::Task['git:push'].invoke
+    Rake::Task['git:push_and_dont_open'].invoke
     `heroku open`
   end
   
