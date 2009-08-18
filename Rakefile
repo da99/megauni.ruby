@@ -108,28 +108,33 @@ namespace :git do
     print_this commit_results
   end
   
-  task :push do
+  task :push_and_dont_open do
     status_results = `rake git:status 2>&1`
     if status_results['nothing to commit']
       print_this 'Please wait as code is being pushed to Heroku...'
       push_results = `git push heroku master 2>&1`
       print_this push_results
-      `heroku open`
     else
       raise_this "Uncommited code: \n\n #{status_results}"
     end
+  end  
+  
+  task :push do
+    Rake::Task['git:push'].invoke
+    `heroku open`
   end
   
   task :push_and_migrate do
-    Rake::Task['git:push'].invoke
+    Rake::Task['git:push_and_dont_open'].invoke
     
     print_this 'Migrating on Heroku...'
     migrate_results = `heroku rake migrate:up`
-    raise "Problem on executing migrate:up on Heroku." if migrate_results['aborted']
+    raise "Problem on executing migrate:up on Heroku." if migrate_results[/aborted/i]
     print_this migrate_results
     
     print_this 'Restarting app servers.'
     print_this `heroku restart`
+    `heroku open`
   end
 
 end # ==== namespace :git
