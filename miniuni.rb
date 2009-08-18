@@ -208,7 +208,11 @@ get('/rss.xml') do
                     ].compact.sort_by { |i|
                                       i.created_at.to_i 
                                   }.first 
-  @last_issue_time = last_issue ? last_issue.created_at.to_s : 'Mon Aug 17 15:20:11 UTC 2009'
+  @last_issue_time = if last_issue 
+    (last_issue.created_at || last_issue.modified_at).to_s 
+  else
+    'Mon Aug 17 15:20:11 UTC 2009'
+  end
     
   
   response['Content-Type'] = 'application/rss+xml; charset=UTF-8'

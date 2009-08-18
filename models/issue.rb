@@ -52,6 +52,12 @@ class Issue < Sequel::Model
     self[:created_at]= Time.now.utc
     super
   end
+  
+  def before_update
+    self[:modified_at] = Time.now.utc
+    super
+  end
+  
   def resolve
     self[:resolved] = true
     safe_save(:changed=>true)
