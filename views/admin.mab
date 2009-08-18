@@ -5,7 +5,10 @@ xhtml_transitional {
   }
 
   body {
-    a('Log-out', :href=>"/log-out")
+    ul {
+      li { a('Log-out', :href=>"/log-out") }
+      li { a('RSS', :href=>"http://#{env['HTTP_HOST']}/rss.xml") }
+    }
     
     if !mab_data[:mini_issues].empty?
       p.title "Mini-issues:"
