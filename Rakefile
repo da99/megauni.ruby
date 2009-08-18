@@ -114,13 +114,13 @@ namespace :git do
       print_this 'Please wait as code is being pushed to Heroku...'
       push_results = `git push heroku master 2>&1`
       print_this push_results
+      `heroku open`
     else
       raise_this "Uncommited code: \n\n #{status_results}"
     end
   end
   
   task :push_and_migrate do
-    
     Rake::Task['git:push'].invoke
     
     print_this 'Migrating on Heroku...'
