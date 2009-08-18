@@ -129,7 +129,16 @@ not_found do
 end
 
 get('/') do
-  "Mega Fail."
+  %~
+    <html>
+      <head>
+        <title>Got no time...</title>
+      </head>
+      <body>
+        Mega Fail.
+      </body>
+    </html>
+  ~
 end
 
 get('/log-in') do
