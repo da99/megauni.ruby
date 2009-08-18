@@ -260,4 +260,20 @@ end
 
 
 __END__
+CHECK POSTS
+require 'rubygems'
+require 'pow'
+require '/home/da01/megauni/helpers/sinatra/post_error'
 
+val = begin; 
+  raise 'ok'; 
+rescue;  
+  faux_env = {'PATH_INFO' => __FILE__.to_s, 
+  'HTTP_USER_AGENT' => "#<Rack::Builder:0x2ab501c36cf8 @ins=[#<Proc:0x00002ab501c68118@/usr/local/lib/ruby/gems/1.8/gems/rack-1.0.0/lib/rack/builder.rb:37>, #<Proc:0x00002ab501c68118@/usr/local/lib/ruby/gems/1.8/gems/rack-1.0.0/lib/rack/builder.rb:37>, #<Proc:0x00002ab501c68118@/usr/local/lib/ruby/gems/1.8/gems/rack-1.0.0/lib/rack/builder.rb:37>]>", 
+  'REMOTE_ADDR'=>'127.0.0.1' 
+}
+  IssueClient.create( faux_env, :test, 'test1', 'test2'); 
+end;
+
+
+print val
