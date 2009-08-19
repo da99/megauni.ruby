@@ -1,81 +1,3 @@
-require 'rubygems'
-require "highline/import"
-require 'pow'
-
-def dev?
-  !ENV.keys.include?('HEROKU_ENV') && ENV.keys.include?('DESKTOP_SESSION')
-end
-
-def print_this(*args)
-  args.each {|new_line|
-    if new_line.empty?
-      print "\n"
-    else
-      print "===>  #{new_line}\n\n" 
-    end
-  }
-end
-
-print_this ''
-
-def exec_this(command)
-  `#{command} 2>&1`
-end
-
-def raise_this( error_str )
-  print_this '', error_str, ''
-  raise
-end
-
-
-namespace :db do
-  task :connect do
-    require 'sequel'
-    require 'sequel/extensions/migration'     
-    require(Pow('~/.miniuni')) if Pow('~/.miniuni.rb').file?
-    DB = Sequel.connect ENV['DATABASE_URL']
-  end
-end
-
-namespace :production do
-  task :up do
-		print_this "Migrating..."
-		Rake::Task['db:connect'].invoke
-		Sequel::Migrator.apply( DB, Pow('migrations') )
-		print_this "Done."	
-  end
-end
-
-namespace :migrate do
-  desc "Migrate to latest version."
-  task :up do
-		print_this "Migrating..."
-		Rake::Task['db:connect'].invoke
-		Sequel::Migrator.apply( DB, Pow!('migrations') )
-		print_this "Done."	
-  end
-  
-  desc 'Migrate to version 0'
-  task :down do
-    raise ArgumentError, "This task not allowed in :production" unless dev?
-
-    print_this "Reseting database..."
-    Rake::Task['db:connect'].invoke
-
-    Sequel::Migrator.apply( DB, Pow!('migrations'), 0 )
-    print_this "Done."
-  end
-  
-  desc 'Migrate to a specific version.'
-  task :specify do
-    raise ArgumentError, "This task not allowed in :production" unless dev?
-
-    Rake::Task['migrate:down'].invoke
-
-    Sequel::Migrator.apply( DB, Pow!('migrations'), ask('Specify version:').to_i )
-    print_this "Done."
-  end
-end # === namespace
 
 namespace :git do
 
@@ -141,22 +63,7 @@ namespace :git do
 end # ==== namespace :git
 
 
-namespace :run do
-  # These use 'exec', which replaces the current process (i.e. Rake)
-  # More info: http://blog.jayfields.com/2006/06/ruby-kernel-system-exec-and-x.html
-  task :light do
-    exec "sudo /etc/init.d/lighttpd start"
-  end
 
-  task :dev do
-    exec  "thin start --rackup config.ru -p 4567"
-  end
-  
-  task :tests do
-    exec 'DATABASE_URL=postgres://da01:xd19yzxkrp10@localhost/newsprint-db-test'
-  end
-
-end
 
 
 namespace :migration do
