@@ -249,7 +249,7 @@ get('/rss.xml') do
             xml.link "http://#{env['HTTP_HOST']}/"
             xml.description "Diego is working on website... unless he is goofing off with organic, programmable tech!"
             xml.pubDate Time.parse(post.created_at.to_s).rfc822()
-            # xml.guid "http://#{env['HTTP_HOST']}/#{rand(10000)}"
+            xml.guid "http://#{env['HTTP_HOST']}/#{post[:id]}"
           end # === xml.item
         end # === each
       end
