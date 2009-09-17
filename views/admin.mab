@@ -37,6 +37,7 @@ xhtml_transitional {
             p.title i.title
             pre { i.body }
             pre { i.environment }
+            pre { i.ip_address }
             a.resolve('Mark as resolved.', :href=>"/resolve/#{i[:id]}")
           }
         }
