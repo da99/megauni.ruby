@@ -1,3 +1,5 @@
+$KCODE = 'u'
+
 require 'rubygems'
 require 'sinatra'
 require 'sequel'
@@ -6,6 +8,7 @@ require 'markaby'
 require 'htmlentities'
 
 use Rack::Session::Pool
+set :session, true
 
 configure :test do
   require Pow("~/.miniuni")

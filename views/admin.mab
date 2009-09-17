@@ -36,6 +36,7 @@ xhtml_transitional {
             p.path_info i.path_info
             p.title i.title
             pre { i.body }
+            pre { i.environment }
             a.resolve('Mark as resolved.', :href=>"/resolve/#{i[:id]}")
           }
         }

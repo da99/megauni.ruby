@@ -1,8 +1,4 @@
 
-class Bacon::Context
-  include Rack::Test::Methods
-end
-
 describe 'The HelloWorld App' do
   def app
     Sinatra::Application
