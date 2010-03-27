@@ -8,7 +8,7 @@ require 'markaby'
 require 'htmlentities'
 
 use Rack::Session::Pool
-set :session, true
+# set :session, true # Don't use this because: http://www.gittr.com/index.php/archive/using-alternate-session-stores-with-sinatra/
 
 configure :test do
   require Pow("~/.miniuni")
@@ -69,7 +69,7 @@ helpers do
     
     def require_log_in!
       render_error_msg('Not logged in.')
-      # redirect('/log-in') if !logged_in?
+      redirect('/log-in') if !logged_in?
     end
     
     def logged_in?
