@@ -64,7 +64,8 @@ helpers do
     end
     
     def require_ssl!
-      raise("SSL required") if !using_ssl?
+      redirect('http://www.apple.com/')
+      # raise("SSL required") if !using_ssl?
     end # === def 
     
     def require_log_in!
