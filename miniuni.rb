@@ -64,7 +64,7 @@ helpers do
     end
     
     def require_ssl!
-      redirect('http://www.apple.com/')
+      redirect('http://www.apple.com/') if !using_ssl?
       # raise("SSL required") if !using_ssl?
     end # === def 
     
