@@ -117,6 +117,7 @@ end # === helpers
 
 
 before do 
+	halt('Unknown error.') if request.path_info =~ /awstats.pl/
   require_ssl! unless ['/', '/rss.xml', '/test', '/log-out', '/favicon.ico', '/robots.txt'].include?(request.path_info)
   halt('Unknown error') if FailedAttempts.too_many?(remote_addr)
 end
@@ -213,6 +214,11 @@ get('/unresolve/:id') do
   i_id = params[:id].to_i
   Issue[:id=>i_id].unresolve
   redirect('/admin')
+end
+
+get '/rack' do
+  require_log_in!
+  ENV.keys.grep(/rack/).join("<br />")
 end
 
 get('/rss.xml') do
