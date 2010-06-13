@@ -218,7 +218,7 @@ end
 
 get '/rack' do
   require_log_in!
-  ENV.keys.join("<br />")
+  ENV.keys.sort.join("<br />")
 end
 
 get('/rss.xml') do
