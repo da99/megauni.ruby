@@ -131,7 +131,7 @@ class Mu_Router
         path '/club-search/{filename}/'      ,  'club_search'
         
         map '/life/{filename}' do
-          path '/'                        , 'by_filename'
+          path '/'                        , 'as_life'
           sections.each { |suffix|
             path "/#{suffix}/", "read_#{suffix}"
           }

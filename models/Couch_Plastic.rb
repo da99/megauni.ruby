@@ -266,6 +266,11 @@ module Couch_Plastic
     @raw_data
   end
 
+	def generate_id
+		raise "New id can not be generated on an existing record." if not new?
+		new_data._id = clean_date = BSON::ObjectID.new
+	end
+
   def clean_data
     raise ArgumentError, "No clean data." unless @clean_data
     @clean_data

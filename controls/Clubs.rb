@@ -31,6 +31,12 @@ class Clubs
     redirect! club.href
   end
   
+  def GET_as_life username
+    env['club']            = Club.by_filename_or_member_username(username)
+    env['messages_latest'] = Message.latest_by_club_id(env['club'].data._id)
+    render_html_template
+  end
+
   def GET_by_filename filename
     env['results.club'] = club = Club.by_filename_or_member_username(filename)
     env['results.messages_latest'] = Message.latest_by_club_id(club.data._id)

@@ -61,6 +61,7 @@ class Club
       demand :owner_id, :filename, :title, :teaser
       ask_for_or_default :lang
       save_create 
+			
     end
   end
 

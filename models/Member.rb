@@ -7,12 +7,10 @@ class Member
   
   include Couch_Plastic
 
-  related_collection :deleted
-
-  def self.db_collection
-    @coll ||= DB.collection('Members')
-  end
-
+  related_collections :deleted
+  # related_collections :usernames
+  related_collections :failed_attempts
+  related_collections :password_resets
       
   # =========================================================
   #                     CONSTANTS
@@ -115,11 +113,6 @@ class Member
       false
     end
   end
-  
-  related_collections :deleted
-  related_collections :usernames
-  related_collections :failed_attempts
-  related_collections :password_resets
 
   # ==== Getters =====================================================    
   
@@ -296,30 +289,25 @@ class Member
       new_data.security_level = Member::MEMBER
       ask_for :email
       demand  :add_username, :password
-      un_id = nil
-      save_create :if_valid => lambda { 
-        un_id = __prep_new_username__
-      }
-      __complete_new_username__ un_id
+			generate_id
+			save_create_life
+			save_create
     end
   end
 
-  def __prep_new_username__
-    add_unique_key 'username', "Username, #{clean_data.add_username}, already taken."
-    self.class.db_collection_usernames.insert(
-      { :username   => clean_data.add_username,  
-        :owner_id   => nil}, 
-        :safe=>true
-    )
-  end
-
-  def __complete_new_username__ un_id
-    self.class.db_collection_usernames.update(
-      {'_id'=>un_id}, 
-      {:username=>clean_data.add_username, :owner_id=>data._id}, 
-      :safe=>true
-    )
-  end
+	def save_create_life
+		return false unless creatable?
+		
+		begin
+			life = Life.create( self, 
+												 :username   => clean_data.add_username,  
+												 :owner_id   => data._id || cleanest(:_id)
+												)
+			
+		rescue Life::Invalid
+			errors.concat $!.doc.errors
+		end
+	end
 
   def reader? editor # SHOW
     true
