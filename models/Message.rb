@@ -47,9 +47,6 @@ class Message
   
   include Couch_Plastic
 
-  related_collection :notifys, 'Member_Notifys'
-  related_collection :reposts, 'Member_Reposts'
-  
   enable_timestamps
   
   make_psuedo :editor_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids } ]
@@ -333,7 +330,7 @@ class Message
   #      }
   #    ]
   def notifys mem 
-    find_notifys( 
+    Member_Notifys.find( 
       :message_id => data._id,
       :owner_id   => { :$in=>mem.username_ids } 
     ).to_a
@@ -365,7 +362,7 @@ class Message
   #      }
   #    ]
   def reposts mem
-    find_reposts( 
+    Member_Reposts.find( 
       :message_id => data._id,
       :owner_id   => { :$in=>mem.username_ids },
       :message_model => 'repost'

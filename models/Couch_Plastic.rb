@@ -881,42 +881,6 @@ module Couch_Plastic_Class_Methods
     allowed_field?('created_at') && allowed_field?('updated_at')
   end
 
-  def related_collections *args
-    args.each { |name|
-      related_collection name
-    }
-  end
-
-  def related_collection lower_case_name, full_name = nil
-    full_name ||= "#{self}_#{lower_case_name.to_s.split('_').map(&:capitalize).join('_')}"
-    eval %~
-      def db_collection_#{lower_case_name}
-        @coll_#{lower_case_name} ||= DB.collection('#{full_name}')
-      end
-      
-      def find_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = db_collection_#{lower_case_name}
-        find selector, params, &blok
-      end
-      
-      def find_one_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = db_collection_#{lower_case_name}
-        find_one selector, params, &blok
-      end
-    ~
-    class_eval %~
-      def find_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = self.class.db_collection_#{lower_case_name}
-        find(selector, params, &blok)
-      end
-        
-      def find_one_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = self.class.db_collection_#{lower_case_name}
-        find_one(selector, params, &blok)
-      end
-    ~
-  end
-
   # ===== CRUD Methods ====================================
 
   def find selector, params = {}, &blok
@@ -989,6 +953,45 @@ module Couch_Plastic_Class_Methods
 
 end # === module ClassMethods ==============================================
 
+
+__END__
+
+
+  def related_collections *args
+    args.each { |name|
+      related_collection name
+    }
+  end
+
+  def related_collection lower_case_name, full_name = nil
+    full_name ||= "#{self}_#{lower_case_name.to_s.split('_').map(&:capitalize).join('_')}"
+    eval %~
+      def db_collection_#{lower_case_name}
+        @coll_#{lower_case_name} ||= DB.collection('#{full_name}')
+      end
+      
+      def find_#{lower_case_name} selector, params = {}, &blok
+        params[:collection] = db_collection_#{lower_case_name}
+        find selector, params, &blok
+      end
+      
+      def find_one_#{lower_case_name} selector, params = {}, &blok
+        params[:collection] = db_collection_#{lower_case_name}
+        find_one selector, params, &blok
+      end
+    ~
+    class_eval %~
+      def find_#{lower_case_name} selector, params = {}, &blok
+        params[:collection] = self.class.db_collection_#{lower_case_name}
+        find(selector, params, &blok)
+      end
+        
+      def find_one_#{lower_case_name} selector, params = {}, &blok
+        params[:collection] = self.class.db_collection_#{lower_case_name}
+        find_one(selector, params, &blok)
+      end
+    ~
+  end
 
 
 

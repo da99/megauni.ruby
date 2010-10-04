@@ -3,15 +3,9 @@ require 'bcrypt'
 class Member 
 
   attr_reader :password_reset_code
-  attr_reader :old_un, :old_un_id, :current_un, :current_un_id
   
   include Couch_Plastic
 
-  related_collections :deleted
-  # related_collections :usernames
-  related_collections :failed_attempts
-  related_collections :password_resets
-      
   # =========================================================
   #                     CONSTANTS
   # =========================================================  
@@ -30,8 +24,6 @@ class Member
   EMAIL_FINDER        = /[a-zA-Z0-9\.\-\_\+]{1,}@[a-zA-Z0-9\-\_]{1,}[\.]{1}[a-zA-Z0-9\.\-\_]{1,}[a-zA-Z0-9]/
   VALID_EMAIL_FORMAT  = /\A#{EMAIL_FINDER}\z/
 
-  #VALID_USERNAME_FORMAT = /\A[a-zA-Z0-9\-\_\.]{2,25}\z/
-  #VALID_USERNAME_FORMAT_IN_WORDS = "letters, numbers, underscores, dashes and periods."
 
   enable_timestamps
   
@@ -42,11 +34,8 @@ class Member
     make_psuedo fld, :not_empty
   }
 
-  [ 
-    :hashed_password, 
-    :salt
-  ].each { |f| make f, :not_empty}
-               
+  make :hashed_password, :not_empty
+  make :salt, :not_empty 
   make :security_level, [:in_array, SECURITY_LEVELS]
   
   make :email, 
@@ -57,21 +46,6 @@ class Member
     [:equal, lambda { raw_data.email } ],
     [:error_msg, 'Email has invalid characters.']
 
-  make_psuedo :add_username, 
-    # Delete invalid characters and 
-    # reduce any suspicious characters. 
-    # '..*' becomes '.'
-    [:stripped, /[^a-z0-9_-]{1,}/i, lambda { |s|
-        if ['.'].include?( s[0,1] )
-          s[0,1]
-        else
-          ''
-        end
-      }], 
-     [:min, 2, 'Username is too small. It must be at least 2 characters long.'],
-     [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
-     [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
-  
   make_psuedo :password, 
       :not_empty,
       [:min, 5],
@@ -99,7 +73,7 @@ class Member
           end
     if obj
       super(id, editor)
-      db_collection_deleted.save(obj.data.as_hash, :safe=>true)
+      Trashed_Members.create(editor, obj.data.as_hash)
     end
     obj
   end
@@ -189,7 +163,7 @@ class Member
 
   def self.failed_attempts_for_today mem, &blok
     require 'time'
-    find_failed_attempts( 
+    Failed_Log_In_Attempts.find( 
        :owner_id => mem.data._id,  
        :created_at => { :$lte => Couch_Plastic.utc_now,
                  :$gte => Couch_Plastic.utc_string(Time.now.utc - (60*60*24))
@@ -230,19 +204,19 @@ class Member
     return mem if correct_password
 
     # Grab failed attempt count.
-    fail_count = Member.failed_attempts_for_today(mem).count
+    fail_count = failed_attempts_for_today(mem).count
     new_count  = fail_count + 1
     
     # Insert failed password.
-    db_collection_failed_attempts.insert(
+    Failed_Log_In_Attempts.create(
+			nil,
       { :data_model => 'Member_Failed_Attempt',
       :owner_id   => mem.data._id, 
       :date       => Couch_Plastic.utc_date_now, 
       :time       => Couch_Plastic.utc_time_now,
       :created_at => Couch_Plastic.utc_now,
       :ip_address => ip_addr,
-      :user_agent => user_agent },
-      :safe => false
+      :user_agent => user_agent }
     )
 
     # Raise Account::Reset if necessary.
@@ -360,7 +334,7 @@ class Member
   end
 
   def password_reset_doc
-    find_one_password_resets(:_id=>pass_reset_id)
+    Password_Resets.by_id pass_reset_id 
   end
 
   def password_in_reset?
@@ -380,7 +354,7 @@ class Member
     
     if BCrypt::Password.new(reset_doc['hashed_code']) === (opts.code + reset_doc['salt']) 
       results = Member.update( data._id, self, opts.as_hash ) 
-      self.class.db_collection_password_resets.remove(:_id=>pass_reset_id)
+      Password_Resets.delete(:_id=>pass_reset_id)
       results
     else
       raise Invalid_Password_Reset_Code, "Member: #{data._id}, Code: #{opts.code}"
@@ -407,14 +381,13 @@ class Member
            end
 
     hashed_code = BCrypt::Password.create( code + salt ).to_s
-    self.class.db_collection_password_resets.save( # Use :save => update OR insert.
-      {:_id       => pass_reset_id, 
-      :created_at => Couch_Plastic.utc_now, 
-      :owner_id   => data._id,
-      :salt       => salt,
-      :hashed_code => hashed_code
-      },
-      :safe       => false
+    Password_Resets.create( # Use :save => update OR insert.
+													 nil,
+													 :_id       => pass_reset_id, 
+													 :created_at => Couch_Plastic.utc_now, 
+													 :owner_id   => data._id,
+													 :salt       => salt,
+													 :hashed_code => hashed_code
     )
     @password_reset_code = code
   
@@ -542,24 +515,6 @@ class Member
     @tz_proxy ||= TZInfo::Timezone.get(self.timezone)
     @tz_proxy.utc_to_local( utc ).strftime('%a, %b %d, %Y @ %I:%M %p')
   end 
-
-  def within_username un, &blok
-    within_username_id username_to_username_id(un, &blok)
-  end
-  
-  # This method makes sure username belongs to member.
-  # If not, current username/username_id is set to nil.
-  def within_username_id un_id
-    @old_un_id           = current_un_id
-    @old_un              = current_un
-    
-    @current_un    = username_id_to_username(un_id)
-    @current_un_id = username_to_username_id(current_un)
-    
-    yield
-    @current_un    = old_un
-    @current_un_id = old_un_id
-  end
 
   def current_username_ids
     if current_un_id
@@ -759,3 +714,40 @@ end # === model Member
 
 
 
+__END__
+
+  attr_reader :old_un, :old_un_id, :current_un, :current_un_id
+
+  def within_username un, &blok
+    within_username_id username_to_username_id(un, &blok)
+  end
+  
+  # This method makes sure username belongs to member.
+  # If not, current username/username_id is set to nil.
+  def within_username_id un_id
+    @old_un_id           = current_un_id
+    @old_un              = current_un
+    
+    @current_un    = username_id_to_username(un_id)
+    @current_un_id = username_to_username_id(current_un)
+    
+    yield
+    @current_un    = old_un
+    @current_un_id = old_un_id
+  end
+
+  make_psuedo :add_username, 
+    # Delete invalid characters and 
+    # reduce any suspicious characters. 
+    # '..*' becomes '.'
+    [:stripped, /[^a-z0-9_-]{1,}/i, lambda { |s|
+        if ['.'].include?( s[0,1] )
+          s[0,1]
+        else
+          ''
+        end
+      }], 
+     [:min, 2, 'Username is too small. It must be at least 2 characters long.'],
+     [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
+     [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
+  

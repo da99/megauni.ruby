@@ -8,7 +8,23 @@ class Life
   CATEGORIES = %w{ real celebrity pet baby fantasy }
 
   make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids } ]
-  make :username, [:min, 2, "Username is too small."]
+  make :username, 
+    # Delete invalid characters and 
+    # reduce any suspicious characters. 
+    # '..*' becomes '.'
+    [:stripped, /[^a-z0-9_-]{1,}/i, lambda { |s|
+        if ['.'].include?( s[0,1] )
+          s[0,1]
+        else
+          ''
+        end
+      }], 
+     [:min, 2, 'Username is too small. It must be at least 2 characters long.'],
+     [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
+     [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
+  #VALID_USERNAME_FORMAT = /\A[a-zA-Z0-9\-\_\.]{2,25}\z/
+  #VALID_USERNAME_FORMAT_IN_WORDS = "letters, numbers, underscores, dashes and periods."
+  
 	make :category, [:in_array, CATEGORIES]
 
   # ==== Hooks ====

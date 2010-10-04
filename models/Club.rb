@@ -27,8 +27,6 @@ class Club
     miniuni 
   }
 
-  related_collection :followers
-  
   attr_reader :life, :life_username, :life_member
   enable_created_at
 
@@ -101,7 +99,7 @@ class Club
     following_ids = []
     clubs         = {}
 
-    hash = find_followers(
+    hash = Club_Followers.find(
       {:follower_id=>{:$in=>mem.username_ids}}, 
       {:fields=>%w{ follower_id club_id }}
     ).inject({}) { |memo, doc|
