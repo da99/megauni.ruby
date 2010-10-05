@@ -12,6 +12,6 @@ get '/' do
   ~
 end
 
-get 'googlehostedservice.html' do
+get '/googlehostedservice.html' do
   'googled80ce82f00e7fc31'
 end
