@@ -3,6 +3,8 @@ class Club
 
   include Couch_Plastic
   
+  HREF_PATTERN = [ '/uni/%s/', 'filename' ]
+
   MEMBERS = %w{ 
     stranger
     member
@@ -27,7 +29,6 @@ class Club
     miniuni 
   }
 
-  attr_reader :life, :life_username, :life_member
   enable_created_at
 
   make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids }]
@@ -42,12 +43,6 @@ class Club
   
   # ======== Authorizations ======== 
 
-  def allow_as_creator? editor 
-    return false if not new?
-    return true if editor.has_power_of? :MEMBER
-    # editor.has_power_of? Member::ADMIN
-  end
-
   def self.create editor, raw_raw_data # CREATE
     new do
       
@@ -59,19 +54,8 @@ class Club
       demand :owner_id, :filename, :title, :teaser
       ask_for_or_default :lang
       save_create 
-			
+      
     end
-  end
-
-  def reader? editor
-    true
-  end
-
-  def updator? editor
-    return false if not editor
-    return false if not data.owner_id
-    editor.has_power_of?(:ADMIN) ||
-      editor.has_power_of?(data.owner_id)
   end
 
   def self.update id, editor, new_raw_data # UPDATE
@@ -82,17 +66,30 @@ class Club
       save_update 
     end
   end
-  
-  def deletor? editor
-    owner? editor
+
+  def allow_to? action, editor
+    case action
+      
+      when :create
+        return false if not new?
+        return true if editor.has_power_of? :MEMBER
+        
+      when :read
+        true
+        
+      when :update
+        editor.has_power_of?(:ADMIN) ||
+          editor.has_power_of?(data.owner_id)
+        
+      when :delete
+        owner? editor
+    end
   end
 
   # ======== Accessors ======== 
 
   def self.by_filename filename
-    doc = find_one(:filename=>filename)
-    return Club.new(doc) if doc
-    raise Club::Not_Found, "Filename: #{filename}"
+    find_one(:filename=>filename)
   end
 
   def self.hash_for_follower mem
@@ -148,40 +145,7 @@ class Club
   def self.all_for_member_by_relation mem
     { :as_owner => hash_for_owner(mem), :as_follower => hash_for_follower(mem), :as_lifer  => hash_for_lifer(mem)}
   end
-  
-  def set_as_life username, mem
-    @life_club     = true
-    @life_username = username
-    @life_member   = mem
-  end
 
-  def self.life_clubs_for_member mem
-    mem.usernames.map { |filename|
-      life_club_for_username(filename, mem)
-    }
-  end
-
-  def self.life_club_for_username filename, mem
-    doc = mem.data.as_hash.clone
-    doc['filename']  = filename
-    doc['title']     = "The Universe of #{filename}"
-    doc['_id']       = mem.username_to_username_id(filename)
-    doc['owner_id']  = doc['_id']
-    club = Club.new doc
-    club.set_as_life filename, mem
-    club
-  end
-
-  def self.all raw_params = {}, &blok
-    find( raw_params, &blok)
-  end
-
-  def self.all_ids params = {}, opts = {}
-    find( params, {:fields=>['_id']}.update(opts) ).map { |doc|
-      doc['_id']
-    }
-  end
-  
   def self.all_ids_for_owner( raw_id )
     id = Couch_Plastic.mongofy_id( raw_id )
     find({:owner_id=>id}, {:fields=>'_id'}).map { |doc|
@@ -205,35 +169,9 @@ class Club
     ).map {|r| r['filename']}
   end
 
-  def self.add_clubs_to_collection raw_coll
-    coll     = (raw_coll.is_a?(Array)) ? raw_coll : raw_coll.to_a
-    club_ids = coll.map { |doc| doc['target_ids'] }.compact.flatten.uniq
-    clubs    = find({ :_id=>{:$in=>club_ids}}).inject({}) { | m, club| 
-      m[club['_id']] = club
-      m
-    } 
-    
-    coll.map { |doc|
-      target = clubs[doc['target_ids'].first]
-      doc['club_title'], doc['club_filename'] = if target
-                                                  [target['title'], target['filename']]
-                                                end
-
-      doc
-    }
-  end
-
   def self.by_club_model raw_models, opts = {}
     models = [raw_models].flatten.compact.uniq
     clubs = find({:club_model=>{:$in=>models}}, opts)
-  end
-  
-  def self.by_filename filename
-    club = find_one('filename'=>filename)
-    if not club
-      raise Couch_Plastic::Not_Found, "Club by filename: #{filename.inspect}"
-    end
-    Club.new(club)
   end
 
   def self.ids_by_owner_id raw_id, raw_opts = {}
@@ -257,26 +195,12 @@ class Club
     mem.username_ids.include?(data.owner_id)
   end
 
-  def life_club?
-    !!@life_club
-  end
-  alias_method :life?, :life_club?
-
-  def href 
-    "/uni/#{data.filename}/"
-  end
-  alias_method :href_delete, :href
-
   %w{ e magazine news qa shop random thanks fights delete_follow members }.each do |suffix|
     eval %~
       def href_#{suffix}
         File.join(href, '#{suffix}/')
       end
     ~
-  end
-
-  def href_edit
-    File.join(href, 'edit/' )
   end
 
   def href_follow
@@ -297,43 +221,7 @@ class Club
     mem.following_club_id?(data._id)
   end
 
-  # === Other Instance Methods
-
-  def create_follower mem, username_id
-    self.class.db_collection_followers.insert(
-      '_id' => "#{data._id}#{mem.data._id}",
-      'club_id' => data._id, 
-      'follower_id' => Couch_Plastic.mongofy_id(username_id)
-    )
-  end
-
 end # === Club
 
 __END__
 
-  def self.by_filename_or_member_username filename
-    begin
-      by_filename filename
-    rescue Club::Not_Found
-      begin
-        mem = Member.by_username(filename)
-        life_club_for_username(filename, mem)
-      rescue Member::Not_Found
-        raise Club::Not_Found, "Filename: #{filename.inspect}"
-      end
-    end
-  end
-
-
-  def self.by_id_or_member_username_id id
-    begin
-      by_id(id)
-    rescue Club::Not_Found
-      begin
-        mem = Member.by_username_id(id)
-        by_filename_or_member_username( mem.username_id_to_username(id) )
-      rescue Member::Not_Found, Club::Not_Found
-        raise Club::Not_Found, "ID: #{id.inspect}"
-      end
-    end
-  end
