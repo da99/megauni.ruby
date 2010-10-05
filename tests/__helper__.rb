@@ -151,11 +151,11 @@ class Test::Unit::TestCase
   # === Custom Helpers ===
 
   def self.admin_member
-    @admin_member ||= Member.by_username("admin-member-1")
+    @admin_member ||= Life.by_username("admin-member-1").owner
   end
 
   def self.regular_members
-    @regular_mem ||= [1,2,3].map { |i| Member.by_username("regular-member-#{i}") }
+    @regular_mem ||= [1,2,3].map { |i| Life.by_username("regular-member-#{i}").owner }
   end
   
   [1,2,3].each do |i|
@@ -173,7 +173,7 @@ class Test::Unit::TestCase
       end
       
       def log_in_regular_member_#{i}
-        mem = Member.by_username(regular_username_#{i})
+        mem = Life.by_username(regular_username_#{i}).owner
         assert_equal false, mem.has_power_of?( :ADMIN )
         post '/log-in/', {:username=>mem.usernames.first, :password=>regular_password_#{i}}, ssl_hash
         follow_redirect!
@@ -272,7 +272,7 @@ class Test::Unit::TestCase
   end
 
   def log_in_admin
-    mem = Member.by_username('admin-member-1')
+    mem = Life.by_username('admin-member-1').owner
     assert mem.has_power_of?(:ADMIN)
     post '/log-in/', {:username=>mem.usernames.first, :password=>admin_password}, ssl_hash
     follow_redirect!

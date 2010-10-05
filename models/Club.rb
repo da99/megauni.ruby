@@ -172,32 +172,6 @@ class Club
     club
   end
 
-  def self.by_filename_or_member_username filename
-    begin
-      by_filename filename
-    rescue Club::Not_Found
-      begin
-        mem = Member.by_username(filename)
-        life_club_for_username(filename, mem)
-      rescue Member::Not_Found
-        raise Club::Not_Found, "Filename: #{filename.inspect}"
-      end
-    end
-  end
-
-  def self.by_id_or_member_username_id id
-    begin
-      by_id(id)
-    rescue Club::Not_Found
-      begin
-        mem = Member.by_username_id(id)
-        by_filename_or_member_username( mem.username_id_to_username(id) )
-      rescue Member::Not_Found, Club::Not_Found
-        raise Club::Not_Found, "ID: #{id.inspect}"
-      end
-    end
-  end
-
   def self.all raw_params = {}, &blok
     find( raw_params, &blok)
   end
@@ -334,3 +308,32 @@ class Club
   end
 
 end # === Club
+
+__END__
+
+  def self.by_filename_or_member_username filename
+    begin
+      by_filename filename
+    rescue Club::Not_Found
+      begin
+        mem = Member.by_username(filename)
+        life_club_for_username(filename, mem)
+      rescue Member::Not_Found
+        raise Club::Not_Found, "Filename: #{filename.inspect}"
+      end
+    end
+  end
+
+
+  def self.by_id_or_member_username_id id
+    begin
+      by_id(id)
+    rescue Club::Not_Found
+      begin
+        mem = Member.by_username_id(id)
+        by_filename_or_member_username( mem.username_id_to_username(id) )
+      rescue Member::Not_Found, Club::Not_Found
+        raise Club::Not_Found, "ID: #{id.inspect}"
+      end
+    end
+  end

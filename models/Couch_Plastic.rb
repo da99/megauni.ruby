@@ -834,6 +834,38 @@ module Couch_Plastic_Class_Methods
     @db_collection ||= DB.collection(name.to_s + 's')
   end
 
+	# Example:
+	#		arr = [ doc, doc, doc ]
+	#		relationaize arr, Life, 'owner_id', 'username'=>'owner_username'
+	#		Each doc now has 'owner_username' added to it
+	#		from the Life class.
+	#
+	# Parameters: 
+	#   fk => means foreign key
+	#   field_map =>
+	#		  { 'username' => 'owner_username' }
+	#		
+	def relationize raw_coll, relation_class, fk, field_map
+    coll   = raw_coll.to_a
+    fks    = coll.map { |doc| doc[fk] }.uniq.compact
+    f_docs = relation_class.find(:_id=>{ :$in => fks }).inject({}) { |m, doc|
+      m[doc['_id']] = doc
+      m
+    }
+		
+    coll.map { |doc|
+      target = f_docs[doc[fk]]
+			field_map.each { | orig, namespaced |
+				doc[namespaced] = if target
+														target[orig]
+													else
+														nil
+													end
+			}
+      doc
+    }
+	end
+
   # ===== DSL-icious ======
 
   def allowed_field? fld

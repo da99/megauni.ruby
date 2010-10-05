@@ -33,7 +33,7 @@ module FeFe_Test
   end
 
   def log_in_member
-    mem = Member.by_username('regular-member-1')
+    mem = Life.by_username('regular-member-1').owner
     demand_false( mem.has_power_of?( :ADMIN ) )
     post '/log-in/', {:username=>mem.usernames.first, :password=>'regular-password-1'}, ssl_hash
     follow_ssl_redirect!
@@ -41,7 +41,7 @@ module FeFe_Test
   end
 
   def log_in_admin
-    mem = Member.by_username('admin-member-1')
+    mem = Life.by_username('admin-member-1').owner
     demand_true mem.has_power_of?( :ADMIN )
     post '/log-in/', {:username=>mem.usernames.first, :password=>'admin-password-1'}, ssl_hash
     follow_ssl_redirect!

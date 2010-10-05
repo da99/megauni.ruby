@@ -59,7 +59,7 @@ class Test_Model_Member_Read < Test::Unit::TestCase
       rescue Member::Wrong_Password
       rescue Member::Password_Reset
       end
-      assert_equal( i, Member.failed_attempts_for_today(mem).count )
+      assert_equal( i, Failed_Log_In_Attempts.for_today(mem).count )
     end
   end
 
@@ -73,16 +73,7 @@ class Test_Model_Member_Read < Test::Unit::TestCase
       end
     end
 
-    assert_equal( 3, Member.failed_attempts_for_today(mem).size )
-  end
-
-  must 'add username info of owner for an Enumerable of databasse records.' do
-    mem          = regular_member_3
-    messages     = (1..3).to_a.map { |i| create_message(mem).data.as_hash }
-    results      = Member.add_owner_usernames_to_collection(messages)
-    mem_by_un    = Member.by_username(results.first['owner_username'])
-    mem_by_un_id = Member.by_username_id(results.first['owner_id'])
-    assert_equal mem_by_un, mem_by_un_id
+    assert_equal( 3, Failed_Log_In_Attempts.for_today(mem).size )
   end
 
   must 'raise Member::Invalid_Security_Level if :has_power_of? given invalid parameter.' do

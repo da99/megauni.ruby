@@ -24,16 +24,10 @@ class Member
   EMAIL_FINDER        = /[a-zA-Z0-9\.\-\_\+]{1,}@[a-zA-Z0-9\-\_]{1,}[\.]{1}[a-zA-Z0-9\.\-\_]{1,}[a-zA-Z0-9]/
   VALID_EMAIL_FORMAT  = /\A#{EMAIL_FINDER}\z/
 
-
+	has_one :password_reset
+	has_many :lifes
+	
   enable_timestamps
-  
-  %w{ 
-      update_username
-      confirm_password 
-  }.each { |fld|
-    make_psuedo fld, :not_empty
-  }
-
   make :hashed_password, :not_empty
   make :salt, :not_empty 
   make :security_level, [:in_array, SECURITY_LEVELS]
@@ -46,7 +40,9 @@ class Member
     [:equal, lambda { raw_data.email } ],
     [:error_msg, 'Email has invalid characters.']
 
-  make_psuedo :password, 
+	make_psuedo :update_username, :not_empty
+	make_psuedo :confirm_password, :not_empty
+	make_psuedo :password, 
       :not_empty,
       [:min, 5],
       [:equal, lambda { self.raw_data.confirm_password }, 'Password and password confirmation do not match.' ],
@@ -90,20 +86,16 @@ class Member
 
   # ==== Getters =====================================================    
   
-  def self.all_usernames_by_id( raw_id )
-    find_usernames(:_id=>Couch_Plastic.mongofy_id(raw_id))
-  end
-
   def self.add_docs_by_username_id(docs, key = 'owner_id')
     
     # Grab all docs for: usernames, members.
     editor_ids = docs.map { |doc| doc[key] }.compact.uniq
-    usernames  = Member.all_usernames_by_id(:$in => editor_ids).to_a
-    member_ids = usernames.map { |doc| doc['owner_id'] }
+    lifes  = Life.find(:owner_id => { :$in => editor_ids } ).to_a
+    member_ids = lifes.map { |doc| doc['owner_id'] }
     members    = Member.all_by_id( :$in  => member_ids ).to_a
     
     # Create a Hash: :username_id => :username
-    username_map = usernames.inject({}) { |memo, un|
+    username_map = lifes.inject({}) { |memo, un|
       memo[un['_id']] = un['username']
       memo
     }
@@ -127,49 +119,12 @@ class Member
     
   end
 
-  def self.username_doc_by_id(id)
-    doc = find_one_username(:_id=> Couch_Plastic.mongofy_id(id))
-    raise Member::Not_Found, "Member username: #{id.inspect}"  unless doc
-    doc
-  end
-
   def self.by_email email
     mem = find_one(:email=>email)
     if email.empty? || !mem
       raise Not_Found, "Member email: #{email.inspect}"
     end
     Member.by_id(mem['_id'])
-  end
-
-  def self.by_username raw_username
-    username = raw_username.to_s.strip
-    doc = find_one_usernames( :username => username )
-    if doc && !username.empty?
-      Member.by_id(doc['owner_id'])
-    else
-      raise Not_Found, "Member username: #{username.inspect}"
-    end
-  end
-
-  def self.by_username_id raw_id
-    id = Couch_Plastic.mongofy_id(raw_id)
-    doc = find_one_usernames(:_id=>id)
-    if doc
-      Member.by_id(doc['owner_id'])
-    else
-      raise Couch_Plastic::Not_Found, "Member Username id: #{raw_id.inspect}"
-    end
-  end
-
-  def self.failed_attempts_for_today mem, &blok
-    require 'time'
-    Failed_Log_In_Attempts.find( 
-       :owner_id => mem.data._id,  
-       :created_at => { :$lte => Couch_Plastic.utc_now,
-                 :$gte => Couch_Plastic.utc_string(Time.now.utc - (60*60*24))
-       },
-       &blok
-    ).to_a
   end
   
   # Based on Sinatra-authentication (on github).
@@ -194,7 +149,8 @@ class Member
       raise Wrong_Password, "#{raw_vals.inspect}"
     end
 
-    mem = Member.by_username( username )
+		life = Life.by_username( username )
+    mem = life.owner
 
     # Check for Password_Reset
     raise Password_Reset, mem.inspect if mem.password_in_reset?
@@ -204,7 +160,7 @@ class Member
     return mem if correct_password
 
     # Grab failed attempt count.
-    fail_count = failed_attempts_for_today(mem).count
+    fail_count = Failed_Log_In_Attempts.for_today(mem).count
     new_count  = fail_count + 1
     
     # Insert failed password.
@@ -228,25 +184,6 @@ class Member
     raise Wrong_Password, "Password is invalid for: #{username.inspect}"
   end 
 
-  def self.add_owner_usernames_to_collection raw_coll
-    
-    coll = raw_coll.is_a?(Array) ? raw_coll : raw_coll.to_a
-
-    un_ids = coll.map { |c| c['owner_id'] }.uniq.compact
-    usernames = find_usernames(:_id=>{ :$in => un_ids }).inject({}) { |m, doc|
-      m[doc['_id']] = doc
-      m
-    }
-    coll.map { |c|
-      target = usernames[c['owner_id']]
-      if target
-        c['owner_username'] = target['username']
-      else
-        c['owner_username'] = nil
-      end
-      c
-    }
-  end
 
   # ==== Authorizations ====
 
@@ -329,16 +266,8 @@ class Member
 
   # ==== UPDATORS ======================================================
   
-  def pass_reset_id 
-    "#{data._id}-password-reset"
-  end
-
-  def password_reset_doc
-    Password_Resets.by_id pass_reset_id 
-  end
-
   def password_in_reset?
-    !!password_reset_doc
+    has_password_reset?
   end
   
   def change_password_through_reset raw_opts 
@@ -350,11 +279,9 @@ class Member
     all_values_included = opts.code && opts.password && opts.confirm_password
     raise ArgumentError, "Missing values: #{opts.as_hash.inspect}" if not all_values_included
 
-    reset_doc = password_reset_doc
-    
-    if BCrypt::Password.new(reset_doc['hashed_code']) === (opts.code + reset_doc['salt']) 
+    if BCrypt::Password.new(password_reset.data.hashed_code) === (opts.code + password_reset.data.salt ) 
       results = Member.update( data._id, self, opts.as_hash ) 
-      Password_Resets.delete(:_id=>pass_reset_id)
+      Password_Resets.delete password_reset.data._id, self
       results
     else
       raise Invalid_Password_Reset_Code, "Member: #{data._id}, Code: #{opts.code}"
@@ -383,7 +310,7 @@ class Member
     hashed_code = BCrypt::Password.create( code + salt ).to_s
     Password_Resets.create( # Use :save => update OR insert.
 													 nil,
-													 :_id       => pass_reset_id, 
+													 :_id       => password_reset_id, 
 													 :created_at => Couch_Plastic.utc_now, 
 													 :owner_id   => data._id,
 													 :salt       => salt,
@@ -419,13 +346,10 @@ class Member
   #
   def username_hash
     @username_hash ||= \
-      begin
-        hsh = {}
-        find_usernames(:owner_id=>data._id).map { |un| 
+        Life.find(:owner_id=>data._id).inject({}) { |hsh, un| 
           hsh[un['_id']] = un['username']
+					hsh
         }
-        hsh
-      end
   end
   
   # Returns: 
@@ -551,14 +475,6 @@ class Member
   
   def owned_clubs
     Club.by_owner_id(:$in=>current_username_ids)
-  end
-
-  def life_club un_id
-    Club.life_club_for_username_id( un_id, self)
-  end
-
-  def life_clubs
-    Club.life_clubs_for_member(self)
   end
 
   def messages_from_my_clubs 
@@ -751,3 +667,34 @@ __END__
      [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
      [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
   
+  def self.by_username raw_username
+    username = raw_username.to_s.strip
+    doc = find_one_usernames( :username => username )
+    if doc && !username.empty?
+      Member.by_id(doc['owner_id'])
+    else
+      raise Not_Found, "Member username: #{username.inspect}"
+    end
+  end
+
+  def self.by_username_id raw_id
+    id = Couch_Plastic.mongofy_id(raw_id)
+    doc = find_one_usernames(:_id=>id)
+    if doc
+      Member.by_id(doc['owner_id'])
+    else
+      raise Couch_Plastic::Not_Found, "Member Username id: #{raw_id.inspect}"
+    end
+  end
+
+
+  def self.failed_attempts_for_today mem, &blok
+    require 'time'
+    Failed_Log_In_Attempts.find( 
+       :owner_id => mem.data._id,  
+       :created_at => { :$lte => Couch_Plastic.utc_now,
+                 :$gte => Couch_Plastic.utc_string(Time.now.utc - (60*60*24))
+       },
+       &blok
+    ).to_a
+  end

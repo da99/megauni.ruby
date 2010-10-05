@@ -5,10 +5,14 @@
 # CONTROL models/Club.rb
 # MODEL   controls/Club.rb
 
+require 'views/extensions/Base_Club'
+
 class Clubs_as_life < Base_View
+ 
+  include Views::Base_Club
 
   def title 
-    '...'
+    "The Life of #{app.env['club'].data}"
   end
   
 end # === as_life 

@@ -214,7 +214,7 @@ class Message
     else
       docs = cursor
       if include_mods.include?(Member)
-        docs = Member.add_owner_usernames_to_collection(docs)
+        docs = Couch_Plastic.relationize(docs, Life, 'owner_id', 'username' => 'owner_username')
       end
       if include_mods.include?(Club)
         docs = Club.add_clubs_to_collection(docs)
