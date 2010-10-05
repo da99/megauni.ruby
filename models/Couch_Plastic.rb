@@ -178,6 +178,15 @@ module Couch_Plastic
     BSON::ObjectID.from_string(str)
   end
 
+  def href 
+    HREF_PATTERN.first % data.send(HREF_PATTERN.last) "/uni/#{data.filename}/"
+  end
+  alias_method :href_delete, :href
+
+  def href_edit
+    File.join(href, 'edit/' )
+  end
+
   # 
   # Parameters:
   #   doc_id_or_hash - Optional. If String, used as a doc ID to
@@ -266,10 +275,10 @@ module Couch_Plastic
     @raw_data
   end
 
-	def generate_id
-		raise "New id can not be generated on an existing record." if not new?
-		new_data._id = clean_date = BSON::ObjectID.new
-	end
+  def generate_id
+    raise "New id can not be generated on an existing record." if not new?
+    new_data._id = clean_date = BSON::ObjectID.new
+  end
 
   def clean_data
     raise ArgumentError, "No clean data." unless @clean_data
@@ -834,37 +843,37 @@ module Couch_Plastic_Class_Methods
     @db_collection ||= DB.collection(name.to_s + 's')
   end
 
-	# Example:
-	#		arr = [ doc, doc, doc ]
-	#		relationaize arr, Life, 'owner_id', 'username'=>'owner_username'
-	#		Each doc now has 'owner_username' added to it
-	#		from the Life class.
-	#
-	# Parameters: 
-	#   fk => means foreign key
-	#   field_map =>
-	#		  { 'username' => 'owner_username' }
-	#		
-	def relationize raw_coll, relation_class, fk, field_map
+  # Example:
+  #    arr = [ doc, doc, doc ]
+  #    relationaize arr, Life, 'owner_id', 'username'=>'owner_username'
+  #    Each doc now has 'owner_username' added to it
+  #    from the Life class.
+  #
+  # Parameters: 
+  #   fk => means foreign key
+  #   field_map =>
+  #      { 'username' => 'owner_username' }
+  #    
+  def relationize raw_coll, relation_class, fk, field_map
     coll   = raw_coll.to_a
     fks    = coll.map { |doc| doc[fk] }.uniq.compact
     f_docs = relation_class.find(:_id=>{ :$in => fks }).inject({}) { |m, doc|
       m[doc['_id']] = doc
       m
     }
-		
+    
     coll.map { |doc|
       target = f_docs[doc[fk]]
-			field_map.each { | orig, namespaced |
-				doc[namespaced] = if target
-														target[orig]
-													else
-														nil
-													end
-			}
+      field_map.each { | orig, namespaced |
+        doc[namespaced] = if target
+                            target[orig]
+                          else
+                            nil
+                          end
+      }
       doc
     }
-	end
+  end
 
   # ===== DSL-icious ======
 
@@ -920,9 +929,16 @@ module Couch_Plastic_Class_Methods
     (params.delete(:collection) || db_collection).find(selector, params).to_a
   end
   
-  def find_one selector, params = {}, &blok
+  def find_doc selector, params = {}, &blok
     raise ArgumentError, "I don't know what to do with a block." if blok
     (params.delete(:collection) || db_collection).find_one(selector, params)
+  end
+  
+  def find_one *args
+    raise ArgumentError, "No block allowed here." if block_given?
+    doc = find_doc(*args)
+    return new(doc) if doc
+    raise self::Not_Found, args.to_a.map { |pair| "#{pair.first.capitalize}: #{pair.last}" }.join(', ')
   end
 
   def by_id( id ) # READ

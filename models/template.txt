@@ -10,17 +10,19 @@ class {{model_name}}
 
   # ==== Authorizations ====
  
-  def allow_as_creator? editor # NEW, CREATE
+  def allow_to? action, editor # NEW, CREATE
+		case action
+			when :create 
+			
+			when :read
+
+			when :update
+
+			when :delete
+
+		end
   end
 
-  def reader? editor # SHOW
-  end
-
-  def updator? editor # EDIT, UPDATE
-  end
-
-  def deletor? editor # DELETE
-  end
 
   # ==== Accessors ====
 

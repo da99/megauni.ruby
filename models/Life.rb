@@ -25,7 +25,7 @@ class Life
   #VALID_USERNAME_FORMAT = /\A[a-zA-Z0-9\-\_\.]{2,25}\z/
   #VALID_USERNAME_FORMAT_IN_WORDS = "letters, numbers, underscores, dashes and periods."
   
-	make :category, [:in_array, CATEGORIES]
+  make :category, [:in_array, CATEGORIES]
 
   # ==== Hooks ====
 
@@ -43,11 +43,11 @@ class Life
 
   def self.create editor, raw_raw_data # CREATE
     new do
-			self.manipulator = editor
-			self.raw_data = raw_raw_data
-			demand :owner_id, :username, :category
-			save_create
-		end
+      self.manipulator = editor
+      self.raw_data = raw_raw_data
+      demand :owner_id, :username, :category
+      save_create
+    end
   end
 
   def reader? editor # SHOW

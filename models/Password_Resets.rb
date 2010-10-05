@@ -8,13 +8,13 @@ class Password_Resets
   
   make :body, :anything
 
-	# ==== Class Methods ====
-	
-	class << self
-		def by_member mem
-			reset_id = "#{mem.data._id}-password-reset"
-		end
-	end
+  # ==== Class Methods ====
+  
+  class << self
+    def by_member mem
+      reset_id = "#{mem.data._id}-password-reset"
+    end
+  end
 
   # ==== Authorizations ====
  

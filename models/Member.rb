@@ -24,9 +24,9 @@ class Member
   EMAIL_FINDER        = /[a-zA-Z0-9\.\-\_\+]{1,}@[a-zA-Z0-9\-\_]{1,}[\.]{1}[a-zA-Z0-9\.\-\_]{1,}[a-zA-Z0-9]/
   VALID_EMAIL_FORMAT  = /\A#{EMAIL_FINDER}\z/
 
-	has_one :password_reset
-	has_many :lifes
-	
+  has_one :password_reset
+  has_many :lifes
+  
   enable_timestamps
   make :hashed_password, :not_empty
   make :salt, :not_empty 
@@ -40,9 +40,9 @@ class Member
     [:equal, lambda { raw_data.email } ],
     [:error_msg, 'Email has invalid characters.']
 
-	make_psuedo :update_username, :not_empty
-	make_psuedo :confirm_password, :not_empty
-	make_psuedo :password, 
+  make_psuedo :update_username, :not_empty
+  make_psuedo :confirm_password, :not_empty
+  make_psuedo :password, 
       :not_empty,
       [:min, 5],
       [:equal, lambda { self.raw_data.confirm_password }, 'Password and password confirmation do not match.' ],
@@ -149,7 +149,7 @@ class Member
       raise Wrong_Password, "#{raw_vals.inspect}"
     end
 
-		life = Life.by_username( username )
+    life = Life.by_username( username )
     mem = life.owner
 
     # Check for Password_Reset
@@ -165,7 +165,7 @@ class Member
     
     # Insert failed password.
     Failed_Log_In_Attempts.create(
-			nil,
+      nil,
       { :data_model => 'Member_Failed_Attempt',
       :owner_id   => mem.data._id, 
       :date       => Couch_Plastic.utc_date_now, 
@@ -200,25 +200,25 @@ class Member
       new_data.security_level = Member::MEMBER
       ask_for :email
       demand  :add_username, :password
-			generate_id
-			save_create_life
-			save_create
+      generate_id
+      save_create_life
+      save_create
     end
   end
 
-	def save_create_life
-		return false unless creatable?
-		
-		begin
-			life = Life.create( self, 
-												 :username   => clean_data.add_username,  
-												 :owner_id   => data._id || cleanest(:_id)
-												)
-			
-		rescue Life::Invalid
-			errors.concat $!.doc.errors
-		end
-	end
+  def save_create_life
+    return false unless creatable?
+    
+    begin
+      life = Life.create( self, 
+                         :username   => clean_data.add_username,  
+                         :owner_id   => data._id || cleanest(:_id)
+                        )
+      
+    rescue Life::Invalid
+      errors.concat $!.doc.errors
+    end
+  end
 
   def reader? editor # SHOW
     true
@@ -309,12 +309,12 @@ class Member
 
     hashed_code = BCrypt::Password.create( code + salt ).to_s
     Password_Resets.create( # Use :save => update OR insert.
-													 nil,
-													 :_id       => password_reset_id, 
-													 :created_at => Couch_Plastic.utc_now, 
-													 :owner_id   => data._id,
-													 :salt       => salt,
-													 :hashed_code => hashed_code
+                           nil,
+                           :_id       => password_reset_id, 
+                           :created_at => Couch_Plastic.utc_now, 
+                           :owner_id   => data._id,
+                           :salt       => salt,
+                           :hashed_code => hashed_code
     )
     @password_reset_code = code
   
@@ -348,7 +348,7 @@ class Member
     @username_hash ||= \
         Life.find(:owner_id=>data._id).inject({}) { |hsh, un| 
           hsh[un['_id']] = un['username']
-					hsh
+          hsh
         }
   end
   

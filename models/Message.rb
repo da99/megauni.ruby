@@ -217,7 +217,7 @@ class Message
         docs = Couch_Plastic.relationize(docs, Life, 'owner_id', 'username' => 'owner_username')
       end
       if include_mods.include?(Club)
-        docs = Club.add_clubs_to_collection(docs)
+        docs = Couch_Plastic.relationize(docs, Club, 'target_ids', 'title'=>'club_title', 'filename' => 'club_filename')
       end
       docs
     end
