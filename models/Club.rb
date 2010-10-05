@@ -43,29 +43,33 @@ class Club
   
   # ======== Authorizations ======== 
 
-  def self.create editor, raw_raw_data # CREATE
-    new do
-      
-      if editor.usernames.size == 1 || !raw_raw_data['username_id']
-        raw_raw_data['owner_id'] ||= editor.username_ids.first
+  class << self
+    
+    def create editor, raw_raw_data # CREATE
+      new do
+        
+        if editor.usernames.size == 1 || !raw_raw_data['username_id']
+          raw_raw_data['owner_id'] ||= editor.username_ids.first
+        end
+        self.manipulator = editor
+        self.raw_data = raw_raw_data
+        demand :owner_id, :filename, :title, :teaser
+        ask_for_or_default :lang
+        save_create 
+        
       end
-      self.manipulator = editor
-      self.raw_data = raw_raw_data
-      demand :owner_id, :filename, :title, :teaser
-      ask_for_or_default :lang
-      save_create 
-      
     end
-  end
 
-  def self.update id, editor, new_raw_data # UPDATE
-    doc = new(id) do
-      self.manipulator = editor
-      self.raw_data = new_raw_data
-      ask_for :title, :teaser
-      save_update 
+    def update id, editor, new_raw_data # UPDATE
+      doc = new(id) do
+        self.manipulator = editor
+        self.raw_data = new_raw_data
+        ask_for :title, :teaser
+        save_update 
+      end
     end
-  end
+    
+  end # == self
 
   def allow_to? action, editor
     case action
