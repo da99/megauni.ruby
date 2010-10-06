@@ -4,24 +4,26 @@
 class Hellos
   include Base_Control
 
-  def GET_list 
+	top_slash 
+
+  get '/' do
     set_header 'Cache-Control', 'public, max-age=600'
     render_html_template
   end
 
-  def GET_salud
+  get '/salud' do
     render_html_template
   end
 
-  def GET_help
+  get '/help' do
     render_html_template
   end
 
-  def GET_sitemap_xml
+  get '/sitemap.xml' do
     render_xml_template
   end
 
-  def GET_rss_xml
+  get '/rss.xml' do
     render_xml_template
   end
 

@@ -144,13 +144,13 @@ class Mu_Router
       path '/follow/'         , 'follow'   , 'POST'
       
       map '/{filename}' do
-        path '/'            ,  'by_filename'    
-        path '/'            ,  'update'          , 'PUT'
-        path '/edit/', 'edit'
-        path '/follow/'     ,  'follow'       
-        sections.each { |suffix|
-          path "/#{suffix}/", "read_#{suffix}"
-        }
+        # path '/'            ,  'by_filename'    
+        # path '/'            ,  'update'          , 'PUT'
+        # path '/edit/', 'edit'
+        # path '/follow/'     ,  'follow'       
+        # sections.each { |suffix|
+        #   path "/#{suffix}/", "read_#{suffix}"
+        # }
       end
     end
     

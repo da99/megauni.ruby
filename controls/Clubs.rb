@@ -3,111 +3,45 @@ require 'views/Club_Control_Base_View'
 class Clubs
   
   include Base_Control
-
-  def GET_list
-    env['results.clubs'] = Club.all
-    render_html_template
-  end
-
-  def GET_create
+  
+  SECTIONS = %w{ e qa news fights shop random thanks predictions magazine}
+  
+  top_slash # =====================================================
+  
+  get '/club-create' do
     require_log_in!
     render_html_template
   end
 
-  def GET_follow filename
-    clean_room['username'] = current_member.usernames.first
-    clean_room['filename'] = filename
-    POST_follow()
-  end
-
-  def POST_follow 
-    username_id = current_member.username_to_username_id(clean_room['username'])
-    club        = Club.by_filename(clean_room['filename'])
+  get '/club_search' do
+    env['club_filename'] = filename
     begin
-      club.create_follower(current_member, username_id)
-    rescue Couch_Plastic::Invalid
-      flash_msg.errors = $!.doc.errors
+      club = Club.by_filename(filename)
+      redirect!("/uni/#{club.data.filename}/")
+    rescue Club::Not_Found
     end
-    redirect! club.href
-  end
-  
-  def GET_as_life username
-    env['club']            = Club.by_filename_or_member_username(username)
-    env['messages_latest'] = Message.latest_by_club_id(env['club'].data._id)
     render_html_template
   end
 
-  def GET_by_filename filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.messages_latest'] = Message.latest_by_club_id(club.data._id)
-    case filename
-    when 'hearts'
-      render_html_template "Clubs_#{filename}"
-    else
-      render_html_template
+  post '/club_search/:filename' do
+    filename = clean_room['keyword'].to_s
+    begin
+      club = Club.by_filename_or_member_username(filename)
+      redirect!("/uni/#{club.data.filename}/")
+    rescue Club::Not_Found
+      cgi_filename = CGI.escape(filename)
+      redirect!("/club-search/#{cgi_filename}/")
     end
   end
+
+  path '/uni' # =====================================================
   
-  def GET_by_old_id id
-    env['results.club'] = id
-    render_html_template("Topic_#{id}")
-  end
-
-  def GET_read_news filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.news'] = Message.latest_by_club_id(club.data._id, :message_model=>'news')
+  get '/' do
+    env['results.clubs'] = Club.all
     render_html_template
   end
 
-  def GET_read_magazine filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.magazine'] = Message.latest_by_club_id(club.data._id, :message_model=>'mag_story')
-    render_html_template
-  end
-
-  def GET_read_fights filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.passions'] = Message.latest_by_club_id(club.data._id, :message_model=>{ :$in=> %w{fight complaint debate} })
-    render_html_template
-  end
-
-  def GET_read_qa filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.questions'] = Message.latest_by_club_id(club.data._id, :message_model=>'question')
-    render_html_template
-  end
-
-  def GET_read_e filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.facts'] = Message.latest_by_club_id(club.data._id, :message_model=>{:$in=>['e_chapter', 'e_quote']})
-    render_html_template
-  end
-
-  def GET_read_shop filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.buys'] = Message.latest_by_club_id(club.data._id, :message_model=>'buy')
-    render_html_template
-  end
-
-  def GET_read_predictions filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.predictions'] = Message.latest_by_club_id(club.data._id, :message_model=>'prediction')
-    render_html_template
-  end
-
-  def GET_read_random filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.randoms'] = Message.latest_by_club_id(club.data._id, :message_model=>'random')
-    render_html_template
-  end
-
-  def GET_read_thanks filename
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
-    env['results.thanks'] = Message.latest_by_club_id(club.data._id, :message_model=>'thank')
-    render_html_template
-  end
-
-  def POST_create
+  post '/create' do
     require_log_in!
     begin
       club = Club.create( current_member, clean_room )
@@ -119,7 +53,36 @@ class Clubs
     end
   end
 
-  def PUT_update filename
+  post '/follow' do
+    username_id = current_member.username_to_username_id(clean_room['username'])
+    club        = Club.by_filename(clean_room['filename'])
+    begin
+      club.create_follower(current_member, username_id)
+    rescue Couch_Plastic::Invalid
+      flash_msg.errors = $!.doc.errors
+    end
+    redirect! club.href
+  end
+  
+  get '/:old_topic' do # by_old_id id
+    env['results.club'] = id
+    render_html_template("Topic_#{id}")
+  end
+
+  path '/:filename' # =====================================================
+
+  get '/' do # by_filename filename
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.messages_latest'] = Message.latest_by_club_id(club.data._id)
+    case filename
+    when 'hearts'
+      render_html_template "Clubs_#{filename}"
+    else
+      render_html_template
+    end
+  end
+  
+  put '/' do # update filename
     require_log_in! 
     club_id = Club.by_filename(filename).data._id
     begin
@@ -132,33 +95,83 @@ class Clubs
     end
   end
 
-  def GET_edit club_filename
+  get '/edit' do # club_filename
+    club_filename = clean_room[:filename]
     club = save_club_to_env(club_filename)
     require_log_in! :ADMIN, club.data.owner_id
     render_html_template
   end
+
+  get '/follow' do
+    filename = clean_room[:filename]
+    clean_room['username'] = current_member.usernames.first
+    clean_room['filename'] = filename
+    POST_follow()
+  end
   
-  def GET_club_search filename
-    env['club_filename'] = filename
-    begin
-      club = Club.by_filename(filename)
-      redirect!("/uni/#{club.data.filename}/")
-    rescue Club::Not_Found
-    end
+  get '/news' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.news'] = Message.latest_by_club_id(club.data._id, :message_model=>'news')
     render_html_template
   end
 
-  def POST_club_search
-    filename = clean_room['keyword'].to_s
-    begin
-      club = Club.by_filename_or_member_username(filename)
-      redirect!("/uni/#{club.data.filename}/")
-    rescue Club::Not_Found
-      cgi_filename = CGI.escape(filename)
-      redirect!("/club-search/#{cgi_filename}/")
-    end
+  get '/magazine' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.magazine'] = Message.latest_by_club_id(club.data._id, :message_model=>'mag_story')
+    render_html_template
   end
 
+  get '/fights' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.passions'] = Message.latest_by_club_id(club.data._id, :message_model=>{ :$in=> %w{fight complaint debate} })
+    render_html_template
+  end
+
+  get '/qa' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.questions'] = Message.latest_by_club_id(club.data._id, :message_model=>'question')
+    render_html_template
+  end
+
+  get '/e' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.facts'] = Message.latest_by_club_id(club.data._id, :message_model=>{:$in=>['e_chapter', 'e_quote']})
+    render_html_template
+  end
+
+  get '/shop' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.buys'] = Message.latest_by_club_id(club.data._id, :message_model=>'buy')
+    render_html_template
+  end
+
+  get '/predictions' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.predictions'] = Message.latest_by_club_id(club.data._id, :message_model=>'prediction')
+    render_html_template
+  end
+
+  get '/random' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.randoms'] = Message.latest_by_club_id(club.data._id, :message_model=>'random')
+    render_html_template
+  end
+
+  get '/thanks' do
+    filename = clean_params[:filename]
+    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    env['results.thanks'] = Message.latest_by_club_id(club.data._id, :message_model=>'thank')
+    render_html_template
+  end
+  
   private # ======================================
 
   def save_club_to_env id
@@ -193,3 +206,14 @@ class Clubs
   end # ===
   
 end # === Club_Control
+
+
+
+__END__
+
+  
+  def GET_as_life username
+    env['club']            = Club.by_filename_or_member_username(username)
+    env['messages_latest'] = Message.latest_by_club_id(env['club'].data._id)
+    render_html_template
+  end
