@@ -126,9 +126,9 @@ class Mu_Router
       sections = %w{ e qa news fights shop random thanks predictions magazine}
       
       top_slash do
-        path '/club-create/'                 ,  'create'         
-        path '/club-search/'                 ,  'club_search'     , 'POST'
-        path '/club-search/{filename}/'      ,  'club_search'
+        # path '/club-create/'                 ,  'create'         
+        # path '/club-search/'                 ,  'club_search'     , 'POST'
+        # path '/club-search/{filename}/'      ,  'club_search'
         
         map '/life/{filename}' do
           path '/'                        , 'as_life'

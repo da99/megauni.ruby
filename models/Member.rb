@@ -61,63 +61,40 @@ class Member
       }]
   # ==== Class Methods =====================================================    
 
-  def self.delete id, editor
-    obj = begin
-            by_id(id)
-          rescue Member::Not_Found
-            nil
-          end
-    if obj
-      super(id, editor)
-      Trashed_Members.create(editor, obj.data.as_hash)
+  class << self
+    def delete id, editor
+      obj = begin
+              by_id(id)
+            rescue Member::Not_Found
+              nil
+            end
+      if obj
+        super(id, editor)
+        Trashed_Members.create(editor, obj.data.as_hash)
+      end
+      obj
     end
-    obj
-  end
 
-  def self.valid_security_level?(perm_level)
-    return true if SECURITY_LEVELS.include?(perm_level)
-    case perm_level
-    when BSON::ObjectID, Member, String, Symbol
-      true
-    else
-      false
+    def valid_security_level?(perm_level)
+      return true if SECURITY_LEVELS.include?(perm_level)
+      case perm_level
+      when BSON::ObjectID, Member, String, Symbol
+        true
+      else
+        false
+      end
     end
-  end
+    
+    def relationize docs, namespace = 'owner'
+      Couch_Plastic.relationize(docs, Life,   "#{namespace}_id", 'username' => "#{namespace}_username")
+      Couch_Plastic.relationize(docs, Member, "#{namespace}_id",  namespace => :doc)
+      docs
+    end
+
+  end # === end
+
 
   # ==== Getters =====================================================    
-  
-  def self.add_docs_by_username_id(docs, key = 'owner_id')
-    
-    # Grab all docs for: usernames, members.
-    editor_ids = docs.map { |doc| doc[key] }.compact.uniq
-    lifes  = Life.find(:owner_id => { :$in => editor_ids } ).to_a
-    member_ids = lifes.map { |doc| doc['owner_id'] }
-    members    = Member.all_by_id( :$in  => member_ids ).to_a
-    
-    # Create a Hash: :username_id => :username
-    username_map = lifes.inject({}) { |memo, un|
-      memo[un['_id']] = un['username']
-      memo
-    }
-    
-    # Create a Hash: :username_id => :member
-    editor_map = editor_ids.inject({}) do |memo, ed_id|
-      memo[ed_id] = members.detect { |mem| 
-                      mem['_id'].to_s == ed_id.to_s
-                    }
-      memo
-    end
-    
-    # Finally, add corresponding member to target collection.
-    key_username = key.sub('_id', '_username')
-    key_mem      = key.sub('_id', '')
-    docs.each { |doc|
-      un_id = doc[key]
-      doc[key_username] = username_map[ un_id ]
-      doc[key_mem]       = editor_map[ un_id ]
-    }
-    
-  end
 
   def self.by_email email
     mem = find_one(:email=>email)
@@ -698,3 +675,38 @@ __END__
        &blok
     ).to_a
   end
+  
+  
+  def self.add_docs_by_username_id(docs, key = 'owner_id')
+    
+    # Grab all docs for: usernames, members.
+    editor_ids = docs.map { |doc| doc[key] }.compact.uniq
+    lifes  = Life.find(:owner_id => { :$in => editor_ids } ).to_a
+    member_ids = lifes.map { |doc| doc['owner_id'] }
+    members    = Member.all_by_ids( :$in  => member_ids ).to_a
+    
+    # Create a Hash: :username_id => :username
+    username_map = lifes.inject({}) { |memo, un|
+      memo[un['_id']] = un['username']
+      memo
+    }
+    
+    # Create a Hash: :username_id => :member
+    editor_map = editor_ids.inject({}) do |memo, ed_id|
+      memo[ed_id] = members.detect { |mem| 
+                      mem['_id'].to_s == ed_id.to_s
+                    }
+      memo
+    end
+    
+    # Finally, add corresponding member to target collection.
+    key_username = key.sub('_id', '_username')
+    key_mem      = key.sub('_id', '')
+    docs.each { |doc|
+      un_id = doc[key]
+      doc[key_username] = username_map[ un_id ]
+      doc[key_mem]       = editor_map[ un_id ]
+    }
+    
+  end
+  

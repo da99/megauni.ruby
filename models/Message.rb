@@ -152,7 +152,9 @@ class Message
       valid    = message_model?(mess_model)
       raise "Invalid message model #{mess_model.inspect}" if not valid
     end
-    Member.add_docs_by_username_id(find_wo_validation(selector, params, &blok))
+    Member.relationize(
+      find_wo_validation(selector, params, &blok)
+    )
   end
   
   class << self

@@ -198,25 +198,6 @@ module Couch_Plastic
     @error_msg = nil # The efault error message for validation errors.
     @cache = {}
     doc   = case doc_id_or_hash
-            when String, BSON::ObjectID
-
-              result = if doc_id_or_hash.is_a?(BSON::ObjectID)
-                         find_one(
-                           '_id'=>doc_id_or_hash
-                         )
-                       else 
-                         if BSON::ObjectID.legal?(doc_id_or_hash)
-                           find_one(
-                             '_id'=>BSON::ObjectID.from_string(doc_id_or_hash)
-                           )
-                         else
-                           find_one('old_id'=>doc_id_or_hash)
-                         end
-                       end
-              if !result
-                raise Not_Found, "Document not found for #{self.class} id: #{doc_id_or_hash.inspect}"
-              end
-              result
             when Hash
               doc_id_or_hash
             when nil
@@ -846,8 +827,11 @@ module Couch_Plastic_Class_Methods
   # Example:
   #    arr = [ doc, doc, doc ]
   #    relationaize arr, Life, 'owner_id', 'username'=>'owner_username'
-  #    Each doc now has 'owner_username' added to it
-  #    from the Life class.
+  # Each doc now has 'owner_username' added to it
+  # from the Life class.
+  # 
+  # To include the entire doc, use a map of
+  #     'key_name' => :doc
   #
   # Parameters: 
   #   fk => means foreign key
@@ -865,17 +849,33 @@ module Couch_Plastic_Class_Methods
     coll.map { |doc|
       target = f_docs[doc[fk]]
       field_map.each { | orig, namespaced |
-        doc[namespaced] = if target
-                            target[orig]
-                          else
-                            nil
-                          end
+        if namespaced == :doc
+          doc[orig] = target
+        else
+          doc[namespaced] = if target
+                              target[orig]
+                            else
+                              nil
+                            end
+        end
       }
       doc
     }
   end
 
   # ===== DSL-icious ======
+
+  def fields_must_exist *flds
+    raise(ArgumentError, "Empty array for fields.") if flds.empty?
+    flds.each { |fld| 
+      field_must_exist fld 
+    }
+  end
+
+  def field_must_exist fld
+    return true if allowed_field?(fld)
+    raise ArgumentError, "Field does not exist: #{fld.inspect}"
+  end
 
   def allowed_field? fld
     @fields.keys.include? fld
@@ -922,34 +922,85 @@ module Couch_Plastic_Class_Methods
     allowed_field?('created_at') && allowed_field?('updated_at')
   end
 
+  def associations
+    @associations ||= {}
+  end
+
+  %{ has_many has_one, belongs_to }.each { |assoc|
+    eval %~
+      def #{assoc} name, class_name = nil, namespace = nil
+        create_association( :#{assoc}, name, class_name, namespace)
+      end
+    ~
+  }
+
+  def create_association type, name, class_name = nil, namespace = nil
+    meta           = Data_Pouch.new({}, :type, :name, :Class, :namespace)
+    meta.type      = type
+    meta.name      = name.to_sym
+    meta.Class     = class_name || Object.const_get(name.to_s.capitalize),
+    meta.namespace = namespace || meta.name
+    
+    if associations[meta.name]
+      raise ArgumentError, "Association already defined: #{name}"
+    end
+    
+    associations[meta.name] = meta
+  end
+
   # ===== CRUD Methods ====================================
 
+  def find_with_associations raw_assocs, selector, params = {}
+    assocs = [raw_assocs].flatten.uniq.compact
+    docs = db_collection.find( selector, params ).to_a
+    assocs.each { |rel|
+      meta = associations[rel]
+      meta[:class].relationize(docs, meta[:namespace])
+    }
+  end
+
+  def find_by_field field, id, params = {}
+    selector = { field => Couch_Plastic.mongofy_id(id) }
+    find selector, params
+  end
+
+  def find_by_field_and_associate field, id, params = {}
+    selector = { field => Couch_Plastic.mongofy_id(id) }
+    find_with_associations associations.keys, selector, params
+  end
+
   def find selector, params = {}, &blok
+    fields = selector.keys
+    fields_must_exist(fields) if not fields.empty?
     raise ArgumentError, "I don't know what to do with a block." if blok
     (params.delete(:collection) || db_collection).find(selector, params).to_a
   end
   
-  def find_doc selector, params = {}, &blok
-    raise ArgumentError, "I don't know what to do with a block." if blok
-    (params.delete(:collection) || db_collection).find_one(selector, params)
+  def find_doc selector, params = {}
+    raise ArgumentError, "I don't know what to do with a block." if block_given?
+    params[:limit] = 1
+    find(selector, params).first
   end
   
   def find_one *args
     raise ArgumentError, "No block allowed here." if block_given?
     doc = find_doc(*args)
     return new(doc) if doc
-    raise self::Not_Found, args.to_a.map { |pair| "#{pair.first.capitalize}: #{pair.last}" }.join(', ')
+    raise self::Not_Found, args.to_a.map { |pair| "Document not found for: #{pair.first.capitalize}: #{pair.last}" }.join(', ')
   end
 
-  def by_id( id ) # READ
-    new(id)
+  def find_one_by_field
+  def find_one_by_id( raw_id ) # READ
+    id = Couch_Plastic.mongofy_id(raw_id)
+    case id
+    when BSON::ObjectID
+      find_one( :_id => id )
+    else
+      find_one('old_id'=>doc_id_or_hash)
+    end
   end
 
-  def all_by_id raw_id
-    find( :_id => Couch_Plastic.mongofy_id(raw_id) )
-  end
-
-  def by_owner_id str, params = {}, opts = {}
+  def find_one_by_owner_id str, params = {}, opts = {}
     id = Couch_Plastic.mongofy_id(str)
     find({:owner_id=>str}.update(params), opts)
   end
