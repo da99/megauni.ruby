@@ -8,21 +8,33 @@ class {{model_name}}
   
   make :body, :anything
 
+  # ==== Associations   ====
+  
+  
   # ==== Authorizations ====
  
   def allow_to? action, editor # NEW, CREATE
-		case action
-			when :create 
-			
-			when :read
+    case action
+      when :create 
+      
+      when :read
 
-			when :update
+      when :update
 
-			when :delete
+      when :delete
 
-		end
+    end
   end
 
+  class << self
+  
+    def create editor, raw_raw_data
+    end
+
+    def update id, editor, raw_raw_data
+    end
+
+  end # == self
 
   # ==== Accessors ====
 

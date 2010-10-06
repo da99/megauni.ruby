@@ -11,10 +11,10 @@ Received: from nestorius.hostingrails.com (nestorius.server0571.info [74.63.8.22
 Received-SPF: softfail (google.com: domain of transitioning kurosawa@ajisso.com does not designate 74.63.8.221 as permitted sender) client-ip=74.63.8.221;
 Authentication-Results: mx.google.com; spf=softfail (google.com: domain of transitioning kurosawa@ajisso.com does not designate 74.63.8.221 as permitted sender) smtp.mail=kurosawa@ajisso.com
 Received: from mail12.hs.kddi.ne.jp ([211.134.183.9])
-	by nestorius.hostingrails.com with esmtp (Exim 4.69)
-	(envelope-from <kurosawa@ajisso.com>)
-	id 1LDV5g-000810-NF
-	for support@busynoise.com; Thu, 18 Dec 2008 21:27:49 -0500
+  by nestorius.hostingrails.com with esmtp (Exim 4.69)
+  (envelope-from <kurosawa@ajisso.com>)
+  id 1LDV5g-000810-NF
+  for support@busynoise.com; Thu, 18 Dec 2008 21:27:49 -0500
 Received: from mkurosawa ([221.245.36.66]) by mail12.hs.kddi.ne.jp
           with ESMTP
           id <20081219022919821.PNFD.32591.mail12.hs.kddi.ne.jp@hs.kddi.ne.jp>
@@ -26,7 +26,7 @@ Date: Fri, 19 Dec 2008 11:29:14 +0900
 Message-ID: <009401c96181$95ac43e0$c104cba0$@com>
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0095_01C961CD.0593EBE0"
+  boundary="----=_NextPart_000_0095_01C961CD.0593EBE0"
 X-Mailer: Microsoft Office Outlook 12.0
 Thread-Index: Aci2Ja6iWuLo4hFnQDyCIhmIQB/7tgAC5TowKtQRIoA=
 Content-Language: ja
@@ -40,12 +40,12 @@ X-AntiAbuse: Sender Address Domain - ajisso.com
 
 ------=_NextPart_000_0095_01C961CD.0593EBE0
 Content-Type: multipart/alternative;
-	boundary="----=_NextPart_001_0096_01C961CD.0593EBE0"
+  boundary="----=_NextPart_001_0096_01C961CD.0593EBE0"
 
 
 ------=_NextPart_001_0096_01C961CD.0593EBE0
 Content-Type: text/plain;
-	charset="ks_c_5601-1987"
+  charset="ks_c_5601-1987"
 Content-Transfer-Encoding: quoted-printable
 
 =20
@@ -268,7 +268,7 @@ Version: 8.0.100 / Virus Database: 269.23.16/1431 - Release Date:
 
 ------=_NextPart_001_0096_01C961CD.0593EBE0
 Content-Type: text/html;
-	charset="ks_c_5601-1987"
+  charset="ks_c_5601-1987"
 Content-Transfer-Encoding: quoted-printable
 
 <html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
@@ -293,90 +293,90 @@ w\:* {behavior:url(#default#VML);}
 <!--
  /* Font Definitions */
  @font-face
-	{font-family:Gulim;
-	panose-1:2 11 6 0 0 1 1 1 1 1;}
+  {font-family:Gulim;
+  panose-1:2 11 6 0 0 1 1 1 1 1;}
 @font-face
-	{font-family:Gulim;
-	panose-1:2 11 6 0 0 1 1 1 1 1;}
+  {font-family:Gulim;
+  panose-1:2 11 6 0 0 1 1 1 1 1;}
 @font-face
-	{font-family:"MS UI Gothic";
-	panose-1:2 11 6 0 7 2 5 8 2 4;}
+  {font-family:"MS UI Gothic";
+  panose-1:2 11 6 0 7 2 5 8 2 4;}
 @font-face
-	{font-family:Tahoma;
-	panose-1:2 11 6 4 3 5 4 4 2 4;}
+  {font-family:Tahoma;
+  panose-1:2 11 6 4 3 5 4 4 2 4;}
 @font-face
-	{font-family:"\@MS UI Gothic";
-	panose-1:2 11 6 0 7 2 5 8 2 4;}
+  {font-family:"\@MS UI Gothic";
+  panose-1:2 11 6 0 7 2 5 8 2 4;}
 @font-face
-	{font-family:Batang;}
+  {font-family:Batang;}
 @font-face
-	{font-family:Gulim;}
+  {font-family:Gulim;}
 @font-face
-	{font-family:"Malgun Gothic";}
+  {font-family:"Malgun Gothic";}
 @font-face
-	{font-family:"\@Gulim";
-	panose-1:2 11 6 0 0 1 1 1 1 1;}
+  {font-family:"\@Gulim";
+  panose-1:2 11 6 0 0 1 1 1 1 1;}
  /* Style Definitions */
  p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0mm;
-	margin-bottom:.0001pt;
-	text-align:justify;
-	text-justify:inter-ideograph;
-	text-autospace:none;
-	word-break:break-all;
-	font-size:10.0pt;
-	font-family:"Malgun Gothic";}
+  {margin:0mm;
+  margin-bottom:.0001pt;
+  text-align:justify;
+  text-justify:inter-ideograph;
+  text-autospace:none;
+  word-break:break-all;
+  font-size:10.0pt;
+  font-family:"Malgun Gothic";}
 a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
+  {mso-style-priority:99;
+  color:blue;
+  text-decoration:underline;}
 a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
+  {mso-style-priority:99;
+  color:purple;
+  text-decoration:underline;}
 p
-	{mso-style-priority:99;
-	mso-margin-top-alt:auto;
-	margin-right:0mm;
-	mso-margin-bottom-alt:auto;
-	margin-left:0mm;
-	font-size:12.0pt;
-	font-family:Gulim;}
+  {mso-style-priority:99;
+  mso-margin-top-alt:auto;
+  margin-right:0mm;
+  mso-margin-bottom-alt:auto;
+  margin-left:0mm;
+  font-size:12.0pt;
+  font-family:Gulim;}
 span.18
-	{mso-style-type:personal;
-	font-family:"Malgun Gothic";
-	color:windowtext;}
+  {mso-style-type:personal;
+  font-family:"Malgun Gothic";
+  color:windowtext;}
 span.19
-	{mso-style-type:personal;
-	font-family:"Malgun Gothic";
-	color:#1F497D;}
+  {mso-style-type:personal;
+  font-family:"Malgun Gothic";
+  color:#1F497D;}
 span.20
-	{mso-style-type:personal;
-	font-family:"Malgun Gothic";
-	color:blue;
-	font-weight:normal;
-	font-style:normal;
-	text-decoration:none none;}
+  {mso-style-type:personal;
+  font-family:"Malgun Gothic";
+  color:blue;
+  font-weight:normal;
+  font-style:normal;
+  text-decoration:none none;}
 span.21
-	{mso-style-type:personal;
-	font-family:"Malgun Gothic";
-	color:blue;
-	font-weight:normal;
-	font-style:normal;
-	text-decoration:none none;}
+  {mso-style-type:personal;
+  font-family:"Malgun Gothic";
+  color:blue;
+  font-weight:normal;
+  font-style:normal;
+  text-decoration:none none;}
 span.wordlink
-	{mso-style-name:wordlink;}
+  {mso-style-name:wordlink;}
 span.23
-	{mso-style-type:personal-reply;
-	color:#993366;}
+  {mso-style-type:personal-reply;
+  color:#993366;}
 .MsoChpDefault
-	{mso-style-type:export-only;
-	font-size:10.0pt;}
+  {mso-style-type:export-only;
+  font-size:10.0pt;}
 @page Section1
-	{size:612.0pt 792.0pt;
-	margin:30.0mm 72.0pt 72.0pt 72.0pt;}
+  {size:612.0pt 792.0pt;
+  margin:30.0mm 72.0pt 72.0pt 72.0pt;}
 div.Section1
-	{page:Section1;}
+  {page:Section1;}
 -->
 </style>
 <!--[if gte mso 9]><xml>
@@ -926,10 +926,10 @@ Version: 8.0.100 / Virus Database: 269.23.16/1431 - Release Date: =
 
 ------=_NextPart_000_0095_01C961CD.0593EBE0
 Content-Type: text/plain;
-	name="_AVG certification_.txt"
+  name="_AVG certification_.txt"
 Content-Transfer-Encoding: quoted-printable
 Content-Disposition: attachment;
-	filename="_AVG certification_.txt"
+  filename="_AVG certification_.txt"
 
 
 No virus found in this incoming message.
