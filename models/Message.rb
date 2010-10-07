@@ -1,5 +1,4 @@
 
-
 class Message
 
   DECLINE = -1
@@ -81,6 +80,12 @@ class Message
       [url, width.to_i, height.to_i]
     }
   }]
+
+  # ==== Associations   ====
+
+  has_many :notifys, Member_Notifys
+  has_many :reposts, Member_Reposts
+
 
   # ==== Authorizations ====
  
@@ -332,22 +337,11 @@ class Message
   #      }
   #    ]
   def notifys mem 
-    Member_Notifys.find( 
-      :message_id => data._id,
-      :owner_id   => { :$in=>mem.lifes._ids } 
-    ).to_a
-  end
-
-  # Accepts:
-  #    Member - Required.
-  #
-  #  Returns:
-  #    Array - [
-  #      owner_id
-  #      owner_id
-  #    ]
-  def notifys_by_username mem
-    notifys(mem).map { |doc| doc['owner_id'] }
+    update_association :notifys, \
+      Member_Notifys.find( 
+                          :message_id => data._id,
+                          :owner_id   => { :$in=>mem.lifes._ids } 
+                         ).to_a
   end
 
   # Accepts:
@@ -364,27 +358,12 @@ class Message
   #      }
   #    ]
   def reposts mem
-    Member_Reposts.find( 
-      :message_id => data._id,
-      :owner_id   => { :$in=>mem.lifes._ids },
-      :message_model => 'repost'
-    )
-  end
-  
-  # Accepts:
-  #    Member - Required.
-  #
-  #  Returns:
-  #    Array - {
-  #      'owner_id' => [ club_id, club_id]
-  #      'owner_id' => [ club_id, club_id]
-  #    }
-  def reposts_by_username mem
-    reposts(mem).inject({}) { |memo, doc|
-      memo[ doc['owner_id'] ] ||= []
-      memo[ doc['owner_id'] ] += doc['target_ids']
-      memo
-    }
+    update_association :reposts, \
+      Member_Reposts.find( 
+                          :message_id => data._id,
+                          :owner_id   => { :$in=>mem.lifes._ids },
+                          :message_model => 'repost'
+                         ).to_a
   end
 
   def product?

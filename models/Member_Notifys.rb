@@ -29,6 +29,41 @@ class Member_Notifys
 
   # ==== Accessors ====
 
+  # ==== Modules ======
+
+  module Results
+    
+    # Accepts:
+    #    Member - Required.
+    #
+    #  Returns:
+    #    Array - [
+    #      owner_id
+    #      owner_id
+    #    ]
+    def usernames
+      map { |doc| doc['owner_id'] }
+    end
+    
+    # Accepts:
+    #   Message - Optional.
+    #   
+    # Returns:
+    #   Array - [
+    #     {
+    #       'username_id'   => id
+    #       'username'      => un
+    #       'selected?'     => Boolean
+    #       'not_selected?' => Boolean
+    #     }
+    #   ]
+    def menu
+      mem.lifes.menu(
+        usernames
+      )
+    end
+
+  end # === module
   
 
 end # === end Member_Notifys

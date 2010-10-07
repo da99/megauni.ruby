@@ -101,17 +101,17 @@ class Messages_by_id < Base_View
       end
     ~
   }
-
-  def notify_menu
-    @cache_notify_menu ||= current_member.notifys_menu( message )
-  end
   
   def notifys
     @cache_message_notifys ||= message.notifys(current_member)
   end
+
+  def notify_menu
+    @cache_notify_menu ||= message.notifys( current_member ).menu
+  end
   
   def repost_menu
-    @cache_repost_menu ||= current_member.reposts_menu( message )
+    @cache_repost_menu ||= message.reposts( current_member ) .menu
   end
 
 end # === Messages_by_id 

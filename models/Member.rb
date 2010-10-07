@@ -460,51 +460,6 @@ class Member
       hash
     }
   end
-  
-  # Accepts:
-  #   Message - Optional.
-  #   
-  # Returns:
-  #   Array - [
-  #     {
-  #       'username_id'   => id
-  #       'username'      => un
-  #       'selected?'     => Boolean
-  #       'not_selected?' => Boolean
-  #     }
-  #   ]
-  def notifys_menu message = nil
-    notifys = message ? 
-                message.notifys(self) :
-                []
-    
-    return lifes.menu if notifys.empty?
-    
-    lifes.menu(
-      notifys_by_username(mem)
-    )
-  end
-  
-  # Accepts:
-  #   Message - Optional.
-  #   
-  # Returns:
-  #   Array - [
-  #     { 
-  #       :username_id   => id 
-  #       :username      => un 
-  #       :clubs         => [ {
-  #                          :selected?     => Boolean
-  #                          :not_selected? => Boolean
-  #                         } ]
-  #     }
-  #   ]
-  def reposts_menu message = nil
-    return multi_verse_menu if not message
-    multi_verse_menu(
-      message.reposts_by_username(self)
-    )
-  end
 
 end # === model Member
 

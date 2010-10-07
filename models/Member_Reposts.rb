@@ -24,7 +24,48 @@ class Member_Reposts
   end
 
   # ==== Accessors ====
+    
+  # ==== Modules ====
 
+  module Results
+
+    # Accepts:
+    #    Member - Required.
+    #
+    #  Returns:
+    #    Array - {
+    #      'owner_id' => [ club_id, club_id]
+    #      'owner_id' => [ club_id, club_id]
+    #    }
+    def usernames
+      inject({}) { |memo, doc|
+        memo[ doc['owner_id'] ] ||= []
+        memo[ doc['owner_id'] ] += doc['target_ids']
+        memo
+      }
+    end
+    
+    # Accepts:
+    #   Member - Required.
+    #   
+    # Returns:
+    #   Array - [
+    #     { 
+    #       :username_id   => id 
+    #       :username      => un 
+    #       :clubs         => [ {
+    #                          :selected?     => Boolean
+    #                          :not_selected? => Boolean
+    #                         } ]
+    #     }
+    #   ]
+    def menu
+      multi_verse_menu(
+        mem.lifes.usernames
+      )
+    end
+    
+  end # === module
   
 
 end # === end Member_Reposts
