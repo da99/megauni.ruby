@@ -26,6 +26,14 @@ class Member
 	  
   has_one :password_reset
   has_many :lifes
+  has_many :following_clubs, Club
+    # Club.ids_for_follower_id( :$in => current_username_ids )
+  # def following_club_id?(club_id)
+  #   club_ids.include?(Couch_Plastic.mongofy_id(club_id))
+  # end
+  has_many :owned_clubs, Club
+    # Club.ids_by_owner_id(:$in=>current_username_ids)
+    # Club.by_owner_id(:$in=>current_username_ids)
   
 	# ==== Fields  =====
 	  
@@ -321,15 +329,6 @@ class Member
     @tz_proxy.utc_to_local( utc ).strftime('%a, %b %d, %Y @ %I:%M %p')
   end 
 
-  def current_username_ids
-    if current_un_id
-      [current_un_id]
-    else
-      lifes._ids
-    end
-  end
-  alias_method :life_club_ids, :current_username_ids
-
   def clubs  un_id, type = nil
     @all_clubs ||= begin
                      Club.hash_for_member(self).values.uniq
@@ -339,25 +338,9 @@ class Member
   end
 
   def club_ids 
-    (life_club_ids + following_club_ids + owned_club_ids)
+    (lifes.clubs._ids + following_clubs._ids + owned_clubs._ids)
   end
-
-  def following_club_ids 
-    Club.ids_for_follower_id( :$in => current_username_ids )
-  end
-
-  def following_club_id?(club_id)
-    club_ids.include?(Couch_Plastic.mongofy_id(club_id))
-  end
-  
-  def owned_club_ids 
-    Club.ids_by_owner_id(:$in=>current_username_ids)
-  end
-  
-  def owned_clubs
-    Club.by_owner_id(:$in=>current_username_ids)
-  end
-
+    
   def messages_from_my_clubs 
     Message.latest_by_club_id(:$in=>club_ids)
   end
@@ -368,7 +351,8 @@ class Member
   #   :as_lifer    => { :usernamed_id => [club doc] }
   #
   def multi_verse
-    @multi_verse ||= Club.all_for_member_by_relation(self)
+    # return @multi_verse ||= Club.all_for_member_by_relation(self)
+    owned_clubs.as_hash + following_clubs.as_hash + lifes.as_hash
   end
   
   # Accepts:
@@ -436,10 +420,12 @@ class Member
   #     { 
   #       'username_id'   => id 
   #       'username'      => un 
-  #       'clubs'         => {
-  #                           :selected?     => Boolean
-  #                           :not_selected? => Boolean
-  #                         }
+  #       'clubs'         => [ {
+  #                           'selected?'     => Boolean
+  #                           'not_selected?' => Boolean
+  #                           '_id'           => 
+  #                           'filename'      =>
+  #                          } ]
   #     }
   #   ]
   #
@@ -469,24 +455,6 @@ end # === model Member
 __END__
 
   attr_reader :old_un, :old_un_id, :current_un, :current_un_id
-
-  def within_username un, &blok
-    within_username_id lifes._id_for(un, &blok)
-  end
-  
-  # This method makes sure username belongs to member.
-  # If not, current username/username_id is set to nil.
-  def within_username_id un_id
-    @old_un_id           = current_un_id
-    @old_un              = current_un
-    
-    @current_un    = lifes.username_for(un_id)
-    @current_un_id = lifes._id_for(current_un)
-    
-    yield
-    @current_un    = old_un
-    @current_un_id = old_un_id
-  end
 
   make_psuedo :add_username, 
     # Delete invalid characters and 
