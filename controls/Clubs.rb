@@ -54,7 +54,7 @@ class Clubs
   end
 
   post '/follow' do
-    username_id = current_member.username_to_username_id(clean_room['username'])
+    username_id = current_member.lifes._id_for(clean_room['username'])
     club        = Club.by_filename(clean_room['filename'])
     begin
       club.create_follower(current_member, username_id)
@@ -104,7 +104,7 @@ class Clubs
 
   get '/follow' do
     filename = clean_room[:filename]
-    clean_room['username'] = current_member.usernames.first
+    clean_room['username'] = current_member.lifes.usernames.first
     clean_room['filename'] = filename
     POST_follow()
   end

@@ -12,7 +12,7 @@ class Members_lifes < Base_View
 
   def lifes
     # [{'username'=>'Not done', 'href'=>'/no-where'}]
-    current_member.username_menu
+    current_member.lifes.username_for
   end
   
   def session_form_username

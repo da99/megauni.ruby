@@ -19,7 +19,7 @@ class Test_Model_Doc_Log_Create < Test::Unit::TestCase
   
   must 'set :diff to a document diff' do
     vals['doc_id']  = BSON::ObjectID.new
-    vals['editor_id'] = mem.username_ids.first
+    vals['editor_id'] = mem.lifes._ids.first
     target = {"title"=>[["old", "new"], "title"]}
     log = Doc_Log.create(mem, vals)
     assert_equal target, log.data.diff
@@ -33,7 +33,7 @@ class Test_Model_Doc_Log_Create < Test::Unit::TestCase
   end
   
   must 'require :doc_id to be a valid BSON::ObjectID' do
-    vals['editor_id'] = mem.username_ids.first
+    vals['editor_id'] = mem.lifes._ids.first
     vals['doc_id'] = 'sometjing'
     assert_raises_with_message(Doc_Log::Invalid, /Doc id is not a valid id/) {
       Doc_Log.create(mem, vals)

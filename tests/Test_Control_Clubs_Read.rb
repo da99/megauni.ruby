@@ -74,7 +74,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
       'form#form_club_message_create input[name=username]'
     ).first
     
-    assert_equal regular_member_1.usernames.first, un.attributes['value'].value
+    assert_equal regular_member_1.lifes.usernames.first, un.attributes['value'].value
   end
 
   must 'not show follow club link to strangers.' do
@@ -102,7 +102,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
 
   must 'not show follow club link to followers.' do
     club = create_club(regular_member_1)
-    club.create_follower( regular_member_2, regular_member_2.username_ids.first )
+    club.create_follower( regular_member_2, regular_member_2.lifes._ids.first )
 
     log_in_regular_member_2
     get club.href
@@ -126,14 +126,14 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     get File.join('/', club.href, 'follow/')
     follows = Club.find_followers(
       :club_id=>club.data._id, 
-      :follower_id=>regular_member_1.username_ids.first
+      :follower_id=>regular_member_1.lifes._ids.first
     ).to_a
 
     assert_equal 1, follows.size
   end
 
   must 'show a form if user has multiple usernames' do
-    if regular_member_3.usernames.size == 1
+    if regular_member_3.lifes.usernames.size == 1
       Member.update(
         regular_member_3.data._id, 
         regular_member_3, 
@@ -152,7 +152,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
 
   must 'use /uni/{filename}/ for life clubs' do
     mem   = regular_member_1
-    un_id, un  = mem.username_hash.to_a.first
+    un_id, un  = mem.lifes._ids_to_usernames.to_a.first
     life  = Club.by_filename_or_member_username(un)
     assert_equal "/uni/#{un}/", life.href
   end
@@ -160,7 +160,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   must 'show "This life is yours" to owner of life club' do
     msg = "This life is yours"
     mem = regular_member_3
-    un_id, un = mem.username_hash.to_a.first
+    un_id, un = mem.lifes._ids_to_usernames.to_a.first
     log_in_regular_member_3
     life = Club.by_filename_or_member_username(un)
     get life.href
@@ -192,7 +192,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   end
 
   must 'redirect to life club if keyword is a member username' do
-    un = regular_member_1.usernames.first
+    un = regular_member_1.lifes.usernames.first
     post "/club-search/", :keyword=>un
     assert_redirect "/uni/#{un}/", 303
   end

@@ -13,7 +13,7 @@ class Test_Model_Member_Update < Test::Unit::TestCase
     mem    = create_member(:password => pwrd, :confirm_password => pwrd)
     mem.reset_password
     assert_raise Member::Password_Reset do
-      Member.authenticate(:username => mem.usernames.first, :password=>pwrd)
+      Member.authenticate(:username => mem.lifes.usernames.first, :password=>pwrd)
     end
   end
 
@@ -68,7 +68,7 @@ class Test_Model_Member_Update < Test::Unit::TestCase
     target.change_password_through_reset(:code=>code, :password=>new_pwrd, :confirm_password=>new_pwrd)
 
     final = Member.by_id(mem.data._id)
-    assert Member.authenticate(:username=>mem.usernames.first, :password=>new_pwrd)
+    assert Member.authenticate(:username=>mem.lifes.usernames.first, :password=>new_pwrd)
   end
 
   must 'raise Member::Invalid if new password/confirmation do not match' do

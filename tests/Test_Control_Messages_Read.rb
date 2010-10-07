@@ -10,7 +10,7 @@ class Test_Control_Messages_Read < Test::Unit::TestCase
 
   must 'render a message posted to a life club' do
     mem = regular_member_2
-    club = Club.by_filename_or_member_username(mem.usernames.first)
+    club = Club.by_filename_or_member_username(mem.lifes.usernames.first)
     mess = create_message(mem, club)
     get mess.href
     assert_equal 200, last_response.status

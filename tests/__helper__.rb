@@ -165,7 +165,7 @@ class Test::Unit::TestCase
       end
 
       def regular_username_#{i}
-        self.class.regular_members[#{i}-1].usernames.first
+        self.class.regular_members[#{i}-1].lifes.usernames.first
       end
       
       def regular_password_#{i}
@@ -175,7 +175,7 @@ class Test::Unit::TestCase
       def log_in_regular_member_#{i}
         mem = Life.by_username(regular_username_#{i}).owner
         assert_equal false, mem.has_power_of?( :ADMIN )
-        post '/log-in/', {:username=>mem.usernames.first, :password=>regular_password_#{i}}, ssl_hash
+        post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>regular_password_#{i}}, ssl_hash
         follow_redirect!
         assert_match( /lifes/, last_request.fullpath)
       end
@@ -266,7 +266,7 @@ class Test::Unit::TestCase
 
   def log_in_member(mem, password)
     assert_equal false, mem.has_power_of?( :ADMIN )
-    post '/log-in/', {:username=>mem.usernames.first, :password=>password}, ssl_hash
+    post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>password}, ssl_hash
     follow_redirect!
     assert_match( /lifes/, last_request.fullpath)
   end
@@ -274,7 +274,7 @@ class Test::Unit::TestCase
   def log_in_admin
     mem = Life.by_username('admin-member-1').owner
     assert mem.has_power_of?(:ADMIN)
-    post '/log-in/', {:username=>mem.usernames.first, :password=>admin_password}, ssl_hash
+    post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>admin_password}, ssl_hash
     follow_redirect!
     assert_match( /lifes/, last_request.fullpath )
   end
@@ -302,7 +302,7 @@ class Test::Unit::TestCase
 
   def create_member_and_log_in(*args)
     mem = create_member(*args)
-    log_in_member(mem, "pass-#{mem.usernames.first}")
+    log_in_member(mem, "pass-#{mem.lifes.usernames.first}")
     mem
   end
 
@@ -331,7 +331,7 @@ class Test::Unit::TestCase
     final_opts = {
       :privacy => 'public',
       :target_ids => [club.data._id],
-      :owner_id => (un_id || mem.username_ids.first),
+      :owner_id => (un_id || mem.lifes._ids.first),
       :body => "random body #{rand(4000)}",
       :message_model => 'random'
     }.update(opts)
@@ -352,8 +352,8 @@ class Test::Unit::TestCase
     un_2 = "rand_#{rand 3000}"
     Member.update(mem.data._id, mem, :add_username=>un_2)
     mem = Member.by_id(mem.data._id)
-    uns     = mem.usernames
-    un_ids  = uns.map { |u| mem.username_to_username_id(u) }
+    uns     = mem.lifes.usernames
+    un_ids  = uns.map { |u| mem.lifes._id_for(u) }
     [mem, uns, un_ids]
   end
 

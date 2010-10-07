@@ -45,7 +45,7 @@ class Test_Model_Member_Create < Test::Unit::TestCase
   must 'require a unique username' do
     old_mem_id = Member.find_one({})['_id']
     mem = Member.by_id('_id'=>old_mem_id)
-    username = mem.usernames.first
+    username = mem.lifes.usernames.first
     doc = begin
             Member.create(nil, {:password => 'pass132pass',
                                 :confirm_password=>'pass132pass',

@@ -49,13 +49,13 @@ class Message
 
   enable_timestamps
   
-  make_psuedo :editor_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids } ]
+  make_psuedo :editor_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
 
   make :message_model, [:in_array, MODELS]
   make :important, :not_empty
   make :rating, :not_empty
   make :privacy, [:in_array, ['private', 'public', 'friends_only'] ]
-  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids } ]
+  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
   make :parent_message_id, :mongo_object_id, [:set_raw_data, [:target_ids, lambda { 
     mess = Message.by_id(raw_data.parent_message_id)
     mess.data.target_ids
@@ -334,7 +334,7 @@ class Message
   def notifys mem 
     Member_Notifys.find( 
       :message_id => data._id,
-      :owner_id   => { :$in=>mem.username_ids } 
+      :owner_id   => { :$in=>mem.lifes._ids } 
     ).to_a
   end
 
@@ -366,7 +366,7 @@ class Message
   def reposts mem
     Member_Reposts.find( 
       :message_id => data._id,
-      :owner_id   => { :$in=>mem.username_ids },
+      :owner_id   => { :$in=>mem.lifes._ids },
       :message_model => 'repost'
     )
   end

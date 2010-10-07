@@ -7,7 +7,7 @@ class Test_Model_Member_Read < Test::Unit::TestCase
     doc = Member.authenticate(:username=>regular_username_1, :password=>regular_password_1)
     assert_equal(
       regular_username_1,
-      doc.usernames.detect { |un| un == regular_username_1 }
+      doc.lifes.usernames.detect { |un| un == regular_username_1 }
     )
   end
 
@@ -86,10 +86,10 @@ class Test_Model_Member_Read < Test::Unit::TestCase
   must 'add :owner_username to a collection of docs with :owner_id (:username_id)' do
     mem_1 = regular_member_1
     mem_2 = regular_member_2
-    un_id_1 = mem_1.username_ids.first
-    un_id_2 = mem_2.username_ids.last
-    un_1    = mem_1.usernames.first
-    un_2    = mem_2.usernames.last
+    un_id_1 = mem_1.lifes._ids.first
+    un_id_2 = mem_2.lifes._ids.last
+    un_1    = mem_1.lifes.usernames.first
+    un_2    = mem_2.lifes.usernames.last
     
     docs = []
     docs << {'title'=>'something', 'owner_id'=> un_id_1}

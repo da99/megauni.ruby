@@ -49,7 +49,7 @@ class Test_Control_Sessions_Create < Test::Unit::TestCase
     pass = "mypass123"
     mem = create_member(:password=>pass, :confirm_password=>pass)
     mem.reset_password
-    post '/log-in/', {:username=>mem.usernames.first, :password=>pass}, ssl_hash
+    post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>pass}, ssl_hash
     follow_redirect!
     assert last_response.body['has been reset']
   end

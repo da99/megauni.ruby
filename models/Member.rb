@@ -2,8 +2,6 @@ require 'bcrypt'
 
 class Member 
 
-  attr_reader :password_reset_code
-  
   include Couch_Plastic
 
   # =========================================================
@@ -24,9 +22,13 @@ class Member
   EMAIL_FINDER        = /[a-zA-Z0-9\.\-\_\+]{1,}@[a-zA-Z0-9\-\_]{1,}[\.]{1}[a-zA-Z0-9\.\-\_]{1,}[a-zA-Z0-9]/
   VALID_EMAIL_FORMAT  = /\A#{EMAIL_FINDER}\z/
 
+	# ==== Associations  ====
+	  
   has_one :password_reset
   has_many :lifes
   
+	# ==== Fields  =====
+	  
   enable_timestamps
   make :hashed_password, :not_empty
   make :salt, :not_empty 
@@ -59,9 +61,11 @@ class Member
 
           new_data.hashed_password = BCrypt::Password.create( cleanest(:password) + new_data.salt ).to_s
       }]
+			
   # ==== Class Methods =====================================================    
 
   class << self
+		
     def delete id, editor
       obj = begin
               by_id(id)
@@ -96,91 +100,139 @@ class Member
 
   # ==== Getters =====================================================    
 
-  def self.by_email email
-    mem = find_one(:email=>email)
-    if email.empty? || !mem
-      raise Not_Found, "Member email: #{email.inspect}"
-    end
-    Member.by_id(mem['_id'])
-  end
-  
-  # Based on Sinatra-authentication (on github).
-  # 
-  # Parameters:
-  #   raw_vals - Hash with at least 2 keys: :username, :password
-  # 
-  # Raises: 
-  #   Member::Wrong_Password
-  #
-  def self.authenticate( raw_vals )
+	class << self
 
-    username   = (raw_vals[:username] || raw_vals['username']).to_s.strip
-    password   = (raw_vals[:password] || raw_vals['password']).to_s.strip
-    ip_addr    = (raw_vals[:ip_address] || raw_vals['ip_address']).to_s.strip
-    user_agent = (raw_vals[:user_agent] || raw_vals['user_agent']).to_s.strip
-    
-    ip_addr    = nil if ip_addr.empty?
-    user_agent = nil if user_agent.empty?
+		def by_email email
+			mem = find_one(:email=>email)
+			if email.empty? || !mem
+				raise Not_Found, "Member email: #{email.inspect}"
+			end
+			Member.by_id(mem['_id'])
+		end
+		
+		# Based on Sinatra-authentication (on github).
+		# 
+		# Parameters:
+		#   raw_vals - Hash with at least 2 keys: :username, :password
+		# 
+		# Raises: 
+		#   Member::Wrong_Password
+		#
+		def authenticate( raw_vals )
 
-    if username.empty? || password.empty?
-      raise Wrong_Password, "#{raw_vals.inspect}"
-    end
+			username   = (raw_vals[:username] || raw_vals['username']).to_s.strip
+			password   = (raw_vals[:password] || raw_vals['password']).to_s.strip
+			ip_addr    = (raw_vals[:ip_address] || raw_vals['ip_address']).to_s.strip
+			user_agent = (raw_vals[:user_agent] || raw_vals['user_agent']).to_s.strip
+			
+			ip_addr    = nil if ip_addr.empty?
+			user_agent = nil if user_agent.empty?
 
-    life = Life.by_username( username )
-    mem = life.owner
+			if username.empty? || password.empty?
+				raise Wrong_Password, "#{raw_vals.inspect}"
+			end
 
-    # Check for Password_Reset
-    raise Password_Reset, mem.inspect if mem.password_in_reset?
+			life = Life.by_username( username )
+			mem = life.owner
 
-    # See if password matches with correct password.
-    correct_password = BCrypt::Password.new(mem.data.hashed_password) === (password + mem.data.salt)
-    return mem if correct_password
+			# Check for Password_Reset
+			raise Password_Reset, mem.inspect if mem.password_in_reset?
 
-    # Grab failed attempt count.
-    fail_count = Failed_Log_In_Attempts.for_today(mem).count
-    new_count  = fail_count + 1
-    
-    # Insert failed password.
-    Failed_Log_In_Attempts.create(
-      nil,
-      { :data_model => 'Member_Failed_Attempt',
-      :owner_id   => mem.data._id, 
-      :date       => Couch_Plastic.utc_date_now, 
-      :time       => Couch_Plastic.utc_time_now,
-      :created_at => Couch_Plastic.utc_now,
-      :ip_address => ip_addr,
-      :user_agent => user_agent }
-    )
+			# See if password matches with correct password.
+			correct_password = BCrypt::Password.new(mem.data.hashed_password) === (password + mem.data.salt)
+			return mem if correct_password
 
-    # Raise Account::Reset if necessary.
-    if new_count > 2
-      mem.reset_password
-      raise Password_Reset, mem.inspect
-    end
+			# Grab failed attempt count.
+			fail_count = Failed_Log_In_Attempts.for_today(mem).count
+			new_count  = fail_count + 1
+			
+			# Insert failed password.
+			Failed_Log_In_Attempts.create(
+				nil,
+				{ :data_model => 'Member_Failed_Attempt',
+				:owner_id   => mem.data._id, 
+				:date       => Couch_Plastic.utc_date_now, 
+				:time       => Couch_Plastic.utc_time_now,
+				:created_at => Couch_Plastic.utc_now,
+				:ip_address => ip_addr,
+				:user_agent => user_agent }
+			)
 
-    raise Wrong_Password, "Password is invalid for: #{username.inspect}"
-  end 
+			# Raise Account::Reset if necessary.
+			if new_count > 2
+				mem.reset_password
+				raise Password_Reset, mem.inspect
+			end
+
+			raise Wrong_Password, "Password is invalid for: #{username.inspect}"
+		end 
+	
+	end # === self
 
 
   # ==== Authorizations ====
 
-  def allow_as_creator? editor # NEW, CREATE
-    return true if !editor
-    false
-  end
+	class << self
+		
+		def create editor, raw_raw_data # CREATE
+			d = new do
+				self.manipulator = editor
+				self.raw_data = raw_raw_data
+				
+				new_data.security_level = Member::MEMBER
+				ask_for :email
+				demand  :add_username, :password
+				generate_id
+				save_create_life
+				save_create
+			end
+		end
+		
+		def update id, editor, new_raw_data # UPDATE
 
-  def self.create editor, raw_raw_data # CREATE
-    d = new do
-      self.manipulator = editor
-      self.raw_data = raw_raw_data
-      
-      new_data.security_level = Member::MEMBER
-      ask_for :email
-      demand  :add_username, :password
-      generate_id
-      save_create_life
-      save_create
-    end
+			doc = new(id) do
+				self.manipulator = editor
+				self.raw_data    = new_raw_data
+				
+				ask_for :add_username 
+
+				if manipulator == self
+					ask_for :password  
+				end
+
+				if manipulator.has_power_of? ADMIN
+					ask_for :security_level
+				end
+				un_id = nil
+				
+				save_update :if_valid => lambda {
+					if raw_data.add_username
+						un_id = __prep_new_username__
+					end
+				}
+				if un_id
+					__complete_new_username__ un_id
+				end
+			end
+
+		end
+		
+	end # === self
+
+  def allow_to? action, editor # NEW, CREATE
+		case action
+			when :create
+				editor ? true : false 
+			when :read
+				read
+			when :update
+				return false if !editor
+				return true if self.data._id == editor.data._id
+				return true if editor.has_power_of?(:ADMIN)
+				false
+			when :delete
+				allow_to? :update, editor
+		end
   end
 
   def save_create_life
@@ -197,105 +249,22 @@ class Member
     end
   end
 
-  def reader? editor # SHOW
-    true
-  end
 
-  def updator? editor # EDIT, UPDATE
-    return false if !editor
-    return true if self.data._id == editor.data._id
-    return true if editor.has_power_of?(:ADMIN)
-    false
-  end
-
-  def self.update id, editor, new_raw_data # UPDATE
-
-    doc = new(id) do
-      self.manipulator = editor
-      self.raw_data    = new_raw_data
-      
-      ask_for :add_username 
-
-      if manipulator == self
-        ask_for :password  
-      end
-
-      if manipulator.has_power_of? ADMIN
-        ask_for :security_level
-      end
-      un_id = nil
-      
-      save_update :if_valid => lambda {
-        if raw_data.add_username
-          un_id = __prep_new_username__
-        end
-      }
-      if un_id
-        __complete_new_username__ un_id
-      end
-    end
-
-  end
-
-  def deletor? editor # DELETE
-    updator? editor
-  end
 
   # ==== UPDATORS ======================================================
   
   def password_in_reset?
     has_password_reset?
   end
-  
-  def change_password_through_reset raw_opts 
-    if not password_in_reset?
-      raise Password_Not_In_Reset, "Can't reset password when account has not been reset."
-    end
-    
-    opts                = Data_Pouch.new(raw_opts, :code, :password, :confirm_password)
-    all_values_included = opts.code && opts.password && opts.confirm_password
-    raise ArgumentError, "Missing values: #{opts.as_hash.inspect}" if not all_values_included
 
-    if BCrypt::Password.new(password_reset.data.hashed_code) === (opts.code + password_reset.data.salt ) 
-      results = Member.update( data._id, self, opts.as_hash ) 
-      Password_Resets.delete password_reset.data._id, self
-      results
-    else
-      raise Invalid_Password_Reset_Code, "Member: #{data._id}, Code: #{opts.code}"
-    end
-  end
+	def change_password_through_reset opts
+		password_reset.change_password opts
+	end
+	
+	def reset_password
+		update_relation :password_reset, Password_Reset.create(self)
+	end
 
-  def reset_password 
-
-    code = begin
-             # Salt and encrypt values.
-             chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-             (1..10).inject('') { |new_pass, i|  
-               new_pass += chars[rand(chars.size-1)] 
-               new_pass
-             }
-           end
-    salt = begin
-             # Salt and encrypt values.
-             chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-             (1..10).inject('') { |new_pass, i|  
-               new_pass += chars[rand(chars.size-1)] 
-               new_pass
-             }
-           end
-
-    hashed_code = BCrypt::Password.create( code + salt ).to_s
-    Password_Resets.create( # Use :save => update OR insert.
-                           nil,
-                           :_id       => password_reset_id, 
-                           :created_at => Couch_Plastic.utc_now, 
-                           :owner_id   => data._id,
-                           :salt       => salt,
-                           :hashed_code => hashed_code
-    )
-    @password_reset_code = code
-  
-  end
 
   # ==== ACCESSORS =====================================================
 
@@ -309,75 +278,10 @@ class Member
   #
   def inspect
     if new?
-      "#<#{self.class}:#{self.object_id} id=[NEW]>"
+      "#<#{self.class}:#{self.object_id} _id=[NEW]>"
     else
-      "#<#{self.class}:#{self.object_id} id=#{self.data._id}>"
+      "#<#{self.class}:#{self.object_id} _id=#{self.data._id}>"
     end
-  end
-
-  # Returns: 
-  #   Hash
-  #     :username_id => username
-  #     :username_id => username
-  #     :username_id => username
-  #
-  def username_hash
-    @username_hash ||= \
-        Life.find(:owner_id=>data._id).inject({}) { |hsh, un| 
-          hsh[un['_id']] = un['username']
-          hsh
-        }
-  end
-  
-  # Returns: 
-  #   Array - [ :username ]
-  #     
-  def usernames
-    username_hash.values
-  end
-
-  # Accepts:
-  #   un_ids - Optional. Array [
-  #     username_id
-  #     username_id
-  #   ]
-  #
-  # Returns:
-  #   Array - [
-  #     { 
-  #       'username_id'   => id, 
-  #       'username'      => un, 
-  #       'selected?'     => Boolean,
-  #       'not_selected?' => Boolean
-  #     }
-  #   ]
-  #
-  def username_menu un_ids = []
-    username_hash.map { |id, un|
-      { 
-        'username_id'   => id,
-        'username'      => un,
-        'href'      => "/life/#{un}/",
-        'selected?'     => un_ids.include?(id),
-        'not_selected?' => !un_ids.include?(id)
-      }
-    }
-  end
-
-  # Returns: 
-  #   Array - [ :username_id ]
-  #
-  def username_ids
-    username_hash.keys
-  end
-
-  def username_to_username_id str
-    username_hash.index(str)
-  end
-
-  def username_id_to_username raw_id
-    id = Couch_Plastic.mongofy_id(raw_id)
-    username_hash[id]
   end
 
   def has_power_of?(raw_level)
@@ -385,9 +289,9 @@ class Member
     return true if raw_level == self
     
     if raw_level.is_a?(String) || raw_level.is_a?(BSON::ObjectID)
-      return true if usernames.include?(raw_level)
+      return true if lifes.usernames.include?(raw_level)
       return true if data._id === raw_level
-      return true if username_ids.include?(raw_level)
+      return true if lifes._ids.include?(raw_level)
     end
 
     if !self.class.valid_security_level?(raw_level)
@@ -421,7 +325,7 @@ class Member
     if current_un_id
       [current_un_id]
     else
-      username_ids
+      lifes._ids
     end
   end
   alias_method :life_club_ids, :current_username_ids
@@ -516,7 +420,7 @@ class Member
   def multi_verse_per_username *args
     hash = {}
     multi_verse_per_username_id(*args).each { |k,v|
-      hash[username_id_to_username(k)] = v
+      hash[lifes.username_for(k)] = v
     }
     hash
   end
@@ -546,7 +450,7 @@ class Member
     multi.map { |un_id, club_arr|
       hash = { 
         'username_id' => un_id,
-        'username'    => username_id_to_username(un_id),
+        'username'    => lifes.username_for(un_id),
         'clubs'       => club_arr.map { |doc|
                           doc['selected?'] = (selected[un_id] || []).include?( doc['_id'] )
                           doc['not_selected?'] = !doc['selected?']
@@ -574,9 +478,9 @@ class Member
                 message.notifys(self) :
                 []
     
-    return username_menu if notifys.empty?
+    return lifes.menu if notifys.empty?
     
-    username_menu(
+    lifes.menu(
       notifys_by_username(mem)
     )
   end
@@ -612,7 +516,7 @@ __END__
   attr_reader :old_un, :old_un_id, :current_un, :current_un_id
 
   def within_username un, &blok
-    within_username_id username_to_username_id(un, &blok)
+    within_username_id lifes._id_for(un, &blok)
   end
   
   # This method makes sure username belongs to member.
@@ -621,8 +525,8 @@ __END__
     @old_un_id           = current_un_id
     @old_un              = current_un
     
-    @current_un    = username_id_to_username(un_id)
-    @current_un_id = username_to_username_id(current_un)
+    @current_un    = lifes.username_for(un_id)
+    @current_un_id = lifes._id_for(current_un)
     
     yield
     @current_un    = old_un

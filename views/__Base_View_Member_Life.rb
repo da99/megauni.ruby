@@ -32,7 +32,7 @@ module Base_View_Member_Life
   end
 
   def owner_username_id
-    @cache_username_id ||= app.env['results.owner'].username_hash.index(username)
+    @cache_username_id ||= app.env['results.owner'].lifes._id_for(username)
   end
 
   def username_id

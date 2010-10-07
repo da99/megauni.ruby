@@ -10,7 +10,7 @@ class Test_Control_Members_Update < Test::Unit::TestCase
     log_in_regular_member_3
     put "/member/", :add_username=>rand_un
     reg3 = Member.by_id(regular_member_3.data._id)
-    assert reg3.usernames.include?(rand_un)
+    assert reg3.lifes.usernames.include?(rand_un)
   end
 
   must 'redirect to new username after insertion' do

@@ -257,9 +257,13 @@ module Couch_Plastic
   end
 
   def generate_id
-    raise "New id can not be generated on an existing record." if not new?
-    new_data._id = clean_date = BSON::ObjectID.new
+		set_id BSON::ObjectID.new 
   end
+	
+	def set_id new_id
+    raise "New id can not be generated on an existing record." if not new?
+    new_data._id = ( clean_date._id = new_id )
+	end
 
   def clean_data
     raise ArgumentError, "No clean data." unless @clean_data
@@ -313,12 +317,12 @@ module Couch_Plastic
     return false if not editor
     case editor
     when Member
-      editor.username_ids.include?( data.owner_id ) || editor.has_power_of?(:ADMIN)
+      editor.lifes._ids.include?( data.owner_id ) || editor.has_power_of?(:ADMIN)
     when BSON::ObjectID
       match = data.owner_id == editor
       if not match
         match = begin
-                  Member.by_id(editor).username_ids.include?(data.owner_id)
+                  Member.by_id(editor).lifes._ids.include?(data.owner_id)
                 rescue Member::Not_Found
                   false
                 end
@@ -409,7 +413,7 @@ module Couch_Plastic
           case reg
             
           when :require_owner_as_manipulator
-            manipulator.username_ids.include?(data.owner_id)
+            manipulator.lifes._ids.include?(data.owner_id)
 
           when :set_to
             clean_val = instance_eval(&target_val)
@@ -931,6 +935,14 @@ module Couch_Plastic_Class_Methods
       def #{assoc} name, class_name = nil, namespace = nil
         create_association( :#{assoc}, name, class_name, namespace)
       end
+		
+			def has_#{name}?
+				raise "Not implemented yet."
+			end
+		
+			def update_relation name, obj
+				raise "not done implemented yet."
+			end
     ~
   }
 
@@ -1006,10 +1018,9 @@ module Couch_Plastic_Class_Methods
   end
 
   def create editor, raw_raw_data # CREATE
-    d = new do
+    new do
       self.manipulator =  editor
       self.raw_data = raw_raw_data
-      save_create 
     end
   end
 

@@ -18,7 +18,7 @@ class Members_today < Base_View
   end
 
   def my_club_href
-    "/life/#{current_member.usernames.first}/"
+    current_member.lifes.usernames.first.href
   end
 
 end # === Member_Control_today 

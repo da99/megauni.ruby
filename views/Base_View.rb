@@ -191,7 +191,7 @@ class Base_View < Mustache
   def current_member_usernames
     @cache_current_member_usernames ||= \
       if current_member
-        current_member.username_hash.map { |un_id, un| 
+        current_member.lifes._ids_to_usernames.map { |un_id, un| 
           {:filename=>un, :username=>un, :username_id=>un_id, :href=>"/life/#{un}/" }
         }
       else
@@ -215,7 +215,7 @@ class Base_View < Mustache
   end
 
   def first_username
-    current_member.usernames.first
+    current_member.lifes.usernames.first
   end
 
   def single_username
@@ -271,11 +271,11 @@ class Base_View < Mustache
       doc['title']            = nil if not doc['title']
       doc['message_updated?'] = !!doc['updated_at']
       doc['owner_href']       = "/uni/#{doc['owner_username']}/"
-      doc['owner?']           = current_member && current_member.username_ids.include?(doc['owner_id'])
+      doc['owner?']           = current_member && current_member.lifes._ids.include?(doc['owner_id'])
       doc['not_owner?']       = !doc['owner?']
       
       if parent_doc
-        doc['parent_message_owner?']     = current_member && current_member.username_ids.include?(parent_doc['owner_id'])
+        doc['parent_message_owner?']     = current_member && current_member.lifes._ids.include?(parent_doc['owner_id'])
         doc['not_parent_message_owner?'] = !doc['parent_message_owner?']
       end
 

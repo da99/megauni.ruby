@@ -7,7 +7,7 @@ class Doc_Log
   enable_timestamps
   
   make :doc_id, :mongo_object_id
-  make :editor_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids } ]
+  make :editor_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
   
   make_psuedo :old_doc, :Hash
   make_psuedo :new_doc, :Hash

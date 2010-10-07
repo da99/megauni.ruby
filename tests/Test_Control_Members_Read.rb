@@ -49,14 +49,14 @@ class Test_Control_Members_Read < Test::Unit::TestCase
   # ========== LIFE ============================
 
   must 'show profile: /life/{username}/' do
-    un = regular_member_3.usernames.first
+    un = regular_member_3.lifes.usernames.first
     get "/life/#{un}/"
     assert_last_response_ok
   end
 
   %w{ e qa news shop predictions random }.each { |suffix|
     must "show /life/{username}/#{suffix}/" do
-      un = regular_member_3.usernames.first
+      un = regular_member_3.lifes.usernames.first
       get "/life/#{un}/#{suffix}/"
       assert_last_response_ok
     end

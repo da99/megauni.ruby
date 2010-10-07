@@ -55,7 +55,7 @@ class Messages
       clean_room[:lang]       = self.current_member.lang
       
 
-      clean_room[:owner_id]   = current_member.username_to_username_id(clean_room[:username])
+      clean_room[:owner_id]   = current_member.lifes._id_for(clean_room[:username])
       
       Message.create( current_member, clean_room )
       

@@ -29,7 +29,7 @@ class Messages_edit < Base_View
   end
 
   def editor_id
-    current_member.username_ids.first
+    current_member.lifes._ids.first
   end
   
 end # === Messages_edit 

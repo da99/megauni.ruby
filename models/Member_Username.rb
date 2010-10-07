@@ -6,7 +6,7 @@ class Member_Username
 
   enable_timestamps
   
-  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids } ]
+  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
   make :username, [:min, 2, "Username is too small."]
   make :title, [:min, 1]
 

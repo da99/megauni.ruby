@@ -3,7 +3,8 @@ class Club
 
   include Couch_Plastic
   
-  HREF_PATTERN = [ '/uni/%s/', 'filename' ]
+  HREF_NAMESPACE = '/uni'
+  HREF_PATTERN   = [ '/uni/%s/', 'filename' ]
 
   MEMBERS = %w{ 
     stranger
@@ -31,7 +32,7 @@ class Club
 
   enable_created_at
 
-  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.username_ids }]
+  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids }]
   make :filename, 
        [:stripped, /[^a-zA-Z0-9\_\-\+]/ ], 
        :not_empty,
@@ -48,8 +49,8 @@ class Club
     def create editor, raw_raw_data # CREATE
       new do
         
-        if editor.usernames.size == 1 || !raw_raw_data['username_id']
-          raw_raw_data['owner_id'] ||= editor.username_ids.first
+        if editor.lifes.usernames.size == 1 || !raw_raw_data['username_id']
+          raw_raw_data['owner_id'] ||= editor.lifes._ids.first
         end
         self.manipulator = editor
         self.raw_data = raw_raw_data
@@ -101,7 +102,7 @@ class Club
     clubs         = {}
 
     hash = Club_Followers.find(
-      {:follower_id=>{:$in=>mem.username_ids}}, 
+      {:follower_id=>{:$in=>mem.lifes._ids}}, 
       {:fields=>%w{ follower_id club_id }}
     ).inject({}) { |memo, doc|
       memo[doc['follower_id']] ||= []
@@ -126,7 +127,7 @@ class Club
   
   def self.hash_for_owner mem
     clubs = {}
-    find( :owner_id => {:$in=>mem.username_ids} ).each { |doc|
+    find( :owner_id => {:$in=>mem.lifes._ids} ).each { |doc|
       clubs[doc['owner_id']] ||= []
       clubs[doc['owner_id']] << doc
     }
@@ -168,7 +169,7 @@ class Club
 
   def self.all_filenames 
     find(
-      { :owner_id => {:$in=>Member.by_filename('da01tv').username_ids} },
+      { :owner_id => {:$in=>Member.by_filename('da01tv').lifes._ids} },
       { :fields => 'filename' }
     ).map {|r| r['filename']}
   end
@@ -196,7 +197,7 @@ class Club
 
   def owner?(mem)
     return false if not mem
-    mem.username_ids.include?(data.owner_id)
+    mem.lifes._ids.include?(data.owner_id)
   end
 
   %w{ e magazine news qa shop random thanks fights delete_follow members }.each do |suffix|
