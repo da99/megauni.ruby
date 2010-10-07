@@ -6,21 +6,32 @@ class Trashed_Members
 
   enable_timestamps
   
-  make :body, :anything
+  make :_id, :mongo_object_id
+  make :doc, :anything
 
   # ==== Authorizations ====
  
-  def allow_as_creator? editor # NEW, CREATE
+  class << self
+    
+    def create editor, raw_raw_data
+      super.instance_eval do
+        demand :doc
+        set_id new_data.doc['_id']
+        save_create
+      end
+    end
+
+  end # === self
+
+  def allow_to? action, editor
+    case action
+    when :create
+    when :read
+    when :update
+    when :delete
+    end
   end
 
-  def reader? editor # SHOW
-  end
-
-  def updator? editor # EDIT, UPDATE
-  end
-
-  def deletor? editor # DELETE
-  end
 
   # ==== Accessors ====
 

@@ -9,9 +9,6 @@ class Member
   # =========================================================  
   
   Wrong_Password              = Class.new( StandardError )
-  Password_Reset              = Class.new( StandardError )
-  Password_Not_In_Reset       = Class.new( StandardError )
-  Invalid_Password_Reset_Code = Class.new( StandardError )
   Invalid_Security_Level      = Class.new( StandardError )
 
   SECURITY_LEVELS        = %w{ NO_ACCESS STRANGER  MEMBER  EDITOR   ADMIN }
@@ -144,7 +141,7 @@ class Member
 			mem = life.owner
 
 			# Check for Password_Reset
-			raise Password_Reset, mem.inspect if mem.password_in_reset?
+			raise Password_Resets::In_Reset, mem.inspect if mem.password_in_reset?
 
 			# See if password matches with correct password.
 			correct_password = BCrypt::Password.new(mem.data.hashed_password) === (password + mem.data.salt)
@@ -169,7 +166,7 @@ class Member
 			# Raise Account::Reset if necessary.
 			if new_count > 2
 				mem.reset_password
-				raise Password_Reset, mem.inspect
+				raise Password_Resets::In_Reset, mem.inspect
 			end
 
 			raise Wrong_Password, "Password is invalid for: #{username.inspect}"

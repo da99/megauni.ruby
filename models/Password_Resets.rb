@@ -6,19 +6,26 @@ class Password_Resets
 
 	attr_reader :code
 
-  enable_timestamps
+  # ==== CONSTANTS ====
   
+  In_Reset       = Class.new( StandardError )
+  Not_In_Reset   = Class.new( StandardError )
+  Invalid_Code   = Class.new( StandardError )
+  
+  # ==== Fields  ====
+  
+  enable_timestamps
 	make :owner_id, :mongo_object_id
 	make :salt, :anything
   make :hashed_code, :anything
 
+  # ==== Associations  ====
+    
+  belongs_to :owner, Member
+
   # ==== Class Methods ====
   
   class << self
-		
-    def by_member mem
-      reset_id = "#{mem.data._id}-password-reset"
-    end
 
 		def create member
 
@@ -30,6 +37,7 @@ class Password_Resets
 								 new_pass
 							 }
 						 end
+      
 			salt = begin
 							 # Salt and encrypt values.
 							 chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
@@ -44,13 +52,13 @@ class Password_Resets
 			new do
 				self.manipulator = member
 				self.raw_data = {
-					:owner_id   => data._id,
-					:salt       => salt,
+					:owner_id    => data._id,
+					:salt        => salt,
 					:hashed_code => hashed_code
 				}
 
-				set_id( member.data._id )
 				demand :owner_id, :salt, :hashed_code
+				set_id( member.data._id )
 				save_upsert
 				
 				@code = code
@@ -66,19 +74,20 @@ class Password_Resets
 		when :create
 			true
 		when :read
-			true
+			false
 		when :update
-			true
+			false
 		when :delete
-			true
+			false
 		end
 	end
 
   # ==== Accessors ====
   
   def change_password raw_opts 
-    if not password_in_reset?
-      raise Password_Not_In_Reset, "Can't reset password when account has not been reset."
+    
+    if new?
+      raise Not_In_Reset, "Can't reset password when account has not been reset."
     end
     
     opts                = Data_Pouch.new(raw_opts, :code, :password, :confirm_password)
@@ -90,8 +99,9 @@ class Password_Resets
       Password_Resets.delete password_reset.data._id, self
       results
     else
-      raise Invalid_Password_Reset_Code, "Member: #{data._id}, Code: #{opts.code}"
+      raise Invalid_Code, "Member: #{data._id}, Code: #{opts.code}"
     end
+    
   end
 
 
