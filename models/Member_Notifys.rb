@@ -6,21 +6,26 @@ class Member_Notifys
 
   enable_timestamps
   
-  make :body, :anything
+  make :something, :anything
 
   # ==== Authorizations ====
  
-  def allow_as_creator? editor # NEW, CREATE
-  end
+	class << self
+	end # === self
 
-  def reader? editor # SHOW
+  def allow_to? action, editor # NEW, CREATE
+		case action
+			when :create
+				false
+			when :read
+				false
+			when :update
+				false
+			when :delete
+				false
+		end
   end
-
-  def updator? editor # EDIT, UPDATE
-  end
-
-  def deletor? editor # DELETE
-  end
+	
 
   # ==== Accessors ====
 

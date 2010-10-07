@@ -10,16 +10,17 @@ class Member_Reposts
 
   # ==== Authorizations ====
  
-  def allow_as_creator? editor # NEW, CREATE
-  end
+	class << self
+	end # === self
 
-  def reader? editor # SHOW
-  end
-
-  def updator? editor # EDIT, UPDATE
-  end
-
-  def deletor? editor # DELETE
+  def allow_to? action, editor
+		case action
+		when :create
+			false
+		when :read
+		when :update
+		when :delete
+		end
   end
 
   # ==== Accessors ====

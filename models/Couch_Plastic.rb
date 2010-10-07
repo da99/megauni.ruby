@@ -940,6 +940,10 @@ module Couch_Plastic_Class_Methods
 				raise "Not implemented yet."
 			end
 		
+      def #{name}? target
+        raise "This can only be called with :belongs_to association."
+      end
+
 			def update_relation name, obj
 				raise "not done implemented yet."
 			end
