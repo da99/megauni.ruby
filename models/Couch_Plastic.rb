@@ -111,6 +111,10 @@ module Couch_Plastic
     ]
     
     new['Messages'] = [
+      { 'key' => {'published_at' => -1} }
+    ]
+    
+    new['Messages'] = [
       { 'key' => {'target_ids' => 1, 'parent_message_id' => -1} }
     ]
     
@@ -178,6 +182,10 @@ module Couch_Plastic
     BSON::ObjectID.from_string(str)
   end
 
+  def fetch( key )
+    data.send key
+  end
+	
   def href 
     HREF_PATTERN.first % data.send(HREF_PATTERN.last) "/uni/#{data.filename}/"
   end
@@ -966,6 +974,18 @@ module Couch_Plastic_Class_Methods
 
   # ===== CRUD Methods ====================================
 
+	def find_by_date field, start_tm, end_tm = nil
+		time_format = '%Y-%m-%d %H:%M:%S'
+		
+		selector = if end_at
+								 { field => {'$gt'=>start_tm,'$lt'=>end_tm} }
+							 else
+								 { field => start_tm }
+							 end
+		
+		find selector
+	end
+
   def find_with_associations raw_assocs, selector, params = {}
     assocs = [raw_assocs].flatten.uniq.compact
     docs = db_collection.find( selector, params ).to_a
@@ -986,6 +1006,9 @@ module Couch_Plastic_Class_Methods
   end
 
   def find selector, params = {}, &blok
+		if respond_to?(:selector_validation
+			raise "not implemented yet."
+		end
     fields = selector.keys
     fields_must_exist(fields) if not fields.empty?
     raise ArgumentError, "I don't know what to do with a block." if blok

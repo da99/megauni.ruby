@@ -5,7 +5,7 @@
 class Hellos_rss_xml < Base_View
 
   def posts
-    @news ||= Message.public({}, :sort =>['created_at', :desc], :limit =>10).map { |post|
+    @news ||= Message.public.map { |post|
       {:published_at_rfc822 => rfc822_date(post['created_at']),
        :url => File.join(site_url, 'mess', post['_id'].to_s + '/' ),
        :body => post['body'],

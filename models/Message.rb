@@ -1,9 +1,29 @@
+# put public_labels into own Collection
+#   -> authors, insiders, strangers will be tagging records
+#   -> making them embedded is wrong.
+# put old_id into hard code, on this file
+# take :created_at for old_id and turn them into ObjectIDs, make them :_id
+    # def by_old_id id
+    #   old_id = "message-#{id}"
+    #   mess = find_one(:old_id=>old_id)
+    #   if mess
+    #     by_id(mess['_id'])
+    #   else
+    #     by_id(old_id)
+    #   end
+    # end
+
 
 class Message
 
   DECLINE = -1
   PENDING = 0
   ACCEPT  = 1
+  HREF_NAMESPACE = '/mess/'
+  HREF_PATTERN = ['/mess/%s/', :_id]
+  HREF_SUFFIXES = %w{ notify repost edit log } + 
+                  [['parent', :parent_message_id], 
+                   ['section', :message_section_suffix]] 
 
   module SECTIONS
     E      = 'Encyclopedia'
@@ -83,288 +103,131 @@ class Message
 
   # ==== Associations   ====
 
-  has_many :notifys, Member_Notifys
-  has_many :reposts, Member_Reposts
+  finder :public do
+    limit 10
+    sort  [:_id, :desc]
+    relations :optional, Life, Club
+  end
 
+  has_many :clubs, nil, :target_ids
+  
+  has_many :reposts, Message do |mem|
+    where_in :owner_id, mem.lifes._ids
+    where    :message_model => 'repost'
+  end
+  
+  has_many :notifys, Member_Notifys do |mem|
+    where_in :owner_id, mem.lifes._ids
+  end
+  
+  has_many :responds, Message, :parent_message_id do
+    where :privacy => 'public'
+    limit 10
+    sort  [:_id, :desc]
+    
+    select :critiques, :message_model => { :$in=>['cheer', 'jeer'] }
+    select :suggests,  :message_model => 'suggest'
+    select :questions, :message_model => 'question'
+  end
 
+  has_many :messages, Message, :parent_message_id do
+    where :privacy => 'public'
+    limit 10
+    sort  [:_id, :desc]
+  end
+
+  has_many :comments do
+    based_on :messages
+    where_in :message_model, %w{ jeer cheer }
+  end
+
+  has_many :questions do
+    based_on :messages
+    where    :message_model => 'question'
+  end
+  
   # ==== Authorizations ====
  
-  def allow_as_creator? editor # NEW, CREATE
-    return false unless editor
-    editor.has_power_of? :MEMBER
-  end
-
-  def self.create editor, raw_data
-    d = new do
-      self.manipulator = editor
-      self.raw_data = raw_data
-      new_data.labels = []
-      new_data.public_labels = []
-      ask_for_or_default :lang
-      ask_for :parent_message_id
-      demand :owner_id, :target_ids, :body, :message_model
-      ask_for :title, :category, :privacy, :labels,
-          :emotion, :rating,
-          :labels, :public_labels,
-          :important,
-          :body_images_cache
-      save_create 
+  class << self
+    
+    def create editor, raw_data
+      d = new do
+        self.manipulator = editor
+        self.raw_data = raw_data
+        new_data.labels = []
+        new_data.public_labels = []
+        ask_for_or_default :lang
+        ask_for :parent_message_id
+        demand :owner_id, :target_ids, :body, :message_model
+        ask_for :title, :category, :privacy, :labels,
+            :emotion, :rating,
+            :labels, :public_labels,
+            :important,
+            :body_images_cache
+        save_create 
+      end
     end
-  end
 
-  def reader? editor # SHOW
-    true
-  end
-
-  def updator? editor # EDIT, UPDATE
-    owner? editor
-  end
-
-  def self.update id, editor, new_raw_data
-    doc = new(id) do
-      self.manipulator = editor
-      self.raw_data    = new_raw_data
-      ask_for :title, :body, :teaser, :public_labels, 
-        :private_labels, :published_at,
-        :message_model, :important,
-        :body_images_cache,
-        :editor_id,
-        :owner_accept
-      save_update :record_diff => true
+    def update id, editor, new_raw_data
+      doc = new(id) do
+        self.manipulator = editor
+        self.raw_data    = new_raw_data
+        ask_for :title, :body, :teaser, :public_labels, 
+          :private_labels, :published_at,
+          :message_model, :important,
+          :body_images_cache,
+          :editor_id,
+          :owner_accept
+        save_update :record_diff => true
+      end
     end
-  end
 
-  def deletor? editor # DELETE
-    true
+
+  end # === self
+
+  def allow_to? action, editor # NEW, CREATE
+    case action
+    when :create
+      return false unless editor
+      editor.has_power_of? :MEMBER
+    when :read
+      true
+    when :update
+      owner? editor
+    when :delete
+      owner? editor
+    end
   end
 
   # ==== Accessors ====
-
-  def self.message_model?( str_or_hash )
-    case str_or_hash
-    when String
-      MODELS.include?(str_or_hash)
-    when Hash
-      !!(str_or_hash.values.flatten.detect { |mod| MODELS.include?(mod) })
-    else
-      raise ArgumentError, "Unknown type: #{str_or_hash}"
-    end
-  end
-
-  def self.find_with_selector_validation selector, params = {}, &blok
-    mess_model = selector[:message_model] || selector['message_model']
-    if mess_model
-      valid    = message_model?(mess_model)
-      raise "Invalid message model #{mess_model.inspect}" if not valid
-    end
-    Member.relationize(
-      find_wo_validation(selector, params, &blok)
-    )
-  end
-  
-  class << self
-    alias_method :find_wo_validation, :find
-    alias_method :find, :find_with_selector_validation
-  end
-
-  def self.latest_by_club_id club_id, raw_params = {}, raw_opts = {}, &blok
-    params = {:target_ids =>club_id, :parent_message_id => nil, :privacy => 'public' }.update(raw_params)
-    opts   = {:limit=>10, :sort=>[:_id, :desc]}.update(raw_opts)
-    find(
-      params,
-      opts,
-      &blok
-    )
-  end
-
-  def self.latest_comments_by_club_id club_id, raw_params = {}, *args
-    params = {:message_model => {:$in=>%w{jeer cheer}}}.update(raw_params)
-    Message.latest_by_club_id(club_id, params, *args)
-  end
-
-  def self.latest_questions_by_club_id club_id, raw_params = {}, *args
-    params = {:message_model => 'question'}.update(raw_params)
-    Message.latest_by_club_id(club_id, params, *args)
-  end
-
-  def self.latest_by_parent_message_id mess_id, raw_params = {}, raw_opts = {}, &blok
-    params = {:parent_message_id =>mess_id, :privacy => 'public' }.update(raw_params)
-    opts   = {:limit=>10, :sort=>[:_id, :desc]}.update(raw_opts)
-    find(
-      params,
-      opts,
-      &blok
-    )
-  end
-  
-  def self.latest_comments_by_parent_message_id mess_id, raw_params = {}, *args
-    params = {:message_model => {:$in=>%w{jeer cheer}}}.update(raw_params)
-    Message.latest_by_parent_message_id(mess_id, params, *args)
-  end
-
-  def self.latest_questions_by_parent_message_id mess_id, raw_params = {}, *args
-    params = {:message_model => 'question'}.update(raw_params)
-    Message.latest_by_parent_message_id(mess_id, params, *args)
-  end
-
-  def self.public raw_params = {}, raw_opts = {}, &blok
-    opts = {:limit=>10, :sort=>[:_id, :desc]}.update(raw_opts)
-    include_mods = [opts.delete(:include)].flatten.compact
-    params = {}.update(raw_params)
-    cursor = find(
-      params, 
-      opts,
-      &blok
-    )
-    if include_mods.empty?
-      cursor
-    else
-      docs = cursor
-      if include_mods.include?(Member)
-        docs = Couch_Plastic.relationize(docs, Life, 'owner_id', 'username' => 'owner_username')
-      end
-      if include_mods.include?(Club)
-        docs = Couch_Plastic.relationize(docs, Club, 'target_ids', 'title'=>'club_title', 'filename' => 'club_filename')
-      end
-      docs
-    end
-  end
-
-  def self.public_labels target_ids = nil
-    map = %~
-      function () {
-          for (var i in this.tags) {
-              emit(this.tags[i], {total:1});
-          }
-      };
-    ~
-    reduce = %~
-      function (key, value) {
-          var sum = 0;
-          value.forEach(function (doc) {sum += doc.total;});
-          return {total:sum};
-      };
-    ~
-    opts = if target_ids
-             { :query => { :target_ids=> { :$in=>target_ids}} }
-           else
-             { :query => { :tags => { :$ne => nil } } }
-           end
     
-    db_collection.map_reduce(map, reduce, opts).find().map { |doc| doc['_id'] }
-  end
+  # ==== Class Methods ====
 
-  def self.by_public_label label, raw_params={}, &blok
-    params = { :public_labels => {:$in=>[label]} }.update(raw_params)
-    find( params, &blok )
-  end
+  class << self
 
-  def self.by_club_id_and_public_label club_id, label, raw_params = {}, raw_opts={}, &blok
-    params = { 
-              :target_ids    => {:$in=>[club_id]},
-              :public_labels => {:$in=>[label].flatten}
-              }.update(raw_params)
-    opts = {:sort=>[:_id, :desc]}.update(raw_opts)
-    find(params, &blok)
-  end
-
-  def self.by_published_at *args, &blok
-    if args.size === 1
-      raw_opts=args.first
-      opts = {}.update(raw_opts)
-      params = {}
-    else
-      case args.size
-      when 2
-        start_year = args[0].to_i
-        start_month = args[1].to_i
-        case start_month
-        when 12
-          end_month = 1
-          end_year = (start_year + 1)
-        else
-          end_month = start_month + 1
-          end_year = start_year
-        end
-      when 4
-        start_year, start_month, end_year, end_month = args
+    def message_model?( str_or_hash )
+      case str_or_hash
+      when String
+        MODELS.include?(str_or_hash)
+      when Hash
+        !!(str_or_hash.values.flatten.detect { |mod| MODELS.include?(mod) })
       else
-        raise ArgumentError, "Unknown argument list: #{args.inspect}"
+        raise ArgumentError, "Unknown type: #{str_or_hash}"
       end
-      time_format = '%Y-%m-%d %H:%M:%S'
-      start_tm = Time.utc(start_year, start_month).strftime(time_format)
-      end_tm   = Time.utc(end_year, end_month).strftime(time_format)
-      params = {:published_at=>{'$gt'=>start_tm,'$lt'=>end_tm}}
-      opts = {}
     end
-    # time_format = '%Y-%m-%d %H:%M:%S'
-    # dt = Time.now.utc
-    # start_dt = dt.strftime(time_format)
-    # end_dt   = (dt + (60 * 60 * 24)).strftime(time_format)
-    find(params, opts, &blok )
-  end
 
-  def self.by_club_id_and_published_at club_id, raw_params = {}, opts = {}, &blok
-    find(
-      {:target_ids=>Club.filename_to_id(club_id)},
-      opts, 
-      &blok
-    )
-  end
+    def selector_validation selector
+      mess_model = selector[:message_model] || selector['message_model']
+      if mess_model && !message_model?(mess_model)
+          raise ArgumentError, "Invalid message model #{mess_model.inspect}" 
+      end
+      selector
+    end
+
+  end # === self
   
-
-  def self.by_old_id id
-    old_id = "message-#{id}"
-    mess = find_one(:old_id=>old_id)
-    if mess
-      by_id(mess['_id'])
-    else
-      by_id(old_id)
-    end
-  end
-
+  
   # ==== Accessors =====================================================
-
-  # Accepts:
-  #    Member - Required.
-  #
-  #  Returns:
-  #    Array - [
-  #      {
-  #        'owner_id'   => id
-  #        'message_id' => id
-  #        '_id'        => id
-  #      }
-  #    ]
-  def notifys mem 
-    update_association :notifys, \
-      Member_Notifys.find( 
-                          :message_id => data._id,
-                          :owner_id   => { :$in=>mem.lifes._ids } 
-                         ).to_a
-  end
-
-  # Accepts:
-  #    Member - Required.
-  #
-  #  Returns:
-  #    Array - [
-  #      {
-  #        'message_model' => 'repost'
-  #        'owner_id'   => id
-  #        'target_ids' => []
-  #        'message_id' => id
-  #        '_id'        => id
-  #      }
-  #    ]
-  def reposts mem
-    update_association :reposts, \
-      Member_Reposts.find( 
-                          :message_id => data._id,
-                          :owner_id   => { :$in=>mem.lifes._ids },
-                          :message_model => 'repost'
-                         ).to_a
-  end
 
   def product?
     data.public_labels && data.public_labels.include?('product')
@@ -379,61 +242,14 @@ class Message
     Time.parse(latest)
   end
 
-  def clubs
-    @clubs ||= data.target_ids.map { |id|
-      begin
-        Club.by_id_or_member_username_id(id)
-      rescue Club::Not_Found
-        nil
-      end
-    }.compact
-  end
-
-  def href
-    "/mess/#{data._id}/"
-  end
-
-  def href_notify
-    File.join(href, 'notify/')
-  end
-
-  def href_repost
-    File.join(href, 'repost/')
-  end
-
-  def href_edit
-    File.join(href, 'edit/')
-  end
-
-  def href_log
-    File.join(href, 'log/')
-  end
-  
-  def href_parent
-    "/mess/#{data.parent_message_id}/"
-  end
-
-  def href_club
-    clubs.first.href
-  end
-
-  def href_section
-    suffix = case message_section
-      when Message::SECTIONS::E
+  def message_section_suffix
+    case message_section
+    when Message::SECTIONS::E
         'e'
-      when Message::SECTIONS::QA
+    when Message::SECTIONS::QA
         'qa'
-      else
-        message_section.to_s.downcase.split.join('_')
-      end
-    File.join(href_club, suffix + '/')
-  end
-  
-  def message_model_in_english
-    if data.message_model
-      Message::MODEL_HASH[data.message_model].first 
     else
-      'unkown'
+      message_section.to_s.downcase.split.join('_')
     end
   end
 
@@ -445,29 +261,61 @@ class Message
     end
   end
   
-  def responds
-      Message.latest_by_parent_message_id(self.data._id).to_a 
+  def message_model_in_english
+    if data.message_model
+      Message::MODEL_HASH[data.message_model].first 
+    else
+      'unkown'
+    end
   end
 
-  def critiques
-    select_responds_by_model('cheer', 'jeer')
-  end
+  module Result
   
-  def suggests
-    select_responds_by_model('suggest')
-  end
-  
-  def questions
-    select_responds_by_model('question')
-  end
+    def published_at
+      Time.parse( fetch('published_at') || fetch('created_at') )
+    end
+    
+    def last_modified_at
+      latest = [ fetch('created_at'), fetch('updated_at'), fetch('published_at')] \
+                .compact
+                .sort
+                .first
+      Time.parse(latest)
+    end
 
-  private 
+  end # === module
   
-  def select_responds_by_model(*mods)
-    responds.select { |doc|
-      mods.include?(doc['message_model'])
-    }
-  end
-
+  include Result
 
 end # === end Message
+
+
+
+__END__
+
+    # def public_labels target_ids = nil
+    #   map = %~
+    #     function () {
+    #         for (var i in this.tags) {
+    #             emit(this.tags[i], {total:1});
+    #         }
+    #     };
+    #   ~
+    #   reduce = %~
+    #     function (key, value) {
+    #         var sum = 0;
+    #         value.forEach(function (doc) {sum += doc.total;});
+    #         return {total:sum};
+    #     };
+    #   ~
+    #   opts = if target_ids
+    #            { :query => { :target_ids=> { :$in=>target_ids}} }
+    #          else
+    #            { :query => { :tags => { :$ne => nil } } }
+    #          end
+    #   
+    #   db_collection.map_reduce(map, reduce, opts).find().map { |doc| doc['_id'] }
+    # end
+
+    
+
