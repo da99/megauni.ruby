@@ -6,8 +6,11 @@ class Member_Reposts
 
   enable_timestamps
   
-  make :body, :anything
+  make :message_id, :mongo_object_id
+  make :owner_id,   :mongo_object_id
+  make :message_model, [:in_array, %w{repost} ]
 
+  # ==== Authorizations ====
   # ==== Authorizations ====
  
 	class << self

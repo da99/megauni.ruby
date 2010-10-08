@@ -39,9 +39,44 @@ class Life
   #   data.owner_id == mem ||
   #     (mem.respond_to?(:data) && mem.data._id == data.owner_id)
   # end
+  has_many :following_clubs, Club
+    # Club.ids_for_follower_id( :$in => current_username_ids )
+  # def following_club_id?(club_id)
+  #   club_ids.include?(Couch_Plastic.mongofy_id(club_id))
+  # end
+  has_many :owned_clubs, Club
+    # Club.ids_by_owner_id(:$in=>current_username_ids)
+    # Club.by_owner_id(:$in=>current_username_ids)
+
+  # ==== Class Methods  ====
+	  
+	class << self
+		
+		def relationize docs, namespace = 'owner'
+      Couch_Plastic.relationize( 
+				docs, 
+				Life,   
+				"#{namespace}_id",
+        '_id'      => "#{namespace}_id", 
+        'username' => "#{namespace}_username"
+      )
+			docs
+		end
+		
+	end # === self
 
   # ==== Authorizations ====
  
+	class << self
+		
+		def create editor, raw_raw_data # CREATE
+			super.instance_eval do
+				demand :owner_id, :username, :category
+				save_create
+			end
+		end
+		
+	end # == self
 
 	def allow_to? action, editor
 		case action
@@ -57,23 +92,9 @@ class Life
 		end
 	end
 
-	class << self
-		def create editor, raw_raw_data # CREATE
-			super.instance_eval do
-				demand :owner_id, :username, :category
-				save_create
-			end
-		end
-	end # == self
-
-
   # ==== Accessors ====
 
-  def href
-    "/life/#{data.username}/"
-  end
-
-  # ==== Validators ====
+  # ==== Modules    ====
 
 	module Results
 		
@@ -121,7 +142,6 @@ class Life
 		def _id_for str
 				_ids_to_usernames.index(str)
 		end
-
 	
 		def usernames
 			_ids_to_usernames.values
@@ -164,6 +184,124 @@ class Life
 					'selected?'     => un_ids.include?(id),
 					'not_selected?' => !un_ids.include?(id)
 				}
+			}
+		end
+
+		def clubs  un_id, type = nil
+			@all_clubs ||= begin
+											 Club.hash_for_member(self).values.uniq
+										 end
+			return @all_clubs if not type
+			@all_clubs[type]
+		end
+		
+		def club_ids 
+			(lifes.clubs._ids + lifes.following_clubs._ids + lifes.owned_clubs._ids)
+		end
+
+		def messages_from_my_clubs 
+			Message.latest_by_club_id(:$in=>club_ids)
+		end
+
+		# Returns:
+		#   :as_owner    => { :usernamed_id => [club doc] }
+		#   :as_follower => { :usernamed_id => [club doc] }
+		#   :as_lifer    => { :usernamed_id => [club doc] }
+		#
+		def multi_verse
+			# return @multi_verse ||= Club.all_for_member_by_relation(self)
+			owned_clubs.as_hash + following_clubs.as_hash + lifes.as_hash
+		end
+		
+		# Accepts:
+		#   args - Multiple. Example:
+		#     :as_owner
+		#     :as_lifer
+		#     :as_follower
+		#
+		# Raises:
+		#   ArgumentError - If args has a value not listed above.
+		#   
+		# Returns:
+		#   Hash - {
+		#     :username_id => [club doc, club doc]
+		#     :username_id => [club doc, club doc]
+		#     :username_id => [club doc, club doc]
+		#   }
+		#
+		def multi_verse_per_username_id *args
+			valid_types =  [:as_owner, :as_lifer, :as_follower]
+			
+			types = if args.empty?
+								valid_types
+							else
+								invalid_types = args - valid_types
+								raise ArgumentError, "Invalid types: #{invalid_types.inspect}" if not invalid_types
+								args
+							end
+			
+			hash = {}
+			
+			multi_verse.each { |rel, un_id_clubs|
+				if types.include?(rel)
+					un_id_clubs.each { |un_id, clubs|
+						hash[un_id] ||= []
+						hash[un_id] += clubs
+						hash[un_id] = hash[un_id].uniq
+					}
+				end
+			}
+			hash
+		end
+		
+		# Returns:
+		#   :username => [Club, Club].uniq
+		#   :username => [Club, Club].uniq
+		#   :username => [Club, Club].uniq
+		#
+		def multi_verse_per_username *args
+			hash = {}
+			multi_verse_per_username_id(*args).each { |k,v|
+				hash[lifes.username_for(k)] = v
+			}
+			hash
+		end
+		
+		# Accepts:
+		#   Hash - Optional. {
+		#     :username_id => [:club_id, :club_id]
+		#     :username_id => [:club_id, :club_id]
+		#   }
+		#
+		# Returns:
+		#   Array - [
+		#     { 
+		#       'username_id'   => id 
+		#       'username'      => un 
+		#       'clubs'         => [ {
+		#                           'selected?'     => Boolean
+		#                           'not_selected?' => Boolean
+		#                           '_id'           => 
+		#                           'filename'      =>
+		#                          } ]
+		#     }
+		#   ]
+		#
+		def multi_verse_menu selected = {}
+			cache_name = selected.empty? ? '{}' : selected.object_id
+			multi      = multi_verse_per_username_id( :as_owner, :as_lifer )
+			
+			multi.map { |un_id, club_arr|
+				hash = { 
+					'username_id' => un_id,
+					'username'    => lifes.username_for(un_id),
+					'clubs'       => club_arr.map { |doc|
+														doc['selected?'] = (selected[un_id] || []).include?( doc['_id'] )
+														doc['not_selected?'] = !doc['selected?']
+														doc
+													}
+				}
+				hash
 			}
 		end
 
