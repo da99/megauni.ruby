@@ -17,13 +17,13 @@ class Member
   EMAIL_FINDER        = /[a-zA-Z0-9\.\-\_\+]{1,}@[a-zA-Z0-9\-\_]{1,}[\.]{1}[a-zA-Z0-9\.\-\_]{1,}[a-zA-Z0-9]/
   VALID_EMAIL_FORMAT  = /\A#{EMAIL_FINDER}\z/
 
-	# ==== Associations  ====
-	  
+  # ==== Associations  ====
+    
   has_one :password_reset
   has_many :lifes
   
-	# ==== Fields  =====
-	  
+  # ==== Fields  =====
+    
   enable_timestamps
   
   make :security_level,  [:in_array, SECURITY_LEVELS]
@@ -56,7 +56,7 @@ class Member
 
           new_data.hashed_password = BCrypt::Password.create( cleanest(:password) + new_data.salt ).to_s
       }]
-			
+      
   # ==== Class Methods =====================================================    
 
   class << self
@@ -75,115 +75,115 @@ class Member
       Couch_Plastic.relationize( docs, Member, "#{namespace}_id",  namespace => :doc)
       Life.relationize docs, namespace
     end
-		
-		# Based on Sinatra-authentication (on github).
-		# 
-		# Parameters:
-		#   raw_vals - Hash with at least 2 keys: :username, :password
-		# 
-		# Raises: 
-		#   Member::Wrong_Password
-		#
-		def authenticate( raw_vals )
+    
+    # Based on Sinatra-authentication (on github).
+    # 
+    # Parameters:
+    #   raw_vals - Hash with at least 2 keys: :username, :password
+    # 
+    # Raises: 
+    #   Member::Wrong_Password
+    #
+    def authenticate( raw_vals )
 
-			username   = (raw_vals[:username] || raw_vals['username']).to_s.strip
-			password   = (raw_vals[:password] || raw_vals['password']).to_s.strip
-			ip_addr    = (raw_vals[:ip_address] || raw_vals['ip_address']).to_s.strip
-			user_agent = (raw_vals[:user_agent] || raw_vals['user_agent']).to_s.strip
-			
-			ip_addr    = nil if ip_addr.empty?
-			user_agent = nil if user_agent.empty?
+      username   = (raw_vals[:username] || raw_vals['username']).to_s.strip
+      password   = (raw_vals[:password] || raw_vals['password']).to_s.strip
+      ip_addr    = (raw_vals[:ip_address] || raw_vals['ip_address']).to_s.strip
+      user_agent = (raw_vals[:user_agent] || raw_vals['user_agent']).to_s.strip
+      
+      ip_addr    = nil if ip_addr.empty?
+      user_agent = nil if user_agent.empty?
 
-			if username.empty? || password.empty?
-				raise Wrong_Password, "#{raw_vals.inspect}"
-			end
+      if username.empty? || password.empty?
+        raise Wrong_Password, "#{raw_vals.inspect}"
+      end
 
-			life = Life.by_username( username )
-			mem = life.owner
+      life = Life.by_username( username )
+      mem = life.owner
 
-			# Check for Password_Reset
-			raise Password_Resets::In_Reset, mem.inspect if mem.password_in_reset?
+      # Check for Password_Reset
+      raise Password_Resets::In_Reset, mem.inspect if mem.password_in_reset?
 
-			# See if password matches with correct password.
-			correct_password = BCrypt::Password.new(mem.data.hashed_password) === (password + mem.data.salt)
-			return mem if correct_password
+      # See if password matches with correct password.
+      correct_password = BCrypt::Password.new(mem.data.hashed_password) === (password + mem.data.salt)
+      return mem if correct_password
 
-			# Grab failed attempt count.
-			fail_count = Failed_Log_In_Attempts.for_today(mem).count
-			new_count  = fail_count + 1
-			
-			# Insert failed password.
-			Failed_Log_In_Attempts.create(
-				nil,
-				{ :data_model => 'Member_Failed_Attempt',
-				:owner_id   => mem.data._id, 
-				:date       => Couch_Plastic.utc_date_now, 
-				:time       => Couch_Plastic.utc_time_now,
-				:created_at => Couch_Plastic.utc_now,
-				:ip_address => ip_addr,
-				:user_agent => user_agent }
-			)
+      # Grab failed attempt count.
+      fail_count = Failed_Log_In_Attempts.for_today(mem).count
+      new_count  = fail_count + 1
+      
+      # Insert failed password.
+      Failed_Log_In_Attempts.create(
+        nil,
+        { :data_model => 'Member_Failed_Attempt',
+        :owner_id   => mem.data._id, 
+        :date       => Couch_Plastic.utc_date_now, 
+        :time       => Couch_Plastic.utc_time_now,
+        :created_at => Couch_Plastic.utc_now,
+        :ip_address => ip_addr,
+        :user_agent => user_agent }
+      )
 
-			# Raise Account::Reset if necessary.
-			if new_count > 2
-				mem.reset_password
-				raise Password_Resets::In_Reset, mem.inspect
-			end
+      # Raise Account::Reset if necessary.
+      if new_count > 2
+        mem.reset_password
+        raise Password_Resets::In_Reset, mem.inspect
+      end
 
-			raise Wrong_Password, "Password is invalid for: #{username.inspect}"
-		end 
-	
-	end # === self
+      raise Wrong_Password, "Password is invalid for: #{username.inspect}"
+    end 
+  
+  end # === self
 
   # ==== Getters ===========
 
   # ==== Authorizations ====
 
-	class << self
-		
-		def create editor, raw_raw_data # CREATE
-			d = new do
-				self.manipulator = editor
-				self.raw_data = raw_raw_data
-				
-				new_data.security_level = Member::MEMBER
-				ask_for :email
-				demand  :add_username, :password
-				generate_id
-				save_create_life
-				save_create
-			end
-		end
-		
-		def update id, editor, new_raw_data # UPDATE
+  class << self
+    
+    def create editor, raw_raw_data # CREATE
+      d = new do
+        self.manipulator = editor
+        self.raw_data = raw_raw_data
+        
+        new_data.security_level = Member::MEMBER
+        ask_for :email
+        demand  :add_username, :password
+        generate_id
+        save_create_life
+        save_create
+      end
+    end
+    
+    def update id, editor, new_raw_data # UPDATE
 
-			doc = new(id) do
-				self.manipulator = editor
-				self.raw_data    = new_raw_data
-				
-				ask_for :add_username 
+      doc = new(id) do
+        self.manipulator = editor
+        self.raw_data    = new_raw_data
+        
+        ask_for :add_username 
 
-				if manipulator == self
-					ask_for :password  
-				end
+        if manipulator == self
+          ask_for :password  
+        end
 
-				if manipulator.has_power_of? ADMIN
-					ask_for :security_level
-				end
-				un_id = nil
-				
-				save_update :if_valid => lambda {
-					if raw_data.add_username
-						un_id = __prep_new_username__
-					end
-				}
-				if un_id
-					__complete_new_username__ un_id
-				end
-			end
+        if manipulator.has_power_of? ADMIN
+          ask_for :security_level
+        end
+        un_id = nil
+        
+        save_update :if_valid => lambda {
+          if raw_data.add_username
+            un_id = __prep_new_username__
+          end
+        }
+        if un_id
+          __complete_new_username__ un_id
+        end
+      end
 
-		end
-		
+    end
+    
     def delete id, editor
       obj = begin
               by_id(id)
@@ -196,23 +196,23 @@ class Member
       end
       obj
     end
-		
-	end # === self
+    
+  end # === self
 
   def allow_to? action, editor # NEW, CREATE
-		case action
-			when :create
-				editor ? true : false 
-			when :read
-				read
-			when :update
-				return false if !editor
-				return true if self.data._id == editor.data._id
-				return true if editor.has_power_of?(:ADMIN)
-				false
-			when :delete
-				allow_to? :update, editor
-		end
+    case action
+      when :create
+        editor ? true : false 
+      when :read
+        read
+      when :update
+        return false if !editor
+        return true if self.data._id == editor.data._id
+        return true if editor.has_power_of?(:ADMIN)
+        false
+      when :delete
+        allow_to? :update, editor
+    end
   end
 
   def save_create_life
@@ -237,13 +237,13 @@ class Member
     has_password_reset?
   end
 
-	def change_password_through_reset opts
-		password_reset.change_password opts
-	end
-	
-	def reset_password
-		update_relation :password_reset, Password_Reset.create(self)
-	end
+  def change_password_through_reset opts
+    password_reset.change_password opts
+  end
+  
+  def reset_password
+    update_relation :password_reset, Password_Reset.create(self)
+  end
 
 
   # ==== ACCESSORS =====================================================

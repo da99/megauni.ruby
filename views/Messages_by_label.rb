@@ -22,7 +22,7 @@ class Messages_by_label < Base_View
 
   def public_labels
     raise "no longer allowed."
-		@public_labels ||= Message.public_labels.map {|label| {:filename => label} }
+    @public_labels ||= Message.public_labels.map {|label| {:filename => label} }
   end
 
   def messages

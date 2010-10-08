@@ -31,6 +31,7 @@ class Clubs_by_filename < Base_View
   end
 
   def public_labels
+    raise "No longer allowed."
     @public_labels ||= Message.public_labels.map {|label| {:filename => label} }
   end
 

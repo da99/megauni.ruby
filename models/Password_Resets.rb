@@ -4,7 +4,7 @@ class Password_Resets
 
   include Couch_Plastic
 
-	attr_reader :code
+  attr_reader :code
 
   # ==== CONSTANTS ====
   
@@ -15,8 +15,8 @@ class Password_Resets
   # ==== Fields  ====
   
   enable_timestamps
-	make :owner_id, :mongo_object_id
-	make :salt, :anything
+  make :owner_id, :mongo_object_id
+  make :salt, :anything
   make :hashed_code, :anything
 
   # ==== Associations  ====
@@ -27,60 +27,60 @@ class Password_Resets
   
   class << self
 
-		def create member
+    def create member
 
-			code = begin
-							 # Salt and encrypt values.
-							 chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-							 (1..10).inject('') { |new_pass, i|  
-								 new_pass += chars[rand(chars.size-1)] 
-								 new_pass
-							 }
-						 end
+      code = begin
+               # Salt and encrypt values.
+               chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+               (1..10).inject('') { |new_pass, i|  
+                 new_pass += chars[rand(chars.size-1)] 
+                 new_pass
+               }
+             end
       
-			salt = begin
-							 # Salt and encrypt values.
-							 chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-							 (1..10).inject('') { |new_pass, i|  
-								 new_pass += chars[rand(chars.size-1)] 
-								 new_pass
-							 }
-						 end
+      salt = begin
+               # Salt and encrypt values.
+               chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+               (1..10).inject('') { |new_pass, i|  
+                 new_pass += chars[rand(chars.size-1)] 
+                 new_pass
+               }
+             end
 
-			hashed_code = BCrypt::Password.create( code + salt ).to_s
-			
-			new do
-				self.manipulator = member
-				self.raw_data = {
-					:owner_id    => data._id,
-					:salt        => salt,
-					:hashed_code => hashed_code
-				}
+      hashed_code = BCrypt::Password.create( code + salt ).to_s
+      
+      new do
+        self.manipulator = member
+        self.raw_data = {
+          :owner_id    => data._id,
+          :salt        => salt,
+          :hashed_code => hashed_code
+        }
 
-				demand :owner_id, :salt, :hashed_code
-				set_id( member.data._id )
-				save_upsert
-				
-				@code = code
-			end
-		
-		end
+        demand :owner_id, :salt, :hashed_code
+        set_id( member.data._id )
+        save_upsert
+        
+        @code = code
+      end
+    
+    end
   
-	end # === self
+  end # === self
   # ==== Authorizations ====
  
-	def allow_to? action, editor
-		case action
-		when :create
-			true
-		when :read
-			false
-		when :update
-			false
-		when :delete
-			false
-		end
-	end
+  def allow_to? action, editor
+    case action
+    when :create
+      true
+    when :read
+      false
+    when :update
+      false
+    when :delete
+      false
+    end
+  end
 
   # ==== Accessors ====
   

@@ -185,7 +185,7 @@ module Couch_Plastic
   def fetch( key )
     data.send key
   end
-	
+  
   def href 
     HREF_PATTERN.first % data.send(HREF_PATTERN.last) "/uni/#{data.filename}/"
   end
@@ -265,13 +265,13 @@ module Couch_Plastic
   end
 
   def generate_id
-		set_id BSON::ObjectID.new 
+    set_id BSON::ObjectID.new 
   end
-	
-	def set_id new_id
+  
+  def set_id new_id
     raise "New id can not be generated on an existing record." if not new?
     new_data._id = ( clean_date._id = new_id )
-	end
+  end
 
   def clean_data
     raise ArgumentError, "No clean data." unless @clean_data
@@ -943,18 +943,18 @@ module Couch_Plastic_Class_Methods
       def #{assoc} name, class_name = nil, namespace = nil
         create_association( :#{assoc}, name, class_name, namespace)
       end
-		
-			def has_#{name}?
-				raise "Not implemented yet."
-			end
-		
+    
+      def has_#{name}?
+        raise "Not implemented yet."
+      end
+    
       def #{name}? target
         raise "This can only be called with :belongs_to association."
       end
 
-			def update_relation name, obj
-				raise "not done implemented yet."
-			end
+      def update_relation name, obj
+        raise "not done implemented yet."
+      end
     ~
   }
 
@@ -974,17 +974,17 @@ module Couch_Plastic_Class_Methods
 
   # ===== CRUD Methods ====================================
 
-	def find_by_date field, start_tm, end_tm = nil
-		time_format = '%Y-%m-%d %H:%M:%S'
-		
-		selector = if end_at
-								 { field => {'$gt'=>start_tm,'$lt'=>end_tm} }
-							 else
-								 { field => start_tm }
-							 end
-		
-		find selector
-	end
+  def find_by_date field, start_tm, end_tm = nil
+    time_format = '%Y-%m-%d %H:%M:%S'
+    
+    selector = if end_at
+                 { field => {'$gt'=>start_tm,'$lt'=>end_tm} }
+               else
+                 { field => start_tm }
+               end
+    
+    find selector
+  end
 
   def find_with_associations raw_assocs, selector, params = {}
     assocs = [raw_assocs].flatten.uniq.compact
@@ -1006,9 +1006,9 @@ module Couch_Plastic_Class_Methods
   end
 
   def find selector, params = {}, &blok
-		if respond_to?(:selector_validation
-			raise "not implemented yet."
-		end
+    if respond_to?(:selector_validation
+      raise "not implemented yet."
+    end
     fields = selector.keys
     fields_must_exist(fields) if not fields.empty?
     raise ArgumentError, "I don't know what to do with a block." if blok

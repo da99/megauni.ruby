@@ -10,22 +10,22 @@ class Member_Notifys
 
   # ==== Authorizations ====
  
-	class << self
-	end # === self
+  class << self
+  end # === self
 
   def allow_to? action, editor # NEW, CREATE
-		case action
-			when :create
-				false
-			when :read
-				false
-			when :update
-				false
-			when :delete
-				false
-		end
+    case action
+      when :create
+        false
+      when :read
+        false
+      when :update
+        false
+      when :delete
+        false
+    end
   end
-	
+  
 
   # ==== Accessors ====
 

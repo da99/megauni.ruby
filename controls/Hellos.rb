@@ -4,7 +4,7 @@
 class Hellos
   include Base_Control
 
-	top_slash 
+  top_slash 
 
   get '/' do
     set_header 'Cache-Control', 'public, max-age=600'

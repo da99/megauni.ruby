@@ -13,23 +13,20 @@ class Club
     owner
   }.map(&:to_sym)
 
-  INVALID_FILENAMES = %w{ 
-    help 
-    mega
-    mini
-    megauni 
-    test 
-    support 
-    admin 
-    official 
-    indonesia 
-    factor 
-    happy 
-    da01 
-    da01tv 
-    miniuni 
-  }
+  INVALID_FILENAMES = File.read('models/INVALID_FILENAMES.txt') \
+                        .split
+                        .map { |raw_str|
+                          str = raw_str.strip
+                          if str.empty?
+                            nil
+                          else
+                            [str.strip, str + 's']
+                          end
+                        }
+                        .compact.flatten
 
+  # ======== Fields ======== 
+    
   enable_created_at
 
   make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids }]
@@ -41,7 +38,27 @@ class Club
   make :title, :not_empty
   make :teaser, :not_empty
 
+  # ======== Associations   ======== 
   
+  has_many :messages, Message, :target_ids do
+    where :parent_message_id => nil
+    where :privacy => 'public'
+    limit 10
+    sort  [:_id, :desc]
+    
+    find_by_date :published_at
+  end
+
+  has_many :comments do
+    based_on :messages
+    where_in :message_model, %w{ jeer cheer }
+  end
+
+  has_many :questions do
+    based_on :messages
+    where    :message_model => 'question'
+  end
+
   # ======== Authorizations ======== 
 
   class << self
@@ -90,6 +107,22 @@ class Club
         owner? editor
     end
   end
+
+  # ======== Class Methods ======== 
+  
+  class << self 
+    
+    def relationize docs, namespace = 'club'
+      Couch_Plastic.relationize(
+        doc,
+        self,
+        'target_ids', 
+        'title'    => "#{namespace}_title",
+        'filename' => "#{namespace}_filename"
+      )
+    end
+    
+  end # === self
 
   # ======== Accessors ======== 
 
@@ -224,6 +257,14 @@ class Club
 
   def follower? mem
     mem.following_club_id?(data._id)
+  end
+
+  module Results
+    
+    def href
+      first.href
+    end
+
   end
 
 end # === Club
