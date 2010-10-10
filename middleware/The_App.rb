@@ -60,7 +60,7 @@ class The_App
         end
       end
     rescue The_App::Redirect
-    rescue Couch_Plastic::Not_Found
+    rescue Mongo_Dsl::Not_Found
       if The_App.production?
         raise The_App::HTTP_404, ($!.message.is_a?(String) ? $!.message : "Record not found.")
       else

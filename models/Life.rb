@@ -2,7 +2,7 @@
 
 class Life
 
-  include Couch_Plastic
+  include Mongo_Dsl
 
   CATEGORIES = %w{ real celebrity pet baby fantasy }
   HREF_NAMESPACE = '/life'
@@ -42,7 +42,7 @@ class Life
   has_many :following_clubs, Club
     # Club.ids_for_follower_id( :$in => current_username_ids )
   # def following_club_id?(club_id)
-  #   club_ids.include?(Couch_Plastic.mongofy_id(club_id))
+  #   club_ids.include?(Mongo_Dsl.mongofy_id(club_id))
   # end
   has_many :owned_clubs, Club
     # Club.ids_by_owner_id(:$in=>current_username_ids)
@@ -53,7 +53,7 @@ class Life
   class << self
     
     def relationize docs, namespace = 'owner'
-      Couch_Plastic.relationize( 
+      Mongo_Dsl.relationize( 
         docs, 
         Life,   
         "#{namespace}_id",
@@ -155,7 +155,7 @@ class Life
     #    nil or String.
     #    
     def username_for raw_id
-      id = Couch_Plastic.mongofy_id(raw_id)
+      id = Mongo_Dsl.mongofy_id(raw_id)
       _ids_to_usernames[id]
     end
 

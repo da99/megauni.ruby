@@ -2,7 +2,7 @@ require 'bcrypt'
 
 class Member 
 
-  include Couch_Plastic
+  include Mongo_Dsl
 
   # ==== CONSTANTS ====
   
@@ -72,7 +72,7 @@ class Member
     end
     
     def relationize docs, namespace = 'owner'
-      Couch_Plastic.relationize( docs, Member, "#{namespace}_id",  namespace => :doc)
+      Mongo_Dsl.relationize( docs, Member, "#{namespace}_id",  namespace => :doc)
       Life.relationize docs, namespace
     end
     
@@ -117,9 +117,9 @@ class Member
         nil,
         { :data_model => 'Member_Failed_Attempt',
         :owner_id   => mem.data._id, 
-        :date       => Couch_Plastic.utc_date_now, 
-        :time       => Couch_Plastic.utc_time_now,
-        :created_at => Couch_Plastic.utc_now,
+        :date       => Mongo_Dsl.utc_date_now, 
+        :time       => Mongo_Dsl.utc_time_now,
+        :created_at => Mongo_Dsl.utc_now,
         :ip_address => ip_addr,
         :user_agent => user_agent }
       )
@@ -335,12 +335,12 @@ __END__
   end
 
   def self.by_username_id raw_id
-    id = Couch_Plastic.mongofy_id(raw_id)
+    id = Mongo_Dsl.mongofy_id(raw_id)
     doc = find_one_usernames(:_id=>id)
     if doc
       Member.by_id(doc['owner_id'])
     else
-      raise Couch_Plastic::Not_Found, "Member Username id: #{raw_id.inspect}"
+      raise Mongo_Dsl::Not_Found, "Member Username id: #{raw_id.inspect}"
     end
   end
 
@@ -349,8 +349,8 @@ __END__
     require 'time'
     Failed_Log_In_Attempts.find( 
        :owner_id => mem.data._id,  
-       :created_at => { :$lte => Couch_Plastic.utc_now,
-                 :$gte => Couch_Plastic.utc_string(Time.now.utc - (60*60*24))
+       :created_at => { :$lte => Mongo_Dsl.utc_now,
+                 :$gte => Mongo_Dsl.utc_string(Time.now.utc - (60*60*24))
        },
        &blok
     ).to_a

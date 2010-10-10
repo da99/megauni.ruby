@@ -341,7 +341,7 @@ class Base_View < Mustache
 
   def languages
     @cache_languages ||= begin
-                             Couch_Plastic::LANGS.map { |k,v| 
+                             Mongo_Dsl::LANGS.map { |k,v| 
                               {:name=>v, :filename=>k, :selected? =>(k=='en-us'), :not_selected? => (k != 'en-us')}
                              }.sort { |x,y| 
                               x[:name] <=> y[:name]

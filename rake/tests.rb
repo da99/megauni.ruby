@@ -16,7 +16,7 @@ namespace :tests do
     Rake::Task['db:reset!'].invoke
     rb_files = Dir.glob('tests/Test_*.rb').sort.reverse.map { |file| file.sub('.rb', '')}
     
-    order    = [ 'Helper', 'model_Couch_Plastic' ]
+    order    = [ 'Helper', 'model_Mongo_Dsl' ]
     pre      = order.inject([]) { |m,pat| m + rb_files.select {|file| file =~ /_#{pat}/ }  }
     ordered  = (rb_files - pre) + pre.reverse
     

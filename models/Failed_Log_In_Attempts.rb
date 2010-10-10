@@ -4,7 +4,7 @@ class Failed_Log_In_Attempts
 
   TooManyFailedAttempts = Class.new( StandardError )
   
-  include Couch_Plastic
+  include Mongo_Dsl
   MAX = 4
   
   enable_timestamps

@@ -79,7 +79,7 @@ namespace 'git' do
       puts_white "Updating indexes on production DB server..."
       ENV['RACK_ENV'] = 'production'
       require 'megauni'
-      Couch_Plastic.ensure_indexes()
+      Mongo_Dsl.ensure_indexes()
       Rake::Task['db:check_size'].invoke
       ENV['RACK_ENV'] = orig_env
     end

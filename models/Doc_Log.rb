@@ -2,7 +2,7 @@ require 'models/Diff_Document'
 
 class Doc_Log
 
-  include Couch_Plastic
+  include Mongo_Dsl
 
   enable_timestamps
   
@@ -16,7 +16,7 @@ class Doc_Log
     demand :old_doc, :new_doc
     o = raw_data.old_doc
     n = raw_data.new_doc
-    o.extend Couch_Plastic::Diff_Document
+    o.extend Mongo_Dsl::Diff_Document
     o.diff_document n
   }]
 

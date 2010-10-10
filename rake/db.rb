@@ -53,7 +53,7 @@ namespace :db do
 
     require File.basename(File.expand_path('.'))
 
-    Couch_Plastic.reset_db!
+    Mongo_Dsl.reset_db!
     puts_white "Removed all records and added new indexes (if any)."
 
     # conn = Mongo::Connection.new
@@ -61,7 +61,7 @@ namespace :db do
     # 
     # puts_white "Deleted: #{DB.name}"
 
-    # Couch_Plastic.ensure_indexes
+    # Mongo_Dsl.ensure_indexes
     # puts_white "Created indexes."
 
     # Grab some sample data
@@ -119,7 +119,7 @@ namespace :db do
   task :reset_design_doc do
     ENV['RACK_ENV'] ||= 'development'
     require File.basename(File.expand_path('.'))
-    Couch_Plastic.ensure_indexes
+    Mongo_Dsl.ensure_indexes
     puts_white "Updated indexes."
   end
   

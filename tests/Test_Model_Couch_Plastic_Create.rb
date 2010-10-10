@@ -1,5 +1,5 @@
 
-class Test_Couch_Plastic_Create < Test::Unit::TestCase
+class Test_Mongo_Dsl < Test::Unit::TestCase
 
   must 'raise Invalid, with errors msg, if missing required field' do
     err = assert_raise Cafe_Le_Roger::Invalid do
@@ -71,7 +71,7 @@ end # === class _create
 # === Custom Classes for Testing ===
 
 class Cafe_Le_Roger
-  include Couch_Plastic
+  include Mongo_Dsl
 
   %w{ 
     title

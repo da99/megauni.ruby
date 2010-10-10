@@ -2,7 +2,7 @@
 
 class Password_Resets
 
-  include Couch_Plastic
+  include Mongo_Dsl
 
   attr_reader :code
 

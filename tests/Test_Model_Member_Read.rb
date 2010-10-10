@@ -11,8 +11,8 @@ class Test_Model_Member_Read < Test::Unit::TestCase
     )
   end
 
-  must 'Couch_Plastic::Not_Found is user is not found during authentication' do
-    assert_raise(Couch_Plastic::Not_Found) do
+  must 'Mongo_Dsl::Not_Found is user is not found during authentication' do
+    assert_raise(Mongo_Dsl::Not_Found) do
       Member.authenticate(:username=>'billy_west', :password=>'my-name-is-my-password')
     end
   end

@@ -2,7 +2,7 @@
 
 class Member_Notifys
 
-  include Couch_Plastic
+  include Mongo_Dsl
 
   enable_timestamps
   

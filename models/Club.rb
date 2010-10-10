@@ -1,10 +1,11 @@
 
 class Club
 
-  include Couch_Plastic
+  include Mongo_Dsl
   
   HREF_NAMESPACE = '/uni'
   HREF_PATTERN   = [ '/uni/%s/', 'filename' ]
+  HREF_SUFFIXES  = %w{ follow e magazine news qa shop random thanks fights delete_follow members }
 
   MEMBERS = %w{ 
     stranger
@@ -15,15 +16,10 @@ class Club
 
   INVALID_FILENAMES = File.read('models/INVALID_FILENAMES.txt') \
                         .split
-                        .map { |raw_str|
-                          str = raw_str.strip
-                          if str.empty?
-                            nil
-                          else
-                            [str.strip, str + 's']
-                          end
-                        }
-                        .compact.flatten
+                        .map(&:strip)
+                        .map { |str|
+                          [str, str + 's']
+                        }.flatten
 
   # ======== Fields ======== 
     
@@ -113,7 +109,7 @@ class Club
   class << self 
     
     def relationize docs, namespace = 'club'
-      Couch_Plastic.relationize(
+      Mongo_Dsl.relationize(
         doc,
         self,
         'target_ids', 
@@ -126,123 +122,120 @@ class Club
 
   # ======== Accessors ======== 
 
-  def self.by_filename filename
-    find_one(:filename=>filename)
-  end
+  class << self 
 
-  def self.hash_for_follower mem
-    following_ids = []
-    clubs         = {}
+    # member.lifes.clubs.follows.group_by(:follower_id).map( Club ).go!
+    #   => Grab all Club_Follow for member, with only fields :follower_id, :club_id
+    #      and then convert each :club_id to Club docs.
+    # 
+    # Returns:
+    #   { 
+    #     :follower_id => [ club, club ],
+    #     :follower_id => [ club, club, club ]
+    #   }
+    #   
+    def hash_for_follower mem
+      raise "No longer allowed"
+    end
+    
+    # member.lifes.clubs.owned.group_by(:owner_id).go!
+    #
+    # Returns:
+    #   { 
+    #     :owner_id => [ club, club ],
+    #     :owner_id => [ club ]
+    #   }
+    def hash_for_owner mem
+      raise "No longer allowed"
+    end
 
-    hash = Club_Followers.find(
-      {:follower_id=>{:$in=>mem.lifes._ids}}, 
-      {:fields=>%w{ follower_id club_id }}
-    ).inject({}) { |memo, doc|
-      memo[doc['follower_id']] ||= []
-      memo[doc['follower_id']] << doc['club_id']
-      following_ids << doc['club_id']
-      memo
-    } 
-    
-    following = find( :_id => { :$in => following_ids } ).inject({}) { |memo, doc|
-      memo[doc['_id']] = doc
-      memo
-    }
-    
-    hash.to_a.each { |pair|
-      clubs[pair.first] = hash[pair.first].map { |club_id|
-        following[club_id]
+    # member.lifes.group_by(:life_id).map(Club).go!
+    # 
+    # Returns:
+    #   {
+    #     :username_id => [ life, life ]
+    #     :username_id => [ life ]
+    #   }
+    def hash_for_lifer mem
+      raise "No longer allowed"
+    end
+
+    # Returns:
+    #   :as_owner    => { :usernamed_id => [Clubs] }
+    #   :as_follower => { :usernamed_id => [Clubs] }
+    #   :as_lifer    => { :usernamed_id => [Clubs] }
+    #
+    def all_for_member_by_relation mem
+      { :as_owner => hash_for_owner(mem), :as_follower => hash_for_follower(mem), :as_lifer  => hash_for_lifer(mem)}
+    end
+
+    # member.lifes.clubs._ids.go!
+    #   => Grabs only field, :_id, and maps each doc as: doc['_id']
+    #   
+    # Returns:
+    #   [ club_id, club_id, club_id ]
+    #   
+    def all_ids_for_owner( raw_id )
+      id = Mongo_Dsl.mongofy_id( raw_id )
+      find({:owner_id=>id}, {:fields=>'_id'}).map { |doc|
+        doc['_id']
+      }
+    end
+
+    # member.life.first.club_follows.map(:club_id).go!
+    #
+    # Returns:
+    #   [ club_id, club_id, club_id ]
+    #
+    def ids_for_follower_id( raw_id )
+      id = Mongo_Dsl.mongofy_id( raw_id )
+      following = find_followers({:follower_id=>id}, {:fields=>'club_id'}).map { |doc|
+        doc['club_id']
       } 
-    }
+      owned = all_ids_for_owner(raw_id)
+      (following + owned).uniq
+    end
 
-    clubs
-  end
-  
-  def self.hash_for_owner mem
-    clubs = {}
-    find( :owner_id => {:$in=>mem.lifes._ids} ).each { |doc|
-      clubs[doc['owner_id']] ||= []
-      clubs[doc['owner_id']] << doc
-    }
-    clubs
-  end
+    # da01tv.lifes.clubs.map(:filename).go!
+    # 
+    # Returns: 
+    #   [ club_filename, club_filename, club_filename ]
+    def all_filenames 
+    end
 
-  def self.hash_for_lifer mem
-    life_clubs_for_member(mem).inject({}) { |memo, doc| 
-      memo[doc.data._id] ||= []
-      memo[doc.data._id] << doc.data.as_hash
-      memo
-    }
-  end
+    # Club.all.where_in(:club_model, models ).go!
+    # 
+    # Returns:
+    #   [ doc, doc, doc ]
+    def by_club_model raw_models, opts = {}
+    end
 
-  # Returns:
-  #   :as_owner    => { :usernamed_id => [Clubs] }
-  #   :as_follower => { :usernamed_id => [Clubs] }
-  #   :as_lifer    => { :usernamed_id => [Clubs] }
-  #
-  def self.all_for_member_by_relation mem
-    { :as_owner => hash_for_owner(mem), :as_follower => hash_for_follower(mem), :as_lifer  => hash_for_lifer(mem)}
-  end
+    # member.life.first.clubs.map(:_id).go!
+    # 
+    # Returns:
+    #   [ club_id, club_id, club_id ]
+    #   
+    def ids_by_owner_id raw_id, raw_opts = {}
+      id   = Mongo_Dsl.mongofy_id(raw_id)
+      opts = {:fields => '_id'}.update(raw_opts)
+      find({:owner_id => id }, opts).map { |doc|
+        doc['_id']
+      }
+    end
 
-  def self.all_ids_for_owner( raw_id )
-    id = Couch_Plastic.mongofy_id( raw_id )
-    find({:owner_id=>id}, {:fields=>'_id'}).map { |doc|
-      doc['_id']
-    }
-  end
-
-  def self.ids_for_follower_id( raw_id )
-    id = Couch_Plastic.mongofy_id( raw_id )
-    following = find_followers({:follower_id=>id}, {:fields=>'club_id'}).map { |doc|
-      doc['club_id']
-    } 
-    owned = all_ids_for_owner(raw_id)
-    (following + owned).uniq
-  end
-
-  def self.all_filenames 
-    find(
-      { :owner_id => {:$in=>Member.by_filename('da01tv').lifes._ids} },
-      { :fields => 'filename' }
-    ).map {|r| r['filename']}
-  end
-
-  def self.by_club_model raw_models, opts = {}
-    models = [raw_models].flatten.compact.uniq
-    clubs = find({:club_model=>{:$in=>models}}, opts)
-  end
-
-  def self.ids_by_owner_id raw_id, raw_opts = {}
-    id   = Couch_Plastic.mongofy_id(raw_id)
-    opts = {:fields => '_id'}.update(raw_opts)
-    find({:owner_id => id }, opts).map { |doc|
-      doc['_id']
-    }
-  end
-
-  def self.by_owner_ids raw_id, raw_opts={}
-    id = Couch_Plastic.mongofy_id(raw_id)
-    find(
-      {:owner_id=>id},
-      raw_opts
-    )
-  end
+    # member.life.clubs.go!
+    #
+    # Returns:
+    #   [ doc, doc, doc ]
+    #   
+    def by_owner_ids raw_id, raw_opts={}
+    end
+    
+  end # === self
 
   def owner?(mem)
     return false if not mem
     mem.lifes._ids.include?(data.owner_id)
-  end
-
-  %w{ e magazine news qa shop random thanks fights delete_follow members }.each do |suffix|
-    eval %~
-      def href_#{suffix}
-        File.join(href, '#{suffix}/')
-      end
-    ~
-  end
-
-  def href_follow
-    File.join(href, "/follow/")
   end
 
   def followers
@@ -265,7 +258,7 @@ class Club
       first.href
     end
 
-  end
+  end # === module
 
 end # === Club
 

@@ -3,7 +3,7 @@
 class News_Create < Test::Unit::TestCase
 
   must 'only allow Admins as creators' do
-    assert_raise(Couch_Plastic::Unauthorized) do
+    assert_raise(Mongo_Dsl::Unauthorized) do
       News.create(regular_member_1, {})
     end
   end

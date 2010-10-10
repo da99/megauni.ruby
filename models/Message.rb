@@ -64,7 +64,7 @@ class Message
   
   MODELS = MODEL_HASH.keys
   
-  include Couch_Plastic
+  include Mongo_Dsl
 
   enable_timestamps
   

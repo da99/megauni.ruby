@@ -58,7 +58,7 @@ class Clubs
     club        = Club.by_filename(clean_room['filename'])
     begin
       club.create_follower(current_member, username_id)
-    rescue Couch_Plastic::Invalid
+    rescue Club::Invalid
       flash_msg.errors = $!.doc.errors
     end
     redirect! club.href

@@ -2,7 +2,7 @@
 
 class Club_Followers
 
-  include Couch_Plastic
+  include Mongo_Dsl
 
   enable_timestamps
   
@@ -57,7 +57,7 @@ __END__
       mem,
       '_id' => "#{data._id}#{mem.data._id}",
       'club_id' => data._id, 
-      'follower_id' => Couch_Plastic.mongofy_id(username_id)
+      'follower_id' => Mongo_Dsl.mongofy_id(username_id)
     )
   end
 

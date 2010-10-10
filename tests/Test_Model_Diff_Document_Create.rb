@@ -6,7 +6,7 @@ class Test_Model_Diff_Document_Create < Test::Unit::TestCase
   
   def o
     @o_hash_diff ||= begin
-                       {}.extend Couch_Plastic::Diff_Document
+                       {}.extend Mongo_Dsl::Diff_Document
                      end
   end
 

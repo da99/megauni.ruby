@@ -1,7 +1,7 @@
 
 require 'differ'
 
-module Couch_Plastic::Differ_To_Document
+module Mongo_Dsl::Differ_To_Document
   def to_document
     raw_array.map { |change|
       case change
@@ -16,7 +16,7 @@ module Couch_Plastic::Differ_To_Document
   end
 end # === module 
 
-module Couch_Plastic::Diff_Document
+module Mongo_Dsl::Diff_Document
 
   def diff_document new_doc
     raise "Invalid type: #{self.class}" unless self.is_a?(Hash)
@@ -33,7 +33,7 @@ module Couch_Plastic::Diff_Document
       case diff_type
       when :String
         differ = Differ.diff_by_word(v, self[k])
-        differ.extend Couch_Plastic::Differ_To_Document
+        differ.extend Mongo_Dsl::Differ_To_Document
         meta[k] = differ.to_document
 
       when :Array

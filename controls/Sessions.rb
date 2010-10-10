@@ -24,7 +24,7 @@ class Sessions
       )
       redirect!( session.delete(:return_page) || '/lifes/' )
       
-    rescue Couch_Plastic::Not_Found, Member::Wrong_Password
+    rescue Mongo_Dsl::Not_Found, Member::Wrong_Password
       flash_msg.errors = "Incorrect info. Try again."
       
     rescue Member::Password_Reset

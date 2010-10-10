@@ -2,7 +2,7 @@
 
 class Trashed_Members
 
-  include Couch_Plastic
+  include Mongo_Dsl
 
   enable_timestamps
   

@@ -2,62 +2,7 @@ require 'mongo'
 require 'loofah'
 require 'models/Data_Pouch'
 
-DB_CONN = if The_App.production?
-            DB_NAME          = "mu02"
-            DB_HOST          = "pearl.mongohq.com:27027/#{DB_NAME}"
-            DB_USER          = 'da01'
-            DB_PASSWORD      = "isle569vxwo103"
-            DB_CONN_STRING   = "#{DB_USER}:#{DB_PASSWORD}@#{DB_HOST}"
-            MONGODB_CONN_STRING ="mongodb://#{DB_CONN_STRING}"
-            DB_SESSION_TABLE = 'rack_sessions'
-            Mongo::Connection.from_uri(
-              MONGODB_CONN_STRING,
-              :timeout=>3
-            ) 
-          else
-            case The_App.environment
-            when 'development'
-              DB_NAME = "megauni_dev"
-            when 'test'
-              DB_NAME = "megauni_test"
-            end
-            DB_HOST          = "localhost:27017/#{DB_NAME}"
-            DB_USER          = 'da01'
-            DB_PASSWORD      = "kgflw30zeno4vr"
-            DB_CONN_STRING   = "#{DB_USER}:#{DB_PASSWORD}@#{DB_HOST}"
-            MONGODB_CONN_STRING = "mongodb://#{DB_CONN_STRING}"
-            DB_SESSION_TABLE = 'rack_sessions'
-            begin
-              Mongo::Connection.from_uri(MONGODB_CONN_STRING, :timeout=>1)
-            rescue Mongo::AuthenticationError 
-              puts "Did you add #{DB_USER} to both dev and test databases? If not, please do."
-              raise
-            end
-          end
-
-at_exit do
-  DB_CONN.close
-end
-  
-
-DB = case ENV['RACK_ENV']
-  
-  when 'test'
-    DB_CONN.db("megauni_test")
-    
-  when 'development'
-    DB_CONN.db("megauni_dev")
-
-  when 'production'
-    DB_CONN.db(DB_NAME)
-
-  else
-    raise ArgumentError, "Unknown RACK_ENV value: #{ENV['RACK_ENV'].inspect}"
-
-end # === case
-
-
-module Couch_Plastic
+module Mongo_Dsl
   
   Not_Found               = Class.new(StandardError)
   HTTP_Error              = Class.new(StandardError)
@@ -69,12 +14,15 @@ module Couch_Plastic
   Unauthorized            = Class.new(StandardError)
   
   class Invalid < StandardError
+    
     attr_accessor :doc
+    
     def initialize doc, msg=nil
       @doc = doc
       super(msg)
     end
-  end
+    
+  end # === class Invalid
 
 
   attr_reader :data
@@ -84,7 +32,7 @@ module Couch_Plastic
   # ========================================================= 
 
   def self.included(target)
-    target.extend Couch_Plastic_Class_Methods
+    target.extend Class_Methods
   end
   
   def self.reset_db!
@@ -187,7 +135,7 @@ module Couch_Plastic
   end
   
   def href 
-    HREF_PATTERN.first % data.send(HREF_PATTERN.last) "/uni/#{data.filename}/"
+    HREF_PATTERN.first % data.send(HREF_PATTERN.last)
   end
   alias_method :href_delete, :href
 
@@ -450,13 +398,13 @@ module Couch_Plastic
             end
             
           when :utc_now
-            new_clean_value(fld, Couch_Plastic.utc_now)
+            new_clean_value(fld, Mongo_Dsl.utc_now)
               
           when :datetime_or_now
             new_val = begin
                         Time.parse(raw)
                       rescue ArgumentError
-                        Couch_Plastic.utc_now
+                        Mongo_Dsl.utc_now
                       end
             new_clean_value(fld, new_val)
               
@@ -742,7 +690,7 @@ module Couch_Plastic
     no_data = begin
                 raise_if_invalid
                 false
-              rescue Couch_Plastic::Nothing_To_Update 
+              rescue Mongo_Dsl::Nothing_To_Update 
                 $!
               end
 
@@ -787,7 +735,7 @@ module Couch_Plastic
     
     clear_cache
 
-    results = Couch_Plastic.delete( data.id, data._rev )
+    results = Mongo_Dsl.delete( data.id, data._rev )
     @data = nil # Mark document as new.
 
   end
@@ -822,313 +770,276 @@ module Couch_Plastic
 
   end 
   
+  
+  module Class_Methods 
 
-end # === module Couch_Plastic ================================================
+    def db_collection
+      @db_collection ||= DB.collection(name.to_s + 's')
+    end
 
-
-# =========================================================
-# === Module: Class Methods for Couch_Plastic 
-# ========================================================= 
-
-module Couch_Plastic_Class_Methods 
-
-  def db_collection
-    @db_collection ||= DB.collection(name.to_s + 's')
-  end
-
-  # Example:
-  #    arr = [ doc, doc, doc ]
-  #    relationaize arr, Life, 'owner_id', 'username'=>'owner_username'
-  # Each doc now has 'owner_username' added to it
-  # from the Life class.
-  # 
-  # To include the entire doc, use a map of
-  #     'key_name' => :doc
-  #
-  # Parameters: 
-  #   fk => means foreign key
-  #   field_map =>
-  #      { 'username' => 'owner_username' }
-  #    
-  def relationize raw_coll, relation_class, fk, field_map
-    coll   = raw_coll.to_a
-    fks    = coll.map { |doc| doc[fk] }.uniq.compact
-    f_docs = relation_class.find(:_id=>{ :$in => fks }).inject({}) { |m, doc|
-      m[doc['_id']] = doc
-      m
-    }
-    
-    coll.map { |doc|
-      target = f_docs[doc[fk]]
-      field_map.each { | orig, namespaced |
-        if namespaced == :doc
-          doc[orig] = target
-        else
-          doc[namespaced] = if target
-                              target[orig]
-                            else
-                              nil
-                            end
-        end
+    # Example:
+    #    arr = [ doc, doc, doc ]
+    #    relationaize arr, Life, 'owner_id', 'username'=>'owner_username'
+    # Each doc now has 'owner_username' added to it
+    # from the Life class.
+    # 
+    # To include the entire doc, use a map of
+    #     'key_name' => :doc
+    #
+    # Parameters: 
+    #   fk => means foreign key
+    #   field_map =>
+    #      { 'username' => 'owner_username' }
+    #    
+    def relationize raw_coll, relation_class, fk, field_map
+      coll   = raw_coll.to_a
+      fks    = coll.map { |doc| doc[fk] }.uniq.compact
+      f_docs = relation_class.find(:_id=>{ :$in => fks }).inject({}) { |m, doc|
+        m[doc['_id']] = doc
+        m
       }
-      doc
+      
+      coll.map { |doc|
+        target = f_docs[doc[fk]]
+        field_map.each { | orig, namespaced |
+          if namespaced == :doc
+            doc[orig] = target
+          else
+            doc[namespaced] = if target
+                                target[orig]
+                              else
+                                nil
+                              end
+          end
+        }
+        doc
+      }
+    end
+
+    # ===== DSL-icious ======
+
+    def fields_must_exist *flds
+      raise(ArgumentError, "Empty array for fields.") if flds.empty?
+      flds.each { |fld| 
+        field_must_exist fld 
+      }
+    end
+
+    def field_must_exist fld
+      return true if allowed_field?(fld)
+      raise ArgumentError, "Field does not exist: #{fld.inspect}"
+    end
+
+    def allowed_field? fld
+      @fields.keys.include? fld
+    end
+
+    def fields 
+      @fields ||= begin
+                    {'_id' => [:not_empty], 'data_model' => [:not_empty], 'lang' => [ [:in_array, Mongo_Dsl::LANGS]] }
+                  end
+    end
+
+    def allowed_psuedo_field? fld
+      @psuedo_fields.keys.include? fld
+    end
+
+    def psuedo_fields
+      @psuedo_fields ||= {}
+    end
+
+    def make raw_name, *regs
+      name = raw_name.to_s.strip
+      raise ArgumentError, "Field already set: #{name}" if fields[name]
+      fields[name] ||= regs
+    end
+
+    def make_psuedo raw_name, *regs
+      name = raw_name.to_s.strip
+      raise ArgumentError, "Psuedo field already set: #{name}" if psuedo_fields[name]
+      psuedo_fields[name] ||= regs
+    end
+
+
+    def enable_timestamps
+      %w{ created_at updated_at }.each { |f| 
+        make f, :utc_now
+      }
+    end
+
+    def enable_created_at
+      make 'created_at', :utc_now
+    end
+
+    def timestamps_enabled?
+      allowed_field?('created_at') && allowed_field?('updated_at')
+    end
+
+    def associations
+      @associations ||= {}
+    end
+
+    %{ has_many has_one, belongs_to }.each { |assoc|
+      eval %~
+        def #{assoc} name, class_name = nil, namespace = nil
+          create_association( :#{assoc}, name, class_name, namespace)
+        end
+      
+        def has_#{name}?
+          raise "Not implemented yet."
+        end
+      
+        def #{name}? target
+          raise "This can only be called with :belongs_to association."
+        end
+
+        def update_relation name, obj
+          raise "not done implemented yet."
+        end
+      ~
     }
-  end
 
-  # ===== DSL-icious ======
-
-  def fields_must_exist *flds
-    raise(ArgumentError, "Empty array for fields.") if flds.empty?
-    flds.each { |fld| 
-      field_must_exist fld 
-    }
-  end
-
-  def field_must_exist fld
-    return true if allowed_field?(fld)
-    raise ArgumentError, "Field does not exist: #{fld.inspect}"
-  end
-
-  def allowed_field? fld
-    @fields.keys.include? fld
-  end
-
-  def fields 
-    @fields ||= begin
-                  {'_id' => [:not_empty], 'data_model' => [:not_empty], 'lang' => [ [:in_array, Couch_Plastic::LANGS]] }
-                end
-  end
-
-  def allowed_psuedo_field? fld
-    @psuedo_fields.keys.include? fld
-  end
-
-  def psuedo_fields
-    @psuedo_fields ||= {}
-  end
-
-  def make raw_name, *regs
-    name = raw_name.to_s.strip
-    raise ArgumentError, "Field already set: #{name}" if fields[name]
-    fields[name] ||= regs
-  end
-
-  def make_psuedo raw_name, *regs
-    name = raw_name.to_s.strip
-    raise ArgumentError, "Psuedo field already set: #{name}" if psuedo_fields[name]
-    psuedo_fields[name] ||= regs
-  end
-
-
-  def enable_timestamps
-    %w{ created_at updated_at }.each { |f| 
-      make f, :utc_now
-    }
-  end
-
-  def enable_created_at
-    make 'created_at', :utc_now
-  end
-
-  def timestamps_enabled?
-    allowed_field?('created_at') && allowed_field?('updated_at')
-  end
-
-  def associations
-    @associations ||= {}
-  end
-
-  %{ has_many has_one, belongs_to }.each { |assoc|
-    eval %~
-      def #{assoc} name, class_name = nil, namespace = nil
-        create_association( :#{assoc}, name, class_name, namespace)
-      end
-    
-      def has_#{name}?
-        raise "Not implemented yet."
-      end
-    
-      def #{name}? target
-        raise "This can only be called with :belongs_to association."
-      end
-
-      def update_relation name, obj
-        raise "not done implemented yet."
-      end
-    ~
-  }
-
-  def create_association type, name, class_name = nil, namespace = nil
-    meta           = Data_Pouch.new({}, :type, :name, :Class, :namespace)
-    meta.type      = type
-    meta.name      = name.to_sym
-    meta.Class     = class_name || Object.const_get(name.to_s.capitalize),
-    meta.namespace = namespace || meta.name
-    
-    if associations[meta.name]
-      raise ArgumentError, "Association already defined: #{name}"
-    end
-    
-    associations[meta.name] = meta
-  end
-
-  # ===== CRUD Methods ====================================
-
-  def find_by_date field, start_tm, end_tm = nil
-    time_format = '%Y-%m-%d %H:%M:%S'
-    
-    selector = if end_at
-                 { field => {'$gt'=>start_tm,'$lt'=>end_tm} }
-               else
-                 { field => start_tm }
-               end
-    
-    find selector
-  end
-
-  def find_with_associations raw_assocs, selector, params = {}
-    assocs = [raw_assocs].flatten.uniq.compact
-    docs = db_collection.find( selector, params ).to_a
-    assocs.each { |rel|
-      meta = associations[rel]
-      meta[:class].relationize(docs, meta[:namespace])
-    }
-  end
-
-  def find_by_field field, id, params = {}
-    selector = { field => Couch_Plastic.mongofy_id(id) }
-    find selector, params
-  end
-
-  def find_by_field_and_associate field, id, params = {}
-    selector = { field => Couch_Plastic.mongofy_id(id) }
-    find_with_associations associations.keys, selector, params
-  end
-
-  def find selector, params = {}, &blok
-    if respond_to?(:selector_validation
-      raise "not implemented yet."
-    end
-    fields = selector.keys
-    fields_must_exist(fields) if not fields.empty?
-    raise ArgumentError, "I don't know what to do with a block." if blok
-    (params.delete(:collection) || db_collection).find(selector, params).to_a
-  end
-  
-  def find_doc selector, params = {}
-    raise ArgumentError, "I don't know what to do with a block." if block_given?
-    params[:limit] = 1
-    find(selector, params).first
-  end
-  
-  def find_one *args
-    raise ArgumentError, "No block allowed here." if block_given?
-    doc = find_doc(*args)
-    return new(doc) if doc
-    raise self::Not_Found, args.to_a.map { |pair| "Document not found for: #{pair.first.capitalize}: #{pair.last}" }.join(', ')
-  end
-
-  def find_one_by_field
-  def find_one_by_id( raw_id ) # READ
-    id = Couch_Plastic.mongofy_id(raw_id)
-    case id
-    when BSON::ObjectID
-      find_one( :_id => id )
-    else
-      find_one('old_id'=>doc_id_or_hash)
-    end
-  end
-
-  def find_one_by_owner_id str, params = {}, opts = {}
-    id = Couch_Plastic.mongofy_id(str)
-    find({:owner_id=>str}.update(params), opts)
-  end
-
-  def create editor, raw_raw_data # CREATE
-    new do
-      self.manipulator =  editor
-      self.raw_data = raw_raw_data
-    end
-  end
-
-  def read id, mem # READ
-    d = new(id) do
-      if !d.reader?(mem)
-        raise Unauthorized, "Reader: #{self.inspect} #{mem.inspect}"
-      end
-    end
-    d
-  end
-
-  def edit id, mem # EDIT
-    d = new(id) do 
-      if !updator?(mem)
-        raise Unauthorized, "Editor: #{self.inspect} #{mem.inspect}"
-      end
-    end
-    d
-  end
-
-  def update id, editor, new_raw_data # UPDATE
-    doc = new(id) do
-      self.manipulator = editor
-      self.raw_data = new_raw_data
-      save_update 
-    end
-  end
-
-  def delete id, editor # DELETE
-    new(id) do
-      self.manipulator = editor
-      if !deletor?(editor)
-        raise Unauthorized, "Deletor: #{self.class} #{manipulator.inspect}"
-      end
-      self.class.db_collection.remove({:_id=>data._id}, {:safe=>true})
-    end
-  end
-
-
-end # === module ClassMethods ==============================================
-
-
-__END__
-
-
-  def related_collections *args
-    args.each { |name|
-      related_collection name
-    }
-  end
-
-  def related_collection lower_case_name, full_name = nil
-    full_name ||= "#{self}_#{lower_case_name.to_s.split('_').map(&:capitalize).join('_')}"
-    eval %~
-      def db_collection_#{lower_case_name}
-        @coll_#{lower_case_name} ||= DB.collection('#{full_name}')
+    def create_association type, name, class_name = nil, namespace = nil
+      meta           = Data_Pouch.new({}, :type, :name, :Class, :namespace)
+      meta.type      = type
+      meta.name      = name.to_sym
+      meta.Class     = class_name || Object.const_get(name.to_s.capitalize),
+      meta.namespace = namespace || meta.name
+      
+      if associations[meta.name]
+        raise ArgumentError, "Association already defined: #{name}"
       end
       
-      def find_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = db_collection_#{lower_case_name}
-        find selector, params, &blok
-      end
+      associations[meta.name] = meta
+    end
+
+    # ===== CRUD Methods ====================================
+
+    def find_by_date field, start_tm, end_tm = nil
+      time_format = '%Y-%m-%d %H:%M:%S'
       
-      def find_one_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = db_collection_#{lower_case_name}
-        find_one selector, params, &blok
+      selector = if end_at
+                   { field => {'$gt'=>start_tm,'$lt'=>end_tm} }
+                 else
+                   { field => start_tm }
+                 end
+      
+      find selector
+    end
+
+    def find_with_associations raw_assocs, selector, params = {}
+      assocs = [raw_assocs].flatten.uniq.compact
+      docs = db_collection.find( selector, params ).to_a
+      assocs.each { |rel|
+        meta = associations[rel]
+        meta[:class].relationize(docs, meta[:namespace])
+      }
+    end
+
+    def find_by_field field, id, params = {}
+      selector = { field => Mongo_Dsl.mongofy_id(id) }
+      find selector, params
+    end
+
+    def find_by_field_and_associate field, id, params = {}
+      selector = { field => Mongo_Dsl.mongofy_id(id) }
+      find_with_associations associations.keys, selector, params
+    end
+
+    def find selector, params = {}, &blok
+      if respond_to?(:selector_validation)
+        raise "not implemented yet."
       end
-    ~
-    class_eval %~
-      def find_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = self.class.db_collection_#{lower_case_name}
-        find(selector, params, &blok)
+      fields = selector.keys
+      fields_must_exist(fields) if not fields.empty?
+      raise ArgumentError, "I don't know what to do with a block." if blok
+      (params.delete(:collection) || db_collection).find(selector, params).to_a
+    end
+    
+    def find_doc selector, params = {}
+      raise ArgumentError, "I don't know what to do with a block." if block_given?
+      params[:limit] = 1
+      find(selector, params).first
+    end
+    
+    def find_one *args
+      raise ArgumentError, "No block allowed here." if block_given?
+      doc = find_doc(*args)
+      return new(doc) if doc
+      raise self::Not_Found, args.to_a.map { |pair| "Document not found for: #{pair.first.capitalize}: #{pair.last}" }.join(', ')
+    end
+
+    def find_one_by_field
+    end
+
+    def find_one_by_id( raw_id ) # READ
+      id = Mongo_Dsl.mongofy_id(raw_id)
+      case id
+      when BSON::ObjectID
+        find_one( :_id => id )
+      else
+        find_one('old_id'=>doc_id_or_hash)
       end
-        
-      def find_one_#{lower_case_name} selector, params = {}, &blok
-        params[:collection] = self.class.db_collection_#{lower_case_name}
-        find_one(selector, params, &blok)
+    end
+
+    def find_one_by_owner_id str, params = {}, opts = {}
+      id = Mongo_Dsl.mongofy_id(str)
+      find({:owner_id=>str}.update(params), opts)
+    end
+
+    def create editor, raw_raw_data # CREATE
+      new do
+        self.manipulator =  editor
+        self.raw_data = raw_raw_data
       end
-    ~
-  end
+    end
+
+    def read id, mem # READ
+      d = new(id) do
+        if !d.reader?(mem)
+          raise Unauthorized, "Reader: #{self.inspect} #{mem.inspect}"
+        end
+      end
+      d
+    end
+
+    def edit id, mem # EDIT
+      d = new(id) do 
+        if !updator?(mem)
+          raise Unauthorized, "Editor: #{self.inspect} #{mem.inspect}"
+        end
+      end
+      d
+    end
+
+    def update id, editor, new_raw_data # UPDATE
+      doc = new(id) do
+        self.manipulator = editor
+        self.raw_data = new_raw_data
+        save_update 
+      end
+    end
+
+    def delete id, editor # DELETE
+      new(id) do
+        self.manipulator = editor
+        if !deletor?(editor)
+          raise Unauthorized, "Deletor: #{self.class} #{manipulator.inspect}"
+        end
+        self.class.db_collection.remove({:_id=>data._id}, {:safe=>true})
+      end
+    end
 
 
+  end # === module ClassMethods ==============================================
 
+
+end # === module Mongo_Dsl ================================================
+
+%w{
+  Query_Builder
+  Relations_Query_Builder
+  Relations_Liason
+}.each { |doc|
+  require "models/mongo_dsl/#{doc}"
+}

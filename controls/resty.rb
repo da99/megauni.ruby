@@ -34,7 +34,7 @@ helpers {
     @model_instance ||= begin
       i = if clean_room[:id] 
         begin
-          Couch_Plastic.GET(Integer(clean_room[:id]))
+          Mongo_Dsl.GET(Integer(clean_room[:id]))
         rescue model_class::Not_Found
           nil
         end
