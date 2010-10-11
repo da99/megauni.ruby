@@ -1,3 +1,33 @@
+# === Custom Classes for Testing ===
+
+class Cafe_Le_Roger
+  include Mongo_Dsl
+
+  %w{ 
+    title
+    teaser
+    body
+  }.each do |field|
+    make field, :not_empty
+  end
+
+  make_psuedo 'big_body', :not_empty
+
+  def self.create editor, new_raw_data
+    new do
+      self.manipulator = editor
+      self.raw_data = new_raw_data
+      demand :title, :teaser, :body
+      ask_for :big_body
+      save_create
+    end
+  end
+
+  def allow_as_creator? editor
+    true
+  end
+
+end # === Cafe_Le_Roger
 
 class Test_Mongo_Dsl < Test::Unit::TestCase
 
@@ -66,36 +96,4 @@ class Test_Mongo_Dsl < Test::Unit::TestCase
   
 end # === class _create
 
-
-
-# === Custom Classes for Testing ===
-
-class Cafe_Le_Roger
-  include Mongo_Dsl
-
-  %w{ 
-    title
-    teaser
-    body
-  }.each do |field|
-    make field, :not_empty
-  end
-
-  make_psuedo 'big_body', :not_empty
-
-  def self.create editor, new_raw_data
-    new do
-      self.manipulator = editor
-      self.raw_data = new_raw_data
-      demand :title, :teaser, :body
-      ask_for :big_body
-      save_create
-    end
-  end
-
-  def allow_as_creator? editor
-    true
-  end
-
-end # === Cafe_Le_Roger
 

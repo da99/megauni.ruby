@@ -1,4 +1,4 @@
-require 'models/Delegator_DSL'
+require 'models/Delegator_Dsl'
 require 'modules/Dslicious'
 
 def String_for_Safe_Writer raw_txt

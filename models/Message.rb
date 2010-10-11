@@ -103,11 +103,11 @@ class Message
 
   # ==== Associations   ====
 
-  finder :public do
-    limit 10
-    sort  [:_id, :desc]
-    relations :optional, Life, Club
-  end
+  # finder :public do
+  #   limit 10
+  #   sort  [:_id, :desc]
+  #   relations :optional, Life, Club
+  # end
 
   has_many :clubs, nil, :target_ids
   
@@ -116,7 +116,7 @@ class Message
     where    :message_model => 'repost'
   end
   
-  has_many :notifys, Member_Notifys do |mem|
+  has_many :notifys, :Member_Notifys do |mem|
     where_in :owner_id, mem.lifes._ids
   end
   
@@ -276,10 +276,10 @@ class Message
     end
     
     def last_modified_at
-      latest = [ fetch('created_at'), fetch('updated_at'), fetch('published_at')] \
-                .compact
-                .sort
-                .first
+      latest = [ fetch('created_at'), fetch('updated_at'), fetch('published_at')].
+                compact.
+                sort.
+                first
       Time.parse(latest)
     end
 

@@ -1,4 +1,6 @@
 require 'bcrypt'
+require 'models/Password_Reset'
+require 'models/Life'
 
 class Member 
 
@@ -312,12 +314,12 @@ class Member
   #   }
   #   
   def club_follower_menu
-    find
-      .lifes
-      .follows.clubs
-      .grab(Club)
-      .group_by(:follower_id)
-    .go!
+    find.
+      lifes.
+      follows.clubs.
+      grab(Club).
+      group_by(:follower_id).
+    go!
   end
   
   #
@@ -328,12 +330,12 @@ class Member
   #   }
   #   
   def club_owner_menu
-    find
-      .lifes
-      .clubs.owned
-      .group_by(:owner_id)
-      .map( Club )
-    .go!
+    find.
+      lifes.
+      clubs.owned.
+      group_by(:owner_id).
+      map( Club ).
+    go!
   end
 
   # 
@@ -343,11 +345,11 @@ class Member
   #     :username_id => [ life ]
   #   }
   def life_menu
-    find
-      .lifes
-      .group_by(:life_id)
-      .map(Club)
-    .go!
+    find.
+      lifes.
+      group_by(:life_id).
+      map(Club).
+    go!
   end
 
   # member.lifes.clubs._ids.go!
@@ -357,11 +359,11 @@ class Member
   #   [ club_id, club_id, club_id ]
   #   
   def club_owner_ids
-    find
-      .lifes
-      .clubs
-      .map(:_id)
-    .go!
+    find.
+      lifes.
+      clubs.
+      map(:_id).
+    go!
   end
 
   # Returns:
@@ -399,26 +401,6 @@ __END__
      [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
      [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
   
-  def self.by_username raw_username
-    username = raw_username.to_s.strip
-    doc = find_one_usernames( :username => username )
-    if doc && !username.empty?
-      Member.by_id(doc['owner_id'])
-    else
-      raise Not_Found, "Member username: #{username.inspect}"
-    end
-  end
-
-  def self.by_username_id raw_id
-    id = Mongo_Dsl.mongofy_id(raw_id)
-    doc = find_one_usernames(:_id=>id)
-    if doc
-      Member.by_id(doc['owner_id'])
-    else
-      raise Mongo_Dsl::Not_Found, "Member Username id: #{raw_id.inspect}"
-    end
-  end
-
 
   def self.failed_attempts_for_today mem, &blok
     require 'time'
@@ -431,37 +413,5 @@ __END__
     ).to_a
   end
   
-  
-  def self.add_docs_by_username_id(docs, key = 'owner_id')
-    
-    # Grab all docs for: usernames, members.
-    editor_ids = docs.map { |doc| doc[key] }.compact.uniq
-    lifes  = Life.find(:owner_id => { :$in => editor_ids } ).to_a
-    member_ids = lifes.map { |doc| doc['owner_id'] }
-    members    = Member.all_by_ids( :$in  => member_ids ).to_a
-    
-    # Create a Hash: :username_id => :username
-    username_map = lifes.inject({}) { |memo, un|
-      memo[un['_id']] = un['username']
-      memo
-    }
-    
-    # Create a Hash: :username_id => :member
-    editor_map = editor_ids.inject({}) do |memo, ed_id|
-      memo[ed_id] = members.detect { |mem| 
-                      mem['_id'].to_s == ed_id.to_s
-                    }
-      memo
-    end
-    
-    # Finally, add corresponding member to target collection.
-    key_username = key.sub('_id', '_username')
-    key_mem      = key.sub('_id', '')
-    docs.each { |doc|
-      un_id = doc[key]
-      doc[key_username] = username_map[ un_id ]
-      doc[key_mem]       = editor_map[ un_id ]
-    }
-    
-  end
+
   

@@ -1,6 +1,6 @@
 
 
-class Password_Resets
+class Password_Reset
 
   include Mongo_Dsl
 
@@ -21,7 +21,7 @@ class Password_Resets
 
   # ==== Associations  ====
     
-  belongs_to :owner, Member
+  belongs_to :owner, :Member
 
   # ==== Class Methods ====
   
@@ -105,4 +105,4 @@ class Password_Resets
   end
 
 
-end # === end Password_Resets
+end # === end Password_Reset

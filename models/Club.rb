@@ -1,3 +1,4 @@
+require 'models/Message'
 
 class Club
 
@@ -14,10 +15,10 @@ class Club
     owner
   }.map(&:to_sym)
 
-  INVALID_FILENAMES = File.read('models/INVALID_FILENAMES.txt') \
-                        .split
-                        .map(&:strip)
-                        .map { |str|
+  INVALID_FILENAMES = File.read('models/INVALID_FILENAMES.txt').
+                        split.
+                        map(&:strip).
+                        map { |str|
                           [str, str + 's']
                         }.flatten
 

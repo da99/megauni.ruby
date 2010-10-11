@@ -34,17 +34,17 @@ class Life
     
   # ==== Associations   ====
   
-  belongs_to :owner, Member
+  # belongs_to :owner, Member
   # def owner? mem
   #   data.owner_id == mem ||
   #     (mem.respond_to?(:data) && mem.data._id == data.owner_id)
   # end
-  has_many :following_clubs, Club
+  has_many :following_clubs, :Club
     # Club.ids_for_follower_id( :$in => current_username_ids )
   # def following_club_id?(club_id)
   #   club_ids.include?(Mongo_Dsl.mongofy_id(club_id))
   # end
-  has_many :owned_clubs, Club
+  has_many :owned_clubs, :Club
     # Club.ids_by_owner_id(:$in=>current_username_ids)
     # Club.by_owner_id(:$in=>current_username_ids)
 

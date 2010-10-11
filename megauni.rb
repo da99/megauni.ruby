@@ -5,6 +5,7 @@ ENV['RACK_ENV'] ||= 'development'
 require 'jcode'
 require 'helpers/app/kernel' 
 require 'middleware/The_App'  
+require 'mongo'
 
 class The_App
   

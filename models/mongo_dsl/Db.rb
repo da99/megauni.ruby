@@ -1,3 +1,4 @@
+require 'models/Delegator_Dsl'
 
 class Mongo_Dsl::Db_For_Classes
   

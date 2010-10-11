@@ -1,5 +1,5 @@
 
-module Delegator_DSL
+module Delegator_Dsl
   
   def delegate_to receiver, *raw_meths
     meths = raw_meths.flatten.compact.uniq

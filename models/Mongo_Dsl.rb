@@ -841,31 +841,36 @@ module Mongo_Dsl
       @associations ||= {}
     end
 
-    %{ has_many has_one, belongs_to }.each { |assoc|
+    %w{ has_many has_one belongs_to }.each { |assoc|
       eval %~
         def #{assoc} name, class_name = nil, namespace = nil
           create_association( :#{assoc}, name, class_name, namespace)
         end
       
-        def has_#{name}?
-          raise "Not implemented yet."
-        end
+        # def has_#{assoc}?
+        #   raise "Not implemented yet."
+        # end
       
-        def #{name}? target
-          raise "This can only be called with :belongs_to association."
-        end
+        # def #{assoc}? target
+        #   raise "This can only be called with :belongs_to association."
+        # end
 
-        def update_relation name, obj
-          raise "not done implemented yet."
-        end
+        # def update_relation name, obj
+        #   raise "not done implemented yet."
+        # end
       ~
     }
 
     def create_association type, name, class_name = nil, namespace = nil
-      meta           = Data_Pouch.new({}, :type, :name, :Class, :namespace)
+      meta           = Data_Pouch.new({}, :type, :name, :Class_Name, :namespace)
       meta.type      = type
       meta.name      = name.to_sym
-      meta.Class     = class_name || Object.const_get(name.to_s.capitalize),
+      meta.Class_Name     = class_name ? 
+                              class_name.to_s : 
+                              (name.to_s.sub( /s$/, '' ).split('_').map(&:capitalize).join('_'))
+      def meta.Class
+        @Class_as_Object ||= Object.const_get(self.Class_Name)
+      end
       meta.namespace = namespace || meta.name
       
       if associations[meta.name]

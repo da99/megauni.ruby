@@ -1,4 +1,5 @@
 require 'models/Diff_Document'
+require 'models/Member'
 
 class Doc_Log
 

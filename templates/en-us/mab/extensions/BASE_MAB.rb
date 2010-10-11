@@ -1,4 +1,4 @@
-require 'models/Delegator_DSL'
+require 'models/Delegator_Dsl'
 require 'models/Sentry_Sender'
 
 module BASE_MAB
