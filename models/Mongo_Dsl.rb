@@ -908,15 +908,19 @@ module Mongo_Dsl
       find_with_associations associations.keys, selector, params
     end
 
-    def find selector, params = {}, &blok
-      if respond_to?(:selector_validation)
-        raise "not implemented yet."
-      end
-      fields = selector.keys
-      fields_must_exist(fields) if not fields.empty?
-      raise ArgumentError, "I don't know what to do with a block." if blok
-      (params.delete(:collection) || db_collection).find(selector, params).to_a
+    def find
+      Mongo_Dsl::Query_Builder.new(self)
     end
+# 
+#     def find selector, params = {}, &blok
+#       if respond_to?(:selector_validation)
+#         raise "not implemented yet."
+#       end
+#       fields = selector.keys
+#       fields_must_exist(fields) if not fields.empty?
+#       raise ArgumentError, "I don't know what to do with a block." if blok
+#       (params.delete(:collection) || db_collection).find(selector, params).to_a
+#     end
     
     def find_doc selector, params = {}
       raise ArgumentError, "I don't know what to do with a block." if block_given?

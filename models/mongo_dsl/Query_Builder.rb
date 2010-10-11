@@ -94,7 +94,7 @@ class Mongo_Dsl::Query_Builder
 
   def go!
     results = go.to_a
-    instance.db.cache( cache_name, results ) if cacheable?
+    # instance.db.cache( cache_name, results ) if cacheable?
     results
   end
   

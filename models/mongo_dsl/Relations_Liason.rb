@@ -30,10 +30,29 @@ class Mongo_Dsl::Relations_Liason
 	end
 
 	def method_missing name, *args
+    return super if !args.empty?
+    
 		relation = self.class.get_relation( child, name )
 		return relation if relation
+    
+    sub_relation = sub_relation?(name) && get_sub_relation(name)
+    return sub_relation if sub_relation
+    
 		super
 	end
+
+  # Example:
+  #   member.follows.clubs
+  #   member.follows.lifes
+  #   member.follows.pets
+  #
+  def sub_relation?(name)
+    raise "Not implemented yet."
+  end
+  
+  def get_sub_relation name
+    raise "Not implemented yet."
+  end
 
 	def find doc_or_instance, selector_override, params_override
 		# compose default selector
@@ -80,5 +99,10 @@ class Mongo_Dsl::Relations_Liason
 		child.find.by( final_selector ).and( final_params ).cache_in(instance)
 
 	end # === find
+
+  def map klass, results_arr
+    _ids = results_arr.map { |doc| doc[foreign_key] }
+    klass.find._id.in(_ids)
+  end
 
 end # === class
