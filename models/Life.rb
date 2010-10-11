@@ -94,6 +94,29 @@ class Life
 
   # ==== Accessors ====
 
+  # Searches for clubs being followed 
+  #   or owned by life.
+  #   
+  # Returns:
+  #   [ club_id, club_id, club_id ]
+  #
+  def club_ids
+    (owned_clubs.map(:club_id).go! +
+      club_follows.map(:club_id).go!
+    ).uniq
+  end
+ 
+  # da01tv.lifes.clubs.map(:filename).go!
+  # 
+  # Returns: 
+  #   [ club_filename, club_filename, club_filename ]
+  #   
+  def club_filenames
+    (owned_clubs.map(:filename).go! +
+      club_follows.grab(Club).map(:filename).go!
+    ).uniq
+  end
+  
   # ==== Modules    ====
 
   module Results

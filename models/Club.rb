@@ -59,7 +59,7 @@ class Club
   class << self
     
     def create editor, raw_raw_data # CREATE
-      (super).instance_eval do
+      super.instance_eval do
         demand :owner_id, :filename, :title, :teaser
         ask_for_or_default :lang
         save_create 
@@ -67,7 +67,7 @@ class Club
     end
 
     def update id, editor, new_raw_data # UPDATE
-      (super).instance_eval do
+      super.instance_eval do
         ask_for :title, :teaser
         save_update 
       end
@@ -101,69 +101,8 @@ class Club
 
   # ======== Accessors ======== 
 
-  class << self 
-
-    # Returns:
-    #   :as_owner    => { :usernamed_id => [Clubs] }
-    #   :as_follower => { :usernamed_id => [Clubs] }
-    #   :as_lifer    => { :usernamed_id => [Clubs] }
-    #
-    def all_for_member_by_relation mem
-      { :as_owner => mem.club_owner_menu, 
-        :as_follower => mem.club_follower_menu, 
-        :as_lifer  => mem.life_menu}
-    end
-
-    # member.life.first.club_follows.map(:club_id).go!
-    #
-    # Returns:
-    #   [ club_id, club_id, club_id ]
-    #
-    def ids_for_follower_id( raw_id )
-      id = Mongo_Dsl.mongofy_id( raw_id )
-      following = find_followers({:follower_id=>id}, {:fields=>'club_id'}).map { |doc|
-        doc['club_id']
-      } 
-      owned = Member.find._id(raw_id).go!.club_owner_ids
-      (following + owned).uniq
-    end
-
-    # da01tv.lifes.clubs.map(:filename).go!
-    # 
-    # Returns: 
-    #   [ club_filename, club_filename, club_filename ]
-    def all_filenames 
-    end
-
-    # Club.all.where_in(:club_model, models ).go!
-    # 
-    # Returns:
-    #   [ doc, doc, doc ]
-    def by_club_model raw_models, opts = {}
-    end
-
-    # member.life.first.clubs.map(:_id).go!
-    # 
-    # Returns:
-    #   [ club_id, club_id, club_id ]
-    #   
-    def ids_by_owner_id raw_id, raw_opts = {}
-      id   = Mongo_Dsl.mongofy_id(raw_id)
-      opts = {:fields => '_id'}.update(raw_opts)
-      find({:owner_id => id }, opts).map { |doc|
-        doc['_id']
-      }
-    end
-
-    # member.life.clubs.go!
-    #
-    # Returns:
-    #   [ doc, doc, doc ]
-    #   
-    def by_owner_ids raw_id, raw_opts={}
-    end
-    
-  end # === self
+  # class << self 
+  # end # === self
 
   def owner?(mem)
     return false if not mem

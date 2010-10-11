@@ -315,8 +315,8 @@ class Member
     find
       .lifes
       .follows.clubs
+      .grab(Club)
       .group_by(:follower_id)
-      .map(Club)
     .go!
   end
   
@@ -362,6 +362,18 @@ class Member
       .clubs
       .map(:_id)
     .go!
+  end
+
+  # Returns:
+  #   :as_owner    => { :usernamed_id => [Clubs] }
+  #   :as_follower => { :usernamed_id => [Clubs] }
+  #   :as_lifer    => { :usernamed_id => [Clubs] }
+  #
+  def club_menu 
+    raise "Not done"
+    { :as_owner => club_owner_menu, 
+      :as_follower => mem.club_follower_menu, 
+      :as_lifer  => mem.life_menu}
   end
 
 end # === model Member
