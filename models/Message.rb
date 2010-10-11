@@ -111,27 +111,37 @@ class Message
 
   has_many :clubs, nil, :target_ids
   
-  has_many :reposts, Message do |mem|
-    where_in :owner_id, mem.lifes._ids
-    where    :message_model => 'repost'
-  end
-  
-  has_many :notifys, :Member_Notifys do |mem|
-    where_in :owner_id, mem.lifes._ids
-  end
+  # has_many :reposts, Message do 
+  #   where_in :owner_id, mem.lifes._ids
+  #   where    :message_model, 'repost'
+  # end
+  # 
+  # has_many :notifys, :Member_Notifys do |mem|
+  #   where_in :owner_id, mem.lifes._ids
+  # end
   
   has_many :responds, Message, :parent_message_id do
-    where :privacy => 'public'
+    
+    where :privacy , 'public'
     limit 10
     sort  [:_id, :desc]
     
-    select :critiques, :message_model => { :$in=>['cheer', 'jeer'] }
-    select :suggests,  :message_model => 'suggest'
-    select :questions, :message_model => 'question'
+    filter :critiques do
+      where_in :message_model, ['cheer', 'jeer']
+    end
+    
+    filter :suggests do
+      where :message_model, 'suggest'
+    end
+    
+    filter :questions do
+      where :message_model, 'question'
+    end
+    
   end
 
   has_many :messages, Message, :parent_message_id do
-    where :privacy => 'public'
+    where :privacy, 'public'
     limit 10
     sort  [:_id, :desc]
   end
@@ -143,7 +153,7 @@ class Message
 
   has_many :questions do
     based_on :messages
-    where    :message_model => 'question'
+    where    :message_model, 'question'
   end
   
   # ==== Authorizations ====

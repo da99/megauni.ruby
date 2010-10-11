@@ -38,9 +38,9 @@ class Club
   # ======== Associations   ======== 
   
   has_many :messages do
-    where_in :target_ids
-    where :parent_message_id => nil
-    where :privacy => 'public'
+    where :target_ids
+    where :parent_message_id, nil
+    where :privacy, 'public'
     limit 10
     sort  [:_id, :desc]
   end
@@ -52,7 +52,7 @@ class Club
 
   has_many :questions do
     based_on :messages
-    where    :message_model => 'question'
+    where    :message_model, 'question'
   end
 
   # ======== Authorizations ======== 

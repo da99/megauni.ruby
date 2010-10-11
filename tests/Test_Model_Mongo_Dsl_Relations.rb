@@ -18,6 +18,11 @@ class Cafe_Galaxy
     end
     
   end
+  
+  has_many :men do
+    based_on :employees
+    where :role, 'man'
+  end
 
   class << self
     def create editor, new_raw_data

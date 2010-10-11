@@ -1,6 +1,8 @@
 
 class Mongo_Dsl::Relations_Liason
 	
+  DYNO_Q = :dyno_q
+
 	class << self
 		
 		def relations 
@@ -12,6 +14,10 @@ class Mongo_Dsl::Relations_Liason
 			relations[parent][name] = new( parent, type, name, child, foreign_key )
 		end
 		
+    def has_relation?(parent, name)
+      !!( relations[parent] && relations[parent][name] )
+    end
+
 		def get_relation parent, name
 			relations[parent][name]
 		end
@@ -20,7 +26,8 @@ class Mongo_Dsl::Relations_Liason
 
 	attr_reader :parent, :type, :name, :child_name, :foreign_key, 
               :instance, :sub_relations,
-              :selector, :params
+              :selector, :params,
+              :dynamic_querys
 	
 	def initialize parent, type, name, child_name, foreign_key, &blok
     name_singular = name.to_s.sub( /s$/ , '')
@@ -38,8 +45,9 @@ class Mongo_Dsl::Relations_Liason
     
     @selector = {}
     @params = {}
-    
-    instance_eval(&blok) if block_given? && parent.to_s =~ /Cafe_/
+    @dynamic_querys = []
+
+    instance_eval(&blok) if block_given?
 	end
   
   def child
@@ -48,13 +56,11 @@ class Mongo_Dsl::Relations_Liason
 
 	def method_missing name, *args
     return super if !args.empty?
-    
-		relation = self.class.get_relation( child, name )
-		return relation if relation
-    
-    sub_relation = sub_relation?(name) && get_sub_relation(name)
-    return sub_relation if sub_relation
-    
+
+    if self.class.has_relation?( child, name )
+		  return self.class.get_relation( child, name )
+    end
+   
 		super
 	end
 
@@ -74,28 +80,24 @@ class Mongo_Dsl::Relations_Liason
 		  
 		selector = self.selector
 		params   = self.params
+    store_instance(doc_or_instance)
+    
+    dynamic_querys.each { |query|
+      action, field = query
+      case action
+      when :where
+        selector[field] = extract_value( field, doc_or_instance)
+      when :where_in
+        selector[field] = { :$in => extract_value( field, doc_or_instance ) }
+      else 
+        raise "Unknown action: #{action.inspect}"
+      end
+    }
 
+    
 		case type
 		when :has_many
-			case doc_or_instance
-			when Hash
-				selector[foreign_key] = doc_or_instance[foreign_key] || doc_or_instance[foreign_key.to_sym]
-			when Array
-				ids = doc_or_instance.map { |doc| 
-					if doc.respond_to?(:data)
-						doc.data._id
-					elsif doc.is_a?(Hash)
-						doc[foreign_key]
-					else
-						doc
-					end
-				}
-				selector[foreign_key] = { :$in => ids }
-			else
-        @instance = doc_or_instance
-				selector[foreign_key] = instance.data._id
-			end
-			
+			selector[foreign_key] = extract_value( foreign_key, doc_or_instance ) 
 		when :belongs_to
 			raise "not done"
 		when :has_one	
@@ -112,6 +114,34 @@ class Mongo_Dsl::Relations_Liason
     child.find.by( final_selector ).and( final_params ) #.cache_in(instance)
 
 	end # === find
+
+  def store_instance doc_or_instance
+    case doc_or_instance
+    when Hash
+    when Array
+    else 
+      @instance = doc_or_instance
+    end
+  end
+
+  def extract_value foreign_key, doc_or_instance
+    case doc_or_instance
+    when Hash
+      doc_or_instance[foreign_key] || doc_or_instance[foreign_key.to_sym]
+    when Array
+      doc_or_instance.map { |doc| 
+        if doc.respond_to?(:data)
+          doc.data._id
+        elsif doc.is_a?(Hash)
+          doc[foreign_key]
+        else
+          doc
+        end
+      }
+    else
+      instance.data._id
+    end
+  end # === def 
 
   def map klass, results_arr
     _ids = results_arr.map { |doc| doc[foreign_key] }
@@ -132,12 +162,45 @@ class Mongo_Dsl::Relations_Liason
       Mongo_Dsl::Relations_Liason.new( parent, type, name.to_sym, child_name, foreign_key, &blok ) 
   end
   
-  def where field, value
-    selector.update field.to_s => value
+  def where field, value = DYNO_Q
+    if field.is_a?(Hash) || field.is_a?(Array)
+      raise ArgumentError, "Invalid field: #{field.inspect}" 
+    end
+    
+    if value == DYNO_Q
+      dynamic_querys << [:where, field]
+    else
+      selector[field.to_s] = value
+    end
   end
   
-  def where_in field, arr
-    selector.update( field.to_s => { :$in => arr } )
+  def where_in field, arr = DYNO_Q
+    if field.is_a?(Hash) || field.is_a?(Array)
+      raise ArgumentError, "Invalid field: #{field.inspect}" 
+    end
+    
+    if arr == DYNO_Q
+      dynamic_querys << [:where_in, field]
+    else
+    end
+    selector[ field.to_s ] =  { :$in => arr }
+  end
+
+  def limit size
+    params[:limit] = size
+  end
+  
+  def sort val
+    params[:sort] = val
+  end
+  
+  def based_on relation_name
+    ancestor = parent.get_relation(relation_name)
+    @class_name ||= ancestor.child_name
+    @foreign_key ||= ancestor.foreign_key
+    self.selector.update(ancestor.selector)
+    self.params.update(ancestor.params)
+    @dynamic_querys = ancestor.dynamic_querys
   end
 
 end # === class
