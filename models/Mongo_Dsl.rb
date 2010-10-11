@@ -860,8 +860,8 @@ module Mongo_Dsl
     %w{ has_many has_one belongs_to }.each { |assoc|
 
       eval %~
-        def #{assoc} name, class_name = nil, namespace = nil
-          create_relation( :#{assoc}, name, class_name, namespace)
+        def #{assoc} name, class_name = nil, namespace = nil, &blok
+          create_relation( :#{assoc}, name, class_name, namespace, &blok)
         end
       
         # def has_#{assoc}?
@@ -882,8 +882,8 @@ module Mongo_Dsl
       relations.has_key?( name.to_sym )
     end
 
-    def create_relation type, name, class_name = nil, foreign_key = nil
-      relations[name.to_sym] = Mongo_Dsl::Relations_Liason.new( self, type, name, class_name, foreign_key )
+    def create_relation type, name, class_name = nil, foreign_key = nil, &blok
+      relations[name.to_sym] = Mongo_Dsl::Relations_Liason.new( self, type, name, class_name, foreign_key, &blok )
     end
 
     # ===== CRUD Methods ====================================

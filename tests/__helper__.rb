@@ -9,45 +9,45 @@ require 'test/unit/testcase'
 require 'term/ansicolor'
 require 'helpers/app/Color_Puts'
 
-require 'quietbacktrace'
-
-class QuietBacktrace::BacktraceCleaner
-  
-  ALL_GEMS_SUB  = '/lib/ruby/gems' 
-  ALL_NOISE << '/middleware'
-  ALL_NOISE << '/tests/__helper__'
-  ALL_NOISE << ALL_GEMS_SUB
-
-  def body_clean(backtrace)
-    total = backtrace.size
-    brain = [backtrace[0]].compact
-    head  = backtrace[1..3]     || []
-    body  = backtrace[4..total] || []
-    remove_first_slash( 
-      filter(brain) + 
-      filter(silence_all_gems(head)) + 
-      filter(silence(body || []))
-    ) 
-  end
-  alias_method :orig_clean, :clean
-  alias_method :clean, :body_clean
-  
-  def silence_all_gems(backtrace)
-    backtrace = backtrace.reject { |line| line[ALL_GEMS_SUB] }
-    backtrace
-  end
-  
-  def remove_first_slash(backtrace)
-    backtrace.map { |line| 
-      if line.lstrip[ /\A\// ]
-        line.sub('/', '')
-      else
-        line
-      end
-    }
-  end
-  
-end # === class
+# require 'quietbacktrace'
+# 
+# class QuietBacktrace::BacktraceCleaner
+#   
+#   ALL_GEMS_SUB  = '/lib/ruby/gems' 
+#   ALL_NOISE << '/middleware'
+#   ALL_NOISE << '/tests/__helper__'
+#   ALL_NOISE << ALL_GEMS_SUB
+# 
+#   def body_clean(backtrace)
+#     total = backtrace.size
+#     brain = [backtrace[0]].compact
+#     head  = backtrace[1..3]     || []
+#     body  = backtrace[4..total] || []
+#     remove_first_slash( 
+#       filter(brain) + 
+#       filter(silence_all_gems(head)) + 
+#       filter(silence(body || []))
+#     ) 
+#   end
+#   alias_method :orig_clean, :clean
+#   alias_method :clean, :body_clean
+#   
+#   def silence_all_gems(backtrace)
+#     backtrace = backtrace.reject { |line| line[ALL_GEMS_SUB] }
+#     backtrace
+#   end
+#   
+#   def remove_first_slash(backtrace)
+#     backtrace.map { |line| 
+#       if line.lstrip[ /\A\// ]
+#         line.sub('/', '')
+#       else
+#         line
+#       end
+#     }
+#   end
+#   
+# end # === class
 
 
 require 'megauni'

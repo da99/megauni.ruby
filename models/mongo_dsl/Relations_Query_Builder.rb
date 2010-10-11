@@ -26,8 +26,21 @@ class Mongo_Dsl::Relations_Query_Builder
     name = meth_name.to_s
     val  = args.first
 
-    return super unless current_klass.has_relation?(meth_name)
-    relation = current_klass.get_relation(meth_name)
+    target = if current_klass.has_relation?(meth_name)
+               current_klass
+             elsif relation_stack.last.has_relation?(meth_name)
+               # This checks for sub relations:
+               #  cafe.find.employees.bosses.go!
+               stack.pop # Take out last relation since new one
+                         #   overrides it.
+               relation_stack.pop
+             else
+               nil
+             end
+    
+    return super unless target # unless current_klass.has_relation?(meth_name)
+    
+    relation = target.get_relation(meth_name)
     @current_klass = relation.child
     stack << {
       :type => :relation, 

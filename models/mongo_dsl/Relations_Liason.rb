@@ -18,9 +18,11 @@ class Mongo_Dsl::Relations_Liason
 		
 	end # === self
 
-	attr_reader :parent, :type, :name, :child_name, :foreign_key, :instance
+	attr_reader :parent, :type, :name, :child_name, :foreign_key, 
+              :instance, :sub_relations,
+              :selector, :params
 	
-	def initialize parent, type, name, child_name, foreign_key
+	def initialize parent, type, name, child_name, foreign_key, &blok
     name_singular = name.to_s.sub( /s$/ , '')
 		@parent = parent
 		@type   = type
@@ -30,11 +32,18 @@ class Mongo_Dsl::Relations_Liason
       (child_name.to_s.sub( /s$/, '' ).split('_').map(&:capitalize).join('_'))
     
 		@foreign_key = foreign_key || (name_singular + '_id')
+    
     @instance = nil
+    @sub_relations = {}
+    
+    @selector = {}
+    @params = {}
+    
+    instance_eval(&blok) if block_given? && parent.to_s =~ /Cafe_/
 	end
-
+  
   def child
-    @Class_as_Object ||= Object.const_get(child_name)
+    @Class_as_Object ||= Object.const_get(child_name.to_s.to_sym)
   end
 
 	def method_missing name, *args
@@ -54,11 +63,7 @@ class Mongo_Dsl::Relations_Liason
   #   member.follows.lifes
   #   member.follows.pets
   #
-  def sub_relation?(name)
-    raise "Not implemented yet."
-  end
-  
-  def get_sub_relation name
+  def has_relation?(name)
     raise "Not implemented yet."
   end
 
@@ -67,8 +72,8 @@ class Mongo_Dsl::Relations_Liason
 		# compose default params
 		# Find and return results.
 		  
-		selector = {}
-		params   = {}
+		selector = self.selector
+		params   = self.params
 
 		case type
 		when :has_many
@@ -104,13 +109,35 @@ class Mongo_Dsl::Relations_Liason
 		
 		# Send back results.
     # 
-		child.find.by( final_selector ).and( final_params ) #.cache_in(instance)
+    child.find.by( final_selector ).and( final_params ) #.cache_in(instance)
 
 	end # === find
 
   def map klass, results_arr
     _ids = results_arr.map { |doc| doc[foreign_key] }
     klass.find._id.in(_ids)
+  end
+
+  def has_relation? name
+    sub_relations.has_key? name.to_sym
+  end
+
+  def get_relation name
+    raise "Unknown relation: #{name.inspect}" unless has_relation?(name)
+    sub_relations[name.to_sym]
+  end
+
+  def filter name, &blok
+    sub_relations[name.to_sym] = \
+      Mongo_Dsl::Relations_Liason.new( parent, type, name.to_sym, child_name, foreign_key, &blok ) 
+  end
+  
+  def where field, value
+    selector.update field.to_s => value
+  end
+  
+  def where_in field, arr
+    selector.update( field.to_s => { :$in => arr } )
   end
 
 end # === class
