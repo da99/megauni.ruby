@@ -18,7 +18,7 @@ class Mongo_Dsl::Relations_Liason
 		
 	end # === self
 
-	attr_reader :parent, :type, :name, :child, :foreign_key
+	attr_reader :parent, :type, :name, :child, :foreign_key, :instance
 	
 	def initialize parent, type, name, child, foreign_key
 		@parent = parent
@@ -26,6 +26,7 @@ class Mongo_Dsl::Relations_Liason
 		@name   = name
 		@child  = child
 		@foreign_key = foreign_key.to_s
+    @instance = nil
 	end
 
 	def method_missing name, *args
@@ -59,7 +60,8 @@ class Mongo_Dsl::Relations_Liason
 				}
 				selector[foreign_key] = { :$in => ids }
 			else
-				selector[foreign_key] = doc_or_instance.data._id
+        @instance = doc_or_instance
+				selector[foreign_key] = instance.data._id
 			end
 			
 		when :belongs_to
@@ -75,7 +77,7 @@ class Mongo_Dsl::Relations_Liason
 		
 		# Send back results.
     # 
-		child.find.by( final_selector ).and( final_params )
+		child.find.by( final_selector ).and( final_params ).cache_in(instance)
 
 	end # === find
 

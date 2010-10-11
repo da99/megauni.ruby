@@ -301,6 +301,69 @@ class Member
     @tz_proxy.utc_to_local( utc ).strftime('%a, %b %d, %Y @ %I:%M %p')
   end 
 
+  #   => Grab all follows (where :target_class => 'Club')
+  #      for member, with only fields :follower_id, :club_id
+  #      and then convert each :club_id to Club docs.
+  # 
+  # Returns:
+  #   { 
+  #     :follower_id => [ club, club ],
+  #     :follower_id => [ club, club, club ]
+  #   }
+  #   
+  def club_follower_menu
+    find
+      .lifes
+      .follows.clubs
+      .group_by(:follower_id)
+      .map(Club)
+    .go!
+  end
+  
+  #
+  # Returns:
+  #   { 
+  #     :owner_id => [ club, club ],
+  #     :owner_id => [ club ]
+  #   }
+  #   
+  def club_owner_menu
+    find
+      .lifes
+      .clubs.owned
+      .group_by(:owner_id)
+      .map( Club )
+    .go!
+  end
+
+  # 
+  # Returns:
+  #   {
+  #     :username_id => [ life, life ]
+  #     :username_id => [ life ]
+  #   }
+  def life_menu
+    find
+      .lifes
+      .group_by(:life_id)
+      .map(Club)
+    .go!
+  end
+
+  # member.lifes.clubs._ids.go!
+  #   => Grabs only field, :_id, and maps each doc as: doc['_id']
+  #   
+  # Returns:
+  #   [ club_id, club_id, club_id ]
+  #   
+  def club_owner_ids
+    find
+      .lifes
+      .clubs
+      .map(:_id)
+    .go!
+  end
+
 end # === model Member
 
 

@@ -1,17 +1,27 @@
 
 
-class Club_Followers
+class Follow
 
   include Mongo_Dsl
 
   enable_timestamps
   
   make :_id, [:set_to, lambda { "#{new_data.club_id}-#{new_data.follower_id}" }]
-  make :club_id, :mongo_object_id
+  make :target_class, :anything
+  make :target_id, :mongo_object_id
   make :follower_id, :mongo_object_id
   
   # ==== Associations   ====
-  belongs_to :club
+  belongs_to :target do
+    child_class :target_class
+    foreign_key :target_id
+  end
+  
+  filter_by :clubs do
+    where :target_class, 'Club'
+  end
+
+  belongs_to :follower, Member, :follower_id 
 
   # ==== Authorizations ====
  
@@ -31,10 +41,8 @@ class Club_Followers
   class << self
 
     def create editor, raw_raw_data
-      new do
-        self.manipulator = editor
-        self.raw_data = raw_raw_data
-        demand :_id, :club_id, :follower_id
+      super.instance_eval do
+        demand :_id, :target_class, :target_id, :follower_id
         save_create
       end
     end
@@ -44,21 +52,4 @@ class Club_Followers
   # ==== Accessors ====
 
   
-
-end # === end Club_Followers
-
-
-__END__
-
-  # === Other Instance Methods
-
-  def create_follower mem, username_id
-    Club_Followers.create(
-      mem,
-      '_id' => "#{data._id}#{mem.data._id}",
-      'club_id' => data._id, 
-      'follower_id' => Mongo_Dsl.mongofy_id(username_id)
-    )
-  end
-
-
+end # === end Follow

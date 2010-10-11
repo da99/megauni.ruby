@@ -36,13 +36,12 @@ class Club
 
   # ======== Associations   ======== 
   
-  has_many :messages, Message, :target_ids do
+  has_many :messages do
+    where_in :target_ids
     where :parent_message_id => nil
     where :privacy => 'public'
     limit 10
     sort  [:_id, :desc]
-    
-    find_by_date :published_at
   end
 
   has_many :comments do
@@ -60,24 +59,15 @@ class Club
   class << self
     
     def create editor, raw_raw_data # CREATE
-      new do
-        
-        if editor.lifes.usernames.size == 1 || !raw_raw_data['username_id']
-          raw_raw_data['owner_id'] ||= editor.lifes._ids.first
-        end
-        self.manipulator = editor
-        self.raw_data = raw_raw_data
+      (super).instance_eval do
         demand :owner_id, :filename, :title, :teaser
         ask_for_or_default :lang
         save_create 
-        
       end
     end
 
     def update id, editor, new_raw_data # UPDATE
-      doc = new(id) do
-        self.manipulator = editor
-        self.raw_data = new_raw_data
+      (super).instance_eval do
         ask_for :title, :teaser
         save_update 
       end
@@ -106,59 +96,12 @@ class Club
 
   # ======== Class Methods ======== 
   
-  class << self 
-    
-    def relationize docs, namespace = 'club'
-      Mongo_Dsl.relationize(
-        doc,
-        self,
-        'target_ids', 
-        'title'    => "#{namespace}_title",
-        'filename' => "#{namespace}_filename"
-      )
-    end
-    
-  end # === self
+  # class << self 
+  # end # === self
 
   # ======== Accessors ======== 
 
   class << self 
-
-    # member.lifes.clubs.follows.group_by(:follower_id).map( Club ).go!
-    #   => Grab all Club_Follow for member, with only fields :follower_id, :club_id
-    #      and then convert each :club_id to Club docs.
-    # 
-    # Returns:
-    #   { 
-    #     :follower_id => [ club, club ],
-    #     :follower_id => [ club, club, club ]
-    #   }
-    #   
-    def hash_for_follower mem
-      raise "No longer allowed"
-    end
-    
-    # member.lifes.clubs.owned.group_by(:owner_id).go!
-    #
-    # Returns:
-    #   { 
-    #     :owner_id => [ club, club ],
-    #     :owner_id => [ club ]
-    #   }
-    def hash_for_owner mem
-      raise "No longer allowed"
-    end
-
-    # member.lifes.group_by(:life_id).map(Club).go!
-    # 
-    # Returns:
-    #   {
-    #     :username_id => [ life, life ]
-    #     :username_id => [ life ]
-    #   }
-    def hash_for_lifer mem
-      raise "No longer allowed"
-    end
 
     # Returns:
     #   :as_owner    => { :usernamed_id => [Clubs] }
@@ -166,20 +109,9 @@ class Club
     #   :as_lifer    => { :usernamed_id => [Clubs] }
     #
     def all_for_member_by_relation mem
-      { :as_owner => hash_for_owner(mem), :as_follower => hash_for_follower(mem), :as_lifer  => hash_for_lifer(mem)}
-    end
-
-    # member.lifes.clubs._ids.go!
-    #   => Grabs only field, :_id, and maps each doc as: doc['_id']
-    #   
-    # Returns:
-    #   [ club_id, club_id, club_id ]
-    #   
-    def all_ids_for_owner( raw_id )
-      id = Mongo_Dsl.mongofy_id( raw_id )
-      find({:owner_id=>id}, {:fields=>'_id'}).map { |doc|
-        doc['_id']
-      }
+      { :as_owner => mem.club_owner_menu, 
+        :as_follower => mem.club_follower_menu, 
+        :as_lifer  => mem.life_menu}
     end
 
     # member.life.first.club_follows.map(:club_id).go!
@@ -192,7 +124,7 @@ class Club
       following = find_followers({:follower_id=>id}, {:fields=>'club_id'}).map { |doc|
         doc['club_id']
       } 
-      owned = all_ids_for_owner(raw_id)
+      owned = Member.find._id(raw_id).go!.club_owner_ids
       (following + owned).uniq
     end
 
@@ -264,3 +196,14 @@ end # === Club
 
 __END__
 
+    
+    def relationize docs, namespace = 'club'
+      Mongo_Dsl.relationize(
+        doc,
+        self,
+        'target_ids', 
+        'title'    => "#{namespace}_title",
+        'filename' => "#{namespace}_filename"
+      )
+    end
+    
