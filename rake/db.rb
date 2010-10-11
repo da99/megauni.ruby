@@ -155,7 +155,7 @@ namespace :db do
     doc_data['security_level'] = 'ADMIN'
     
 
-    Member.db_collection.update(
+    Member.db.collection.update(
       {'_id' =>doc_data['_id']}, 
       doc_data,
       :safe=>true

@@ -18,16 +18,24 @@ class Mongo_Dsl::Relations_Liason
 		
 	end # === self
 
-	attr_reader :parent, :type, :name, :child, :foreign_key, :instance
+	attr_reader :parent, :type, :name, :child_name, :foreign_key, :instance
 	
-	def initialize parent, type, name, child, foreign_key
+	def initialize parent, type, name, child_name, foreign_key
+    name_singular = name.to_s.sub( /s$/ , '')
 		@parent = parent
 		@type   = type
-		@name   = name
-		@child  = child
-		@foreign_key = foreign_key.to_s
+		@name   = name.to_sym
+    @child_name = child_name ? 
+      child_name : 
+      (child_name.to_s.sub( /s$/, '' ).split('_').map(&:capitalize).join('_'))
+    
+		@foreign_key = foreign_key || (name_singular + '_id')
     @instance = nil
 	end
+
+  def child
+    @Class_as_Object ||= Object.const_get(child_name)
+  end
 
 	def method_missing name, *args
     return super if !args.empty?
@@ -96,7 +104,7 @@ class Mongo_Dsl::Relations_Liason
 		
 		# Send back results.
     # 
-		child.find.by( final_selector ).and( final_params ).cache_in(instance)
+		child.find.by( final_selector ).and( final_params ) #.cache_in(instance)
 
 	end # === find
 

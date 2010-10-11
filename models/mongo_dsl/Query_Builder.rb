@@ -70,6 +70,12 @@ class Mongo_Dsl::Query_Builder
   def first
     go!.first
   end
+  
+  def first!
+    results = go!
+    raise "More than one result found." if results.size > 1
+    results.first
+  end
 
   def cache_in instance
     @instance = instance

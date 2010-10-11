@@ -30,7 +30,7 @@ class Test_Control_Members_Create < Test::Unit::TestCase
   must( 'does not create itself + username if username is already taken.' ) do
     
     u_name = "da01-#{Time.now.to_i}"
-    total_rows = lambda { Member.db_collection.find().count }
+    total_rows = lambda { Member.db.collection.find().count }
     old = total_rows.call
     assert_raise(Member::Invalid) do
       Member.create(nil, { 

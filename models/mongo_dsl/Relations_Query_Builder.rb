@@ -26,7 +26,7 @@ class Mongo_Dsl::Relations_Query_Builder
     name = meth_name.to_s
     val  = args.first
 
-    return super unless current_klass.relation?(meth_name)
+    return super unless current_klass.has_relation?(meth_name)
     relation = current_klass.get_relation(meth_name)
     @current_klass = relation.child
     stack << {

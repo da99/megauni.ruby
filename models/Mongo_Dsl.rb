@@ -629,7 +629,7 @@ module Mongo_Dsl
 
     clear_cache
     
-    if !(allow_as_creator? manipulator)
+    if !(allow_to? :create, manipulator)
       raise Unauthorized, "Creator: #{self.class} #{manipulator.inspect}"
     end
     
@@ -650,7 +650,7 @@ module Mongo_Dsl
 
     err ||= begin
       doc.delete('_id') unless doc['_id']
-      new_id = self.class.db_collection.insert( doc, :safe=>true )
+      new_id = self.class.db.collection.insert( doc, :safe=>true )
       doc['_id'] = if new_id.is_a?(String) && BSON::ObjectID.legal?(new_id)
         BSON::ObjectID.from_string(new_id)
       else
@@ -711,9 +711,9 @@ module Mongo_Dsl
 
     id = data._id.to_s
     doc_id = if BSON::ObjectID.legal?(id)
-               self.class.db_collection.update( {:_id=>BSON::ObjectID.from_string(id)}, hsh, :safe=>true )
+               self.class.db.collection.update( {:_id=>BSON::ObjectID.from_string(id)}, hsh, :safe=>true )
              else
-               self.class.db_collection.update( {:_id=>id}, hsh, :safe=>true)
+               self.class.db.collection.update( {:_id=>id}, hsh, :safe=>true)
              end
     
     if opts[:record_diff]
@@ -771,6 +771,17 @@ module Mongo_Dsl
 
   end 
   
+  def method_missing name, *args
+    return super if !args.empty?
+
+    name_wo_bash = name.to_s.sub('!', '').to_sym
+    if self.class.has_relation?(name_wo_bash)
+      return find.send(name_wo_bash).go!
+    end
+
+    super
+  end
+
   
   module Class_Methods 
 
@@ -793,7 +804,8 @@ module Mongo_Dsl
     end
 
     def allowed_field? fld
-      @fields.keys.include? fld
+      @fields.keys.include?(fld.to_sym) ||
+        @fields.keys.include?(fld.to_s)
     end
 
     def fields 
@@ -837,14 +849,19 @@ module Mongo_Dsl
       allowed_field?('created_at') && allowed_field?('updated_at')
     end
 
-    def associations
-      @associations ||= {}
+    def relations
+      @relations ||= {}
+    end
+
+    def get_relation name
+      relations[name.to_s] || relations[name.to_sym]
     end
 
     %w{ has_many has_one belongs_to }.each { |assoc|
+
       eval %~
         def #{assoc} name, class_name = nil, namespace = nil
-          create_association( :#{assoc}, name, class_name, namespace)
+          create_relation( :#{assoc}, name, class_name, namespace)
         end
       
         # def has_#{assoc}?
@@ -861,26 +878,22 @@ module Mongo_Dsl
       ~
     }
 
-    def create_association type, name, class_name = nil, namespace = nil
-      meta           = Data_Pouch.new({}, :type, :name, :Class_Name, :namespace)
-      meta.type      = type
-      meta.name      = name.to_sym
-      meta.Class_Name     = class_name ? 
-                              class_name.to_s : 
-                              (name.to_s.sub( /s$/, '' ).split('_').map(&:capitalize).join('_'))
-      def meta.Class
-        @Class_as_Object ||= Object.const_get(self.Class_Name)
-      end
-      meta.namespace = namespace || meta.name
-      
-      if associations[meta.name]
-        raise ArgumentError, "Association already defined: #{name}"
-      end
-      
-      associations[meta.name] = meta
+    def has_relation? name
+      relations.has_key?( name.to_sym )
+    end
+
+    def create_relation type, name, class_name = nil, foreign_key = nil
+      relations[name.to_sym] = Mongo_Dsl::Relations_Liason.new( self, type, name, class_name, foreign_key )
     end
 
     # ===== CRUD Methods ====================================
+
+    def by_id raw_id
+      id = Mongo_Dsl.mongofy_id(raw_id)
+      doc = find._id(id).first!
+      return new(doc) if doc
+      raise Not_Found, "#{self} _id = #{id}"
+    end
 
     def find_by_date field, start_tm, end_tm = nil
       time_format = '%Y-%m-%d %H:%M:%S'
@@ -896,7 +909,7 @@ module Mongo_Dsl
 
     def find_with_associations raw_assocs, selector, params = {}
       assocs = [raw_assocs].flatten.uniq.compact
-      docs = db_collection.find( selector, params ).to_a
+      docs = db.collection.find( selector, params ).to_a
       assocs.each { |rel|
         meta = associations[rel]
         meta[:class].relationize(docs, meta[:namespace])
@@ -924,7 +937,7 @@ module Mongo_Dsl
 #       fields = selector.keys
 #       fields_must_exist(fields) if not fields.empty?
 #       raise ArgumentError, "I don't know what to do with a block." if blok
-#       (params.delete(:collection) || db_collection).find(selector, params).to_a
+#       (params.delete(:collection) || db.collection).find(selector, params).to_a
 #     end
     
     def find_doc selector, params = {}
@@ -996,7 +1009,7 @@ module Mongo_Dsl
         if !deletor?(editor)
           raise Unauthorized, "Deletor: #{self.class} #{manipulator.inspect}"
         end
-        self.class.db_collection.remove({:_id=>data._id}, {:safe=>true})
+        self.class.db.collection.remove({:_id=>data._id}, {:safe=>true})
       end
     end
 

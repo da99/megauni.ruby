@@ -14,17 +14,20 @@ class Cafe_Le_Roger
   make_psuedo 'big_body', :not_empty
 
   def self.create editor, new_raw_data
-    new do
-      self.manipulator = editor
-      self.raw_data = new_raw_data
+    super.instance_eval do
       demand :title, :teaser, :body
       ask_for :big_body
       save_create
     end
   end
 
-  def allow_as_creator? editor
-    true
+  def allow_to? action, editor
+    case action
+    when :create
+      true
+    else
+      false
+    end
   end
 
 end # === Cafe_Le_Roger
