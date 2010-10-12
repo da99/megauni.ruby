@@ -2,6 +2,8 @@
 
 class Mongo_Dsl::Query_Class
   
+  include Mongo_Dsl::Query_Common
+
   attr_reader :target,
               :selector, :params
 
@@ -16,7 +18,7 @@ class Mongo_Dsl::Query_Class
     when :_id
       true
     else
-      false
+      respond_to? name 
     end
   end
   
@@ -25,7 +27,7 @@ class Mongo_Dsl::Query_Class
     when :_id
       selector[name] = args.first
     else
-      raise "Unknown request: #{name.inspect}, #{args.inspect}"
+      send( name, *args )
     end
   end
   

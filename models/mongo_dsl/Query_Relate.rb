@@ -1,28 +1,34 @@
-require 'modules/String_To_Class'
+require 'modules/To_Class'
 
 class Mongo_Dsl::Query_Relate
   
+  include Mongo_Dsl::Query_Common
+  
   attr_reader :parent, :child,
-              :type, :name, :child_name, :foreign_key
+              :type, :name, :child_name, :foreign_key,
               :selector, :params, :dyno_querys, :filters, :pending_overrides
   
   def initialize parent, type, name, child_name, foreign_key, &blok
+    
+    # Initialize properties.
     @parent      = parent
     @foreign_key = foreign_key
     @child       = nil
-    @child_name  = child_name || \
-      begin
-        sname = name.to_s
-        sname.extend String_To_Class
-        sname.to_model_class_name
-      end
     @child       = child_name.respond_to?(:included_modules) ? child_name : nil
+    @child_name  = @child ? @child.to_s : \
+      begin
+        name.extend To_Class
+        name.to_model_class_name
+      end
+    
+    # Initialize stacks/containers.
     @dyno_querys = []
     @filters     = {}
     @selector    = {}
     @params      = {}
     @pending_overrides = []
 
+    # Initialize other properties.
     instance_eval(&blok) if block_given?
     
     # Check if there were any overrides.
@@ -53,7 +59,8 @@ class Mongo_Dsl::Query_Relate
   def want_request? name
     !!(
       filters[name] ||
-        child.querys[ name ]
+        child.querys[ name ] ||
+          respond_to?(name)
     )
   end
   
@@ -61,13 +68,15 @@ class Mongo_Dsl::Query_Relate
     if filters[name]
       composer.querys.pop
       composer.querys << filters[name].dup
-    else
+    elsif child.querys[name]
       composer.querys << child.querys[name].dup
+    else
+      send( name, *args )
     end
   end
 
   def overrides_as name, &blok
-    pending_overrides << [name, &blok]
+    pending_overrides << [name, blok]
   end
 
   def override name

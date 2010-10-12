@@ -1028,6 +1028,7 @@ end # === module Mongo_Dsl ================================================
 
 %w{
   Db
+	Query_Common
   Query_Composer
 		Query_Class
 		Query_Instance
