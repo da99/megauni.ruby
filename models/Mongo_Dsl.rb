@@ -176,7 +176,7 @@ module Mongo_Dsl
   end
 
   def find
-    Mongo_Dsl::Relations_Query_Builder.new(self)
+    Mongo_Dsl::Query_Composer.new(self)
   end
   alias_method :ask, :find
 
@@ -782,8 +782,9 @@ module Mongo_Dsl
     super
   end
 
-  
-  module Class_Methods 
+  # =========================================================================
+  module Class_Methods # ====================================================
+  # =========================================================================
 
     def db
       @mongo_db ||= Mongo_Dsl::Db_For_Classes.new(self)
@@ -907,27 +908,31 @@ module Mongo_Dsl
       find selector
     end
 
-    def find_with_associations raw_assocs, selector, params = {}
-      assocs = [raw_assocs].flatten.uniq.compact
-      docs = db.collection.find( selector, params ).to_a
-      assocs.each { |rel|
-        meta = associations[rel]
-        meta[:class].relationize(docs, meta[:namespace])
-      }
-    end
+    # def find_with_associations raw_assocs, selector, params = {}
+    #   assocs = [raw_assocs].flatten.uniq.compact
+    #   docs = db.collection.find( selector, params ).to_a
+    #   assocs.each { |rel|
+    #     meta = associations[rel]
+    #     meta[:class].relationize(docs, meta[:namespace])
+    #   }
+    # end
 
-    def find_by_field field, id, params = {}
-      selector = { field => Mongo_Dsl.mongofy_id(id) }
-      find selector, params
-    end
+    # def find_by_field field, id, params = {}
+    #   selector = { field => Mongo_Dsl.mongofy_id(id) }
+    #   find selector, params
+    # end
 
-    def find_by_field_and_associate field, id, params = {}
-      selector = { field => Mongo_Dsl.mongofy_id(id) }
-      find_with_associations associations.keys, selector, params
-    end
+    # def find_by_field_and_associate field, id, params = {}
+    #   selector = { field => Mongo_Dsl.mongofy_id(id) }
+    #   find_with_associations associations.keys, selector, params
+    # end
+
+		def querys
+			@querys ||= {}
+		end
 
     def find
-      Mongo_Dsl::Query_Builder.new(self)
+      Mongo_Dsl::Query_Composer.new(self)
     end
 # 
 #     def find selector, params = {}, &blok
@@ -1014,16 +1019,19 @@ module Mongo_Dsl
     end
 
 
-  end # === module ClassMethods ==============================================
+  # =========================================================================
+  end # === module ClassMethods =============================================
+  # =========================================================================
 
 
 end # === module Mongo_Dsl ================================================
 
 %w{
   Db
-  Query_Builder
-  Relations_Query_Builder
-  Relations_Liason
+  Query_Composer
+		Query_Class
+		Query_Instance
+			Query_Relate
 }.each { |doc|
   require "models/mongo_dsl/#{doc}"
 }
