@@ -141,19 +141,18 @@ class Message
   end
 
   has_many :messages, Message, :parent_message_id do
+
+    override_as :comments do
+      where_in :message_model, %w{ jeer cheer }
+    end
+
+    override_as :questions do
+      where :message_model, 'question'
+    end
+  
     where :privacy, 'public'
     limit 10
     sort  [:_id, :desc]
-  end
-
-  has_many :comments do
-    based_on :messages
-    where_in :message_model, %w{ jeer cheer }
-  end
-
-  has_many :questions do
-    based_on :messages
-    where    :message_model, 'question'
   end
   
   # ==== Authorizations ====

@@ -27,18 +27,13 @@ class Mongo_Dsl::Relations_Liason
 	attr_reader :parent, :type, :name, :child_name, :foreign_key, 
               :instance, :sub_relations,
               :selector, :params,
-              :dynamic_querys
+              :dynamic_querys, :override_stack
 	
 	def initialize parent, type, name, child_name, foreign_key, &blok
     name_singular = name.to_s.sub( /s$/ , '')
 		@parent = parent
 		@type   = type
 		@name   = name.to_sym
-    @child_name = child_name ? 
-      child_name : 
-      (child_name.to_s.sub( /s$/, '' ).split('_').map(&:capitalize).join('_'))
-    
-		@foreign_key = foreign_key || (name_singular + '_id')
     
     @instance = nil
     @sub_relations = {}
@@ -46,12 +41,40 @@ class Mongo_Dsl::Relations_Liason
     @selector = {}
     @params = {}
     @dynamic_querys = []
+    @override_stack = []
+		@foreign_key = foreign_key || (name_singular + '_id')
+    @child_name = child_name ? 
+      child_name : 
+      (child_name.to_s.sub( /s$/, '' ).split('_').map(&:capitalize).join('_'))
 
     instance_eval(&blok) if block_given?
+    
+    # Compile overrides
+    override_stack.each { |pair|
+      args = pair.first
+      blok = pair.last
+      new_name = args.shift
+      new_child_name = args.shift
+      new_fk   = args.shift
+      relation = \
+        parent.send( type,
+                    new_name, 
+                    new_child_name || child_name, 
+                    new_fk || foreign_key, 
+                    &blok
+                   )
+    }
 	end
   
+  def override_as *args, &blok
+    override_stack << [args, blok]
+  end
+
   def child
-    @Class_as_Object ||= Object.const_get(child_name.to_s.to_sym)
+    @Class_as_Object ||= begin
+                           raise "child_name is empty: #{self.inspect}" if child_name.to_s.empty?
+                           Object.const_get(child_name.to_s.to_sym)
+                         end
   end
 
 	def method_missing name, *args
@@ -194,10 +217,21 @@ class Mongo_Dsl::Relations_Liason
     params[:sort] = val
   end
   
+  # This method overrides any set
+  #   :child_name and :foreign_key 
+  #   
+  # Therefore, ":Something, :some_id" is ignored in 
+  # the following example:
+  # 
+  #   has_many :men, :Something, :some_id do
+  #     based_on :people
+  #     where :type, 'man'
+  #   end
+  #   
   def based_on relation_name
-    ancestor = parent.get_relation(relation_name)
-    @class_name ||= ancestor.child_name
-    @foreign_key ||= ancestor.foreign_key
+    ancestor        = parent.get_relation(relation_name)
+    @child_name     = ancestor.child_name
+    @foreign_key    = ancestor.foreign_key
     self.selector.update(ancestor.selector)
     self.params.update(ancestor.params)
     @dynamic_querys = ancestor.dynamic_querys

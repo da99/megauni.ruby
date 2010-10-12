@@ -13,15 +13,14 @@ class Cafe_Galaxy
 
   has_many :employees, :Cafe_Galaxy_Employee, :cafe_id do
 
+    override_as :men do
+      where :role, 'man'
+    end
+
     filter :bossess do
       where :role, 'boss'
     end
     
-  end
-  
-  has_many :men do
-    based_on :employees
-    where :role, 'man'
   end
 
   class << self
@@ -112,6 +111,21 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     
   end
   
+  # Example: 
+  #   member.job_titles
+  #   member.part_time_job_titles
+  #
+  must 'retrieve a list of relations based on another relation' do
+    cafe = create_cafe
+    create_employee(cafe, :role=>'boss')
+    men = (0..2).to_a.map { |index|
+      create_employee(cafe, :role => 'man' )
+    }
+    men_data = men.map { |record| record.data.as_hash }
+
+    assert_equal men_data, cafe.find.men.go!
+
+  end
 end # === class _create
 
 
