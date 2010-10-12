@@ -1,49 +1,49 @@
 
 class Mongo_Dsl::Relations_Liason
-	
+  
   DYNO_Q = :dyno_q
 
-	class << self
-		
-		def relations 
-			@relations ||= {}
-		end
+  class << self
+    
+    def relations 
+      @relations ||= {}
+    end
 
-		def new_relation parent, type, name, child, foreign_key
-			relations[parent] ||= {}
-			relations[parent][name] = new( parent, type, name, child, foreign_key )
-		end
-		
+    def new_relation parent, type, name, child, foreign_key
+      relations[parent] ||= {}
+      relations[parent][name] = new( parent, type, name, child, foreign_key )
+    end
+    
     def has_relation?(parent, name)
       !!( relations[parent] && relations[parent][name] )
     end
 
-		def get_relation parent, name
-			relations[parent][name]
-		end
-		
-	end # === self
+    def get_relation parent, name
+      relations[parent][name]
+    end
+    
+  end # === self
 
-	attr_reader :parent, :type, :name, :child_name, :foreign_key, 
+  attr_reader :parent, :type, :name, :child_name, :foreign_key, 
               :instance, :sub_relations,
               :selector, :params,
               :dynamic_querys, :override_stack
-	
-	def initialize parent, type, name, child_name, foreign_key, &blok
+  
+  def initialize parent, type, name, child_name, foreign_key, &blok
     name_singular = name.to_s.sub( /s$/ , '')
-		@parent = parent
-		@type   = type
-		@name   = name.to_sym
-    
-    @instance = nil
-    @sub_relations = {}
-    
-    @selector = {}
-    @params = {}
+    @parent         = parent
+    @type           = type
+    @name           = name.to_sym
+
+    @instance       = nil
+    @sub_relations  = {}
+
+    @selector       = {}
+    @params         = {}
     @dynamic_querys = []
     @override_stack = []
-		@foreign_key = foreign_key || (name_singular + '_id')
-    @child_name = child_name ? 
+    @foreign_key    = foreign_key || (name_singular + '_id')
+    @child_name     = child_name ?
       child_name : 
       (child_name.to_s.sub( /s$/, '' ).split('_').map(&:capitalize).join('_'))
 
@@ -64,7 +64,7 @@ class Mongo_Dsl::Relations_Liason
                     &blok
                    )
     }
-	end
+  end
   
   def override_as *args, &blok
     override_stack << [args, blok]
@@ -77,15 +77,15 @@ class Mongo_Dsl::Relations_Liason
                          end
   end
 
-	def method_missing name, *args
+  def method_missing name, *args
     return super if !args.empty?
 
     if self.class.has_relation?( child, name )
-		  return self.class.get_relation( child, name )
+      return self.class.get_relation( child, name )
     end
    
-		super
-	end
+    super
+  end
 
   # Example:
   #   member.follows.clubs
@@ -96,13 +96,13 @@ class Mongo_Dsl::Relations_Liason
     raise "Not implemented yet."
   end
 
-	def find doc_or_instance, selector_override, params_override
-		# compose default selector
-		# compose default params
-		# Find and return results.
-		  
-		selector = self.selector
-		params   = self.params
+  def find doc_or_instance, selector_override, params_override
+    # compose default selector
+    # compose default params
+    # Find and return results.
+      
+    selector = self.selector
+    params   = self.params
     store_instance(doc_or_instance)
     
     dynamic_querys.each { |query|
@@ -118,25 +118,25 @@ class Mongo_Dsl::Relations_Liason
     }
 
     
-		case type
-		when :has_many
-			selector[foreign_key] = extract_value( foreign_key, doc_or_instance ) 
-		when :belongs_to
-			raise "not done"
-		when :has_one	
-			raise "not done"
-		end
-		
-		# Update query with requested overrides.
-		final_selector, final_params = \
-			selector.update(selector_override), 
-			params.update(params_override) 
-		
-		# Send back results.
+    case type
+    when :has_many
+      selector[foreign_key] = extract_value( foreign_key, doc_or_instance ) 
+    when :belongs_to
+      raise "not done"
+    when :has_one  
+      raise "not done"
+    end
+    
+    # Update query with requested overrides.
+    final_selector, final_params = \
+      selector.update(selector_override), 
+      params.update(params_override) 
+    
+    # Send back results.
     # 
     child.find.by( final_selector ).and( final_params ) #.cache_in(instance)
 
-	end # === find
+  end # === find
 
   def store_instance doc_or_instance
     case doc_or_instance

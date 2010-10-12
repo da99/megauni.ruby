@@ -175,9 +175,9 @@ module Mongo_Dsl
     @mongo_db ||= Mongo_Dsl::Db_For_Objects.new(self)
   end
 
-	def find
-		Mongo_Dsl::Relations_Query_Builder.new(self)
-	end
+  def find
+    Mongo_Dsl::Relations_Query_Builder.new(self)
+  end
   alias_method :ask, :find
 
   def find_one selector, params = {}, &blok

@@ -1,20 +1,20 @@
 class Mongo_Dsl::Query_Builder
-	
+  
   attr_reader :model_klass, 
               :selector, 
               :params, 
               :current_field, 
               :instance
 
-	def initialize model_klass
-		@model_klass = model_klass
+  def initialize model_klass
+    @model_klass = model_klass
     @current_field = nil
     @selector    = {}
     @params      = {}
     @instance    = nil
-	end
-	
-	def method_missing meth_name, *args
+  end
+  
+  def method_missing meth_name, *args
   
     super if args.size > 1
 
@@ -44,7 +44,7 @@ class Mongo_Dsl::Query_Builder
     
     self
     
-	end
+  end
 
   def and_where condition_hash
     selector[current_field] ||={}
