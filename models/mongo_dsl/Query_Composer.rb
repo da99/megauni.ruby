@@ -30,7 +30,7 @@ class Mongo_Dsl::Query_Composer
   end # def method_missing
 
   def map field
-    querys.last.selector[:fields] = field.to_s
+    querys.last.params[:fields] = field.to_s
     after_all << [:map, field.to_s]
     self
   end

@@ -31,6 +31,13 @@ module Mongo_Dsl
   #                  self.included
   # ========================================================= 
 
+	def self.find coll, selector, params
+		if selector.empty?
+			raise "Selector is empty."
+		end
+		coll.find( selector, params )
+	end
+
   def self.included(target)
     target.extend Class_Methods
   end
@@ -219,7 +226,7 @@ module Mongo_Dsl
   
   def set_id new_id
     raise "New id can not be generated on an existing record." if not new?
-    new_data._id = ( clean_date._id = new_id )
+    new_data._id = ( clean_data._id = new_id )
   end
 
   def clean_data
@@ -626,12 +633,7 @@ module Mongo_Dsl
   def save_create opts = {}
 
     raise "This is not a new document." if !new?
-
     clear_cache
-    
-    if !(allow_to? :create, manipulator)
-      raise Unauthorized, "Creator: #{self.class} #{manipulator.inspect}"
-    end
     
     raise_if_invalid
     demand 'created_at' if self.class.allowed_field?('created_at')
@@ -757,7 +759,26 @@ module Mongo_Dsl
     @unique_keys ||= {}
   end
 
+  def invalid?
+    begin
+      raise_if_invalid
+      true
+    rescue Unauthorized, Invalid, Nothing_To_Update
+      false
+    end
+  end
+
   def raise_if_invalid
+    
+    if new? 
+      if !(allow_to? :create, manipulator)
+        raise Unauthorized, "Creator: #{self.class} #{manipulator.inspect}"
+      end
+    else
+      if !(allow_to? :update, manipulator)
+        raise Unauthorized, "Updator: #{self.class} #{manipulator.inspect}"
+      end
+    end
     
     if !errors.empty? 
       raise Invalid.new(self, "Document has validation errors: #{self.errors.join(' * ')}" )
@@ -775,7 +796,7 @@ module Mongo_Dsl
     return super if !args.empty?
 
     name_wo_bash = name.to_s.sub('!', '').to_sym
-    if self.class.has_relation?(name_wo_bash)
+    if name != name_wo_bash && self.class.has_relation?(name_wo_bash)
       return find.send(name_wo_bash).go!
     end
 
@@ -945,7 +966,7 @@ module Mongo_Dsl
     def find_doc selector, params = {}
       raise ArgumentError, "I don't know what to do with a block." if block_given?
       params[:limit] = 1
-      find(selector, params).first
+      db.collection.find(selector, params).first
     end
     
     def find_one *args

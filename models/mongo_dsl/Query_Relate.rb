@@ -14,6 +14,7 @@ class Mongo_Dsl::Query_Relate
     
     # Initialize properties.
     @name        = name
+    @type        = type
     @parent      = parent
     @foreign_key = foreign_key
     
@@ -29,9 +30,6 @@ class Mongo_Dsl::Query_Relate
     
     # Initialize stacks/containers.
     @dyno_querys = []
-    if foreign_key
-      _where foreign_key
-    end
     
     @filters     = {}
     @selector    = {}
@@ -41,6 +39,12 @@ class Mongo_Dsl::Query_Relate
 
     # Initialize other properties.
     instance_eval(&blok) if block_given?
+    
+    if !self.foreign_key
+      self.foreign_key "#{name.to_s.dup.extend(To_Class).to_singular}_id"
+    else
+      self.foreign_key @foreign_key
+    end
     
     # Check if there were any overrides.
     origin         = self
@@ -89,48 +93,6 @@ class Mongo_Dsl::Query_Relate
   def filter name, &blok
     filters[name] = blok
   end
-
-  def _find doc_or_instance, selector_override, params_override
-    # compose default selector
-    # compose default params
-    # Find and return results.
-      
-    selector = self.selector
-    params   = self.params
-    store_instance(doc_or_instance)
-    
-    dynamic_querys.each { |query|
-      action, field = query
-      case action
-      when :where
-        selector[field] = extract_value( field, doc_or_instance)
-      when :where_in
-        selector[field] = { :$in => extract_value( field, doc_or_instance ) }
-      else 
-        raise "Unknown action: #{action.inspect}"
-      end
-    }
-
-    
-    case type
-    when :has_many
-      selector[foreign_key] = extract_value( foreign_key, doc_or_instance ) 
-    when :belongs_to
-      raise "not done"
-    when :has_one  
-      raise "not done"
-    end
-    
-    # Update query with requested overrides.
-    final_selector, final_params = \
-      selector.update(selector_override), 
-      params.update(params_override) 
-    
-    # Send back results.
-    # 
-    child.find.by( final_selector ).and( final_params ) #.cache_in(instance)
-
-  end # === find
 
   def extract_value foreign_key, doc_or_instance
     case doc_or_instance
@@ -213,15 +175,24 @@ class Mongo_Dsl::Query_Relate::Spawn
 
     # Let's compile the results into
     # something this relation can use.
+    id_key = case type
+             when :has_many
+                '_id'
+             when :belongs_to
+               foreign_key
+             else
+               raise "not ready for: #{type.inspect}"
+             end
+    
     ids = case results
           when Array
             results.map { |doc| 
-              doc['_id']
+              doc[id_key]
             }
           when Hash
-            results['_id']
+            results[id_key]
           else
-            results.fetch('_id')
+            results.fetch(id_key)
           end
 
     # We got the stuff for dynamic queries.
@@ -241,7 +212,7 @@ class Mongo_Dsl::Query_Relate::Spawn
       end
     }
 
-    composer.results << child.db.collection.find(selector, params).to_a
+    composer.results << Mongo_Dsl.find( child.db.collection, selector, params ).to_a
   end
   
   def spawn(new_name)

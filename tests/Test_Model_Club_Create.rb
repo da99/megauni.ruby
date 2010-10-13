@@ -22,7 +22,7 @@ class Test_Club_Create < Test::Unit::TestCase
   end
   
   must 'require a unique filename' do
-    filename = Club.find_one({})['filename']
+    filename = Club.find_one({}).data.filename
     old_filename = create_club.data.filename
     club = begin
              Club.create( admin_member,
@@ -65,7 +65,7 @@ class Test_Club_Create < Test::Unit::TestCase
   end
 
   must 'set "en-us" as the language.' do
-		club = Club.create(
+    club = Club.create(
             admin_member, 
             {:filename=>random_filename, 
              :title=>'Gaijin',

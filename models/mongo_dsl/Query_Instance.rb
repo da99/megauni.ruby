@@ -1,6 +1,6 @@
 
 class Mongo_Dsl::Query_Instance
-	
+  
   attr_reader :target,
               :selector, :params
 
@@ -8,7 +8,7 @@ class Mongo_Dsl::Query_Instance
     @target = target
     @selector = {}
     @params   = {}
-		freeze
+    freeze
   end
 
   def want_request?(name)

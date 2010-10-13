@@ -155,7 +155,7 @@ class Test::Unit::TestCase
   end
 
   def self.regular_members
-    @regular_mem ||= [1,2,3].map { |i| Life.by_username("regular-member-#{i}").owner }
+    @regular_mem ||= [1,2,3].map { |i| Life.find.username("regular-member-#{i}").grab(:owner).go_first! }
   end
   
   [1,2,3].each do |i|

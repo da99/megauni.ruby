@@ -11,27 +11,27 @@ class Cafe_Galaxy
     make field, :not_empty
   end
 
-	has_many :ghosts, :Cafe_Galaxy_Employee do
-		
-		override_as :spirits do
-			where :role, 'spirit'
-		end
-		
-		override_as :fk_spirits do
-			foreign_key :spirit_id
-		end
+  has_many :ghosts, :Cafe_Galaxy_Employee do
+    
+    override_as :spirits do
+      where :role, 'spirit'
+    end
+    
+    override_as :fk_spirits do
+      foreign_key :spirit_id
+    end
 
-		filter :fantoms do
-			where :role, 'fantom'
-		end
-		
-		filter :fk_fantoms do
-			foreign_key :fantom_id
-		end
-		
-		foreign_key :ghost_id
-		
-	end
+    filter :fantoms do
+      where :role, 'fantom'
+    end
+    
+    filter :fk_fantoms do
+      foreign_key :fantom_id
+    end
+    
+    foreign_key :ghost_id
+    
+  end
 
   has_many :employees, :Cafe_Galaxy_Employee, :cafe_id do
 
@@ -41,6 +41,10 @@ class Cafe_Galaxy
 
     filter :bosses do
       where :role, 'boss'
+    end
+    
+    filter :women do
+      where :role, 'woman'
     end
     
   end
@@ -72,11 +76,35 @@ class Cafe_Galaxy_Employee
   make :cafe_id, :not_empty
   make :name, :not_empty
   make :role, [:in_array, ROLES ]
+  make :planet_id, :not_empty
   
+  belongs_to :planet, :Cafe_Planet
+
   class << self
     def create editor, new_raw_data
       super.instance_eval do
-        demand :cafe_id, :name, :role
+        demand :cafe_id, :name, :role, :planet_id
+        save_create
+      end
+    end
+  end # === class
+
+  def allow_to? action, editor
+    true
+  end
+
+end # === class
+
+class Cafe_Planet 
+  include Mongo_Dsl
+  make :title, :not_empty
+
+  has_many :employees, :Cafe_Galaxy_Employee
+
+  class << self
+    def create editor, new_raw_data
+      super.instance_eval do
+        demand :title
         save_create
       end
     end
@@ -90,6 +118,13 @@ end # === class
 
 class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
 
+  PLANET_IDS = [0,1,2].map { |index| 
+    Cafe_Planet.create(
+      nil, 
+      { :title => "Something #{rand(1000)}" }
+    ).data._id
+  }
+  
   def create_cafe
     Cafe_Galaxy.create(
       nil, 
@@ -97,11 +132,19 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     )
   end
   
+  def create_planet new_vals = {}
+    Cafe_Planet.create(
+      nil, 
+      { :title => "Something #{rand(1000)}" }.update(new_vals)
+    )
+  end
+  
   def create_employee cafe, new_data = {}
     default_data =  {
       :cafe_id => cafe.data._id,
       :name => "Mr. #{rand(1000)}",
-      :role => Cafe_Galaxy_Employee::ROLES[rand(3)]
+      :role => Cafe_Galaxy_Employee::ROLES[rand(3)],
+      :planet_id => PLANET_IDS[ rand(3) ]
     }
     data = default_data.update(new_data)
     
@@ -111,44 +154,43 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     )
   end
 
-	must 'update foreign key if specified after override is declared.' do
-		ghosts  = Cafe_Galaxy.querys[:ghosts]
-		spirits = Cafe_Galaxy.querys[:spirits]
-		assert_equal ghosts.foreign_key, spirits.foreign_key
-	end
+  must 'update foreign key if specified after override is declared.' do
+    ghosts  = Cafe_Galaxy.querys[:ghosts]
+    spirits = Cafe_Galaxy.querys[:spirits]
+    assert_equal ghosts.foreign_key, spirits.foreign_key
+  end
 
-	must 'not update foreign key in override if different.' do
-		ghosts  = Cafe_Galaxy.querys[:ghosts]
-		fk      = Cafe_Galaxy.querys[:fk_spirits]
-		assert_not_equal ghosts.foreign_key, fk.foreign_key
-	end
-	
-	must 'update foreign key if specified after filter is declared.' do
-		ghosts  = Cafe_Galaxy.querys[:ghosts]
-		fantoms = ghosts.filters[:fantoms]
-		assert_equal ghosts.foreign_key, fantoms.foreign_key
-	end
+  must 'not update foreign key in override if different.' do
+    ghosts  = Cafe_Galaxy.querys[:ghosts]
+    fk      = Cafe_Galaxy.querys[:fk_spirits]
+    assert_not_equal ghosts.foreign_key, fk.foreign_key
+  end
+  
+  must 'update foreign key if specified after filter is declared.' do
+    ghosts  = Cafe_Galaxy.querys[:ghosts]
+    fantoms = ghosts.filters[:fantoms]
+    assert_equal ghosts.foreign_key, fantoms.foreign_key
+  end
 
-	must 'not update foreign key in filter if different.' do
-		ghosts  = Cafe_Galaxy.querys[:ghosts]
-		fk      = ghosts.filters[:fk_fantoms]
-		assert_not_equal ghosts.foreign_key, fk.foreign_key
-	end
+  must 'not update foreign key in filter if different.' do
+    ghosts  = Cafe_Galaxy.querys[:ghosts]
+    fk      = ghosts.filters[:fk_fantoms]
+    assert_not_equal ghosts.foreign_key, fk.foreign_key
+  end
 
+  must 'have filters (sub-querys) with their own independent (:dup) selectors.' do
+    emp     = Cafe_Galaxy.querys[:employees]
+    bosses  = emp.filters[:bosses]
 
-	must 'have filters (sub-querys) with their own independent (:dup) selectors.' do
-		emp     = Cafe_Galaxy.querys[:employees]
-		bosses  = emp.filters[:bosses]
+    assert_not_equal bosses.selector, emp.selector
+  end
 
-		assert_not_equal bosses.selector, emp.selector
-	end
+  must 'have overrides with their own independent (:dup) selectors' do
+    emp     = Cafe_Galaxy.querys[:employees]
+    men     = Cafe_Galaxy.querys[:men]
 
-	must 'have overrides with their own independent (:dup) selectors' do
-		emp     = Cafe_Galaxy.querys[:employees]
-		men     = Cafe_Galaxy.querys[:men]
-
-		assert_not_equal men.selector, emp.selector
-	end
+    assert_not_equal men.selector, emp.selector
+  end
 
   must 'retrieve list of relations: cafe.employees!' do
     cafe = create_cafe
@@ -167,7 +209,7 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
       create_employee(cafe, :role=>'boss')
     }
     bosses_data = bosses.map { |rec| rec.data.as_hash }
-		
+    
     assert_equal bosses_data, cafe.find.employees.bosses.go!
   end
   
@@ -185,7 +227,18 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
 
     assert_equal men_data, cafe.find.men.go!
   end
-	
+  
+  must 'grab relations from other relations: cafe.fine.employees.women.grab(:planet).go!' do
+    cafe = create_cafe
+    planet = create_planet
+    women = (0..2).to_a.map { |index|
+      create_employee(cafe, :role=>'woman', :planet_id=>planet.data._id)
+    }
+    women_data = women.map { |record| record.data.as_hash } 
+
+    assert_equal [planet.data.as_hash], cafe.find.employees.women.grab(:planet).go!
+  end
+
 end # === class _create
 
 

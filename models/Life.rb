@@ -9,7 +9,7 @@ class Life
   HREF_PATTERN = [ '/life/%s/', :username]
 
   enable_timestamps
-  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
+  make :owner_id, :mongo_object_id #, [:in_array, lambda { manipulator.lifes._ids } ]
   make :title, :anything
   make :username, 
     # Delete invalid characters and 
@@ -47,8 +47,8 @@ class Life
   has_many :owned_clubs, :Club
     # Club.ids_by_owner_id(:$in=>current_username_ids)
     # Club.by_owner_id(:$in=>current_username_ids)
-	
-	belongs_to :owner, :Member
+  
+  belongs_to :owner, :Member
 
   # ==== Class Methods  ====
     

@@ -39,6 +39,21 @@ class Member
     [:equal, lambda { raw_data.email } ],
     [:error_msg, 'Email has invalid characters.']
   
+  make_psuedo :add_username, 
+    # Delete invalid characters and 
+    # reduce any suspicious characters. 
+    # '..*' becomes '.'
+    [:stripped, /[^a-z0-9_-]{1,}/i, lambda { |s|
+        if ['.'].include?( s[0,1] )
+          s[0,1]
+        else
+          ''
+        end
+      }], 
+     [:min, 2, 'Username is too small. It must be at least 2 characters long.'],
+     [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
+     [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
+  
   make_psuedo :update_username, :not_empty
   make_psuedo :confirm_password, :not_empty
   make_psuedo :password, 
@@ -144,13 +159,10 @@ class Member
   class << self
     
     def create editor, raw_raw_data # CREATE
-      d = new do
-        self.manipulator = editor
-        self.raw_data = raw_raw_data
-        
+      super.instance_eval do
         new_data.security_level = Member::MEMBER
         ask_for :email
-        demand  :add_username, :password
+        demand  :password
         generate_id
         save_create_life
         save_create
@@ -159,10 +171,7 @@ class Member
     
     def update id, editor, new_raw_data # UPDATE
 
-      doc = new(id) do
-        self.manipulator = editor
-        self.raw_data    = new_raw_data
-        
+      super.instance_eval do
         ask_for :add_username 
 
         if manipulator == self
@@ -204,7 +213,7 @@ class Member
   def allow_to? action, editor # NEW, CREATE
     case action
       when :create
-        editor ? true : false 
+        editor ? false : true
       when :read
         read
       when :update
@@ -218,12 +227,12 @@ class Member
   end
 
   def save_create_life
-    return false unless creatable?
+    return false if invalid?
     
     begin
       life = Life.create( self, 
                          :username   => clean_data.add_username,  
-                         :owner_id   => data._id || cleanest(:_id)
+                         :owner_id   => (data && data._id) || cleanest(:_id)
                         )
       
     rescue Life::Invalid
@@ -376,6 +385,25 @@ class Member
     { :as_owner => club_owner_menu, 
       :as_follower => mem.club_follower_menu, 
       :as_lifer  => mem.life_menu}
+  end
+
+  def lifes
+    @lifes ||= begin
+                 ls = find.lifes.go!
+                 ls.extend Life_Results
+               end
+  end
+
+  module Life_Results
+    
+    def usernames
+      @usernames ||= map { |doc| doc['username']}
+    end
+    
+    def _ids
+      @_ids ||= map { |doc| doc['_id'] }
+    end
+    
   end
 
 end # === model Member

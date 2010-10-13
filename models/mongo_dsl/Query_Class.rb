@@ -37,7 +37,7 @@ class Mongo_Dsl::Query_Class
   end
 
   def go! composer
-    composer.results << target.db.collection.find( selector, params ).to_a
+    composer.results << Mongo_Dsl.find( target.db.collection, selector, params ).to_a
   end
 
 end # === class Query
