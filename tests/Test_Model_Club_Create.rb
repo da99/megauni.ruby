@@ -34,6 +34,13 @@ class Test_Club_Create < Test::Unit::TestCase
     assert_equal "Filename, #{old_filename}, already taken. Please choose another.", club.errors.first
   end
 
+  must 'use a safe insert into Clubs collection.' do
+    Club.db.collection.expects(:insert).returns('new_id').with do |doc, opts|
+      opts[:safe] === true
+    end
+    create_club
+  end
+
   must 'require a title' do
     club = begin
              Club.create(

@@ -152,11 +152,11 @@ class Test::Unit::TestCase
   # === Custom Helpers ===
 
   def self.admin_member
-    @admin_member ||= Life.find.username("admin-member-1").grab(:owner).go_first!
+    @admin_member ||= Member.new( Life.find.username("admin-member-1").grab(:owner).go_first! )
   end
 
   def self.regular_members
-    @regular_mem ||= [1,2,3].map { |i| Life.find.username("regular-member-#{i}").grab(:owner).go_first! }
+    @regular_mem ||= [1,2,3].map { |i| Member.new( Life.find.username("regular-member-#{i}").grab(:owner).go_first! ) }
   end
   
   [1,2,3].each do |i|

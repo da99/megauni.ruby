@@ -1011,7 +1011,14 @@ module Mongo_Dsl
       find({:owner_id=>str}.update(params), opts)
     end
 
+    def validate_editor editor
+      if !editor.nil? && !editor.class.respond_to?(:db)
+        raise ArgumentError, "Unknown class for editor/manipulator: #{editor.inspect}"
+      end
+    end
+
     def create editor, raw_raw_data # CREATE
+      validate_editor editor
       new do
         self.manipulator =  editor
         self.raw_data = raw_raw_data
@@ -1037,6 +1044,7 @@ module Mongo_Dsl
     end
 
     def update id, editor, new_raw_data # UPDATE
+      validate_editor editor
       new(id) do
         self.manipulator = editor
         self.raw_data = new_raw_data
@@ -1044,6 +1052,7 @@ module Mongo_Dsl
     end
 
     def delete id, editor # DELETE
+      validate_editor editor
       new(id) do
         self.manipulator = editor
         if !deletor?(editor)

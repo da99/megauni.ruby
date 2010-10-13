@@ -60,6 +60,7 @@ class Club
   class << self
     
     def create editor, raw_raw_data # CREATE
+      raw_raw_data['owner_id'] ||= editor.lifes._ids.first
       super.instance_eval do
         demand :owner_id, :filename, :title, :teaser
         ask_for_or_default :lang
