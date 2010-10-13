@@ -22,7 +22,7 @@ class Member
   # ==== Associations  ====
     
   has_one :password_reset
-  has_many :lifes
+  has_many :lifes, :Life, :owner_id
   
   # ==== Fields  =====
     
@@ -39,20 +39,21 @@ class Member
     [:equal, lambda { raw_data.email } ],
     [:error_msg, 'Email has invalid characters.']
   
-  make_psuedo :add_username, 
-    # Delete invalid characters and 
-    # reduce any suspicious characters. 
-    # '..*' becomes '.'
-    [:stripped, /[^a-z0-9_-]{1,}/i, lambda { |s|
-        if ['.'].include?( s[0,1] )
-          s[0,1]
-        else
-          ''
-        end
-      }], 
-     [:min, 2, 'Username is too small. It must be at least 2 characters long.'],
-     [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
-     [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
+  make_psuedo :category, :anything
+  make_psuedo :add_username, :anything
+    # # Delete invalid characters and 
+    # # reduce any suspicious characters. 
+    # # '..*' becomes '.'
+    # [:stripped, /[^a-z0-9_-]{1,}/i, lambda { |s|
+    #     if ['.'].include?( s[0,1] )
+    #       s[0,1]
+    #     else
+    #       ''
+    #     end
+    #   }], 
+    #  [:min, 2, 'Username is too small. It must be at least 2 characters long.'],
+    #  [:max, 20, 'Username is too large. The maximum limit is: 20 characters.'],
+    #  [:not_match, /[^a-zA-Z0-9\.\_\-]/, 'Username can only contain the follow characters: A-Z a-z 0-9 . _ -']
   
   make_psuedo :update_username, :not_empty
   make_psuedo :confirm_password, :not_empty
@@ -227,15 +228,16 @@ class Member
   end
 
   def save_create_life
-    return false if invalid?
+    return false if not valid?
     
     begin
       life = Life.create( self, 
-                         :username   => clean_data.add_username,  
-                         :owner_id   => (data && data._id) || cleanest(:_id)
+                         :username   => cleanest(:add_username) || raw_data.add_username,  
+                         :owner_id   => (data && data._id) || cleanest(:_id),
+                         :category   => cleanest(:category) || raw_data.category
                         )
       
-    rescue Life::Invalid
+    rescue Life::Invalid => err
       errors.concat $!.doc.errors
     end
   end

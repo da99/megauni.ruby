@@ -11,7 +11,7 @@ class Life
   enable_timestamps
   make :owner_id, :mongo_object_id #, [:in_array, lambda { manipulator.lifes._ids } ]
   make :title, :anything
-  make :username, 
+  make :username, :unique, 
     # Delete invalid characters and 
     # reduce any suspicious characters. 
     # '..*' becomes '.'

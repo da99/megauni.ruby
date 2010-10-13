@@ -1,5 +1,6 @@
 # models/Member.rb
 
+
 class Test_Model_Member_Create < Test::Unit::TestCase
 
   RAND_NUMS = (1..100).to_a.map {|a| rand(10000)}.uniq
@@ -13,7 +14,8 @@ class Test_Model_Member_Create < Test::Unit::TestCase
         Member.new, 
         :password=>'pass12pass', 
         :confirm_password=>'pass12pass', 
-        :add_username=>random_username
+        :add_username=>random_username,
+        :category  => 'real'
       )
     end
     assert_match( /\ACreator: /, err.message )
@@ -23,7 +25,8 @@ class Test_Model_Member_Create < Test::Unit::TestCase
     doc = begin
             Member.create( nil, {
               :password => nil,
-              :add_username => random_username
+              :add_username => random_username,
+              :category  => 'real'
             })
           rescue Member::Invalid => e
             e.doc
@@ -35,11 +38,13 @@ class Test_Model_Member_Create < Test::Unit::TestCase
     doc = begin
             Member.create(nil, {:password => 'pass123pass', 
                                 :confirm_password => 'pass123pass',
-                                :add_username => nil })
+                                :add_username => nil,
+                                :category  => 'real'
+            })
           rescue Member::Invalid => e
             e.doc
           end
-    assert_equal "Username is too small. It must be at least 2 characters long.", doc.errors.first
+    assert_equal "Username is too small. It must be at least 2 characters long.", doc.errors.detect { |msg| msg['small'] }
   end
 
   must 'require a unique username' do
@@ -49,18 +54,31 @@ class Test_Model_Member_Create < Test::Unit::TestCase
     doc = begin
             Member.create(nil, {:password => 'pass132pass',
                                 :confirm_password=>'pass132pass',
-                                :add_username => username })
+                                :add_username => username,
+                                :category  => 'real'
+            })
           rescue Member::Invalid => e
             e.doc
           end
-    assert_equal "Username, #{username}, already taken.", doc.errors.detect { |msg| msg =~ /Username/ }
+    assert_equal(
+        "Username, #{username}, already taken. Please choose another.", 
+        doc.errors.detect { |msg| msg =~ /sername/ }
+    )
+  end
+
+  must 'use a safe insert into Lifes collection (in MongoDB) when creating a life.' do
+    Life.db.collection.expects(:insert).returns('new_id').with do | doc, opts |
+      opts[:safe] == false
+    end
+    create_member
   end
 
   must 'add a UUID to data._id' do
     doc = Member.create(nil, {
       :password => "pass123pass", 
       :confirm_password => "pass123pass",
-      :add_username=>random_username
+      :add_username=>random_username,
+      :category => 'real'
      }
     )
     # assert_match( /\A[a-z0-9\-]{10,}\Z/i, doc.data._id.to_s )
@@ -71,7 +89,8 @@ class Test_Model_Member_Create < Test::Unit::TestCase
     doc = Member.create(nil, {
       :password => "pass123pass", 
       :confirm_password => "pass123pass",
-      :add_username=>random_username
+      :add_username=>random_username,
+      :category  => 'real'
      }
     )
     assert_equal( false, doc.new? )
@@ -81,7 +100,8 @@ class Test_Model_Member_Create < Test::Unit::TestCase
     doc = Member.create(nil, {
       :password => "pass123pass", 
       :confirm_password => "pass123pass",
-      :add_username=>random_username
+      :add_username=>random_username,
+      :category  => 'real'
      }
     )
     assert_equal( "MEMBER", doc.data.security_level )
@@ -91,7 +111,8 @@ class Test_Model_Member_Create < Test::Unit::TestCase
     doc = Member.create(nil, {
       :password => "pass123pass", 
       :confirm_password => "pass123pass",
-      :add_username=>random_username
+      :add_username=>random_username,
+      :category  => 'real'
      }
     )
     assert_equal( true, doc.has_power_of?("MEMBER") )
@@ -101,7 +122,8 @@ class Test_Model_Member_Create < Test::Unit::TestCase
     doc = Member.create(nil, {
       :password => "pass123pass", 
       :confirm_password => "pass123pass",
-      :add_username=>random_username
+      :add_username=>random_username,
+      :category  => 'real'
      }
     )
     assert_equal( false, doc.has_power_of?("ADMIN") )

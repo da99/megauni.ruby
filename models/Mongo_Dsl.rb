@@ -61,6 +61,10 @@ module Mongo_Dsl
       { 'unique' => true, 'key' => {'filename' => 1} }
     ]
     
+    new['Lifes'] = [ 
+      { 'unique' => true, 'key' => {'username' => 1} }
+    ]
+    
     new['Member_Usernames'] = [
       { 'unique' => true, 'key' => {'username' => 1} }
     ]
@@ -158,6 +162,9 @@ module Mongo_Dsl
   def initialize doc_id_or_hash = nil, &blok
     
     super()
+    
+    @safe_insert = false
+
     @error_msg = nil # The efault error message for validation errors.
     @cache = {}
     doc   = case doc_id_or_hash
@@ -652,7 +659,7 @@ module Mongo_Dsl
 
     err ||= begin
       doc.delete('_id') unless doc['_id']
-      new_id = self.class.db.collection.insert( doc, :safe=>true )
+      new_id = self.class.db.collection.insert( doc, :safe=>do_safe_insert? )
       doc['_id'] = if new_id.is_a?(String) && BSON::ObjectID.legal?(new_id)
         BSON::ObjectID.from_string(new_id)
       else
@@ -713,9 +720,9 @@ module Mongo_Dsl
 
     id = data._id.to_s
     doc_id = if BSON::ObjectID.legal?(id)
-               self.class.db.collection.update( {:_id=>BSON::ObjectID.from_string(id)}, hsh, :safe=>true )
+               self.class.db.collection.update( {:_id=>BSON::ObjectID.from_string(id)}, hsh, :safe=> do_safe_insert? )
              else
-               self.class.db.collection.update( {:_id=>id}, hsh, :safe=>true)
+               self.class.db.collection.update( {:_id=>id}, hsh, :safe=> do_safe_insert? )
              end
     
     if opts[:record_diff]
@@ -751,7 +758,17 @@ module Mongo_Dsl
     @errors ||= []
   end
 
+  def do_safe_insert
+    @safe_insert = true
+  end
+
+  def safe_insert?
+    !!@safe_insert
+  end
+  alias_method :do_safe_insert?, :safe_insert?
+
   def add_unique_key key_name, err_msg
+    do_safe_insert
     unique_keys[key_name.to_s] = err_msg
   end
 
@@ -759,7 +776,7 @@ module Mongo_Dsl
     @unique_keys ||= {}
   end
 
-  def invalid?
+  def valid?
     begin
       raise_if_invalid
       true
@@ -1032,7 +1049,7 @@ module Mongo_Dsl
         if !deletor?(editor)
           raise Unauthorized, "Deletor: #{self.class} #{manipulator.inspect}"
         end
-        self.class.db.collection.remove({:_id=>data._id}, {:safe=>true})
+        self.class.db.collection.remove({:_id=>data._id}, { :safe=> do_safe_insert? })
       end
     end
 
