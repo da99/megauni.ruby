@@ -31,9 +31,34 @@ module Mongo_Dsl::Query_Common
     self
   end
 
+  def _where field
+    dyno_querys << [ :where, field ]
+    self
+  end
+
   def where field, val
     selector[field] = val
     self
+  end
+
+	# Only applies to Query_Relate and Query_Relate::Spawn
+	# objects.
+  def foreign_key *args
+    return @foreign_key if args.empty?
+    
+    # Remove old foreign_key.
+    if foreign_key 
+      @dyno_querys = dyno_querys.select { |quer|
+        quer != [:where, foreign_key]
+      }
+    end
+    
+    # Add new foreign_key.
+    @foreign_key = args.first
+    if foreign_key
+      _where foreign_key
+    end
+    
   end
    
 end # === module 

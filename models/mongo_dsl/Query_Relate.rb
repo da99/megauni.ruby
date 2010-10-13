@@ -1,4 +1,4 @@
-
+require 'models/Delegator_Dsl'
 require 'modules/To_Class'
 
 class Mongo_Dsl::Query_Relate
@@ -6,7 +6,7 @@ class Mongo_Dsl::Query_Relate
   include Mongo_Dsl::Query_Common
   
   attr_reader :parent, :child,
-              :type, :name, :child_name, :foreign_key,
+              :type, :name, :child_name, 
               :selector, :params, :dyno_querys, :filters, 
               :overrides, :pending_overrides
   
@@ -50,22 +50,26 @@ class Mongo_Dsl::Query_Relate
       name = ovr.first
       blok = ovr.last
       
-      relate = origin.spawn(name)
+      relate = spawn!
+      relate.instance_variable_set '@name', name
       relate.instance_eval &blok
-      origin.overrides << relate
+      # origin.overrides << relate
       origin.parent.relations[name] = relate
-      
     }
+    overrides.freeze
     
     # Check if there were any filters (aka sub-queries).
     filters.keys.each { |name|
       filt = filters[name]
       unless filt.is_a?(Mongo_Dsl::Query_Relate) 
-        dupi = origin.spawn(name)
+        dupi = spawn!
+        dupi.instance_variable_set '@name', name
         dupi.instance_eval( &filt )
         filters[name] = dupi
       end
     }
+    
+    filters.freeze
     
   end # def initialize
   
@@ -78,90 +82,12 @@ class Mongo_Dsl::Query_Relate
     end
   end
 
-  def want_request? name
-    !!(
-      filters[name] ||
-        child.querys[ name ] ||
-          respond_to?(name)
-    )
-  end
-  
-  def new_request composer, name, *args
-    if filters[name]
-      composer.querys.pop
-      composer.querys << filters[name].spawn(name)
-    elsif child.querys[name]
-      composer.querys << child.querys[name].spawn(name)
-    else
-      send( name, *args )
-    end
-  end
-
-  def foreign_key *args
-    return @foreign_key if args.empty?
-    
-    # Remove old foreign_key.
-    if foreign_key 
-      @dyno_querys = dyno_querys.select { |quer|
-        quer != [:where, foreign_key]
-      }
-    end
-    
-    # Add new foreign_key.
-    @foreign_key = args.first
-    if foreign_key
-      _where foreign_key
-    end
-    
-  end
-
   def override_as name, &blok
     pending_overrides << [name, blok]
   end
 
   def filter name, &blok
     filters[name] = blok
-  end
-
-  def _where field
-    dyno_querys << [ :where, field ]
-    self
-  end
-
-  def go! composer
-    results = composer.results.last
-    
-    # Let's compile the results into
-    # something this relation can use.
-    ids = case results
-          when Array
-            results.map { |doc| 
-              doc['_id']
-            }
-          when Hash
-            results['_id']
-          else
-            results.fetch('_id')
-          end
-    
-    # We got the stuff for dynamic queries.
-    # Let's "compile" them into :selector
-    relate = self
-    dyno_querys.each { |quer|
-      case quer.first
-        when :where
-          relate.selector[quer.last] = case ids
-                                       when Array
-                                        { :$in => ids }
-                                       else
-                                         ids
-                                       end
-        else
-          raise "Unknown dynamic query: #{quer.inspect}"
-      end
-    }
-    
-    composer.results << child.db.collection.find(selector, params).to_a
   end
 
   def _find doc_or_instance, selector_override, params_override
@@ -225,30 +151,101 @@ class Mongo_Dsl::Query_Relate
     end
   end # === def  
   
-  def spawn(new_name)
-    copy      = self.class.new( parent, type, new_name, child_name, foreign_key )
-    origin    = self
-    dont_copy = %w{ @filters @overrides @name }
-    
-    self.instance_variables.each { |ivar|
-      unless dont_copy.include?(ivar)
-        
-        new_val = origin.instance_variable_get(ivar)
-        new_dup = begin
-                    new_val.dup
-                  rescue TypeError
-                    new_val
-                  end
-        
-        copy.instance_variable_set(
-          ivar, 
-          new_dup
-        )
-        
-      end
-    }
-
-    copy
+  def spawn!
+    Spawn.new(self, ['@name'])
   end
 
 end # === class Query_Base
+
+
+
+
+# ====================================================================
+class Mongo_Dsl::Query_Relate::Spawn
+  
+  extend Delegator_Dsl
+  delegate_to :origin, 
+              :parent, :type, :child_name, :child
+  
+  include Mongo_Dsl::Query_Common
+  
+  attr_reader :origin, :selector, :params, :dyno_querys, :filters
+  
+  def initialize origin, allowed_ivars = []
+    @origin = origin
+    ivars_to_dup = (allowed_ivars + %w{ @selector @foreign_key @params @dyno_querys @filters })
+    ivars_to_dup.each { |attr|
+      new_val = origin.instance_variable_get(attr)
+      val = begin
+              new_val.dup
+            rescue TypeError
+              new_val
+            end
+      instance_variable_set attr, val
+    }
+  end
+  
+  def want_request? name
+    !!(
+      filters[name] ||
+        origin.child.querys[ name ] ||
+          respond_to?(name)
+    )
+  end
+  
+  def new_request composer, name, *args
+    if filters[name]
+      composer.querys.pop
+      composer.querys << filters[name].spawn!
+    elsif child.querys[name]
+      composer.querys << child.querys[name].spawn!
+    else
+      send( name, *args )
+    end
+  end
+  
+  def spawn!
+    self.class.new(self, ['@name'])
+  end
+  
+  def go! composer
+    results = composer.results.last
+
+    # Let's compile the results into
+    # something this relation can use.
+    ids = case results
+          when Array
+            results.map { |doc| 
+              doc['_id']
+            }
+          when Hash
+            results['_id']
+          else
+            results.fetch('_id')
+          end
+
+    # We got the stuff for dynamic queries.
+    # Let's "compile" them into :selector
+    relate = self
+    dyno_querys.each { |quer|
+      case quer.first
+      when :where
+        relate.selector[quer.last] = case ids
+                                     when Array
+                                       { :$in => ids }
+                                     else
+                                       ids
+                                     end
+      else
+        raise "Unknown dynamic query: #{quer.inspect}"
+      end
+    }
+
+    composer.results << child.db.collection.find(selector, params).to_a
+  end
+  
+  def spawn(new_name)
+    Spawn.new(self, new_name)
+  end
+
+end # === class Spawn

@@ -1,5 +1,6 @@
 
 class Mongo_Dsl::Query_Instance
+	
   attr_reader :target,
               :selector, :params
 
@@ -7,6 +8,7 @@ class Mongo_Dsl::Query_Instance
     @target = target
     @selector = {}
     @params   = {}
+		freeze
   end
 
   def want_request?(name)
@@ -15,22 +17,14 @@ class Mongo_Dsl::Query_Instance
       )
   end
 
-  def new_request list, name, *args
-    list.querys << target.class.querys[name].clone
+  def new_request composer, name, *args
+    composer.querys << target.class.querys[name].spawn!
   end
 
-  def go! list
-    list.results << target
+  def go! composer
+    composer.results << target
   end
-  
+
 end # === class
 
-
-__END__
-
-  # def _where field
-  #   dyno_querys << [ :where, field ]
-  #   self
-  # end
-  
 

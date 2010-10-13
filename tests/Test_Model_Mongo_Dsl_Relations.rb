@@ -167,7 +167,7 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
       create_employee(cafe, :role=>'boss')
     }
     bosses_data = bosses.map { |rec| rec.data.as_hash }
-    
+		
     assert_equal bosses_data, cafe.find.employees.bosses.go!
   end
   
