@@ -358,7 +358,10 @@ class Test::Unit::TestCase
   end
 
   def club
-    Club.by_id(Club.find_one({})['_id'])
+    @club ||= begin
+                doc  = Club.db.collection.find_one()
+                Club.by_id(doc['_id'])
+              end
   end
 
   

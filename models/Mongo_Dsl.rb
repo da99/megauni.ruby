@@ -31,12 +31,12 @@ module Mongo_Dsl
   #                  self.included
   # ========================================================= 
 
-	def self.find coll, selector, params
-		if selector.empty?
-			raise "Selector is empty."
-		end
-		coll.find( selector, params )
-	end
+  def self.find coll, selector, params
+    if selector.empty?
+      raise "Selector is empty."
+    end
+    coll.find( selector, params )
+  end
 
   def self.included(target)
     target.extend Class_Methods
