@@ -11,13 +11,35 @@ class Cafe_Galaxy
     make field, :not_empty
   end
 
+	has_many :ghosts, :Cafe_Galaxy_Employee do
+		
+		override_as :spirits do
+			where :role, 'spirit'
+		end
+		
+		override_as :fk_spirits do
+			foreign_key :spirit_id
+		end
+
+		filter :fantoms do
+			where :role, 'fantom'
+		end
+		
+		filter :fk_fantoms do
+			foreign_key :fantom_id
+		end
+		
+		foreign_key :ghost_id
+		
+	end
+
   has_many :employees, :Cafe_Galaxy_Employee, :cafe_id do
 
     override_as :men do
       where :role, 'man'
     end
 
-    filter :bossess do
+    filter :bosses do
       where :role, 'boss'
     end
     
@@ -89,6 +111,45 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     )
   end
 
+	must 'update foreign key if specified after override is declared.' do
+		ghosts  = Cafe_Galaxy.querys[:ghosts]
+		spirits = Cafe_Galaxy.querys[:spirits]
+		assert_equal ghosts.foreign_key, spirits.foreign_key
+	end
+
+	must 'not update foreign key in override if different.' do
+		ghosts  = Cafe_Galaxy.querys[:ghosts]
+		fk      = Cafe_Galaxy.querys[:fk_spirits]
+		assert_not_equal ghosts.foreign_key, fk.foreign_key
+	end
+	
+	must 'update foreign key if specified after filter is declared.' do
+		ghosts  = Cafe_Galaxy.querys[:ghosts]
+		fantoms = ghosts.filters[:fantoms]
+		assert_equal ghosts.foreign_key, fantoms.foreign_key
+	end
+
+	must 'not update foreign key in filter if different.' do
+		ghosts  = Cafe_Galaxy.querys[:ghosts]
+		fk      = ghosts.filters[:fk_fantoms]
+		assert_not_equal ghosts.foreign_key, fk.foreign_key
+	end
+
+
+	must 'have filters (sub-querys) with their own independent (:dup) selectors.' do
+		emp     = Cafe_Galaxy.querys[:employees]
+		bosses  = emp.filters[:bosses]
+
+		assert_not_equal bosses.selector, emp.selector
+	end
+
+	must 'have overrides with their own independent (:dup) selectors' do
+		emp     = Cafe_Galaxy.querys[:employees]
+		men     = Cafe_Galaxy.querys[:men]
+
+		assert_not_equal men.selector, emp.selector
+	end
+
   must 'retrieve list of relations: cafe.employees!' do
     cafe = create_cafe
     emps = [ create_employee(cafe), 
@@ -105,10 +166,9 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     bosses =  (0..3).to_a.map { |index| 
       create_employee(cafe, :role=>'boss')
     }
-    bossess_data = bosses.map { |rec| rec.data.as_hash }
+    bosses_data = bosses.map { |rec| rec.data.as_hash }
     
-    assert_equal bossess_data, cafe.find.employees.bossess.go!
-    
+    assert_equal bosses_data, cafe.find.employees.bosses.go!
   end
   
   # Example: 
@@ -124,8 +184,8 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     men_data = men.map { |record| record.data.as_hash }
 
     assert_equal men_data, cafe.find.men.go!
-
   end
+	
 end # === class _create
 
 

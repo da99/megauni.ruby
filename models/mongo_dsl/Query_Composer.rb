@@ -9,9 +9,9 @@ class Mongo_Dsl::Query_Composer
     @after_all = []
     
     if target.respond_to?(:included_modules)
-      querys << Query_Class.new(target)
+      querys << Mongo_Dsl::Query_Class.new(target)
     else
-      querys << Query_Instance.new(target)
+      querys << Mongo_Dsl::Query_Instance.new(target)
     end
   end
 
@@ -41,38 +41,48 @@ class Mongo_Dsl::Query_Composer
   end
 
   def go!
-    %w{ results querys after_all }.each { |meth|
-      
-      puts "#{meth}:"
-      pp send(meth)
-
+    # Grab results
+    composer = self
+    querys.each { |quer|
+      quer.go!( composer )
     }
     
-    puts "\n"
-    puts "\n"
+    
+    # Post processing.
+    after_all.size.times { |index|
+      answer = results.last
+      
+      action, val = after_all.shift
+      
+      new_answer = case action
+                   when :map
+                     answer.map { |doc| doc.fetch(val) }
+                   when :group_by
+                     answer.inject( {} ) { |memo, doc|
+                       memo[val] = doc
+                       memo
+                     }
+                   else
+                     raise "Unknown action: #{action.inspect}"
+                   end
+      
+      composer.results << new_answer
+    }
+    
+    results.last
+    
   end
 
   # ==============================================================
 
-  def just_one?
-    go!.size == 1
-  end
-
-  def first
-    go!.first
-  end
-  
-  def first!
+  def first_only!
     results = go!
     raise "More than one result found." if results.size > 1
     results.first
   end
   
   def group_by val
-    stack << { 
-      :type => :group_by,
-      :value => val.to_s
-    }
+    after_all << [:group_by, val.to_s]
   end
 
 end # === class Query_Composer

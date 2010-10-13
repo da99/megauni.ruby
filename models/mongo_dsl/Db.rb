@@ -1,6 +1,6 @@
 require 'models/Delegator_Dsl'
 
-class Mongo_Dsl::Db_For_Classes
+class Mongo_Dsl::Db_Class
   
   attr_reader :target, :cache
 
@@ -17,13 +17,13 @@ class Mongo_Dsl::Db_For_Classes
     cache[:collection] ||= DB.collection(name)
   end
 
-end # === class Mongo_Dsl::Db_For_Classes
+end # === class Mongo_Dsl::Db_Class
 
 
-class Mongo_Dsl::Db_For_Objects
+class Mongo_Dsl::Db_Instance
 
   extend Delegator_Dsl
-  delegate_to :klass_db, :name, :collection
+  delegate_to :db_klass, :name, :collection
 
   attr_reader :target, :db_klass
 
@@ -32,5 +32,5 @@ class Mongo_Dsl::Db_For_Objects
     @db_klass = target.class
   end 
 
-end # === class Mongo_Dsl::Db_For_Objects
+end # === class Mongo_Dsl::Db_Instance
 

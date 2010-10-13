@@ -172,7 +172,7 @@ module Mongo_Dsl
   end
 
   def db
-    @mongo_db ||= Mongo_Dsl::Db_For_Objects.new(self)
+    @mongo_db ||= Mongo_Dsl::Db_Instance.new(self)
   end
 
   def find
@@ -787,7 +787,7 @@ module Mongo_Dsl
   # =========================================================================
 
     def db
-      @mongo_db ||= Mongo_Dsl::Db_For_Classes.new(self)
+      @mongo_db ||= Mongo_Dsl::Db_Class.new(self)
     end
 
     # ===== DSL-icious ======
@@ -853,6 +853,7 @@ module Mongo_Dsl
     def relations
       @relations ||= {}
     end
+    alias_method :querys, :relations
 
     def get_relation name
       relations[name.to_s] || relations[name.to_sym]
@@ -884,7 +885,7 @@ module Mongo_Dsl
     end
 
     def create_relation type, name, class_name = nil, foreign_key = nil, &blok
-      relations[name.to_sym] = Mongo_Dsl::Relations_Liason.new( self, type, name, class_name, foreign_key, &blok )
+      relations[name.to_sym] = Mongo_Dsl::Query_Relate.new( self, type, name, class_name, foreign_key, &blok )
     end
 
     # ===== CRUD Methods ====================================
@@ -926,10 +927,6 @@ module Mongo_Dsl
     #   selector = { field => Mongo_Dsl.mongofy_id(id) }
     #   find_with_associations associations.keys, selector, params
     # end
-
-		def querys
-			@querys ||= {}
-		end
 
     def find
       Mongo_Dsl::Query_Composer.new(self)
@@ -1028,11 +1025,11 @@ end # === module Mongo_Dsl ================================================
 
 %w{
   Db
-	Query_Common
+  Query_Common
   Query_Composer
-		Query_Class
-		Query_Instance
-			Query_Relate
+    Query_Class
+    Query_Instance
+      Query_Relate
 }.each { |doc|
   require "models/mongo_dsl/#{doc}"
 }

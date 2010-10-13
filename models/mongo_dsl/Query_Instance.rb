@@ -19,13 +19,18 @@ class Mongo_Dsl::Query_Instance
     list.querys << target.class.querys[name].clone
   end
 
-  def _where field
-    dyno_querys << [ :where, field ]
-    self
-  end
-  
   def go! list
     list.results << target
   end
   
 end # === class
+
+
+__END__
+
+  # def _where field
+  #   dyno_querys << [ :where, field ]
+  #   self
+  # end
+  
+

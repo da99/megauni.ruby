@@ -47,7 +47,7 @@ class Club
       where    :message_model, 'question'
     end
 
-    where :target_ids
+    foreign_key :target_ids
     where :parent_message_id, nil
     where :privacy, 'public'
     limit 10
