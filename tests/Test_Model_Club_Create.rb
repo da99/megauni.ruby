@@ -65,7 +65,7 @@ class Test_Club_Create < Test::Unit::TestCase
   end
 
   must 'set "en-us" as the language.' do
-    club = Club.create(
+		club = Club.create(
             admin_member, 
             {:filename=>random_filename, 
              :title=>'Gaijin',

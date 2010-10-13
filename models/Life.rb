@@ -47,6 +47,8 @@ class Life
   has_many :owned_clubs, :Club
     # Club.ids_by_owner_id(:$in=>current_username_ids)
     # Club.by_owner_id(:$in=>current_username_ids)
+	
+	belongs_to :owner, :Member
 
   # ==== Class Methods  ====
     

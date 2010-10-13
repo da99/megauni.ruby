@@ -892,7 +892,7 @@ module Mongo_Dsl
 
     def by_id raw_id
       id = Mongo_Dsl.mongofy_id(raw_id)
-      doc = find._id(id).first!
+      doc = find._id(id).go_first!
       return new(doc) if doc
       raise Not_Found, "#{self} _id = #{id}"
     end

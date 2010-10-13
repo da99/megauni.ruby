@@ -151,7 +151,7 @@ class Test::Unit::TestCase
   # === Custom Helpers ===
 
   def self.admin_member
-    @admin_member ||= Life.by_username("admin-member-1").owner
+    @admin_member ||= Life.find.username("admin-member-1").grab(:owner).go_first!
   end
 
   def self.regular_members

@@ -14,21 +14,21 @@ class Mongo_Dsl::Query_Class
   end
 
   def want_request?( name )
-    case name
-    when :_id
-      true
-    else
-      respond_to? name 
-    end
+    target.allowed_field?(name) ||
+      target.querys[name] ||
+        respond_to?( name )
   end
   
   def new_request( list, name, *args )
-    case name
-    when :_id
-      selector[name] = args.first
-    else
-      send( name, *args )
+    if target.allowed_field?( name )
+      return(selector[name] = args.first)
     end
+    
+    if target.querys[name]
+      return( list.querys << target.querys[name].spawn! )
+    end
+    
+    send( name, *args )
   end
   
   def where field, val
