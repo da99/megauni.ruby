@@ -55,17 +55,17 @@ namespace :gem do
   end
 
     
-  desc 'Uninstalls a gem in the .development_gems file.'
+  desc 'Uninstalls a gem in the .development_gems file using ENV["cmd"].'
   task :development_uninstall do
     ENV['env'] = 'development'
-    Rake::Task['gem:uninstall']
+    Rake::Task['gem:uninstall'].invoke
   end
 
     
   desc 'Uninstalls a gem in the .production_gems file.'
   task :production_uninstall do
     ENV['env'] = 'production'
-    Rake::Task['gem:uninstall']
+    Rake::Task['gem:uninstall'].invoke
   end
 
     

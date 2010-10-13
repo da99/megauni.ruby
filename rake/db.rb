@@ -72,6 +72,14 @@ namespace :db do
     end
   end # ===
 
+  desc 'Reset db for RACK_ENV = "test" '
+  task :test_reset! do
+    orig_env = ENV['RACK_ENV']
+    ENV['RACK_ENV'] = 'test'
+    Rake::Task['db:reset!'].invoke
+    ENV['RACK_ENV'] = orig_env
+  end
+
   desc 'Grab some sample data from production database'
   task :sample_data do
     require File.basename(File.expand_path('.'))
@@ -140,7 +148,8 @@ namespace :db do
         nil, 
         :add_username => "regular-member-#{i}", 
         :password => 'regular-password',
-        :confirm_password => 'regular-password'
+        :confirm_password => 'regular-password',
+        :category  => 'real'
       )
     end
 
@@ -148,7 +157,8 @@ namespace :db do
       nil, 
       :add_username => "admin-member-1",
       :password => 'admin-password',
-      :confirm_password => 'admin-password'
+      :confirm_password => 'admin-password',
+      :category  => 'real'
     )
 
     doc_data = doc.data.as_hash
