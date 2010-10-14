@@ -27,7 +27,7 @@ class Sessions
     rescue Mongo_Dsl::Not_Found, Member::Wrong_Password
       flash_msg.errors = "Incorrect info. Try again."
       
-    rescue Member::Password_Reset
+    rescue Password_Reset::In_Reset
       flash_msg.errors = "Your password has been reset. Check your email for instructions." 
       
     end

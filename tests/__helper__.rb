@@ -210,7 +210,8 @@ class Test::Unit::TestCase
     mem = Member.create(nil,
       :add_username => username ,
       :password => password,
-      :confirm_password => password
+      :confirm_password => password,
+      :category => 'real'
     )
     [mem, username, password]
   end

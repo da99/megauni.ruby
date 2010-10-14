@@ -36,17 +36,17 @@ class Test_Model_Member_Read < Test::Unit::TestCase
   end
 
 
-  must 'raise Member::Password_Reset after 3 failed authentication attempts, no matter if correct password' do
+  must 'raise Password_Reset::In_Reset after 3 failed authentication attempts, no matter if correct password' do
     mem, username, pass = generate_random_member
     3.times do 
       begin
         Member.authenticate :username=>username, :password=>'yoyo-i-want-vitamins' 
       rescue Member::Wrong_Password
-      rescue Member::Password_Reset
+      rescue Password_Reset::In_Reset
       end
     end
 
-    assert_raise(Member::Password_Reset) do
+    assert_raise(Password_Reset::In_Reset) do
       Member.authenticate :username=>username, :password=>pass
     end
   end
@@ -57,9 +57,9 @@ class Test_Model_Member_Read < Test::Unit::TestCase
       begin
         Member.authenticate :username=>username, :password=>'yoyo-i-want-vitamins' 
       rescue Member::Wrong_Password
-      rescue Member::Password_Reset
+      rescue Password_Reset::In_Reset
       end
-      assert_equal( i, Failed_Log_In_Attempts.for_today(mem).count )
+      assert_equal( i, Failed_Log_In_Attempt.for_today(mem).count )
     end
   end
 
@@ -69,11 +69,11 @@ class Test_Model_Member_Read < Test::Unit::TestCase
       begin
         Member.authenticate :username=>username, :password=>'yoyo-i-want-vitamins' 
       rescue Member::Wrong_Password
-      rescue Member::Password_Reset
+      rescue Password_Reset::In_Reset
       end
     end
 
-    assert_equal( 3, Failed_Log_In_Attempts.for_today(mem).size )
+    assert_equal( 3, Failed_Log_In_Attempt.for_today(mem).size )
   end
 
   must 'raise Member::Invalid_Security_Level if :has_power_of? given invalid parameter.' do
@@ -83,21 +83,26 @@ class Test_Model_Member_Read < Test::Unit::TestCase
     end
   end
 
-  must 'add :owner_username to a collection of docs with :owner_id (:username_id)' do
-    mem_1 = regular_member_1
-    mem_2 = regular_member_2
-    un_id_1 = mem_1.lifes._ids.first
-    un_id_2 = mem_2.lifes._ids.last
-    un_1    = mem_1.lifes.usernames.first
-    un_2    = mem_2.lifes.usernames.last
-    
-    docs = []
-    docs << {'title'=>'something', 'owner_id'=> un_id_1}
-    docs << {'title'=>'something', 'owner_id'=> un_id_2}
-    
-    results = Member.add_docs_by_username_id(docs).map { |doc| doc['owner_username'] }
-    target = [un_1, un_2]
-    assert_equal target, results
-  end
-
 end # === class Member_Read
+
+
+__END__
+
+
+# 
+#   must 'add :owner_username to a collection of docs with :owner_id (:username_id)' do
+#     mem_1 = regular_member_1
+#     mem_2 = regular_member_2
+#     un_id_1 = mem_1.lifes._ids.first
+#     un_id_2 = mem_2.lifes._ids.last
+#     un_1    = mem_1.lifes.usernames.first
+#     un_2    = mem_2.lifes.usernames.last
+#     
+#     docs = []
+#     docs << {'title'=>'something', 'owner_id'=> un_id_1}
+#     docs << {'title'=>'something', 'owner_id'=> un_id_2}
+#     
+#     results = Member.add_docs_by_username_id(docs).map { |doc| doc['owner_username'] }
+#     target = [un_1, un_2]
+#     assert_equal target, results
+#   end

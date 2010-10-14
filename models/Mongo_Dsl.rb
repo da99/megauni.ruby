@@ -24,6 +24,49 @@ module Mongo_Dsl
     
   end # === class Invalid
 
+  class Db_Indexer
+    
+    attr_reader :stack
+    
+    def initialize
+      @stack     = {}
+      @key_stack = nil
+    end
+
+    def collection name, &blok
+      @collection            = name
+      @key_stack             = []
+      @stack[@collection]  ||= []
+      add &blok
+    end
+    
+    def add_to_keys fld, order
+      @key_stack[:keys] << [fld, order]
+    end
+    
+    def unique
+      @key_stack[:options][:unique] = true
+    end
+    
+    def asc field
+      add_to_keys field, 1
+    end
+    
+    def desc field
+      add_to_keys field, -1
+    end
+
+    def add &blok
+      @key_stack = { :keys => [] , :options => {:background=>true, :unique=>false}}
+      instance_eval &blok
+      @key_stack[:options][:name] = \
+        @key_stack[:keys].map { |pair| pair.map(&:to_s).join('_') }.join('_')
+      @stack[@collection] << @key_stack
+      @key_stack = nil
+    end
+
+  end # === 
+
 
   attr_reader :data
   
@@ -55,56 +98,80 @@ module Mongo_Dsl
   end
 
   def self.ensure_indexes
-    new = {}
+    ind = Db_Indexer.new
     
-    new['Clubs'] = [ 
-      { 'unique' => true, 'key' => {'filename' => 1} }
-    ]
+    ind.collection( 'Clubs'  ) {
+      asc( :filename )
+      unique
+    }
     
-    new['Lifes'] = [ 
-      { 'unique' => true, 'key' => {'username' => 1} }
-    ]
+    ind.collection( 'Failed_Log_In_Attempts' ) {
+      desc(:date)
+      desc(:ip_address)
+      asc( :owner_id )
+    }
+
+    ind.collection('Lifes') {
+      asc :username
+      unique
+    }
     
-    new['Member_Usernames'] = [
-      { 'unique' => true, 'key' => {'username' => 1} }
-    ]
+    ind.collection 'Member_Usernames' do
+      asc :username
+      unique
+    end
     
-    new['Messages'] = [
-      { 'key' => {'published_at' => -1} }
-    ]
+    ind.collection 'Messages' do
+      asc :target_ids
+      desc :parent_message_id
+    end
     
-    new['Messages'] = [
-      { 'key' => {'target_ids' => 1, 'parent_message_id' => -1} }
-    ]
+    ind.collection 'Message_Notifys' do
+      asc :owner_id
+      asc :message_id
+    end
     
-    new['Message_Notifys'] = [
-      { 'key' => { 'owner_id' => 1, 'message_id' => 1 } }
-    ]
+    ind.collection 'Doc_Logs' do
+      asc :doc_id
+    end
     
-    new['Doc_Logs'] = [
-      { 'key' => {'doc_id' => 1} }
-    ]
+    update_indexes ind
     
-    new.each { |coll, ixs| 
+  end
+  
+  def self.update_indexes ind
+    ind.stack.each  { |coll, arr|
       index_info      = DB.collection(coll).index_information()
       index_info.delete '_id'
-      index_info_vals = index_info.values
-      slices          = index_info_vals.map { |i| { 'unique' => i['unique'], 'key'=> i['key'] } }
+      index_info.delete '_id_'
+      
+      names = index_info.keys.select { |key| key !~ /\A_/ } 
+      new_names = arr.map { |keys| keys[:options][:name] }
 
-      delete = slices.each_index { |i|
-        i_name = index_info_vals[i]['name']
-        if i_name !~ /\A_id/ && !new[coll].include?( slices[i] )
-          DB.collection(coll).drop_index(i_name)
+      # Delete old indexes.
+      names.each { |old|
+        if !new_names.include?(old) 
+          DB.collection(coll).drop_index(old)
+        end
+      }
+
+      # Insert new indexs.
+      new_names.each_index { |index|
+        fresh = arr[index]
+        old   = index_info[ fresh[:options][:name] ]
+        drop_old = old && fresh[:options][:background] != old['background']
+        insert_new = drop_old || !names.include?(fresh[:options][:name] )
+        
+        if drop_old
+          DB.collection(coll).drop_index(old['name'])
+        end
+        
+        if insert_new
+          DB.collection(coll).create_index( fresh[:keys], fresh[:options] )
         end
       }
       
-      insert = new[coll].each_index { |i| 
-        if not slices.include?( new[coll][i] )
-          DB.collection(coll).create_index( new[coll][i]['key'].to_a, :unique=>new[coll][i]['unique'] , :background => true )
-        end
-      } 
-
-    } 
+    }
   end
 
   def self.utc_now

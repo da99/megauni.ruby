@@ -1,6 +1,7 @@
 require 'bcrypt'
 require 'models/Password_Reset'
 require 'models/Life'
+require 'models/Failed_Log_In_Attempt'
 
 class Member 
 
@@ -120,31 +121,28 @@ class Member
       # Check for Password_Reset
       raise Password_Reset::In_Reset, mem.inspect if mem.password_in_reset?
 
+      # Check for too many failed attempts.
+      # Raise Account::Reset if necessary.
+      fail_count = Failed_Log_In_Attempt.for_today(mem).count
+      if fail_count > 2
+        mem.reset_password
+        raise Password_Reset::In_Reset, mem.inspect
+      end
+      
       # See if password matches with correct password.
       correct_password = BCrypt::Password.new(mem.data.hashed_password) === (password + mem.data.salt)
       return mem if correct_password
 
-      # Grab failed attempt count.
-      fail_count = Failed_Log_In_Attempts.for_today(mem).count
+      # Update failed count.
       new_count  = fail_count + 1
       
       # Insert failed password.
-      Failed_Log_In_Attempts.create(
+      Failed_Log_In_Attempt.create(
         nil,
-        { :data_model => 'Member_Failed_Attempt',
         :owner_id   => mem.data._id, 
-        :date       => Mongo_Dsl.utc_date_now, 
-        :time       => Mongo_Dsl.utc_time_now,
-        :created_at => Mongo_Dsl.utc_now,
         :ip_address => ip_addr,
-        :user_agent => user_agent }
+        :user_agent => user_agent 
       )
-
-      # Raise Account::Reset if necessary.
-      if new_count > 2
-        mem.reset_password
-        raise Password_Reset::In_Reset, mem.inspect
-      end
 
       raise Wrong_Password, "Password is invalid for: #{username.inspect}"
     end 
@@ -443,7 +441,7 @@ __END__
 
   def self.failed_attempts_for_today mem, &blok
     require 'time'
-    Failed_Log_In_Attempts.find( 
+    Failed_Log_In_Attempt.find( 
        :owner_id => mem.data._id,  
        :created_at => { :$lte => Mongo_Dsl.utc_now,
                  :$gte => Mongo_Dsl.utc_string(Time.now.utc - (60*60*24))

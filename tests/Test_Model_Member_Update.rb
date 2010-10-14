@@ -8,7 +8,7 @@ class Test_Model_Member_Update < Test::Unit::TestCase
     assert_equal true, mem.password_in_reset?
   end
 
-  must 'raise Member::Password_Reset during authentication if password is in reset' do
+  must 'raise Password_Reset::In_Reset during authentication if password is in reset' do
     pwrd   = 'test12345'
     mem    = create_member(:password => pwrd, :confirm_password => pwrd)
     mem.reset_password
