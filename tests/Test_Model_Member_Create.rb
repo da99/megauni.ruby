@@ -68,7 +68,7 @@ class Test_Model_Member_Create < Test::Unit::TestCase
 
   must 'use a safe insert into Lifes collection (in MongoDB) when creating a life.' do
     Life.db.collection.expects(:insert).returns('new_id').with do | doc, opts |
-      opts[:safe] == false
+      opts[:safe] == true 
     end
     create_member
   end

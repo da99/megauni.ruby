@@ -263,15 +263,6 @@ module Mongo_Dsl
   end
   alias_method :ask, :find
 
-  def find_one selector, params = {}, &blok
-    raise "I don't know what to do with blocks." if block_given?
-    
-    params.delete('limit')
-    params[:limit] = 1
-    
-    find(selector, params, &blok).first
-  end
-
   def data?
     data && !data.as_hash.empty?
   end
@@ -1050,46 +1041,11 @@ module Mongo_Dsl
     def find
       Mongo_Dsl::Query_Composer.new(self)
     end
-# 
-#     def find selector, params = {}, &blok
-#       if respond_to?(:selector_validation)
-#         raise "not implemented yet."
-#       end
-#       fields = selector.keys
-#       fields_must_exist(fields) if not fields.empty?
-#       raise ArgumentError, "I don't know what to do with a block." if blok
-#       (params.delete(:collection) || db.collection).find(selector, params).to_a
-#     end
     
     def find_doc selector, params = {}
       raise ArgumentError, "I don't know what to do with a block." if block_given?
       params[:limit] = 1
       db.collection.find(selector, params).first
-    end
-    
-    def find_one *args
-      raise ArgumentError, "No block allowed here." if block_given?
-      doc = find_doc(*args)
-      return new(doc) if doc
-      raise self::Not_Found, args.to_a.map { |pair| "Document not found for: #{pair.first.capitalize}: #{pair.last}" }.join(', ')
-    end
-
-    def find_one_by_field
-    end
-
-    def find_one_by_id( raw_id ) # READ
-      id = Mongo_Dsl.mongofy_id(raw_id)
-      case id
-      when BSON::ObjectID
-        find_one( :_id => id )
-      else
-        find_one('old_id'=>doc_id_or_hash)
-      end
-    end
-
-    def find_one_by_owner_id str, params = {}, opts = {}
-      id = Mongo_Dsl.mongofy_id(str)
-      find({:owner_id=>str}.update(params), opts)
     end
 
     def validate_editor editor

@@ -3,7 +3,7 @@
 class Test_Model_Message_Create < Test::Unit::TestCase
 
   def club
-    Club.find_one({})
+    @club ||= Club.db.collection.find_one
   end
 
   must 'be allowed to be created by member' do
@@ -46,6 +46,7 @@ class Test_Model_Message_Create < Test::Unit::TestCase
   end
   
   must 'add Club id if :parent_message_id of message is include' do
+    
     mess_1 = Message.create(
       regular_member_1, {
         :owner_id => regular_member_1.lifes._ids.last,
@@ -121,7 +122,7 @@ class Test_Model_Message_Create < Test::Unit::TestCase
   must 'allow replies posted to messages in life clubs' do
     mem = regular_member_1
     un  = mem.lifes.usernames.first
-    life = Club.by_filename_or_member_username(un)
+    life = Life.find.username(un).go_first!
     club_id = life.data._id
     mess_1 = Message.create(
       regular_member_1, {
