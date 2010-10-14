@@ -16,3 +16,4 @@ tmail
 auto_html
 sanitize
 differ
+sinatra --version '>=1.0'

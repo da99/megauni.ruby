@@ -56,35 +56,20 @@ begin
   
   # === Low-level Helpers 
   # === (specifically designed to run before The_App).
-  use Email_Exception
-  use Catch_Bad_Bunny
-  use Find_The_Bunny
+  
+	unless The_App.development?
+		use Email_Exception
+		use Catch_Bad_Bunny
+		use Find_The_Bunny
+	end
+	
   use Flash_Msg
 
     
-  # ===============================================
-  # Require these controls.
-  # ===============================================
-  
-  %w{
-    Hellos
-    Sessions
-    Members
-    Clubs
-    Messages
-  }.each { |control|
-    require "controls/#{control}"
-    The_App.controls << Object.const_get(control)
-  }
-
-  if The_App.development?
-    require "controls/Inspect_Control"
-    The_App.controls << Inspect_Control
-  end
   
   
   # Finally, start the app.
-  run The_App
+  run Uni_App
 
   
 rescue Object => e

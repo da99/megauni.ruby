@@ -3,6 +3,8 @@ $KCODE = 'UTF8'
 ENV['RACK_ENV'] ||= 'development'
 
 require 'jcode'
+require 'sinatra/base'
+	
 require 'helpers/app/kernel' 
 require 'middleware/The_App'  
 require 'mongo'
@@ -102,5 +104,30 @@ end # === case
   Member
 }.each { |mod| require "models/#{mod}" }
 
+
+  # ===============================================
+  # Require these controls.
+  # ===============================================
+	class Uni_App < Sinatra::Base
+		helpers Sinatra::Uni_Base_Helper
+		helpers Sinatra::HTMLEscapeHelper
+	end # === Uni_App
+
+  #   Sessions
+  #   Members
+  #   Clubs
+  #   Messages
+  %w{
+    Hellos
+  }.each { |control|
+    require "controls/#{control}"
+  #   # The_App.controls << Object.const_get(control)
+  }
+
+  if The_App.development?
+    require "controls/Inspect_Control"
+    # The_App.controls << Inspect_Control
+  end
+	
 
 

@@ -6,9 +6,24 @@ class Hellos
 
   top_slash 
 
+	get '/hello-world' do
+		%~
+			<p>Hello, World.</p>
+		<a href="/">See front page.</a>
+		~
+	end
+# 
+# 	get '/' do
+# 		%~
+# 			<p>It works: #{rand(10_000_000)}.</p>
+# 		<a href="/hello-world/">Say hello.</a>
+# 		~
+# 	end
+
   get '/' do
-    set_header 'Cache-Control', 'public, max-age=600'
-    render_html_template
+    set_header 'Cache-Control', 'public, max-age=601'
+		uni 'test uni'
+    # render_html_template
   end
 
   get '/salud' do
