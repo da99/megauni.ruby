@@ -243,6 +243,13 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     emp_id = Cafe_Galaxy_Employee.db.collection.find_one()['_id']
     assert_equal Cafe_Planet, Cafe_Galaxy_Employee.find._id(emp_id).grab(:planet).go_first!.class
   end
+  
+  must( 'return an initialized model for :go_first! on a Class query:' + 
+  ' Life.find.username(un).go_first!') do
+    doc = Life.db.collection.find_one
+    life = Life.find.username(doc['username']).go_first!
+    assert doc['_id'], life.data._id
+  end
 
 end # === class _create
 
