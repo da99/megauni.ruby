@@ -6,23 +6,21 @@ class Hellos
 
   top_slash 
 
-	get '/hello-world' do
-		%~
-			<p>Hello, World.</p>
-		<a href="/">See front page.</a>
-		~
-	end
-# 
-# 	get '/' do
-# 		%~
-# 			<p>It works: #{rand(10_000_000)}.</p>
-# 		<a href="/hello-world/">Say hello.</a>
-# 		~
-# 	end
+  get '/hello-world' do
+    %~
+      <p>Hello, World.</p>
+    <a href="/">See front page.</a>
+    ~
+  end
 
   get '/' do
-    set_header 'Cache-Control', 'public, max-age=601'
-		uni 'test uni'
+    action :test
+    cache_for 5
+    
+    
+    "#{control} #{action}"
+    "#{response.headers.has_key?('Cache-Control').inspect}"
+    
     # render_html_template
   end
 

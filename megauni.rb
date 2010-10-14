@@ -4,7 +4,7 @@ ENV['RACK_ENV'] ||= 'development'
 
 require 'jcode'
 require 'sinatra/base'
-	
+  
 require 'helpers/app/kernel' 
 require 'middleware/The_App'  
 require 'mongo'
@@ -108,10 +108,9 @@ end # === case
   # ===============================================
   # Require these controls.
   # ===============================================
-	class Uni_App < Sinatra::Base
-		helpers Sinatra::Uni_Base_Helper
-		helpers Sinatra::HTMLEscapeHelper
-	end # === Uni_App
+  class Uni_App < Sinatra::Base
+    helpers Sinatra::Uni_Base_Helper
+  end # === Uni_App
 
   #   Sessions
   #   Members
@@ -128,6 +127,6 @@ end # === case
     require "controls/Inspect_Control"
     # The_App.controls << Inspect_Control
   end
-	
+  
 
 
