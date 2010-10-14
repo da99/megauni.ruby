@@ -98,11 +98,14 @@ namespace :gem do
   end
 
   
-  desc "Installs and updates all gems from manifest (.gems, .development_gems).
-    Use PRODUCTION=true to limit to just .gems.
+  desc "Installs and updates all gems from manifests.
+  (.gems, .development_gems).
+  Use PRODUCTION=true to limit to just .gems.
+  Creates .update_gems for rake git:push.
   " 
   task :update  do
 
+    # Figure out what gems to install.
     gems_to_install = GEM_MANIFEST_ARRAY 
     unless ENV['RACK_ENV']=='production'
       gems_to_install += GEM_MANIFEST_DEV_ARRAY
@@ -124,6 +127,16 @@ namespace :gem do
       }
     end    
 
+    # We need to tell Heroku to update gems
+    #   by altering .gems manifest.
+    # Appending a single line is enough.
+    # 
+    File.open('.gems', 'a') { |f|
+      f.puts "\n"
+    }
+    
+    # Now to update all gems on this
+    #   development machine.
     sh('gem update') 
   end   
      
