@@ -49,19 +49,20 @@ class Password_Reset
 
       hashed_code = BCrypt::Password.create( code + salt ).to_s
       
-      new do
-        self.manipulator = member
-        self.raw_data = {
-          :owner_id    => data._id,
+        # self.manipulator = member
+        new_raw_data = {
+          :_id         => member.data._id,
+          :owner_id    => member.data._id,
           :salt        => salt,
           :hashed_code => hashed_code
         }
-
+        
+      super(member, new_raw_data).instance_eval  do
         demand :owner_id, :salt, :hashed_code
         set_id( member.data._id )
-        save_upsert
-        
+        result = save_create
         @code = code
+        result
       end
     
     end
@@ -78,7 +79,7 @@ class Password_Reset
     when :update
       false
     when :delete
-      false
+      editor.data._id == owner!.fetch('_id')
     end
   end
 
@@ -90,13 +91,13 @@ class Password_Reset
       raise Not_In_Reset, "Can't reset password when account has not been reset."
     end
     
-    opts                = Data_Pouch.new(raw_opts, :code, :password, :confirm_password)
+    opts                = Data_Pouch.new(raw_opts, :manipulator, :code, :password, :confirm_password)
     all_values_included = opts.code && opts.password && opts.confirm_password
     raise ArgumentError, "Missing values: #{opts.as_hash.inspect}" if not all_values_included
 
-    if BCrypt::Password.new(password_reset.data.hashed_code) === (opts.code + password_reset.data.salt ) 
-      results = Member.update( data._id, self, opts.as_hash ) 
-      Password_Resets.delete password_reset.data._id, self
+    if BCrypt::Password.new(data.hashed_code) === (opts.code + data.salt ) 
+      results = Member.update( data._id, opts.manipulator, opts.as_hash ) 
+      Password_Reset.delete data._id, opts.manipulator
       results
     else
       raise Invalid_Code, "Member: #{data._id}, Code: #{opts.code}"

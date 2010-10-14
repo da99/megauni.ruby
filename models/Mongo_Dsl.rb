@@ -170,6 +170,8 @@ module Mongo_Dsl
     doc   = case doc_id_or_hash
             when Hash
               doc_id_or_hash
+            when BSON::ObjectID
+              self.class.doc_by_id( doc_id_or_hash )
             when nil
               nil
             else
@@ -694,7 +696,7 @@ module Mongo_Dsl
   def save_update opts = {}, &blok
 
     clear_cache
-    if !updator?(manipulator)
+    if !allow_to?(:update, manipulator)
       raise Unauthorized, "Updator: #{self.class} #{manipulator.inspect}"
     end
     no_data = begin
@@ -814,7 +816,15 @@ module Mongo_Dsl
 
     name_wo_bash = name.to_s.sub('!', '').to_sym
     if name != name_wo_bash && self.class.has_relation?(name_wo_bash)
-      return find.send(name_wo_bash).go!
+      relate = self.class.relations[name_wo_bash]
+      case relate.type
+      when :has_many
+        return find.send(name_wo_bash).go!
+      when :belongs_to 
+        return find.send(name_wo_bash).go_first!
+      else
+        raise "Unknown relation type: #{relate.type.inspect}"
+      end
     end
 
     super
@@ -928,11 +938,15 @@ module Mongo_Dsl
 
     # ===== CRUD Methods ====================================
 
-    def by_id raw_id
+    def doc_by_id raw_id
       id = Mongo_Dsl.mongofy_id(raw_id)
-      doc = find._id(id).go_first!
+      db.collection.find_one(:_id=>id)
+    end
+
+    def by_id raw_id
+      doc = doc_by_id(raw_id)
       return new(doc) if doc
-      raise Not_Found, "#{self} _id = #{id}"
+      raise Not_Found, "#{self} _id = #{raw_id.inspect}"
     end
 
     def find_by_date field, start_tm, end_tm = nil
@@ -1036,7 +1050,7 @@ module Mongo_Dsl
 
     def edit id, mem # EDIT
       d = new(id) do 
-        if !updator?(mem)
+        if !allow_to?(:update, mem)
           raise Unauthorized, "Editor: #{self.inspect} #{mem.inspect}"
         end
       end
@@ -1055,7 +1069,7 @@ module Mongo_Dsl
       validate_editor editor
       new(id) do
         self.manipulator = editor
-        if !deletor?(editor)
+        if !allow_to?(:delete, editor)
           raise Unauthorized, "Deletor: #{self.class} #{manipulator.inspect}"
         end
         self.class.db.collection.remove({:_id=>data._id}, { :safe=> do_safe_insert? })

@@ -238,6 +238,11 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
 
     assert_equal [planet.data.as_hash], cafe.find.employees.women.grab(:planet).go!
   end
+  
+  must 'return an initialized Mongo_Dsl model when using :go_first!' do
+    emp_id = Cafe_Galaxy_Employee.db.collection.find_one()['_id']
+    assert_equal Cafe_Planet, Cafe_Galaxy_Employee.find._id(emp_id).grab(:planet).go_first!.class
+  end
 
 end # === class _create
 

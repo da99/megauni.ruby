@@ -79,7 +79,7 @@ class Mongo_Dsl::Query_Composer
     results = go!
     raise "More than one result found." if results.size > 1
     raise Mongo_Dsl::Not_Found, "#{querys.last.selector.inspect}" if results.size < 1
-    results.first
+    querys.last.child.new( results.first )
   end
   
   def group_by val

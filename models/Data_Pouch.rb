@@ -67,7 +67,11 @@ class Data_Pouch
     when BSON::ObjectID
       hsh
     else
-      hsh && Loofah::Helpers.sanitize(hsh.to_s)
+      if hsh.respond_to?(:db)
+        hsh
+      else 
+        hsh && Loofah::Helpers.sanitize(hsh.to_s)
+      end
     end
   end
 end # ======== Data_Pouch

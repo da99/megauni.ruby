@@ -21,7 +21,6 @@ class Member
 
   # ==== Associations  ====
     
-  has_one :password_reset
   has_many :lifes, :Life, :owner_id
   
   # ==== Fields  =====
@@ -116,11 +115,10 @@ class Member
         raise Wrong_Password, "#{raw_vals.inspect}"
       end
 
-      life = Life.by_username( username )
-      mem = life.owner
+      mem = Life.find.username( username ).grab(:owner).go_first!
 
       # Check for Password_Reset
-      raise Password_Resets::In_Reset, mem.inspect if mem.password_in_reset?
+      raise Password_Reset::In_Reset, mem.inspect if mem.password_in_reset?
 
       # See if password matches with correct password.
       correct_password = BCrypt::Password.new(mem.data.hashed_password) === (password + mem.data.salt)
@@ -145,7 +143,7 @@ class Member
       # Raise Account::Reset if necessary.
       if new_count > 2
         mem.reset_password
-        raise Password_Resets::In_Reset, mem.inspect
+        raise Password_Reset::In_Reset, mem.inspect
       end
 
       raise Wrong_Password, "Password is invalid for: #{username.inspect}"
@@ -246,16 +244,27 @@ class Member
 
   # ==== UPDATORS ======================================================
   
+  attr_accessor :password_reset
+  def password_reset
+    @password_reset ||= begin
+                          Password_Reset.by_id(self.data._id)
+                        rescue Password_Reset::Not_Found
+                          nil
+                        end
+  end
+
   def password_in_reset?
-    has_password_reset?
+    !!password_reset
   end
 
   def change_password_through_reset opts
-    password_reset.change_password opts
+    result = password_reset.change_password opts
+    @password_reset = nil
+    result
   end
   
   def reset_password
-    update_relation :password_reset, Password_Reset.create(self)
+    self.password_reset = Password_Reset.create(self)
   end
 
 
