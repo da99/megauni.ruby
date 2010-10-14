@@ -63,7 +63,7 @@ class Find_The_Bunny
       return redirect('/')
     end
     
-    raise The_App::HTTP_404, "Not found: #{new_env['REQUEST_METHOD']} #{new_env['PATH_INFO']}"
+    raise Uni_App::HTTP_404, "Not found: #{new_env['REQUEST_METHOD']} #{new_env['PATH_INFO']}"
   end
 
   

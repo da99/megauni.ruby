@@ -17,10 +17,8 @@ class Hellos
     action :test
     cache_for 5
     
-    
     "#{control} #{action}"
     "#{response.headers.has_key?('Cache-Control').inspect}"
-    
     # render_html_template
   end
 

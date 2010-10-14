@@ -5,6 +5,7 @@ secret*
 # A few more files used only for development
 # and not important.
 webrat.log
+configs/config.ru.rb
 doc/*
 coverage/*
 spec/coverage

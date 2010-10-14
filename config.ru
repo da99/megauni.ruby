@@ -38,9 +38,9 @@ begin
   use Old_App_Redirect
 
   
-  if The_App.non_production?
+  if Uni_App.non_production?
     use Rack::CommonLogger
-    use Rack::ShowExceptions if The_App.development?
+    use Rack::ShowExceptions if Uni_App.development?
     require 'middleware/Render_Css' 
     use Render_Css
   end
@@ -55,9 +55,9 @@ begin
   use Strip_If_Head_Request
   
   # === Low-level Helpers 
-  # === (specifically designed to run before The_App).
+  # === (specifically designed to run before Uni_App).
   
-	unless The_App.development?
+	unless Uni_App.development?
 		use Email_Exception
 		use Catch_Bad_Bunny
 		use Find_The_Bunny
@@ -65,9 +65,6 @@ begin
 	
   use Flash_Msg
 
-    
-  
-  
   # Finally, start the app.
   run Uni_App
 
@@ -88,8 +85,8 @@ rescue Object => e
         :via      => :smtp,
         :via_options => { 
           :address   => 'smtp.webfaction.com',
-          :user_name => The_App::SMTP_USER_NAME,
-          :password => The_App::SMTP_PASSWORD
+          :user_name => Uni_App::SMTP_USER_NAME,
+          :password => Uni_App::SMTP_PASSWORD
         }
       )
     rescue Object => x

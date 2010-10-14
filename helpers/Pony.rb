@@ -16,7 +16,7 @@ class Pony
     msg.mime_version = '1.0'
     msg.set_content_type 'text', 'plain', 'charset'=>'UTF-8', 'format'=>'flowed'
 
-    Net::SMTP.start(The_App::SMTP_ADDRESS, 25, ::The_App::SMTP_DOMAIN, ::The_App::SMTP_USER_NAME, The_App::SMTP_PASSWORD, The_App::SMTP_AUTHENTICATION) do |smtp|
+    Net::SMTP.start(Uni_App::SMTP_ADDRESS, 25, ::Uni_App::SMTP_DOMAIN, ::Uni_App::SMTP_USER_NAME, Uni_App::SMTP_PASSWORD, Uni_App::SMTP_AUTHENTICATION) do |smtp|
       smtp.send_message msg.to_s, msg.from, msg.to
     end
 

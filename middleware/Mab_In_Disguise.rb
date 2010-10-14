@@ -92,7 +92,7 @@ class Mab_In_Disguise
           end 
       }
 
-      puts "Compiling: #{mab_file}" if The_App.development?
+      puts "Compiling: #{mab_file}" if Uni_App.development?
         content     = \
           if is_partial
             Markaby::Builder.new(:template_name=>template_name) { 

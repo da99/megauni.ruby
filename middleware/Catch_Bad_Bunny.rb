@@ -13,7 +13,7 @@ class Catch_Bad_Bunny
     rescue Object => e
       the_env['the.app.error'] = $!
       case e
-        when The_App::HTTP_403
+        when Uni_App::HTTP_403
           response             = Rack::Response.new
           response.status      = 403
           response.body        = begin
@@ -23,7 +23,7 @@ class Catch_Bad_Bunny
                                    <p>Check spelling: #{the_env['PATH_INFO']}</p>"
                                  end
           response.finish
-        when The_App::HTTP_404
+        when Uni_App::HTTP_404
           response             = Rack::Response.new
           response.status      = 404
           response.body        = begin
@@ -35,7 +35,7 @@ class Catch_Bad_Bunny
           response.finish
         else
 
-          if The_App.development_or_test?
+          if Uni_App.development_or_test?
             raise $!
           end
 

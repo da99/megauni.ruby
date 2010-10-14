@@ -76,19 +76,19 @@ class Members
       mem       = Member.by_email( clean_room['email'] )
       code      = mem.reset_password
       env['results.reset'] = true
-      reset_url = File.join(The_App::SITE_URL, "change-password", code, CGI.escape(mem.data.email), '/')
+      reset_url = File.join(Uni_App::SITE_URL, "change-password", code, CGI.escape(mem.data.email), '/')
       Pony.mail(
         :to    =>clean_room['email'], 
-        :from  =>The_App::SITE_HELP_EMAIL, 
-        :subject=>"#{The_App::SITE_DOMAIN}: Lost Password",
+        :from  =>Uni_App::SITE_HELP_EMAIL, 
+        :subject=>"#{Uni_App::SITE_DOMAIN}: Lost Password",
         :body  =>"To change your old password, go to:\n#{reset_url}"
         # :via      => :smtp,
         # :via_options => { 
-        #   :authentication => The_App::SMTP_AUTHENTICATION,
-        #   :address   => The_App::SMTP_ADDRESS,
-        #   :user_name => The_App::SMTP_USER_NAME,
-        #   :password  => The_App::SMTP_PASSWORD,
-        #   :domain    => The_App::SMTP_DOMAIN
+        #   :authentication => Uni_App::SMTP_AUTHENTICATION,
+        #   :address   => Uni_App::SMTP_ADDRESS,
+        #   :user_name => Uni_App::SMTP_USER_NAME,
+        #   :password  => Uni_App::SMTP_PASSWORD,
+        #   :domain    => Uni_App::SMTP_DOMAIN
         # }
       )
     rescue Member::Not_Found

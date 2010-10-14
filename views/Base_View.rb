@@ -117,11 +117,11 @@ class Base_View < Mustache
   end
 
   def development?
-    The_App.development?
+    Uni_App.development?
   end
 
   def development_or_test?
-    The_App.development? || The_App.test?
+    Uni_App.development? || Uni_App.test?
   end
 
   def url
@@ -350,11 +350,11 @@ class Base_View < Mustache
   end
 
   def site_domain
-    The_App::SITE_DOMAIN
+    Uni_App::SITE_DOMAIN
   end
 
   def site_url
-    The_App::SITE_URL
+    Uni_App::SITE_URL
   end
   
   def js_epoch_time raw_i = nil
@@ -425,15 +425,15 @@ class Base_View < Mustache
   end
 
   def site_title
-    The_App::SITE_TITLE
+    Uni_App::SITE_TITLE
   end
 
   def site_name
-    The_App::SITE_NAME
+    Uni_App::SITE_NAME
   end
 
   def site_tag_line
-    The_App::SITE_TAG_LINE
+    Uni_App::SITE_TAG_LINE
   end
 
   # === NAV BAR ===

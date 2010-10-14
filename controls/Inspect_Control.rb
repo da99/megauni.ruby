@@ -9,12 +9,12 @@ class Inspect_Control
   end
   
   def GET_request 
-    if The_App.development?
+    if Uni_App.development?
       render_text_html "<pre>" + request.env.keys.sort.map { |key| 
         key.inspect + (' ' * (30 - key.inspect.size).abs) + ': ' + request.env[key].inspect 
       }.join("<br />") + "</pre>"
     else
-      raise The_App::HTTP_404, "/request only allowed in :development environments."
+      raise Uni_App::HTTP_404, "/request only allowed in :development environments."
     end
   end
   
