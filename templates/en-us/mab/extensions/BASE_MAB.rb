@@ -6,7 +6,7 @@ module BASE_MAB
   Method_Overload = Class.new(RuntimeError)
   RINGS = Club::MEMBERS
 
-  extend Delegator_DSL
+  extend Delegator_Dsl
 
   delegate_to "config.get",        :rings_used
   delegate_to "config.get_or_put", :ring

@@ -19,7 +19,7 @@ end
 
 class Safe_Writer
 
-  extend Delegator_DSL
+  extend Delegator_Dsl
   extend Dslicious
   
   ACTIONS = ['read', 'write']
