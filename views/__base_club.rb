@@ -9,7 +9,7 @@ class Clubs_read_e < Base_View
   end
 
   def club
-    @app.env['results.club']
+    app.env['results.club']
   end
   
 end # === Clubs_read_e 

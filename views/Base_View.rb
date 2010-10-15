@@ -155,7 +155,7 @@ class Base_View < Mustache
   end
 
   def base_filename
-    "#{@app.control_name}_#{@app.action_name}"
+    "#{app.control}_#{app.action}"
   end
 
   def time_i
@@ -251,15 +251,15 @@ class Base_View < Mustache
 
   def username_nav
     @cache_username_nav ||= begin
-                                c_name = @app.control_name
-                                a_name = @app.action_name
+                                c_name = @app.control
+                                a_name = @app.action
                                 life_page = (c_name == :Members && a_name == 'lifes')
                                 current_member_usernames.map { |raw_un|
                                   un = raw_un[:username]
                                   { :selected? => (life_page && current_member_username == un), 
-                                    :username=>un, 
-                                    :href =>"/lifes/#{un}/",
-                                  :not_selected? => !(life_page && current_member_username == un)
+                                    :username  => un, 
+                                    :href      => "/lifes/#{un}/",
+																		:not_selected? => !(life_page && current_member_username == un)
                                   }
                                 }
                               end

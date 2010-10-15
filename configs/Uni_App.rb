@@ -1,8 +1,14 @@
 require 'helpers/Uni_Base_Helper'
+require 'helpers/Uni_Header'
+require 'helpers/Uni_Guard'
+require 'helpers/Uni_Render'
 
 class Uni_App
   
   helpers Sinatra::Uni_Base_Helper
+  helpers Sinatra::Uni_Header
+  helpers Sinatra::Uni_Guard
+  helpers Sinatra::Uni_Render
   
   SITE_DOMAIN        = 'megaUni.com'
   SITE_TITLE         = 'megaUNI'

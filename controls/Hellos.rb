@@ -6,36 +6,27 @@ class Hellos
 
   top_slash 
 
-  get '/hello-world' do
-    %~
-      <p>Hello, World.</p>
-    <a href="/">See front page.</a>
-    ~
-  end
-
   get '/' do
-    action :test
+    action :list
     cache_for 5
-    
-    "#{control} #{action}"
-    "#{response.headers.has_key?('Cache-Control').inspect}"
-    # render_html_template
+    render :text, 'Hello, World'
+    template :html
   end
 
   get '/salud' do
-    render_html_template
+    template :html
   end
 
   get '/help' do
-    render_html_template
+    template :html
   end
 
   get '/sitemap.xml' do
-    render_xml_template
+    template :xml
   end
 
   get '/rss.xml' do
-    render_xml_template
+    template :xml
   end
 
 end # === Hello
