@@ -2,25 +2,6 @@ $KCODE = 'utf8'
 
 begin
 
-  require 'mongo_rack'
-  require 'helpers/mongo_rack_with_proper_uri_parser'
-
-  %w{
-    Allow_Only_Roman_Uri
-    Squeeze_Uri_Dots 
-    Find_The_Bunny
-    Always_Find_Favicon
-    Slashify_Path_Ending
-    Serve_Public_Folder
-    Redirect_Mobile
-    Catch_Bad_Bunny
-    Email_Exception
-    Strip_If_Head_Request
-    Flash_Msg
-    Old_App_Redirect
-  }.each { |middle|
-    require "middleware/#{middle}"
-  }
 
   require 'megauni'
   

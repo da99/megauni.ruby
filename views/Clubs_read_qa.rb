@@ -9,7 +9,7 @@ class Clubs_read_qa < Base_View
   include Views::Base_Club
 
   def title 
-    return "Q & A: #{club_title}" if not club.life_club?
+    return "Q & A: #{club_title}" if not club.is_a?(Life)
     "Q & A with #{club_filename}"
   end
 

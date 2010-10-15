@@ -9,7 +9,7 @@ class Clubs_read_shop < Base_View
   include Views::Base_Club
 
   def title 
-    return "Shop: #{club_title}" unless club.life_club?
+    return "Shop: #{club_title}" unless club.is_a?(Life)
     "#{club_filename}'s Favorite Stuff"
   end
 

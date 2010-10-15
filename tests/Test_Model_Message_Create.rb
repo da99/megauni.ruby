@@ -93,7 +93,7 @@ class Test_Model_Message_Create < Test::Unit::TestCase
     assert_equal [club['_id']], mess_2.data.target_ids
   end
 
-  must 'turn :parent_message_id from a String to a BSON::ObjectID' do
+  must 'turn :parent_message_id from a String to a BSON::ObjectId' do
     mess_1 = Message.create(
       regular_member_1, {
         :owner_id => regular_member_1.lifes._ids.last,

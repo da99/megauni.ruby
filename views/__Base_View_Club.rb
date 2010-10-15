@@ -24,7 +24,7 @@ module Base_View_Club
   end
 
   def not_life?
-    club.life_club?
+    club.is_a?(Life)
   end
 
   def club_href
@@ -122,7 +122,7 @@ module Base_View_Club
   end
 
   def club_type
-    club.life? ? 'life' : 'universe'
+    club.is_a?(Life) ? 'life' : 'universe'
   end
 
   def stranger?

@@ -82,7 +82,7 @@ class Member
     def valid_security_level?(perm_level)
       return true if SECURITY_LEVELS.include?(perm_level)
       case perm_level
-      when BSON::ObjectID, Member, String, Symbol
+      when BSON::ObjectId, Member, String, Symbol
         true
       else
         false
@@ -288,7 +288,7 @@ class Member
 
     return true if raw_level == self
     
-    if raw_level.is_a?(String) || raw_level.is_a?(BSON::ObjectID)
+    if raw_level.is_a?(String) || raw_level.is_a?(BSON::ObjectId)
       return true if lifes.usernames.include?(raw_level)
       return true if data._id === raw_level
       return true if lifes._ids.include?(raw_level)

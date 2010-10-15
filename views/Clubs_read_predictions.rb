@@ -10,7 +10,7 @@ class Clubs_read_predictions < Base_View
   include Views::Base_Club
 
   def title 
-    return "Predictions: #{club_title}" unless club.life_club?
+    return "Predictions: #{club_title}" unless club.is_a?(Life)
     "Predictions for #{club_filename}"
   end
 

@@ -9,7 +9,7 @@ class Clubs_read_e < Base_View
   include Views::Base_Club
 
   def title 
-    return "Encyclopedia: #{club_title}" unless club.life_club?
+    return "Encyclopedia: #{club_title}" unless club.is_a?(Life)
     "The Encyclopedia of #{club_filename}"
   end
 

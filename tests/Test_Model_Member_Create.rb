@@ -82,7 +82,7 @@ class Test_Model_Member_Create < Test::Unit::TestCase
      }
     )
     # assert_match( /\A[a-z0-9\-]{10,}\Z/i, doc.data._id.to_s )
-    assert_equal(BSON::ObjectID, doc.data._id.class)
+    assert_equal(BSON::ObjectId, doc.data._id.class)
   end
 
   must 'return false for new?' do

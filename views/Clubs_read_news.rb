@@ -9,7 +9,7 @@ class Clubs_read_news < Base_View
   include Views::Base_Club
 
   def title 
-    return "News: #{club_title}" unless club.life_club?
+    return "News: #{club_title}" unless club.is_a?(Life)
     "#{club_filename}'s Important News"
   end
   

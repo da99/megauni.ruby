@@ -328,7 +328,7 @@ class Test::Unit::TestCase
     opts, un_id = case un_id_or_opts
                   when Hash
                     [ un_id_or_opts, nil ]
-                  when BSON::ObjectID
+                  when BSON::ObjectId
                     [ {}, un_id_or_opts]
                   else
                     [ {}, nil ]

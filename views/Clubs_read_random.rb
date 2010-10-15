@@ -9,7 +9,7 @@ class Clubs_read_random < Base_View
   include Views::Base_Club
 
   def title 
-    return "Random: #{club_title}" unless club.life_club?
+    return "Random: #{club_title}" unless club.is_a?(Life)
     "#{club_filename}'s Random Thoughts & Babble"
   end
 

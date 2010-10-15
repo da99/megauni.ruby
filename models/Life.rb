@@ -173,8 +173,8 @@ class Life
     end
 
     # Accepts:
-    #    raw_id - BSON::ObjectID or legal String
-    #             to be turned into a BSON::ObjectID.
+    #    raw_id - BSON::ObjectId or legal String
+    #             to be turned into a BSON::ObjectId.
     #
     # Returns: 
     #    nil or String.

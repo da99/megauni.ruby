@@ -9,11 +9,10 @@ module Sinatra
         ext       = alt_file_name
         file_name = "#{control}_#{action}"
       else
-        ext       = alt_file_name.split('.').first.to_sym
-        file_name = alt_file_name 
+        parts     = alt_file_name.split('.')
+        ext       = parts.pop.to_sym
+        file_name = parts.join('.')
       end
-      
-      # return render(:text, path_to_file)
       
       # Process the template.
       template_content = process_mustache(ext, file_name)
@@ -39,7 +38,7 @@ module Sinatra
                                       when :xml
                                         'Xml'
                                       else
-                                        raise ArgumentError, "Don't know what to do with: #{file_path}"
+                                        raise ArgumentError, "Don't know what to do with: #{file_name}"
                                       end
                                         
                            original    = "templates/#{lang}/#{disguise.downcase}/#{file_name}.rb"

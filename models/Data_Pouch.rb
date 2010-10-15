@@ -64,7 +64,7 @@ class Data_Pouch
       hsh
     when NilClass
       nil
-    when BSON::ObjectID
+    when BSON::ObjectId
       hsh
     else
       if hsh.respond_to?(:db)

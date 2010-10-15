@@ -197,15 +197,15 @@ module Mongo_Dsl
   end
 
   def self.mongofy_id raw_id
-    return raw_id if raw_id.is_a?(BSON::ObjectID)
+    return raw_id if raw_id.is_a?(BSON::ObjectId)
     return 'Nothing to see here' if raw_id.nil?
     return raw_id if not raw_id.is_a?(String)
     
     str = raw_id.strip
     return 'Nothing to see here' if str.empty?
-    return str if not BSON::ObjectID.legal?(str)
+    return str if not BSON::ObjectId.legal?(str)
 
-    BSON::ObjectID.from_string(str)
+    BSON::ObjectId.from_string(str)
   end
 
   def fetch( key )
@@ -213,7 +213,7 @@ module Mongo_Dsl
   end
   
   def href 
-    HREF_PATTERN.first % data.send(HREF_PATTERN.last)
+    self.class::HREF_PATTERN.first % data.send(self.class::HREF_PATTERN.last)
   end
   alias_method :href_delete, :href
 
@@ -237,7 +237,7 @@ module Mongo_Dsl
     doc   = case doc_id_or_hash
             when Hash
               doc_id_or_hash
-            when BSON::ObjectID
+            when BSON::ObjectId
               self.class.doc_by_id( doc_id_or_hash )
             when nil
               nil
@@ -288,7 +288,7 @@ module Mongo_Dsl
   end
 
   def generate_id
-    set_id BSON::ObjectID.new 
+    set_id BSON::ObjectId.new 
   end
   
   def set_id new_id
@@ -349,7 +349,7 @@ module Mongo_Dsl
     case editor
     when Member
       editor.lifes._ids.include?( data.owner_id ) || editor.has_power_of?(:ADMIN)
-    when BSON::ObjectID
+    when BSON::ObjectId
       match = data.owner_id == editor
       if not match
         match = begin
@@ -556,12 +556,12 @@ module Mongo_Dsl
             end
             
           when :mongo_object_id
-            new_raw = if raw.is_a?(String) && BSON::ObjectID.legal?(raw)
-                        BSON::ObjectID.from_string(raw)
+            new_raw = if raw.is_a?(String) && BSON::ObjectId.legal?(raw)
+                        BSON::ObjectId.from_string(raw)
                       else
                         raw
                       end
-            if new_raw.is_a?(BSON::ObjectID)
+            if new_raw.is_a?(BSON::ObjectId)
               raw_data.send("#{fld}=", new_raw)
               new_clean_value fld, new_raw
               raw = new_raw
@@ -571,9 +571,9 @@ module Mongo_Dsl
 
           when :mongo_object_id_array
             is_array = raw.is_a?(Array)
-            all_legal = is_array && [true] == raw.map { |v| v.is_a?(BSON::ObjectID) || BSON::ObjectID.legal?(v.to_s) }.uniq
+            all_legal = is_array && [true] == raw.map { |v| v.is_a?(BSON::ObjectId) || BSON::ObjectId.legal?(v.to_s) }.uniq
             all_mongo = is_array && all_legal && raw.map { |v| 
-              v.is_a?(BSON::ObjectID) ? v : BSON::ObjectID.from_string(v)
+              v.is_a?(BSON::ObjectId) ? v : BSON::ObjectId.from_string(v)
             }
             if all_mongo
               raw = all_mongo
@@ -585,7 +585,7 @@ module Mongo_Dsl
 
 
           when :not_empty
-            if raw && (raw.is_a?(BSON::ObjectID) || !raw.empty?)
+            if raw && (raw.is_a?(BSON::ObjectId) || !raw.empty?)
               new_clean_value fld, raw
             else
               errors << "#{fld.humanize} is required."
@@ -619,7 +619,7 @@ module Mongo_Dsl
               new_clean_value fld, arr
             when Array
               new_clean_value fld, raw
-            when BSON::ObjectID
+            when BSON::ObjectId
               raw = [raw]
               raw_data.send("#{fld}=", raw)
               new_clean_value fld, raw
@@ -720,8 +720,8 @@ module Mongo_Dsl
     err ||= begin
       doc.delete('_id') unless doc['_id']
       new_id = self.class.db.collection.insert( doc, :safe=>do_safe_insert? )
-      doc['_id'] = if new_id.is_a?(String) && BSON::ObjectID.legal?(new_id)
-        BSON::ObjectID.from_string(new_id)
+      doc['_id'] = if new_id.is_a?(String) && BSON::ObjectId.legal?(new_id)
+        BSON::ObjectId.from_string(new_id)
       else
         new_id
       end
@@ -779,8 +779,8 @@ module Mongo_Dsl
     hsh = self.data.as_hash.clone.update(new_data.as_hash)
 
     id = data._id.to_s
-    doc_id = if BSON::ObjectID.legal?(id)
-               self.class.db.collection.update( {:_id=>BSON::ObjectID.from_string(id)}, hsh, :safe=> do_safe_insert? )
+    doc_id = if BSON::ObjectId.legal?(id)
+               self.class.db.collection.update( {:_id=>BSON::ObjectId.from_string(id)}, hsh, :safe=> do_safe_insert? )
              else
                self.class.db.collection.update( {:_id=>id}, hsh, :safe=> do_safe_insert? )
              end
