@@ -20,7 +20,7 @@ class Test_Model_Dyno_Cache_Crud < Test::Unit::TestCase
 
   must 'raise NoMethodError if accessing a property not set.' do
     dyno = Dyno_Cache.new
-    assert_raise NoMethodError do
+    assert_raise Dyno_Cache::Not_Found do
       dyno.mutt
     end
   end
