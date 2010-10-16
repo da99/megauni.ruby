@@ -251,6 +251,16 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     assert doc['_id'], life.data._id
   end
 
+  must 'be able to merge relations using a namespace: cafe.find.employees.merge(:planet, :title)' do
+    cafe   = create_cafe
+    planet = create_planet( :title             => 'Riven' )
+    emp    = create_employee( cafe, :planet_id => planet.data._id)
+    
+    wish = [ emp.data.as_hash.dup.update( 'planet_title' => planet.data.title ) ]
+    
+    assert_equal wish, cafe.find.employees.merge(:planet).fields(:title).go!
+  end
+
 end # === class _create
 
 

@@ -259,7 +259,7 @@ class Base_View < Mustache
                                   { :selected? => (life_page && current_member_username == un), 
                                     :username  => un, 
                                     :href      => "/lifes/#{un}/",
-																		:not_selected? => !(life_page && current_member_username == un)
+                                    :not_selected? => !(life_page && current_member_username == un)
                                   }
                                 }
                               end

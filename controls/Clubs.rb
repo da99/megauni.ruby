@@ -1,9 +1,9 @@
 require 'views/Club_Control_Base_View'
 
 class Clubs
-	
-	Old_Topics = Find_The_Bunny::Old_Topics
-	
+  
+  Old_Topics = Find_The_Bunny::Old_Topics
+  
   include Base_Control
   
   SECTIONS = %w{ e qa news fights shop random thanks predictions magazine}
@@ -67,20 +67,26 @@ class Clubs
   end
   
   get '/:filename' do # by_old_id id
-		old_topic = clean_room['filename']
+    old_topic = clean_room['filename']
     pass unless Old_Topics.include?(old_topic)
-		
-		env['results.club'] = old_topic
+    
+    env['results.club'] = old_topic
     template "Topic_#{old_topic}.html"
   end
 
   path '/uni/:filename' # =====================================================
 
   get '/' do # by_filename filename
-		action :by_filename
-		filename = clean_room['filename']
-    env['results.club'] = club = Club.find.filename(filename).go_first!
-    env['results.messages_latest'] = [] # Message.find.target_ids(club.data._id).sort([:_id, :desc]).limit(10).go!
+    action :by_filename
+    filename                       = clean_room['filename']
+    env['results.club']            = club                                                                                                     = Club.find.filename(filename).go_first!
+    env['results.messages_latest'] = Message.find.
+                                      target_ids(club.data._id).
+                                      sort([:_id, :desc]).
+                                      limit(10).
+                                      merge(:owner).
+                                      fields(:username).
+                                     go!
     case filename
     when 'hearts'
       template "Clubs_#{filename}.html"

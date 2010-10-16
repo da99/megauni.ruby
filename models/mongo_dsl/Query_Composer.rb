@@ -40,6 +40,12 @@ class Mongo_Dsl::Query_Composer
     self
   end
 
+  def merge name
+    method_missing name
+    querys.last.do_as_merge
+    self
+  end
+
   def go!
     # Grab results
     composer = self

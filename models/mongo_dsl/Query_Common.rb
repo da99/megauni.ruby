@@ -72,5 +72,16 @@ module Mongo_Dsl::Query_Common
     end
     
   end # === def
+  
+  def fields *raw_flds
+    params[:fields] =  (raw_flds + ['_id']).
+      flatten.
+      compact.
+      uniq.
+      map(&:to_s) 
+    
+    self
+  end
+
    
 end # === module 

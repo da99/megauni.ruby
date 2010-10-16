@@ -109,6 +109,8 @@ class Message
   #   relations :optional, Life, Club
   # end
 
+  belongs_to :owner, :Life
+
   has_many :clubs, nil, :target_ids
   
   # has_many :reposts, Message do 

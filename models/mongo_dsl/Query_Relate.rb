@@ -1,5 +1,6 @@
 require 'models/Delegator_Dsl'
 require 'modules/To_Class'
+require 'modules/Uni_Array'
 
 class Mongo_Dsl::Query_Relate
   
@@ -131,10 +132,12 @@ class Mongo_Dsl::Query_Relate::Spawn
   
   include Mongo_Dsl::Query_Common
   
-  attr_reader :origin, :selector, :params, :dyno_querys, :filters
+  attr_reader :origin, :selector, :params, :dyno_querys, 
+              :filters, :do_as_merge, :name
   
   def initialize origin, allowed_ivars = []
-    @origin = origin
+    @origin   = origin
+    @do_as_merge = false
     ivars_to_dup = (allowed_ivars + %w{ @selector @foreign_key @params @dyno_querys @filters })
     ivars_to_dup.each { |attr|
       new_val = origin.instance_variable_get(attr)
@@ -147,6 +150,14 @@ class Mongo_Dsl::Query_Relate::Spawn
     }
   end
   
+  def do_as_merge
+    @do_as_merge = true
+  end
+  
+  def merge?
+    @do_as_merge
+  end
+
   def want_request? name
     !!(
       filters[name] ||
@@ -212,7 +223,19 @@ class Mongo_Dsl::Query_Relate::Spawn
       end
     }
 
-    composer.results << Mongo_Dsl.find( child.db.collection, selector, params ).to_a
+    
+    new_results = Mongo_Dsl.find( child.db.collection, selector, params ).to_a
+    
+    # Do we combine the new results with the previous results
+    # using a namespace?
+    # 
+    if merge?
+      results.extend Uni_Array
+      results.relationize! new_results, id_key, name
+    else
+      composer.results << new_results
+    end
+    
   end
   
   def spawn(new_name)
