@@ -7,6 +7,13 @@ module Sinatra
     'en-us'
     end
 
+		def the
+			@the_cache = Class.new {
+				def method_missing 
+				end
+			}.new
+		end
+
     def cache_for min 
       header :cache_control, "public, max-age=#{min * 60}"
     end

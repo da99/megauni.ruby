@@ -78,8 +78,8 @@ class Clubs
 
   get '/' do # by_filename filename
     action :by_filename
-    filename                       = clean_room['filename']
-    env['results.club']            = club                                                                                                     = Club.find.filename(filename).go_first!
+    filename                       = clean_room['filename']  
+    env['results.club']            = club = Club.find.filename(filename).go_first!
     env['results.messages_latest'] = Message.find.
                                       target_ids(club.data._id).
                                       sort([:_id, :desc]).
