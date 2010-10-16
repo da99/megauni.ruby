@@ -33,7 +33,7 @@ class Hellos_list < Base_View
   def clubs
     return []
     @cache_clubs ||= begin
-                        old_clubs + @app.env['results.clubs'].map { |r| 
+                        old_clubs + app.the.clubs.map { |r| 
                           r[:href] = "/uni/#{r['filename']}/"
                           r
                         }  

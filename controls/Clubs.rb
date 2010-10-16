@@ -39,7 +39,7 @@ class Clubs
   path '/uni' # =====================================================
   
   get '/' do
-    env['results.clubs'] = Club.all
+    the.clubs = Club.all
     render_html_template
   end
 
@@ -70,7 +70,7 @@ class Clubs
     old_topic = clean_room['filename']
     pass unless Old_Topics.include?(old_topic)
     
-    env['results.club'] = old_topic
+    the.club = old_topic
     template "Topic_#{old_topic}.html"
   end
 
@@ -78,15 +78,15 @@ class Clubs
 
   get '/' do # by_filename filename
     action :by_filename
-    filename                       = clean_room['filename']  
-    env['results.club']            = club = Club.find.filename(filename).go_first!
-    env['results.messages_latest'] = Message.find.
-                                      target_ids(club.data._id).
-                                      sort([:_id, :desc]).
-                                      limit(10).
-                                      merge(:owner).
-                                      fields(:username).
-                                     go!
+    filename            = clean_room['filename']  
+    the.club            = club = Club.find.filename(filename).go_first!
+    the.latest_messages = Message.find.
+                            target_ids(club.data._id).
+                            sort([:_id, :desc]).
+                            limit(10).
+                            merge(:owner).
+                            fields(:username).
+                          go!
     case filename
     when 'hearts'
       template "Clubs_#{filename}.html"
@@ -124,63 +124,63 @@ class Clubs
   
   get '/news' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.news'] = Message.latest_by_club_id(club.data._id, :message_model=>'news')
     render_html_template
   end
 
   get '/magazine' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.magazine'] = Message.latest_by_club_id(club.data._id, :message_model=>'mag_story')
     render_html_template
   end
 
   get '/fights' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.passions'] = Message.latest_by_club_id(club.data._id, :message_model=>{ :$in=> %w{fight complaint debate} })
     render_html_template
   end
 
   get '/qa' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.questions'] = Message.latest_by_club_id(club.data._id, :message_model=>'question')
     render_html_template
   end
 
   get '/e' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.facts'] = Message.latest_by_club_id(club.data._id, :message_model=>{:$in=>['e_chapter', 'e_quote']})
     render_html_template
   end
 
   get '/shop' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.buys'] = Message.latest_by_club_id(club.data._id, :message_model=>'buy')
     render_html_template
   end
 
   get '/predictions' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.predictions'] = Message.latest_by_club_id(club.data._id, :message_model=>'prediction')
     render_html_template
   end
 
   get '/random' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.randoms'] = Message.latest_by_club_id(club.data._id, :message_model=>'random')
     render_html_template
   end
 
   get '/thanks' do
     filename = clean_params[:filename]
-    env['results.club'] = club = Club.by_filename_or_member_username(filename)
+    the.club = club = Club.by_filename_or_member_username(filename)
     env['results.thanks'] = Message.latest_by_club_id(club.data._id, :message_model=>'thank')
     render_html_template
   end
@@ -190,7 +190,7 @@ class Clubs
   def save_club_to_env id
     club_filename       = "#{id.sub('club-', '')}"
     env['the.app.club'] = Club.by_filename club_filename
-    env['results.club'] = Club.by_filename club_filename
+    the.club = Club.by_filename club_filename
   end
 
   # =========================================================

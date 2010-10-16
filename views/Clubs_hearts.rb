@@ -13,7 +13,7 @@ class Clubs_hearts < Base_View
   end
 
   def club
-    @app.env['results.club']
+    app.the.club
   end
   
   def months

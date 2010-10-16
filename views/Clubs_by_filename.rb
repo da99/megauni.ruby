@@ -36,7 +36,7 @@ class Clubs_by_filename < Base_View
   end
 
   def messages_latest
-    compile_and_cache( 'messages.latest' , app.env['results.messages_latest'] )
+    compile_and_cache( 'messages.latest' , app.the.latest_messages )
   end
 
   def club_teaser

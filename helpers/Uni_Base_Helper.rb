@@ -1,4 +1,4 @@
-
+require 'models/Dyno_Cache'
 
 module Sinatra
   module Uni_Base_Helper
@@ -8,10 +8,7 @@ module Sinatra
     end
 
     def the
-      @the_cache = Class.new {
-        def method_missing 
-        end
-      }.new
+      @the_cache ||= Dyno_Cache.new
     end
 
     def cache_for min 

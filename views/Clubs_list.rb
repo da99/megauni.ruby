@@ -9,7 +9,7 @@ class Clubs_list < Base_View
   end
 
   def clubs
-    compile_and_cache( 'clubs' , @app.env['results.clubs'] )
+    compile_and_cache( 'clubs' , app.the.clubs )
   end
 
   def other_clubs

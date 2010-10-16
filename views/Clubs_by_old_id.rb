@@ -5,11 +5,11 @@
 class Clubs_by_old_id < Base_View
 
   def title 
-    @app.env['results.club']
+    app.the.club
   end
 
   def css_file
-    "/stylesheets/#{lang}/Topic_#{@app.env['results.club']}.css"
+    "/stylesheets/#{lang}/Topic_#{app.the.club}.css"
   end
   
 end # === Clubs_by_old_id 

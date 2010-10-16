@@ -9,7 +9,7 @@ module Base_View_Club
   end
   
   def title 
-    @app.env['results.club'].data.title
+    app.the.club.data.title
   end
 
   def compile_clubs arr
@@ -20,7 +20,7 @@ module Base_View_Club
   end
 
   def club
-    @app.env['results.club']
+    app.the.club
   end
 
   def not_life?
