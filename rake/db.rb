@@ -45,31 +45,33 @@ namespace :db do
     ENV['RACK_ENV'] = orig_env
   end
   
-  desc "Delete, then re-create database. Uses ENV['RACK_ENV']. Defaults to 'development'." 
-  task :reset! do
-    
+  desc 'Delete all data in database.'
+  task :clear! do
     ENV['RACK_ENV'] ||= 'development'
-    # raise "Not allowed in environment: #{ENV['RACK_ENV']}" unless ['development', 'test'].include?(ENV['RACK_ENV'])
+    if not ['development', 'test'].include?(ENV['RACK_ENV'])
+      raise "Not allowed in environment: #{ENV['RACK_ENV']}" 
+    end
 
-    require File.basename(File.expand_path('.'))
+    require 'megauni'
 
     Mongo_Dsl.reset_db!
     puts_white "Removed all records and added new indexes (if any)."
-
-    # conn = Mongo::Connection.new
-    # conn.drop_database(DB.name)
-    # 
-    # puts_white "Deleted: #{DB.name}"
-
-    # Mongo_Dsl.ensure_indexes
-    # puts_white "Created indexes."
-
-    # Grab some sample data
-    Rake::Task['db:sample_data'].invoke
     
+    # Don't use MongoDB :drop_database
+    # because that erases all system/user info. 
+    # for DB.
+
+  end
+
+  desc "Delete, then re-create database. Uses ENV['RACK_ENV']. Defaults to 'development'." 
+  task :reset! do
+    
+    Rake::Task['db:clear!'].invoke
+    Rake::Task['db:import_development'].invoke
     if ENV['RACK_ENV'] === 'test'
       Rake::Task['db:test_sample_data'].invoke
     end
+    
   end # ===
 
   desc 'Reset db for RACK_ENV = "test" '
@@ -135,12 +137,10 @@ namespace :db do
   task :test_sample_data do
 
     # === Create Regular Member 1 ==========================
-    # === Create Regular Member 2 ==========================
-    # === Create Regular Member 3 ==========================
-    # === Create Admin Member ==========================
     "regular-member-1" # password: regular-password
     "regular-member-2" # password: regular-password
     "regular-member-3" # password: regular-password
+    # === Create Admin Member ==========================
     "admin-member-1" # password: admin-password
 
     (1..3).to_a.each do |i|
@@ -174,6 +174,29 @@ namespace :db do
     puts_white 'Inserted sample data just for tests.'
   end # ======== :db_reset!
 
+  desc "Export the development MongoDB as a json Desktop file."
+  task :export_development do
+    require 'megauni'
+    collections = begin
+                    DB.collections.map { |doc| 
+                      doc.name if doc.name =~ /\A[A-Z]/
+                    }.compact
+                  end
+    
+    collections.each { |name|
+      sh "mongodump -v --db #{DB.name} --collection #{name} --out rake/sample"
+    }
+  end
+  
+  desc 'Import sample development data to MongoDB.'
+  task :import_development do
+    require 'megauni'
+    Dir.glob("rake/sample/#{DB.name}/*.bson").each { |file|
+      collection = File.basename(file).sub( /\.bson\Z/, '' )
+      sh("mongorestore -v --db #{DB.name} --collection #{collection} --drop #{file}")
+    }
+  end
+  
   desc "Export the production MongoDB to development machine."
   task :export_production do
     raise "Not done: Figure out how to get list of collections."

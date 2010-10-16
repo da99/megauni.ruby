@@ -81,13 +81,13 @@ namespace :server do
   desc 'Start MongoDB server.'
   task :db do 
     dir = "~/apps/mongodb"
-    exists = 
+    
     if not db_running?
       exec("mongod --dbpath #{dir}/data/db --fork --logpath #{dir}/data/log/log.txt ")
     else
       puts_white "Mongodb already running."
     end
-    # exec("sudo -i -u couchdb couchdb -b")
+    
   end
 
   desc 'Start Mongo shell.'
@@ -99,7 +99,7 @@ namespace :server do
   task :shutdown_db do
     Rush.processes.filter(:cmdline=>/mongod\ /).kill.inspect
     puts_white 'All mongodb processes have been killed.'
-    # exec("sudo -i -u couchdb couchdb -d")
+    
   end
   
   desc 'Open CouchDB Futon in the Browser'
