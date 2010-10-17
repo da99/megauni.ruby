@@ -234,15 +234,15 @@ class Base_View < Mustache
   # === Html ===
 
   def http_referer
-    @app.env['HTTP_REFERER'].to_s.gsub("'", " ")
+    app.request['HTTP_REFERER'].to_s.gsub("'", " ")
   end
 
   def include_tracking?
-    @app.env['HTTP_HOST'] =~ /megauni/
+    app.request['HTTP_HOST'] =~ /megauni/
   end
 
   def current_member_username
-    @app.env['results.username']
+    app.the.username
   end
   
   def mini_nav_bar?

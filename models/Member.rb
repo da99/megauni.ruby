@@ -412,6 +412,15 @@ class Member
     def _ids
       @_ids ||= map { |doc| doc['_id'] }
     end
+		
+		def _ids_to_usernames
+			@_ids_to_usernames ||= begin
+															arr = {}
+															 _ids.each_index { |ind|
+																 arr[ _ids[ind] ] = usernames[ind]
+															}
+														 end
+		end
     
   end
 

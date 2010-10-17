@@ -1,4 +1,6 @@
+# models/Club.rb
 require 'views/Club_Control_Base_View'
+require 'models/Wash'
 
 class Clubs
   
@@ -8,7 +10,13 @@ class Clubs
   
   top_slash # =====================================================
   
+  redirect('/club-search').to('/search')
+
   path '/search' # =====================================================
+
+  get '/:cgi_escape', :STRANGER do
+    render :text, "Not done."
+  end
 
   get '/', :STRANGER do
     action :search
@@ -23,12 +31,8 @@ class Clubs
     template
   end
 
-  get '/:cgi_escape', :STRANGER do
-    render :text, "Not done."
-  end
-
   post '/', :STRANGER do
-    filename = clean_room['cgi_escape'].to_s
+    filename = clean_room['keyword'].to_s
     begin
       club = Club.find.filename(filename).go_first!
       redirect! club.href
@@ -61,7 +65,7 @@ class Clubs
     redirect_back_or '/uni-new'
   end
   
-	redirect('/uni/').to('/unis/')
+  redirect('/uni/').to('/unis/')
   path '/unis' # =====================================================
   
   get '/', :STRANGER do

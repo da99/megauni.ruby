@@ -9,11 +9,11 @@ class Members_change_password < Base_View
   end
 
   def code
-    app.env['results.code']
+    app.the.code
   end
 
   def email
-    app.env['results.email']
+    app.the.email
   end
   
 end # === Members_change_password 

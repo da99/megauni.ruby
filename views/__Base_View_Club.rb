@@ -64,7 +64,7 @@ module Base_View_Club
   end
 
   def messages
-    app.env['results.messages']
+    app.the.messages
   end
 
   def potential_follower?

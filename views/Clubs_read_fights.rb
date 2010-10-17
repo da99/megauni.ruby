@@ -13,7 +13,7 @@ class Clubs_read_fights < Base_View
   end
 
   def passions
-    compile_and_cache( 'messages.passions' , app.env['results.passions'])
+    compile_and_cache( 'messages.passions' , app.the.passions )
   end
   
 end # === Clubs_read_fights 

@@ -14,7 +14,7 @@ class Clubs_read_random < Base_View
   end
 
   def randoms
-    @randoms ||= compile_messages(app.env['results.randoms'])
+    @randoms ||= compile_messages(app.the.randoms )
   end
   
 end # === Clubs_read_random 

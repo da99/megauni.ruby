@@ -21,7 +21,7 @@ class Messages_edit < Base_View
   end
 
   def mess
-    @app.env['results.message']
+    app.the.message
   end
 
   def mess_id

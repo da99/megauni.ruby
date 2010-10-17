@@ -14,7 +14,7 @@ class Clubs_read_news < Base_View
   end
   
   def news
-    @news ||= compile_messages(app.env['results.news'])
+    @news ||= compile_messages(app.the.news )
   end
   
 end # === Clubs_read_news 

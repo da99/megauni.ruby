@@ -10,11 +10,11 @@ class Members_reset_password < Base_View
   end
 
   def email
-    app.env['results.email']
+    app.the.email
   end
 
   def reset?
-    !!app.env['results.reset']
+    !!app.the.reset
   end
   
 end # === Members_reset_password 

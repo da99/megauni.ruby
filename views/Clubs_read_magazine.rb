@@ -13,7 +13,7 @@ class Clubs_read_magazine < Base_View
   end
 
   def storys
-    @storys ||= compile_messages(app.env['results.magazine'])
+    @storys ||= compile_messages(app.the.magazine )
   end
   
 end # === Clubs_read_magazine 

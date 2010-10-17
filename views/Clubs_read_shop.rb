@@ -14,7 +14,7 @@ class Clubs_read_shop < Base_View
   end
 
   def buys
-    @buys ||= compile_messages( app.env['results.buys'] )
+    @buys ||= compile_messages( app.the.buys  )
   end
   
 end # === Clubs_read_shop 

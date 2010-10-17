@@ -871,7 +871,41 @@ module Mongo_Dsl
   
   def method_missing name, *args
     return super if !args.empty?
+    return cache[name] if cache[name]
 
+    name_s = name.to_s
+      
+    # Is this an :href_ method?
+    if name_s['href_']
+      parts = name_s.split('href_')
+      parts.shift
+      if parts.size == 1 
+        suffixes = self.class.const_get(:HREF_SUFFIXES)
+        part = parts.first
+        if suffixes
+          pattern, field = []
+          suffixes.each { |suff|
+            case suff
+            when String
+              if suff == part 
+                base_pattern, field = self.class::HREF_PATTERN
+								pattern = File.join(base_pattern, suff)
+              end
+            when Array
+              if suff.first == part
+                pattern, field = suff
+              end
+            end
+            break if pattern && field
+          } 
+          if pattern && field
+            return cache[name] = (pattern % data.send(field))
+          end
+        end
+      end
+    end
+
+    # Is this a relation shortcut for :find.relation. ?
     name_wo_bash = name.to_s.sub('!', '').to_sym
     if name != name_wo_bash && self.class.has_relation?(name_wo_bash)
       relate = self.class.relations[name_wo_bash]

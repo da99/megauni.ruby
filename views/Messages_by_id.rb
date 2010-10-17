@@ -44,7 +44,7 @@ class Messages_by_id < Base_View
   end
 
   def message
-    @app.env['message_by_id']
+    app.the.message
   end
   
   def owner?

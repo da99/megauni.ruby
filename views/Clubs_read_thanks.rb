@@ -13,7 +13,7 @@ class Clubs_read_thanks < Base_View
   end
 
   def thanks
-    @thanks ||= compile_messages(app.env['results.thanks'])
+    @thanks ||= compile_messages(app.the.thanks )
   end
   
 end # === Clubs_read_thanks 

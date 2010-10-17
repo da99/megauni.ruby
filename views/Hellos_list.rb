@@ -27,7 +27,7 @@ class Hellos_list < Base_View
   end
   
   def messages_public 
-    compile_and_cache( 'messages.public', @app.env['results.messages_public'])
+    compile_and_cache( 'messages.public', app.the.messages_public )
   end
   
   def clubs

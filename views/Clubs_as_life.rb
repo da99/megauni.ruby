@@ -12,7 +12,7 @@ class Clubs_as_life < Base_View
   include Views::Base_Club
 
   def title 
-    "The Life of #{app.env['club'].data}"
+    "The Life of #{app.the.club.data}"
   end
   
 end # === as_life 

@@ -9,18 +9,20 @@ module Sinatra
     end
 
     def the_club
-      the.filename = clean_params[:filename]
-      the.club = Club.find.filename(filename).go_first!
+      the.filename = clean_room[:filename]
+      the.club = Club.find.filename(the.filename).go_first!
     end
 
     def the_club_with messages
-      the_club
-      the.send("#{messages}=",  the.club.find.messsages.send(messages).go! )
+      action :"read_#{request.path_info.split('/').last}"
+			the_club
+      results = the.club.find.messages.send(messages).go!
+      the.send("#{messages}=", results  )
     end
 
     def the_life
-      the.username = clean_params[:filename]
-      the.life = Life.find.username(filename).go_first!
+      the.username = clean_room[:filename]
+      the.life = Life.find.username(the.username).go_first!
     end
     
     def the_life_with messages
@@ -29,39 +31,39 @@ module Sinatra
     end
 
     def current_path path = :show_me_current_path
-			case path
-			when :show_me_current_path
-				raise ArgumentError, "Current path not set." if !@current_path
-				@current_path
-			else
-				raise ArgumentError, "Current path already set: #{@current_path}" if @current_path
-				@current_path = path
-			end
+      case path
+      when :show_me_current_path
+        raise ArgumentError, "Current path not set." if !@current_path
+        @current_path
+      else
+        raise ArgumentError, "Current path already set: #{@current_path}" if @current_path
+        @current_path = path
+      end
     end
 
     def redirect! raw_url
       url = expand_url( raw_url )
-			redirect url
+      redirect url
     end
 
     def redirect_back_or raw_url
       url   = expand_url( raw_url )
       go_to = [ session[:return_to], back, url ].compact.first
-			redirect go_to
+      redirect go_to
     end
     
     def expand_url txt
       # add slash at end
       if not txt['.']
-				txt = File.join( txt, '/')
-			end
-			
+        txt = File.join( txt, '/')
+      end
+      
       # if url starts with "../"
-			if txt['../']
-				txt = File.join( base_path, txt.gsub('../', '') )
-			end
-			
-			txt
+      if txt['../']
+        txt = File.join( base_path, txt.gsub('../', '') )
+      end
+      
+      txt
     end
 
     def lang
@@ -105,30 +107,30 @@ module Sinatra
       header :cache_control, "public, max-age=#{min * 60}"
     end
 
-		def describe key, value = :_show_this_value_
-			@the_meta_of_the_app ||= begin
-																 new_meta = Dyno_Cache.new
-																 the.meta_of_the_app = new_meta
-																 new_meta
-															 end
-			case value
-			when :_show_this_value_
-				the.meta_of_the_app.send(key)
-			else
-				the.meta_of_the_app.send("#{key}=", value)
-			end
-		end
+    def describe key, value = :_show_this_value_
+      @the_meta_of_the_app ||= begin
+                                 new_meta = Dyno_Cache.new
+                                 the.meta_of_the_app = new_meta
+                                 new_meta
+                               end
+      case value
+      when :_show_this_value_
+        the.meta_of_the_app.send(key)
+      else
+        the.meta_of_the_app.send("#{key}=", value)
+      end
+    end
 
     def control *vals
-			describe :control, *vals
+      describe :control, *vals
     end
 
     def action *vals
-			describe :action, *vals
+      describe :action, *vals
     end
-		
+    
     def base_path *vals
-			describe :base_path, *vals
+      describe :base_path, *vals
     end
 
 

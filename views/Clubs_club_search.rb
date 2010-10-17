@@ -13,7 +13,7 @@ class Clubs_club_search < Base_View
   end
 
   def club_filename
-    app.env['club_filename']
+    app.the.filename
   end
   
 end # === Clubs_club_search 

@@ -17,7 +17,7 @@ class Messages_by_label < Base_View
   end
 
   def label
-    @app.env['message_label']
+    app.the.label
   end
 
   def public_labels
@@ -26,7 +26,7 @@ class Messages_by_label < Base_View
   end
 
   def messages
-    @app.env['messages_by_label'].map { |mess|
+    app.the.messages.map { |mess|
       { 'published_at' => Time.parse(mess['published_at'] || mess['created_at']).strftime(' %b  %d, %Y '),
         'body' => mess['body'],
         'title' => mess['title'],

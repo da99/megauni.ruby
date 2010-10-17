@@ -62,7 +62,7 @@ class Club
     end
     
     filter :buys do
-      where :message_mode, 'buy'
+      where :message_model, 'buy'
     end
 
     filter :predictions do

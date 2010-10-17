@@ -20,11 +20,11 @@ module Base_View_Member_Life
   end
 
   def username
-    app.env['results.username']
+    app.the.username
   end
   
   def owner
-    app.env['results.owner']
+    app.the.owner
   end
 
   def owner?
@@ -32,7 +32,7 @@ module Base_View_Member_Life
   end
 
   def owner_username_id
-    @cache_username_id ||= app.env['results.owner'].lifes._id_for(username)
+    @cache_username_id ||= app.the.owner.lifes._id_for(username)
   end
 
   def username_id

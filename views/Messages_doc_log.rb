@@ -5,7 +5,7 @@
 class Messages_doc_log < Base_View
 
   def message
-    @app.env['message_by_id']
+    app.the.message
   end
   
   def title 

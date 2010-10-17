@@ -26,7 +26,7 @@ class News_Control_edit < Base_View
   end
 
   def news
-    @app.env['the.app.news']
+    app.the.news
   end
 
   def clubs

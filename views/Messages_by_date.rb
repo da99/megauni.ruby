@@ -9,15 +9,15 @@ class Messages_by_date < Base_View
   end
 
   def year
-    @app.env['list.year']
+    app.the.year
   end
 
   def month
-    @app.env['list.month']
+    app.the.month
   end
   
   def messages
-    @cache_messages_by_date ||= @app.env['list.messages'].map { |mess|
+    @cache_messages_by_date ||= app.the.messages.map { |mess|
       { 'published_at' => Time.parse(mess['published_at']).strftime(' %b  %d, %Y '),
         'body' => mess['body'],
         'title' => mess['title'],

@@ -15,7 +15,7 @@ class Clubs_read_predictions < Base_View
   end
 
   def predictions
-    @predictions ||= compile_messages(app.env['results.predictions'])
+    @predictions ||= compile_messages(app.the.predictions )
   end
   
 end # === Clubs_read_predictions 

@@ -14,7 +14,7 @@ class Clubs_read_qa < Base_View
   end
 
   def questions
-    compile_and_cache('messages.questions', app.env['results.questions'])
+    compile_and_cache('messages.questions', app.the.questions )
   end
   
 end # === Clubs_read_qa 

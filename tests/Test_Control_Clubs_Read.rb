@@ -26,7 +26,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
 
   must 'render /uni/{some filename}/ for members' do
     log_in_regular_member(1)
-    get '/uni/predictions/'
+    get "/life/#{regular_member(1).lifes.usernames.first}/predictions/"
     assert_equal 200, last_response.status
   end
 
@@ -101,7 +101,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
 
   must 'not show follow club link to followers.' do
     club = create_club(regular_member(1))
-    club.create_follower( regular_member(2), regular_member_2.lifes._ids.first )
+    club.create_follower( regular_member(2), regular_member(2).lifes._ids.first )
 
     log_in_regular_member(2)
     get club.href
@@ -118,18 +118,19 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     assert_equal club.href_follow, last_response.body[club.href_follow]
   end
 
-  must 'allow members to follow someone else\'s club' do
-    club = create_club(regular_member(2))
+  # must 'allow members to follow someone else\'s club' do
+  #   club = create_club(regular_member(2))
 
-    log_in_regular_member(1)
-    get File.join('/', club.href, 'follow/')
-    follows = Club.find_followers(
-      :club_id=>club.data._id, 
-      :follower_id=>regular_member(1).lifes._ids.first
-    ).to_a
+  #   log_in_regular_member(1)
+  #   get File.join('/', club.href, 'follow/')
+  #   club = Club.find._id(club.data._id).go_first!
+  #   follows = club.find.followers.go_first! Club.find.followers(
+  #     :club_id=>, 
+  #     :follower_id=>regular_member(1).lifes._ids.first
+  #   ).to_a
 
-    assert_equal 1, follows.size
-  end
+  #   assert_equal 1, follows.size
+  # end
 
   must 'show a form if user has multiple usernames' do
     if regular_member(3).lifes.usernames.size == 1
@@ -147,44 +148,34 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     assert Nokogiri::HTML(last_response.body).css('form#form_follow_create').first
   end
 
-  must 'show "This life is yours" to owner of life club' do
-    msg = "This life is yours"
-    mem = regular_member(3)
-    un_id, un = mem.lifes._ids_to_usernames.to_a.first
-    log_in_regular_member(3)
-    life = Club.by_filename_or_member_username(un)
-    get life.href
-    assert_equal msg, last_response.body[msg]
-  end
-
   # ================ Club Search ===========================
 
-  must 'redirect to /club-search/{filename}/ if more no club found' do
+  must 'redirect to /search/{filename}/ if more no club found' do
     keyword = 'factor' + rand(1000).to_s
-    post "/club-search/", :keyword=>keyword
+    post "/search/", :keyword=>keyword
     follow_redirect!
-    assert_equal "/club-search/#{keyword}/", last_request.path_info
+    assert_equal "/search/#{keyword}/", last_request.path_info
   end
 
-  must 'CGI.escape the filename in /club-search/{filename}/' do
+  must 'CGI.escape the filename in /search/{filename}/' do
     keyword = 'factor@factor' + rand(10000).to_s
-    post "/club-search/", :keyword=>keyword
+    post "/search/", :keyword=>keyword
     follow_redirect!
     escaped = CGI.escape(keyword)
-    assert_equal "/club-search/#{escaped}/", last_request.path_info
+    assert_equal "/search/#{escaped}/", last_request.path_info
   end
 
   must 'redirect to club profile page if only one club found' do
     club = create_club(regular_member(1), :filename=>"sf_#{rand(10000)}")
-    post "/club-search/", :keyword=>club.data.filename
+    post "/search/", :keyword=>club.data.filename
     follow_redirect!
     assert_equal "/uni/#{club.data.filename}/", last_request.fullpath
   end
 
-  must 'redirect to life club if keyword is a member username' do
+  must 'redirect to life if keyword is a member username' do
     un = regular_member(1).lifes.usernames.first
-    post "/club-search/", :keyword=>un
-    assert_redirect "/uni/#{un}/", 303
+    post "/search/", :keyword=>un
+    assert_redirect "/life/#{un}/", 303
   end
 
   # ================= Club Parts ===========================

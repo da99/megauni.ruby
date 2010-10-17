@@ -30,7 +30,7 @@ class Clubs_read_e < Base_View
   end
 
   def facts
-    @cache_messages_facts ||= compile_messages( app.env['results.facts'] )
+    @cache_messages_facts ||= compile_messages( app.the.facts )
   end
 
   private

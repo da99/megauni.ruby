@@ -67,7 +67,7 @@ module Base_Control
                      }.join('/')
                    end
 
-      pattern = %r!#{final_path}/!
+      pattern = %r!\A#{final_path}/\Z!
       eval %~
         def pattern.keys
           #{keys.inspect}
@@ -94,20 +94,30 @@ module Base_Control
                     when Symbol
                       action_name = sub_path
                       sub_path = "/#{action_name}"
-											action_name
+                      action_name
                     else
                       nil
                     end
-			
-			the_base_path = current_path
-			
-      Uni_App.send(name, compile_route(sub_path) ) do
-				base_path the_base_path
+      
+      the_base_path = current_path      
+      final_path = compile_route(sub_path)
+
+      if Uni_App.development?
+        puts "CREATING: #{name} #{final_path}"
+      end
+
+      Uni_App.send(name, final_path ) do
+        base_path the_base_path
         control controller
         if action_name
           action action_name
         end
         min_security_level level
+        
+        if Uni_App.development?
+          puts "PATH: #{request.path_info} CONTROL: #{control} ACTION: #{action_name}"
+        end
+      
         instance_eval &blok
       end
 
