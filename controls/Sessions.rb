@@ -1,18 +1,21 @@
 class Sessions
   include Base_Control
 
-  def GET_log_in 
-    render_html_template
-  end
+	top_slash
 
-  def GET_log_out 
+	get '/log-out', :STRANGER do
+		action :log_out
     log_out!
     flash_msg.success =  "You have been logged out." 
-    redirect! '/'
+    redirect '/'
   end
 
-  def POST_log_in 
+	get '/log-in', :STRANGER do
+		action :log_in
+    template :html
+  end
 
+	post '/log-in', :STRANGER do
     log_out!
     
     begin 

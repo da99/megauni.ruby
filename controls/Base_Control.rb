@@ -7,6 +7,8 @@ module Base_Control
     ':year'    => "[0-9]{2,4}",
     ':month'   => "[0-9]{1,2}",
     ':filename' => '[a-zA-Z0-9\_\-\.]{1,}',
+    ':club_filename' => '[a-zA-Z0-9\_\-\.]{1,}',
+    ':label' => '[a-zA-Z0-9\_\-\.]{1,}',
     ':id'  => '[a-zA-Z0-9]{1,}',
     ':_id' => '[a-zA-Z0-9]{5,}',
     ':cgi_escape' => '[a-zA-Z0-9\%\.\_\-\=\+\&\!]{1,}'

@@ -3,6 +3,11 @@ require 'models/Dyno_Cache'
 module Sinatra
   module Uni_Base_Helper
 
+    def the_message
+      the.id = clean[:id]
+      the.message = Message.find._id(the.id).go_first!
+    end
+
     def the_club
       the.filename = clean_params[:filename]
       the.club = Club.find.filename(filename).go_first!
@@ -100,6 +105,7 @@ module Sinatra
     def action name = :get_control_value
       case name
       when :get_control_value
+        raise "Action name not set." if !!@action
         @action
       else
         @action = name
