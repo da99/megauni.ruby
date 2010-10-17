@@ -9,7 +9,7 @@ class Test_Control_Messages_Read < Test::Unit::TestCase
   end
 
   must 'render a message posted to a life club' do
-    mem = regular_member_2
+    mem = regular_member(2)
     club = Club.by_filename_or_member_username(mem.lifes.usernames.first)
     mess = create_message(mem, club)
     get mess.href
@@ -17,10 +17,10 @@ class Test_Control_Messages_Read < Test::Unit::TestCase
   end
   
   must 'show edit link to owner' do
-    mem = regular_member_2
+    mem = regular_member(2)
     club = create_club(mem)
     mess = create_message(mem, club)
-    log_in_regular_member_2
+    log_in_regular_member(2)
     get mess.href
     assert last_response.body[mess.href_edit]
   end

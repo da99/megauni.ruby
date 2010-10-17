@@ -5,13 +5,13 @@ class Test_Control_Messages_Create < Test::Unit::TestCase
 
   must 'allow members to create messages from a club page' do
     club = create_club
-    log_in_regular_member_2
+    log_in_regular_member(2)
     body = "Test body: #{self.class}: 
             allow members to create messages from a club page.
             #{rand(2000)}"
     post "/messages/", :club_filename=>club.data.filename,
       :privacy=>'public',
-      :username=> regular_member_2.lifes.usernames.last,
+      :username=> regular_member(2).lifes.usernames.last,
       :body => body,
       :message_model => 'random'
     assert_equal [body], Message.find(:body=>body).map { |m| m['body'] }
@@ -19,11 +19,11 @@ class Test_Control_Messages_Create < Test::Unit::TestCase
 
   must 'allow public labels (comma delimited' do
     club = create_club
-    log_in_regular_member_1
+    log_in_regular_member(1)
     body = "Buy it #{rand(1000)}"
     post "/messages/", :club_filename=>club.data.filename, 
       :privacy=>'public',
-      :username=>regular_member_1.lifes.usernames.last,
+      :username=>regular_member(1).lifes.usernames.last,
       :body=>body,
       :message_model=>'random',
       :public_labels => 'product , knees'
@@ -37,10 +37,10 @@ class Test_Control_Messages_Create < Test::Unit::TestCase
 
   must 'redirect to club if club_filename was specified.' do
     club = create_club
-    log_in_regular_member_1
+    log_in_regular_member(1)
     post "/messages/", :club_filename=>club.data.filename,
       :privacy=>'public',
-      :username=> regular_member_1.lifes.usernames.last,
+      :username=> regular_member(1).lifes.usernames.last,
       :body => rand(12000)
     follow_redirect!
 
@@ -49,11 +49,11 @@ class Test_Control_Messages_Create < Test::Unit::TestCase
 
   must 'redirect to specified return url' do
     club = create_club
-    log_in_regular_member_1
+    log_in_regular_member(1)
     return_to = '/test/page/45-B.c/'
     post "/messages/", :club_filename=>club.data.filename,
       :privacy=>'public',
-      :username=> regular_member_1.lifes.usernames.last,
+      :username=> regular_member(1).lifes.usernames.last,
       :body => rand(12000),
       :return_url => return_to
 
@@ -62,10 +62,10 @@ class Test_Control_Messages_Create < Test::Unit::TestCase
 
   must 'ignore return url if is is to an external site' do
     club = create_club
-    log_in_regular_member_1
+    log_in_regular_member(1)
     post "/messages/", :club_filename=>club.data.filename,
       :privacy=>'public',
-      :username=> regular_member_1.lifes.usernames.last,
+      :username=> regular_member(1).lifes.usernames.last,
       :body => rand(12000),
       :return_url => 'http://www.bing.com/'
 
@@ -75,12 +75,12 @@ class Test_Control_Messages_Create < Test::Unit::TestCase
   # ============== CLUBS based on USERNAMES =========================
 
   must 'allow members to post to a life club.' do
-    mem = regular_member_1
+    mem = regular_member(1)
     un  = mem.lifes.usernames.first
     club = Club.by_filename_or_member_username(un)
     body = "random content #{rand(1000)} #{un}"
     
-    log_in_regular_member_1
+    log_in_regular_member(1)
     
     post( '/messages/', 
       "body"=>body, 
@@ -96,13 +96,13 @@ class Test_Control_Messages_Create < Test::Unit::TestCase
   end
 
   must 'allow members to reply to messages in a life club.' do
-    mem  = regular_member_1
+    mem  = regular_member(1)
     un   = mem.lifes.usernames.first
     club = Club.by_filename_or_member_username(un)
     mess = Message.find_one(:target_ids => [club.data._id])
     
-    log_in_regular_member_2
-    poster = regular_member_2
+    log_in_regular_member(2)
+    poster = regular_member(2)
     body = "reply to #{mess['_id']} #{rand 10000}"
     
     post( '/messages/', 

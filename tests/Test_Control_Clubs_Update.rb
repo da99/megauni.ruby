@@ -10,8 +10,8 @@ class Test_Control_Clubs_Update < Test::Unit::TestCase
   end
 
   must 'not allow non-owners' do
-    club = create_club(regular_member_1)
-    log_in_regular_member_2
+    club = create_club(regular_member(1))
+    log_in_regular_member(2)
     err = assert_raise(Mongo_Dsl::Unauthorized) do
       put club.href, :title=>'new-hearts'
     end
@@ -28,8 +28,8 @@ class Test_Control_Clubs_Update < Test::Unit::TestCase
   end
 
   must 'allow club owners' do
-    club = create_club(regular_member_1)
-    log_in_regular_member_1
+    club = create_club(regular_member(1))
+    log_in_regular_member(1)
     put club.href, :title=>'new-club-1'
     follow_redirect!
     assert_match( %r!<title>new-club-1</title>!, last_response.body )

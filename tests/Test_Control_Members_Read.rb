@@ -27,11 +27,11 @@ class Test_Control_Members_Read < Test::Unit::TestCase
   #   content          = create_club_content
   #   club_1, club_2, rest = content[:clubs]
   #   mess_1, mess_2, rest = content[:messages]
-  #   mem, uns, un_ids = add_username(regular_member_3)
+  #   mem, uns, un_ids = add_username(regular_member(3))
 
   #   club_1.create_follower(mem, un_ids.first)
   #   club_2.create_follower(mem, un_ids.last)
-  #   log_in_regular_member_3
+  #   log_in_regular_member(3)
   #   get "/uni/#{uns.last}/"
     # 
     # 
@@ -41,7 +41,7 @@ class Test_Control_Members_Read < Test::Unit::TestCase
   # end
 
   must 'show account: /lifes/' do
-    log_in_regular_member_2
+    log_in_regular_member(2)
     get '/lifes/', {}, ssl_hash
     assert_last_response_ok
   end
@@ -49,14 +49,14 @@ class Test_Control_Members_Read < Test::Unit::TestCase
   # ========== LIFE ============================
 
   must 'show profile: /life/{username}/' do
-    un = regular_member_3.lifes.usernames.first
+    un = regular_member(3).lifes.usernames.first
     get "/life/#{un}/"
     assert_last_response_ok
   end
 
   %w{ e qa news shop predictions random }.each { |suffix|
     must "show /life/{username}/#{suffix}/" do
-      un = regular_member_3.lifes.usernames.first
+      un = regular_member(3).lifes.usernames.first
       get "/life/#{un}/#{suffix}/"
       assert_last_response_ok
     end

@@ -4,7 +4,7 @@ require 'tests/__rack_helper__'
 class Test_Control_Clubs_Read < Test::Unit::TestCase
 
   def mem
-    regular_member_1
+    regular_member(1)
   end
 
   must 'render /uni/' do
@@ -13,7 +13,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   end
 
   must 'render /uni/ for members' do
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get '/uni/'
     assert_last_response_ok
   end
@@ -26,7 +26,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   end
 
   must 'render /uni/{some filename}/ for members' do
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get '/uni/predictions/'
     assert_equal 200, last_response.status
   end
@@ -46,7 +46,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   must 'present a create message form for logged-in members' do
     club = create_club
     
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get club.href_e
     form = Nokogiri::HTML(last_response.body).css('form#form_club_message_create').first
     
@@ -56,7 +56,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   must 'include club filename for :club_filename in message create form' do
     club = create_club
     
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get club.href_e
     target_ids = Nokogiri.HTML(last_response.body).css(
       'form#form_club_message_create input[name=club_filename]'
@@ -68,13 +68,13 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   must 'include member\'s username for :username in message create form' do
     club = create_club
     
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get club.href_e
     un = Nokogiri.HTML(last_response.body).css(
       'form#form_club_message_create input[name=username]'
     ).first
     
-    assert_equal regular_member_1.lifes.usernames.first, un.attributes['value'].value
+    assert_equal regular_member(1).lifes.usernames.first, un.attributes['value'].value
   end
 
   must 'not show follow club link to strangers.' do
@@ -85,64 +85,64 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   end
 
   must 'not show follow club link to club creator' do
-    club = create_club(regular_member_1)
+    club = create_club(regular_member(1))
 
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get club.href
     assert_equal nil, last_response.body[club.href_follow]
   end
 
   must 'not show "You are following" message to club creator' do
-    club = create_club(regular_member_1)
+    club = create_club(regular_member(1))
 
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get club.href
     assert_equal nil, last_response.body['following']
   end
 
   must 'not show follow club link to followers.' do
-    club = create_club(regular_member_1)
-    club.create_follower( regular_member_2, regular_member_2.lifes._ids.first )
+    club = create_club(regular_member(1))
+    club.create_follower( regular_member(2), regular_member_2.lifes._ids.first )
 
-    log_in_regular_member_2
+    log_in_regular_member(2)
     get club.href
 
     assert_not_equal club.href_follow, last_response.body[club.href_follow]
   end
 
   must 'show follow club link to members.' do
-    club = create_club(regular_member_1)
+    club = create_club(regular_member(1))
 
-    log_in_regular_member_2
+    log_in_regular_member(2)
     get club.href
     
     assert_equal club.href_follow, last_response.body[club.href_follow]
   end
 
   must 'allow members to follow someone else\'s club' do
-    club = create_club(regular_member_2)
+    club = create_club(regular_member(2))
 
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get File.join('/', club.href, 'follow/')
     follows = Club.find_followers(
       :club_id=>club.data._id, 
-      :follower_id=>regular_member_1.lifes._ids.first
+      :follower_id=>regular_member(1).lifes._ids.first
     ).to_a
 
     assert_equal 1, follows.size
   end
 
   must 'show a form if user has multiple usernames' do
-    if regular_member_3.lifes.usernames.size == 1
+    if regular_member(3).lifes.usernames.size == 1
       Member.update(
-        regular_member_3.data._id, 
-        regular_member_3, 
+        regular_member(3).data._id, 
+        regular_member(3), 
         :add_username=>"username-#{rand(2000)}"
       )
     end
 
-    club = create_club(regular_member_1)
-    log_in_regular_member_3
+    club = create_club(regular_member(1))
+    log_in_regular_member(3)
     get club.href
 
     assert Nokogiri::HTML(last_response.body).css('form#form_follow_create').first
@@ -151,7 +151,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   # ================ Life Club ===========================
 
   must 'use /uni/{filename}/ for life clubs' do
-    mem   = regular_member_1
+    mem   = regular_member(1)
     un_id, un  = mem.lifes._ids_to_usernames.to_a.first
     life  = Club.by_filename_or_member_username(un)
     assert_equal "/uni/#{un}/", life.href
@@ -159,9 +159,9 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
 
   must 'show "This life is yours" to owner of life club' do
     msg = "This life is yours"
-    mem = regular_member_3
+    mem = regular_member(3)
     un_id, un = mem.lifes._ids_to_usernames.to_a.first
-    log_in_regular_member_3
+    log_in_regular_member(3)
     life = Club.by_filename_or_member_username(un)
     get life.href
     assert_equal msg, last_response.body[msg]
@@ -185,14 +185,14 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   end
 
   must 'redirect to club profile page if only one club found' do
-    club = create_club(regular_member_1, :filename=>"sf_#{rand(10000)}")
+    club = create_club(regular_member(1), :filename=>"sf_#{rand(10000)}")
     post "/club-search/", :keyword=>club.data.filename
     follow_redirect!
     assert_equal "/uni/#{club.data.filename}/", last_request.fullpath
   end
 
   must 'redirect to life club if keyword is a member username' do
-    un = regular_member_1.lifes.usernames.first
+    un = regular_member(1).lifes.usernames.first
     post "/club-search/", :keyword=>un
     assert_redirect "/uni/#{un}/", 303
   end
@@ -203,14 +203,14 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     club = nil
     
     must "render /uni/..filename../#{suffix}/" do
-      club ||= create_club(regular_member_1)
+      club ||= create_club(regular_member(1))
       get "/uni/#{club.data.filename}/#{suffix}/"
       assert_equal 200, last_response.status
     end
     
     must "render /uni/..filename../#{suffix}/ while logged in" do
-      club ||= create_club(regular_member_1)
-      log_in_regular_member_1
+      club ||= create_club(regular_member(1))
+      log_in_regular_member(1)
       get "/uni/#{club.data.filename}/#{suffix}/"
       assert_equal 200, last_response.status
     end

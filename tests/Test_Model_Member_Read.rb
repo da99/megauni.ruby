@@ -4,10 +4,10 @@ class Test_Model_Member_Read < Test::Unit::TestCase
 
 
   must 'return user if username/password pass authentication' do
-    doc = Member.authenticate(:username=>regular_username_1, :password=>regular_password_1)
+    doc = Member.authenticate(:username=>regular_username(1), :password=>regular_password_1)
     assert_equal(
-      regular_username_1,
-      doc.lifes.usernames.detect { |un| un == regular_username_1 }
+      regular_username(1),
+      doc.lifes.usernames.detect { |un| un == regular_username(1) }
     )
   end
 
@@ -77,7 +77,7 @@ class Test_Model_Member_Read < Test::Unit::TestCase
   end
 
   must 'raise Member::Invalid_Security_Level if :has_power_of? given invalid parameter.' do
-    mem = regular_member_2
+    mem = regular_member(2)
     assert_raise Member::Invalid_Security_Level do
       mem.has_power_of?(nil)
     end
@@ -91,8 +91,8 @@ __END__
 
 # 
 #   must 'add :owner_username to a collection of docs with :owner_id (:username_id)' do
-#     mem_1 = regular_member_1
-#     mem_2 = regular_member_2
+#     mem_1 = regular_member(1)
+#     mem_2 = regular_member(2)
 #     un_id_1 = mem_1.lifes._ids.first
 #     un_id_2 = mem_2.lifes._ids.last
 #     un_1    = mem_1.lifes.usernames.first

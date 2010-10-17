@@ -159,36 +159,32 @@ class Test::Unit::TestCase
     @regular_mem ||= [1,2,3].map { |i| Life.find.username("regular-member-#{i}").grab(:owner).go_first! }
   end
   
-  [1,2,3].each do |i|
-    eval %~
-      def regular_member_#{i}
-        self.class.regular_members[#{i}-1]
-      end
+	def regular_member i
+		self.class.regular_members[1-1]
+	end
 
-      def regular_username_#{i}
-        self.class.regular_members[#{i}-1].lifes.usernames.first
-      end
-      
-      def regular_password_#{i}
-        'regular-password'
-      end
-      
-      def log_in_regular_member_#{i}
-        mem = Life.by_username(regular_username_#{i}).owner
-        assert_equal false, mem.has_power_of?( :ADMIN )
-        post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>regular_password_#{i}}, ssl_hash
-        follow_redirect!
-        assert_match( /lifes/, last_request.fullpath)
-      end
-    ~
-  end
+	def regular_username i
+		self.class.regular_members[i-1].lifes.usernames.first
+	end
+
+	def regular_password i
+		'regular-password'
+	end
+			
+	def log_in_regular_member i = 1
+		mem = Life.by_username(regular_username(1)).owner
+		assert_equal false, mem.has_power_of?( :ADMIN )
+		post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>regular_password(1)}, ssl_hash
+		follow_redirect!
+		assert_match( /lifes/, last_request.fullpath)
+	end
 
   def mem
-    regular_member_1
+    regular_member(1)
   end
 
   def log_in_mem
-    log_in_regular_member_1
+    log_in_regular_member(1)
   end
 
   def admin_member
@@ -313,7 +309,7 @@ class Test::Unit::TestCase
   end
 
   def create_club(mem = nil, raw_club_opts = {})
-    mem ||= regular_member_1
+    mem ||= regular_member(1)
     id        = rand(20000).to_s + object_id.to_s
     defaults  = {:filename=>"#{id}", :title=>"Club: #{id}", 
                        :teaser=>"Teaser for: Club #{id}"}
@@ -348,13 +344,13 @@ class Test::Unit::TestCase
   def create_club_content
     club_1 = create_club
     club_2 = create_club
-    mess_1 = create_message(regular_member_1, club_1)
-    mess_2 = create_message(regular_member_2, club_2)
+    mess_1 = create_message(regular_member(1), club_1)
+    mess_2 = create_message(regular_member(2), club_2)
     {:clubs => [club_1, club_2], :messages=>[mess_1, mess_2]}
   end
 
   def add_username mem = nil
-    mem ||= regular_member_1
+    mem ||= regular_member(1)
     un_2 = "rand_#{rand 3000}"
     Member.update(mem.data._id, mem, :add_username=>un_2)
     mem = Member.by_id(mem.data._id)

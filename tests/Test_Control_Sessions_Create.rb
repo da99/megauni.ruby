@@ -30,7 +30,7 @@ class Test_Control_Sessions_Create < Test::Unit::TestCase
   end
 
   must 'allows Member access if creditials are correct.' do
-    post '/log-in/', {:username=>regular_username_1, :password=>regular_password_1}, ssl_hash
+    post '/log-in/', {:username=>regular_username(1), :password=>regular_password_1}, ssl_hash
     follow_redirect!
     assert_equal '/lifes/', last_request.path_info
   end

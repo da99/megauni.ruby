@@ -10,7 +10,7 @@ class Test_Control_Members_Edit < Test::Unit::TestCase
   end
 
   must 'render for members' do
-    log_in_regular_member_1
+    log_in_regular_member(1)
     get "/lifes/"
     assert_equal 200, last_response.status
   end

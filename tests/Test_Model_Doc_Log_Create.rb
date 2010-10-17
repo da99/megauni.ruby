@@ -5,7 +5,7 @@ require 'models/Doc_Log'
 class Test_Model_Doc_Log_Create < Test::Unit::TestCase
 
   def mem
-    regular_member_1
+    regular_member(1)
   end
 
   def vals
