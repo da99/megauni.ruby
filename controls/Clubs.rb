@@ -57,8 +57,8 @@ class Clubs
     rescue Club::Invalid
       flash_msg.errors = $!.doc.errors
     end
-		
-		redirect_back_or '/uni-new'
+    
+    redirect_back_or '/uni-new'
   end
   
   path '/uni' # =====================================================

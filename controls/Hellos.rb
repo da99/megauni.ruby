@@ -17,33 +17,33 @@ class Hellos
     template :html
   end
 
-	redirect('/*robots.txt').to('/robots.txt')
+  redirect('/*robots.txt').to('/robots.txt')
   redirect('/blog').to('/news')
   redirect('/about').to('/help')
-	redirect {
-		from *(%w{ /saludm/ /saludm/ /saludmobi/ /saludiphone/ /saludpda/ })
-		to '/salud/m/'
-	}
+  redirect {
+    from *(%w{ /saludm/ /saludm/ /saludmobi/ /saludiphone/ /saludpda/ })
+    to '/salud/m/'
+  }
 
   get :help, :STRANGER do
     template :html
   end
 
   get '/sitemap.xml', :STRANGER do
-		action :sitemap
+    action :sitemap
     template :xml
   end
 
   get '/rss.xml', :STRANGER do
-		action :rss
+    action :rss
     template :xml
   end
-	
-	get '/*beeping.*', :STRANGER do
-		exts = ['mp3', 'wav'].detect  { |e| e == params['splat'].last.downcase }
-		not_found if !exts
-		redirect "http://megauni.s3.amazonaws.com/beeping.#{exts}" 
-	end
+  
+  get '/*beeping.*', :STRANGER do
+    exts = ['mp3', 'wav'].detect  { |e| e == params['splat'].last.downcase }
+    not_found if !exts
+    redirect "http://megauni.s3.amazonaws.com/beeping.#{exts}" 
+  end
 
 
 end # === Hello

@@ -159,25 +159,25 @@ class Test::Unit::TestCase
     @regular_mem ||= [1,2,3].map { |i| Life.find.username("regular-member-#{i}").grab(:owner).go_first! }
   end
   
-	def regular_member i
-		self.class.regular_members[1-1]
-	end
+  def regular_member i
+    self.class.regular_members[1-1]
+  end
 
-	def regular_username i
-		self.class.regular_members[i-1].lifes.usernames.first
-	end
+  def regular_username i
+    self.class.regular_members[i-1].lifes.usernames.first
+  end
 
-	def regular_password i
-		'regular-password'
-	end
-			
-	def log_in_regular_member i = 1
-		mem = Life.by_username(regular_username(1)).owner
-		assert_equal false, mem.has_power_of?( :ADMIN )
-		post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>regular_password(1)}, ssl_hash
-		follow_redirect!
-		assert_match( /lifes/, last_request.fullpath)
-	end
+  def regular_password i
+    'regular-password'
+  end
+      
+  def log_in_regular_member i = 1
+    mem = Life.by_username(regular_username(1)).owner
+    assert_equal false, mem.has_power_of?( :ADMIN )
+    post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>regular_password(1)}, ssl_hash
+    follow_redirect!
+    assert_match( /lifes/, last_request.fullpath)
+  end
 
   def mem
     regular_member(1)

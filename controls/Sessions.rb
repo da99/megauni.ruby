@@ -1,21 +1,21 @@
 class Sessions
   include Base_Control
 
-	top_slash
+  top_slash
 
-	get '/log-out', :STRANGER do
-		action :log_out
+  get '/log-out', :STRANGER do
+    action :log_out
     log_out!
     flash_msg.success =  "You have been logged out." 
     redirect '/'
   end
 
-	get '/log-in', :STRANGER do
-		action :log_in
+  get '/log-in', :STRANGER do
+    action :log_in
     template :html
   end
 
-	post '/log-in', :STRANGER do
+  post '/log-in', :STRANGER do
     log_out!
     
     begin 

@@ -5,10 +5,10 @@ class Members
     
   # ============= Member Actions ==========================          
 
-	top_slash # =============================================
+  top_slash # =============================================
   
-	get '/create-account', :STRANGER do
-		action :new
+  get '/create-account', :STRANGER do
+    action :new
     template :html
   end
 
@@ -40,36 +40,36 @@ class Members
 
   # =========================== MEMBER ONLY ==========================================
 
-	get :today, :MEMBER do
+  get :today, :MEMBER do
     template :html
   end
   
-	get :follows, :MEMBER do
+  get :follows, :MEMBER do
     template :html
   end
   
-	get :notifys, :MEMBER do
+  get :notifys, :MEMBER do
     template :html
   end
 
-	get :lifes, :MEMBER do
+  get :lifes, :MEMBER do
     template :html
   end
 
-	path "/life/:filename" # ======================================
-	
+  path "/life/:filename" # ======================================
+  
   %w{e qa news shop predictions random }.each { |path|
     get path.to_sym, :STRANGER do
-			the_life_with path.to_sym
-			template :html
-		end
+      the_life_with path.to_sym
+      template :html
+    end
   }
 
-	redirect( "../status" ).to( "../news") 
-	
-	top_slash # ==================================================
-	
-	post '/reset-password' do 
+  redirect( "../status" ).to( "../news") 
+  
+  top_slash # ==================================================
+  
+  post '/reset-password' do 
   
     the.email = clean_room['email']
     
@@ -98,15 +98,15 @@ class Members
     template :html
   end
 
-	get '/change-password/:code/:email', :STRANGER do
-		action :change_password
+  get '/change-password/:code/:email', :STRANGER do
+    action :change_password
     the.member = Member.find.email(CGI.unescape(email)).go_first!
     the.code   = code
     the.email  = email
     template :html
   end
 
-	post '/change-password/:code/:email', :STRANGER do
+  post '/change-password/:code/:email', :STRANGER do
     mem = Member.find.email(CGI.unescape(email)).go_first!
     begin
       mem.change_password_through_reset(
@@ -122,7 +122,7 @@ class Members
     end
   end
         
-	put '/update-account', :MEMBER do
+  put '/update-account', :MEMBER do
     begin
       m = Member.update( current_member.data._id, current_member, clean_room )
       flash_msg.success = "Data has been updated and saved."
@@ -138,7 +138,7 @@ class Members
     end
   end # === put :update
 
-	delete '/delete-account' do
+  delete '/delete-account' do
     Member.delete( current_member.data._id, current_member )
     log_out!
     flash_msg.success = "Your account has been deleted forever."

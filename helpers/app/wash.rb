@@ -164,9 +164,9 @@ class Wash
     username
   end  
   
-	def self.url_escape txt
-		CGI.escape(txt)
-	end
+  def self.url_escape txt
+    CGI.escape(txt)
+  end
 
   # ===============================================
   # A better alternative than "Rack::Utils.escape_html". Escapes
