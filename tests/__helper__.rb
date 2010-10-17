@@ -172,7 +172,7 @@ class Test::Unit::TestCase
   end
       
   def log_in_regular_member i = 1
-    mem = Life.by_username(regular_username(1)).owner
+    mem = Life.find.username(regular_username(1)).grab(:owner).go_first!
     assert_equal false, mem.has_power_of?( :ADMIN )
     post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>regular_password(1)}, ssl_hash
     follow_redirect!
@@ -270,7 +270,7 @@ class Test::Unit::TestCase
   end
 
   def log_in_admin
-    mem = Life.by_username('admin-member-1').owner
+    mem = Life.find.username('admin-member-1').grab(:owner).go_first!
     assert mem.has_power_of?(:ADMIN)
     post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>admin_password}, ssl_hash
     follow_redirect!

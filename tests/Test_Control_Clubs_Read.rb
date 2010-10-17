@@ -4,25 +4,24 @@ require 'tests/__rack_helper__'
 class Test_Control_Clubs_Read < Test::Unit::TestCase
 
   def mem
-    regular_member(1)
+    @mem ||= regular_member(1)
   end
 
-  must 'render /uni/' do
+  must 'not render /uni/' do
     get '/uni/'
-    assert_last_response_ok
+    assert_equal false, last_response.ok?
   end
 
-  must 'render /uni/ for members' do
+  must 'not render /uni/ for members' do
     log_in_regular_member(1)
     get '/uni/'
-    assert_last_response_ok
+    assert_equal false, last_response.ok?
   end
 
   must 'be viewable by non-members' do
     club = create_club
     get "/uni/#{club.data.filename}/"
-    
-    assert_match(/#{club.data.title}/, last_response.body)
+    assert_equal club.data.title, last_response.body[club.data.title]
   end
 
   must 'render /uni/{some filename}/ for members' do
@@ -146,15 +145,6 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     get club.href
 
     assert Nokogiri::HTML(last_response.body).css('form#form_follow_create').first
-  end
-
-  # ================ Life Club ===========================
-
-  must 'use /uni/{filename}/ for life clubs' do
-    mem   = regular_member(1)
-    un_id, un  = mem.lifes._ids_to_usernames.to_a.first
-    life  = Club.by_filename_or_member_username(un)
-    assert_equal "/uni/#{un}/", life.href
   end
 
   must 'show "This life is yours" to owner of life club' do

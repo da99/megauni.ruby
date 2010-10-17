@@ -12,7 +12,10 @@ class Members_lifes < Base_View
 
   def lifes
     # [{'username'=>'Not done', 'href'=>'/no-where'}]
-    current_member.lifes.username_for
+    current_member.find.lifes.go!.map { |doc| 
+			doc[:href] = "/life/#{doc['username']}/"
+			doc
+		}
   end
   
   def session_form_username

@@ -61,7 +61,8 @@ class Clubs
     redirect_back_or '/uni-new'
   end
   
-  path '/uni' # =====================================================
+	redirect('/uni/').to('/unis/')
+  path '/unis' # =====================================================
   
   get '/', :STRANGER do
     action :list

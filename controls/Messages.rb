@@ -26,7 +26,7 @@ class Messages
     template :html
   end
 
-  post '/message-create' do # CREATE
+  post '/message-create', :MEMBER do # CREATE
     begin
       mess = Message.create( current_member, clean_room )
       flash_msg.success = "Your message has been saved."
@@ -52,11 +52,11 @@ class Messages
   end
 
 
-  post :notify do |mess_id|
+  post :notify, :MEMBER do |mess_id|
     render :text, clean_room.inspect
   end
 
-  post :repost do 
+  post :repost, :MEMBER do 
     render :text, clean_room.inspect
   end
 
@@ -99,7 +99,7 @@ class Messages
     render_html_template
   end
 
-  delete '/' do
+  delete '/', :MEMBER do
     success_msg { "Delete: #{doc.data.title}"  }
     redirect_success '/my-work/' 
     crud! 

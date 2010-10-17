@@ -28,28 +28,40 @@ module Sinatra
       the.send("#{messages}=", the.life.find.messsages.send(messages).go! )
     end
 
-    def current_path path = nil
-      puts "Not done: current_path"
-    end
-
-    def base_path path
-      puts "Not done: base_path"
+    def current_path path = :show_me_current_path
+			case path
+			when :show_me_current_path
+				raise ArgumentError, "Current path not set." if !@current_path
+				@current_path
+			else
+				raise ArgumentError, "Current path already set: #{@current_path}" if @current_path
+				@current_path = path
+			end
     end
 
     def redirect! raw_url
       url = expand_url( raw_url )
-      raise "not implemented"
+			redirect url
     end
 
     def redirect_back_or raw_url
-      url = expand_url( raw_url )
-      raise "Not implemented."
+      url   = expand_url( raw_url )
+      go_to = [ session[:return_to], back, url ].compact.first
+			redirect go_to
     end
     
     def expand_url txt
-      raise "not done"
       # add slash at end
+      if not txt['.']
+				txt = File.join( txt, '/')
+			end
+			
       # if url starts with "../"
+			if txt['../']
+				txt = File.join( base_path, txt.gsub('../', '') )
+			end
+			
+			txt
     end
 
     def lang
@@ -93,24 +105,32 @@ module Sinatra
       header :cache_control, "public, max-age=#{min * 60}"
     end
 
-    def control name = :get_control_value
-      case name
-      when :get_control_value
-        @control
-      else
-        @control = name
-      end
+		def describe key, value = :_show_this_value_
+			@the_meta_of_the_app ||= begin
+																 new_meta = Dyno_Cache.new
+																 the.meta_of_the_app = new_meta
+																 new_meta
+															 end
+			case value
+			when :_show_this_value_
+				the.meta_of_the_app.send(key)
+			else
+				the.meta_of_the_app.send("#{key}=", value)
+			end
+		end
+
+    def control *vals
+			describe :control, *vals
     end
 
-    def action name = :get_control_value
-      case name
-      when :get_control_value
-        raise "Action name not set." if !!@action
-        @action
-      else
-        @action = name
-      end
+    def action *vals
+			describe :action, *vals
     end
+		
+    def base_path *vals
+			describe :base_path, *vals
+    end
+
 
     # ------------------------------------------------------------------------------------
     private # ----------------------------------------------------------------------------

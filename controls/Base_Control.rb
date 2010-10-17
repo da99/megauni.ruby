@@ -94,13 +94,16 @@ module Base_Control
                     when Symbol
                       action_name = sub_path
                       sub_path = "/#{action_name}"
+											action_name
                     else
                       nil
                     end
-
+			
+			the_base_path = current_path
+			
       Uni_App.send(name, compile_route(sub_path) ) do
-        base_path current_path
-        control controller.to_s
+				base_path the_base_path
+        control controller
         if action_name
           action action_name
         end

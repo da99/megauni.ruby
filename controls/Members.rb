@@ -69,7 +69,7 @@ class Members
   
   top_slash # ==================================================
   
-  post '/reset-password' do 
+  post '/reset-password', :STRANGER do 
   
     the.email = clean_room['email']
     
@@ -138,7 +138,7 @@ class Members
     end
   end # === put :update
 
-  delete '/delete-account' do
+  delete '/delete-account', :MEMBER do
     Member.delete( current_member.data._id, current_member )
     log_out!
     flash_msg.success = "Your account has been deleted forever."

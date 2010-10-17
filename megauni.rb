@@ -46,14 +46,13 @@ require 'configs/DB'
 
 # === Require controls. ===
 
-#   Sessions
-#   Members
-#   Clubs
-#   Messages
 %w{
   Base_Control
   Hellos
   Clubs
+  Sessions
+  Members
+  Messages
 }.each { |control|
   require "controls/#{control}"
 }

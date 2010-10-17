@@ -4,7 +4,7 @@ class Test_Model_Member_Read < Test::Unit::TestCase
 
 
   must 'return user if username/password pass authentication' do
-    doc = Member.authenticate(:username=>regular_username(1), :password=>regular_password_1)
+    doc = Member.authenticate(:username=>regular_username(1), :password=>regular_password(1))
     assert_equal(
       regular_username(1),
       doc.lifes.usernames.detect { |un| un == regular_username(1) }
