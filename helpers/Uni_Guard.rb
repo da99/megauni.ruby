@@ -37,6 +37,19 @@ module Sinatra
       env['flash.msg']
     end
 
+    def min_security_level level
+      case level.to_s
+      when Member::NO_ACCESS
+        raise "NO_ACCESS"
+      when Member::STRANGER
+        true
+      else
+        require_log_in!
+        raise "Invalid security level" unless current_member.has_power_of?( level )
+        true
+      end
+    end
+
     def require_log_in! *perm_levels
 
       return true if perm_levels.empty? && logged_in?

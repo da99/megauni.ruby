@@ -52,6 +52,31 @@ class Club
     where :privacy, 'public'
     limit 10
     sort  [:_id, :desc]
+		
+		filter :passions do
+			where_in :message_model, %w{fight complaint debate}
+		end
+		
+		filter :facts do
+			where_in :message_model, ['e_chapter', 'e_quote']
+		end
+		
+		filter :buys do
+			where :message_mode, 'buy'
+		end
+
+		filter :predictions do
+			where :message_model, 'prediction'
+		end
+		
+		filter :randoms do
+			where :message_model, 'random'
+		end
+		
+		filter :thanks do
+			where :message_model, 'thank'
+		end
+
   end
 
 

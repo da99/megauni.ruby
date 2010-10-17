@@ -5,16 +5,19 @@ class Members
     
   # ============= Member Actions ==========================          
 
-  def GET_create_account 
-    render_html_template
+	top_slash # =============================================
+  
+	get '/create-account', :STRANGER do
+		action :new
+    template :html
   end
 
-  def GET_create_life
-    require_log_in!
-    render_html_template
+  get '/create-life', :MEMBER do
+    action :new_life
+    template :html
   end
             
-  def POST_create
+  post '/create-account', :STRANGER do
     log_out! 
 
     begin
@@ -29,7 +32,7 @@ class Members
       flash_msg.errors= $!.doc.errors 
       session[ :form_username  ] = clean_room[:username] 
                
-      redirect! '/create-account/' 
+      redirect! '/create-account' 
     end
       
   end # == post :create
@@ -37,43 +40,41 @@ class Members
 
   # =========================== MEMBER ONLY ==========================================
 
-  def GET_today
-    require_log_in!
-    render_html_template
+	get :today, :MEMBER do
+    template :html
   end
   
-  def GET_follows
-    require_log_in!
-    render_html_template
+	get :follows, :MEMBER do
+    template :html
   end
   
-  def GET_notifys
-    require_log_in!
-    render_html_template
+	get :notifys, :MEMBER do
+    template :html
   end
 
-  def GET_lifes
-    require_log_in!
-    render_html_template
+	get :lifes, :MEMBER do
+    template :html
   end
 
+	path "/life/:filename" # ======================================
+	
   %w{e qa news shop predictions random }.each { |path|
-    eval(%~
-          def GET_life_#{path} un
-            redirect!("/uni/\#{un}/#{path}/", 301)
-          end
-         ~)
+    get path.to_sym, :STRANGER do
+			the_life_with path.to_sym
+			template :html
+		end
   }
 
-  def GET_life_status un
-    redirect!(request.path_info.sub('status/', 'news/').sub('life', 'clubs'), 301)
-  end
-
-  def POST_reset_password
-    env['results.email'] = clean_room['email']
+	redirect( "../status" ).to( "../news") 
+	
+	top_slash # ==================================================
+	
+	post '/reset-password' do 
+  
+    the.email = clean_room['email']
     
     begin
-      mem       = Member.by_email( clean_room['email'] )
+      mem       = Member.find.email( clean_room['email'] ).go_first!
       code      = mem.reset_password
       env['results.reset'] = true
       reset_url = File.join(Uni_App::SITE_URL, "change-password", code, CGI.escape(mem.data.email), '/')
@@ -94,18 +95,19 @@ class Members
     rescue Member::Not_Found
     end
       
-    render_html_template
+    template :html
   end
 
-  def GET_change_password code, email
-    env['results.member'] = Member.by_email(CGI.unescape(email))
-    env['results.code']   = code
-    env['results.email']  = email
-    render_html_template
+	get '/change-password/:code/:email', :STRANGER do
+		action :change_password
+    the.member = Member.find.email(CGI.unescape(email)).go_first!
+    the.code   = code
+    the.email  = email
+    template :html
   end
 
-  def POST_change_password code, email
-    mem = Member.by_email(CGI.unescape(email))
+	post '/change-password/:code/:email', :STRANGER do
+    mem = Member.find.email(CGI.unescape(email)).go_first!
     begin
       mem.change_password_through_reset(
         :code=>code, 
@@ -120,7 +122,7 @@ class Members
     end
   end
         
-  def PUT_update
+	put '/update-account', :MEMBER do
     begin
       m = Member.update( current_member.data._id, current_member, clean_room )
       flash_msg.success = "Data has been updated and saved."
@@ -136,7 +138,7 @@ class Members
     end
   end # === put :update
 
-  def DELETE_delete_account_forever_and_ever
+	delete '/delete-account' do
     Member.delete( current_member.data._id, current_member )
     log_out!
     flash_msg.success = "Your account has been deleted forever."

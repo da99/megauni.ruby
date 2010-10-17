@@ -2,81 +2,84 @@ require 'views/Club_Control_Base_View'
 
 class Clubs
   
-  Old_Topics = Find_The_Bunny::Old_Topics
-  
   include Base_Control
-  
-  SECTIONS = %w{ e qa news fights shop random thanks predictions magazine}
+  OLD_TOPICS = Find_The_Bunny::Old_Topics
+  SECTIONS   = %w{ e qa news fights shop random thanks predictions magazine}
   
   top_slash # =====================================================
   
-  get '/club-create' do
-    require_log_in!
-    render_html_template
-  end
+  path '/search' # =====================================================
 
-  get '/club_search' do
-    env['club_filename'] = filename
+  get '/', :STRANGER do
+    action :search
+
+    the.club_filename = filename
     begin
-      club = Club.by_filename(filename)
-      redirect!("/uni/#{club.data.filename}/")
+      club = Club.find.filename(filename).go_first!
+      redirect! club.href
     rescue Club::Not_Found
     end
-    render_html_template
+    
+    template
   end
 
-  post '/club_search/:filename' do
-    filename = clean_room['keyword'].to_s
+  get '/:cgi_escape', :STRANGER do
+    render :text, "Not done."
+  end
+
+  post '/', :STRANGER do
+    filename = clean_room['cgi_escape'].to_s
     begin
-      club = Club.by_filename_or_member_username(filename)
-      redirect!("/uni/#{club.data.filename}/")
+      club = Club.find.filename(filename).go_first!
+      redirect! club.href
     rescue Club::Not_Found
-      cgi_filename = CGI.escape(filename)
-      redirect!("/club-search/#{cgi_filename}/")
+      begin
+        life = Life.find.username(filename).go_first!
+        redirect! life.href
+      rescue Life::Not_Found
+        redirect! "/search/#{Wash.url_escape(filename)}/" 
+      end
     end
   end
 
-  path '/uni' # =====================================================
+  top_slash # =====================================================
   
-  get '/' do
-    the.clubs = Club.all
-    render_html_template
+  get '/uni-new', :MEMBER do
+    action :new
+    render :html
   end
 
-  post '/create' do
-    require_log_in!
+  post '/uni-create', :MEMBER do
     begin
       club = Club.create( current_member, clean_room )
       flash_msg.success = "Club has been created: #{club.data.title}"
       redirect! club.href
     rescue Club::Invalid
       flash_msg.errors = $!.doc.errors
-      redirect_back! "/lifes/"
+      redirect_back_or '/uni-new'
     end
-  end
-
-  post '/follow' do
-    username_id = current_member.lifes._id_for(clean_room['username'])
-    club        = Club.by_filename(clean_room['filename'])
-    begin
-      club.create_follower(current_member, username_id)
-    rescue Club::Invalid
-      flash_msg.errors = $!.doc.errors
-    end
-    redirect! club.href
   end
   
-  get '/:filename' do # by_old_id id
+  path '/uni' # =====================================================
+  
+  get '/', :STRANGER do
+    action :list
+    the.clubs = Club.all
+    template 
+  end
+  
+  path '/uni/:filename' # =====================================================
+
+  get '/', :STRANGER do # by_old_id id
+    action :by_old_topic
     old_topic = clean_room['filename']
-    pass unless Old_Topics.include?(old_topic)
+    pass unless OLD_TOPICS.include?(old_topic)
     
     the.club = old_topic
     template "Topic_#{old_topic}.html"
   end
 
-  path '/uni/:filename' # =====================================================
-
-  get '/' do # by_filename filename
+  get '/', :STRANGER do # by_filename filename
     action :by_filename
     filename            = clean_room['filename']  
     the.club            = club = Club.find.filename(filename).go_first!
@@ -95,11 +98,11 @@ class Clubs
     end
   end
   
-  put '/' do # update filename
-    require_log_in! 
-    club_id = Club.by_filename(filename).data._id
+  put '/', :MEMBER do # update filename
+    the.club = Club.find.filename(filename).fields(:_id).go_first!
+    club_id  = the.clud.data._id
     begin
-      club = Club.update(club_id, current_member, clean_room)
+      the.club.update(current_member, clean_room)
       flash_msg.success = "Club has been updated."
       redirect! club.href
     rescue Club::Invalid
@@ -108,125 +111,116 @@ class Clubs
     end
   end
 
-  get '/edit' do # club_filename
-    club_filename = clean_room[:filename]
-    club = save_club_to_env(club_filename)
-    require_log_in! :ADMIN, club.data.owner_id
-    render_html_template
+  get '/edit', :MEMBER do # club_filename
+    action :edit
+    the.filename = clean_room[:filename]
+    the.club = Club.find.filename(the.filename).go_first!
+    require_log_in! :ADMIN, the.club.data.owner_id
+    template :html
   end
 
-  get '/follow' do
+  get '/follow', :MEMBER do
     filename = clean_room[:filename]
     clean_room['username'] = current_member.lifes.usernames.first
     clean_room['filename'] = filename
     POST_follow()
   end
-  
-  get '/news' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.news'] = Message.latest_by_club_id(club.data._id, :message_model=>'news')
-    render_html_template
-  end
 
-  get '/magazine' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.magazine'] = Message.latest_by_club_id(club.data._id, :message_model=>'mag_story')
-    render_html_template
-  end
-
-  get '/fights' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.passions'] = Message.latest_by_club_id(club.data._id, :message_model=>{ :$in=> %w{fight complaint debate} })
-    render_html_template
-  end
-
-  get '/qa' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.questions'] = Message.latest_by_club_id(club.data._id, :message_model=>'question')
-    render_html_template
-  end
-
-  get '/e' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.facts'] = Message.latest_by_club_id(club.data._id, :message_model=>{:$in=>['e_chapter', 'e_quote']})
-    render_html_template
-  end
-
-  get '/shop' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.buys'] = Message.latest_by_club_id(club.data._id, :message_model=>'buy')
-    render_html_template
-  end
-
-  get '/predictions' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.predictions'] = Message.latest_by_club_id(club.data._id, :message_model=>'prediction')
-    render_html_template
-  end
-
-  get '/random' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.randoms'] = Message.latest_by_club_id(club.data._id, :message_model=>'random')
-    render_html_template
-  end
-
-  get '/thanks' do
-    filename = clean_params[:filename]
-    the.club = club = Club.by_filename_or_member_username(filename)
-    env['results.thanks'] = Message.latest_by_club_id(club.data._id, :message_model=>'thank')
-    render_html_template
+  post '/follow', :MEMBER do
+    username_id = current_member.lifes.username(clean_room['username']).fields().go_first!
+    club        = Club.find.filename(clean_room['filename']).go_first!
+    begin
+      club.create_follower(current_member, username_id)
+    rescue Club::Invalid
+      flash_msg.errors = $!.doc.errors
+    end
+    redirect! club.href
   end
   
-  private # ======================================
-
-  def save_club_to_env id
-    club_filename       = "#{id.sub('club-', '')}"
-    env['the.app.club'] = Club.by_filename club_filename
-    the.club = Club.by_filename club_filename
+  get :news, :STRANGER do
+    the_club_with :news
+    template :html
   end
 
+  get :magazine, :STRANGER do
+    the_club_with :magazine
+    template :html
+  end
+
+  get :fights, :STRANGER do
+    the_club_with :passions
+    template :html
+  end
+
+  get :qa, :STRANGER do
+    the_club_with :questions
+    template :html
+  end
+
+  get :e, :STRANGER do
+    the_club_with :facts
+    template :html
+  end
+
+  get :shop, :STRANGER do
+    the_club_with :buys
+    template :html
+  end
+
+  get :predictions, :STRANGER do
+    the_club_with :predictions
+    template :html
+  end
+
+  get :random, :STRANGER do
+    the_club_with :randoms
+    template :html
+  end
+
+  get :thanks, :STRANGER do
+    the_club_with :thanks
+    template :html
+  end
+  
   # =========================================================
   #               READ-related actions
   # =========================================================
 
-  def GET_by_date  raw_year, raw_month
-    year  = raw_year.to_i
-    month = raw_month.to_i
-    year += 2000 if year < 100
-    month = 1 if month < 1
-    case month
-      when 1
-        @prev_month = Time.utc(year - 1, 12)
-        @next_month = Time.utc(year + 1, 2)
-      when 12
-        @prev_month = Time.utc(year, 11)
-        @next_month = Time.utc(year, 1)
-      else
-        @prev_month = Time.utc(year, month-1)
-        @next_month = Time.utc(year, month+1)    
+  %w{ /:year /:year/:month }.each { |url|
+    
+    get url, :STRANGER do  # by_date
+      
+      year, month, prev_month, next_month = stardardize_date_ranger( clean_room[:year], clean_room[:month])
+      case month
+        when 1
+          @prev_month = Time.utc(year - 1, 12)
+          @next_month = Time.utc(year + 1, 2)
+        when 12
+          @prev_month = Time.utc(year, 11)
+          @next_month = Time.utc(year, 1)
+        else
+          @prev_month = Time.utc(year, month-1)
+          @next_month = Time.utc(year, month+1)    
+      end
+      
+      @date = Time.utc(year, month)
+      
+      the.messages = Club.find.messages.
+        news.
+        published_at.
+        between(prev_month, next_month).
+        sort( [:_id, :desc] ).
+        go!
+      
+      template "Clubs_by_date.html"
+      
     end
-    @date = Time.utc(year, month)
-    @news = News.by_published_at(:descending=>true, :startkey=>@next_month, :endkey=>@prev_month)
-    render_html_template
-  end # ===
-  
+    
+  } # === %w{}
+
 end # === Club_Control
 
 
 
 __END__
 
-  
-  def GET_as_life username
-    env['club']            = Club.by_filename_or_member_username(username)
-    env['messages_latest'] = Message.latest_by_club_id(env['club'].data._id)
-    render_html_template
-  end

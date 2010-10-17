@@ -2,6 +2,18 @@ require 'views/Base_View'
 require 'models/Hash_Sym_Or_Str_Keys'
 
 module Base_Control
+  
+  REG_MAPS = {
+    ':year'    => "[0-9]{2,4}",
+    ':month'   => "[0-9]{1,2}",
+    ':filename' => '[a-zA-Z0-9\_\-\.]{1,}',
+    ':id'  => '[a-zA-Z0-9]{1,}',
+    ':_id' => '[a-zA-Z0-9]{5,}',
+    ':cgi_escape' => '[a-zA-Z0-9\%\.\_\-\=\+\&\!]{1,}'
+  }
+
+  KEY_REG = %r!#{REG_MAPS.keys.join('|')}!
+    
 
   # ======== Class Methods  ======== 
   class << self
@@ -24,19 +36,77 @@ module Base_Control
       @path = sub_path
     end
     
-    def method_missing name, *args, &blok
-      case name
-      when :post, :get, :put, :delete
-        sub_path = args.shift
-        raise ArgumentError, "Unknown arguments: #{args.inspect}" unless args.empty?
-        controller = self
-        Uni_App.send(name, File.join(current_path, sub_path, '/') ) do
-          control controller.to_s
-          instance_eval &blok
+    def allow level
+      @security_level = Member.const_get(level)
+    end
+    
+    def security_level
+      @security_level 
+    end
+        
+    def compile_route raw_unknown
+      is_file = raw_unknown['.']
+      unknown = if is_file
+                  File.join(current_path, raw_unknown)
+                else
+                  File.join(current_path, raw_unknown, '/')
+                end
+                  
+      return unknown unless unknown[KEY_REG]
+
+      keys = []
+      final_path = begin
+                     unknown.split('/').map { |sub|
+                       target = ( REG_MAPS[sub] && "(#{REG_MAPS[sub]})" )
+                       if target
+                         keys << sub.sub(':', '')
+                       end
+                       target || sub
+                     }.join('/')
+                   end
+
+      pattern = %r!#{final_path}/!
+      eval %~
+        def pattern.keys
+          #{keys.inspect}
         end
-      else
-        super
+      ~
+      pattern
+    end
+
+    def redirect *args
+      puts "Not done: redirect in control definition"
+      self
+    end
+    alias_method :to, :redirect
+
+    def method_missing name, *args, &blok
+      return super unless [:get, :post, :put, :delete].include?(name)
+      
+      sub_path = args.shift
+      level    = Member.const_get( args.shift )
+      raise ArgumentError, "Unknown arguments: #{args.inspect}" unless args.empty?
+      controller = self
+
+      action_name = case sub_path
+                    when Symbol
+                      action_name = sub_path
+                      sub_path = "/#{action_name}"
+                    else
+                      nil
+                    end
+
+      Uni_App.send(name, compile_route(sub_path) ) do
+        base_path current_path
+        control controller.to_s
+        if action_name
+          action action_name
+        end
+        min_security_level level
+        instance_eval &blok
       end
+
+      allow :NO_ACCESS
     end
 
     # def get sub_path, &blok
