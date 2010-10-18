@@ -115,7 +115,6 @@ class Member
       if username.empty? || password.empty?
         raise Wrong_Password, "#{raw_vals.inspect}"
       end
-
       mem = Life.find.username( username ).grab(:owner).go_first!
 
       # Check for Password_Reset
@@ -412,15 +411,15 @@ class Member
     def _ids
       @_ids ||= map { |doc| doc['_id'] }
     end
-		
-		def _ids_to_usernames
-			@_ids_to_usernames ||= begin
-															arr = {}
-															 _ids.each_index { |ind|
-																 arr[ _ids[ind] ] = usernames[ind]
-															}
-														 end
-		end
+    
+    def _ids_to_usernames
+      @_ids_to_usernames ||= begin
+                              arr = {}
+                               _ids.each_index { |ind|
+                                 arr[ _ids[ind] ] = usernames[ind]
+                              }
+                             end
+    end
     
   end
 

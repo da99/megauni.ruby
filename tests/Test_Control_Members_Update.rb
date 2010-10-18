@@ -1,6 +1,5 @@
 # controls/Members.rb
 require 'tests/__rack_helper__'
-require 'mocha'
 require 'helpers/Pony'
 
 class Test_Control_Members_Update < Test::Unit::TestCase

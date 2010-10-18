@@ -11,7 +11,6 @@
 
   #   assert_equal 1, follows.size
   # end
-
 # controls/Clubs.rb
 require 'tests/__rack_helper__'
 
@@ -21,7 +20,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     @mem ||= regular_member(1)
   end
 
-  must 'not render /uni/' do
+  must "not render /uni/" do
     get '/uni/'
     assert_equal false, last_response.ok?
   end
@@ -68,14 +67,13 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     assert_equal nil, last_response.body[club.href_follow]
   end
 
-  must 'not show "You are following" message to club creator' do
+  must "not show \"You are following\" message to club creator" do
     club = create_club(regular_member(1))
 
     log_in_regular_member(1)
     get club.href
     assert_equal nil, last_response.body['following']
   end
-
 
   # ================ Club Search ===========================
 
@@ -142,13 +140,13 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     end
   }
 
-  must 'show questions in Q&A section' do
+  must "show questions in Q&A section" do
     club = create_club(mem)
     mess = create_message( mem, club, :message_model=>'question' )
     get club.href_qa
     assert last_response.body[mess.data.body]
   end
-
+  
   must 'show magazine articles in magazine section' do
     club = create_club(mem)
     mess = create_message( mem, club, :message_model=>'mag_story')
@@ -163,4 +161,12 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     assert last_response.body[mess.data.body]
   end
 
+  # 100.times { |i|
+  #   must "#{i} do something" do
+  #   get club.href_qa
+  #   assert_equal "hello qa", last_response.body
+  #   end
+  # }
 end # === class Test_Control_Clubs_Read
+
+

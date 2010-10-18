@@ -889,7 +889,7 @@ module Mongo_Dsl
             when String
               if suff == part 
                 base_pattern, field = self.class::HREF_PATTERN
-								pattern = File.join(base_pattern, suff)
+                pattern = File.join(base_pattern, suff)
               end
             when Array
               if suff.first == part
@@ -1025,7 +1025,18 @@ module Mongo_Dsl
     end
 
     def create_relation type, name, class_name = nil, foreign_key = nil, &blok
-      relations[name.to_sym] = Mongo_Dsl::Query_Relate.new( self, type, name, class_name, foreign_key, &blok )
+      # relations[name.to_sym] = gather = Gather.new
+      # gather.meta(
+      #   :type => type, 
+      #   :name => name, 
+      #   :parent => self, 
+      #   :child  => class_name,
+      #   :foreign_key => foreign_key )
+      # gather.instance_eval &blok
+      # gather
+      name_sym = name.to_sym
+      raise ArgumentError, "Already defined: #{name_sym}" if relations[name_sym]
+      relations[name_sym] = Mongo_Dsl::Query_Relate.new( self, type, name, class_name, foreign_key, &blok )
     end
 
     # ===== CRUD Methods ====================================

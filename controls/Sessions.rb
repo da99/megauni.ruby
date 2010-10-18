@@ -17,7 +17,6 @@ class Sessions
 
   post '/log-in', :STRANGER do
     log_out!
-    
     begin 
       self.current_member = Member.authenticate(
         :username   => clean_room['username'], 

@@ -173,6 +173,8 @@ class Test::Unit::TestCase
       
   def log_in_regular_member i = 1
     mem = Life.find.username(regular_username(1)).grab(:owner).go_first!
+    # BCrypt::Password.expects(:new).returns(regular_password(1) + mem.data.salt)
+    Member.expects(:authenticate).returns(mem)
     assert_equal false, mem.has_power_of?( :ADMIN )
     post '/log-in/', {:username=>mem.lifes.usernames.first, :password=>regular_password(1)}, ssl_hash
     follow_redirect!

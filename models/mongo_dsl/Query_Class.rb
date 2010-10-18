@@ -25,6 +25,7 @@ class Mongo_Dsl::Query_Class
     end
     
     if target.querys[name]
+      # return( list.querys << Mongo_Dsl::Query_Relation.new( target, name ) )
       return( list.querys << target.querys[name].spawn! )
     end
     
