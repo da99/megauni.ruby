@@ -94,25 +94,6 @@ class Mongo_Dsl::Query_Relate
   def filter name, &blok
     filters[name] = blok
   end
-
-  def extract_value foreign_key, doc_or_instance
-    case doc_or_instance
-    when Hash
-      doc_or_instance[foreign_key] || doc_or_instance[foreign_key.to_sym]
-    when Array
-      doc_or_instance.map { |doc| 
-        if doc.respond_to?(:data)
-          doc.data._id
-        elsif doc.is_a?(Hash)
-          doc[foreign_key]
-        else
-          doc
-        end
-      }
-    else
-      instance.data._id
-    end
-  end # === def  
   
   def spawn!
     Spawn.new(self, ['@name'])
@@ -158,11 +139,11 @@ class Mongo_Dsl::Query_Relate::Spawn
     @do_as_merge
   end
 
-  def want_request? name
+  def want_request? composer, name
     !!(
       filters[name] ||
-        origin.child.querys[ name ] ||
-          respond_to?(name)
+          respond_to?(name) ||
+          (origin.child.querys[ name ] && composer.grabs.include?(name) || composer.merges.include?(name)) 
     )
   end
   
@@ -183,7 +164,7 @@ class Mongo_Dsl::Query_Relate::Spawn
   
   def go! composer
     results = composer.results.last
-
+			
     # Let's compile the results into
     # something this relation can use.
     id_key = case type

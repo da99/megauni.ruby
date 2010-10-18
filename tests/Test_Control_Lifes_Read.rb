@@ -3,6 +3,12 @@ require 'tests/__rack_helper__'
 
 class Test_Control_Lifes_Read < Test::Unit::TestCase
 
+  must 'render /uni/{some filename}/ for members' do
+    log_in_regular_member(1)
+    get "/life/#{regular_member(1).lifes.usernames.first}/predictions/"
+    assert_equal 200, last_response.status
+  end
+
   must 'show "This life is yours" to owner of life club' do
     msg = "This life is yours"
     mem = regular_member(3)

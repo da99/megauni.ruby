@@ -13,7 +13,7 @@ class Mongo_Dsl::Query_Class
     @params      = {}
   end
 
-  def want_request?( name )
+  def want_request?( composer, name )
     target.allowed_field?(name) ||
       target.querys[name] ||
         respond_to?( name )

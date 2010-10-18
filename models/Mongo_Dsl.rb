@@ -899,7 +899,7 @@ module Mongo_Dsl
             break if pattern && field
           } 
           if pattern && field
-            return cache[name] = (pattern % data.send(field))
+            return cache[name] = File.join(pattern % data.send(field), '/')
           end
         end
       end

@@ -1,12 +1,14 @@
 
 class Mongo_Dsl::Query_Composer
 
-  attr_reader :querys, :results, :after_all
+  attr_reader :querys, :results, :after_all, :grabs, :merges
   
   def initialize target
     @querys    = []
     @results   = []
     @after_all = []
+    @grabs = []
+    @merges = []
     
     if target.respond_to?(:included_modules)
       querys << Mongo_Dsl::Query_Class.new(target)
@@ -21,7 +23,7 @@ class Mongo_Dsl::Query_Composer
       raise "Can't add any more queries once :after_all is no longer empty."
     end
 
-    if querys.last && querys.last.want_request?( name )
+    if querys.last && querys.last.want_request?( self, name )
       querys.last.new_request( self, name, *args )
       return self
     end
@@ -36,13 +38,17 @@ class Mongo_Dsl::Query_Composer
   end
 
   def grab name
+    grabs << name
     method_missing name
+    @grabs = []
     self
   end
 
   def merge name
+    merges << name
     method_missing name
     querys.last.do_as_merge
+    @merges = []
     self
   end
 

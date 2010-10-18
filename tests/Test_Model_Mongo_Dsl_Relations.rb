@@ -228,14 +228,14 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     assert_equal men_data, cafe.find.men.go!
   end
   
-  must 'grab relations from other relations: cafe.fine.employees.women.grab(:planet).go!' do
+  must 'grab relations from other relations: cafe.find.employees.women.grab(:planet).go!' do
     cafe = create_cafe
     planet = create_planet
     women = (0..2).to_a.map { |index|
       create_employee(cafe, :role=>'woman', :planet_id=>planet.data._id)
     }
     women_data = women.map { |record| record.data.as_hash } 
-
+  
     assert_equal [planet.data.as_hash], cafe.find.employees.women.grab(:planet).go!
   end
   
@@ -260,7 +260,18 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     
     assert_equal wish, cafe.find.employees.merge(:planet).fields(:title).go!
   end
-
+  
+  must 'not search in other Models for relations. (aka implicit relations w/o merge/grab/etc.)' do
+    err = assert_raise(NoMethodError) {
+      planet = Cafe_Planet.new( Cafe_Planet.db.collection.find_one )
+      planet.find.employees.planet.go!
+    }
+    assert_match( 
+      /undefined method `planet' for #<Mongo_Dsl::/ , 
+      err.message
+    )
+  end
+  
 end # === class _create
 
 

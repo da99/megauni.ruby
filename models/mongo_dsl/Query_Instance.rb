@@ -11,7 +11,7 @@ class Mongo_Dsl::Query_Instance
     freeze
   end
 
-  def want_request?(name)
+  def want_request?(composer, name)
     !!( 
        target.class.querys[name]
       )

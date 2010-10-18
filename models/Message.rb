@@ -136,9 +136,9 @@ class Message
       where :message_model, 'suggest'
     end
     
-    filter :questions do
-      where :message_model, 'question'
-    end
+    # filter :questions do
+    #   where :message_model, 'question'
+    # end
     
   end
 

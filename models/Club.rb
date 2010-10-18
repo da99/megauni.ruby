@@ -39,20 +39,24 @@ class Club
   
   has_many :messages do
     
-    override_as :comments do
-      where_in :message_model, %w{ jeer cheer }
-    end
-
-    override_as :questions do
-      where    :message_model, 'question'
-    end
-
     foreign_key :target_ids
     where :parent_message_id, nil
     where :privacy, 'public'
     limit 10
     sort  [:_id, :desc]
     
+    filter :questions do
+      where :message_model, 'question'
+    end
+
+    filter :news do
+      where_in :message_model, %w{ news }
+    end
+    
+    filter :magazine do
+      where_in :message_model, %w{mag_story}
+    end
+
     filter :passions do
       where_in :message_model, %w{fight complaint debate}
     end

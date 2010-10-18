@@ -1,3 +1,17 @@
+  # must 'allow members to follow someone else\'s club' do
+  #   club = create_club(regular_member(2))
+
+  #   log_in_regular_member(1)
+  #   get File.join('/', club.href, 'follow/')
+  #   club = Club.find._id(club.data._id).go_first!
+  #   follows = club.find.followers.go_first! Club.find.followers(
+  #     :club_id=>, 
+  #     :follower_id=>regular_member(1).lifes._ids.first
+  #   ).to_a
+
+  #   assert_equal 1, follows.size
+  # end
+
 # controls/Clubs.rb
 require 'tests/__rack_helper__'
 
@@ -23,12 +37,8 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     get "/uni/#{club.data.filename}/"
     assert_equal club.data.title, last_response.body[club.data.title]
   end
-
-  must 'render /uni/{some filename}/ for members' do
-    log_in_regular_member(1)
-    get "/life/#{regular_member(1).lifes.usernames.first}/predictions/"
-    assert_equal 200, last_response.status
-  end
+                                          
+     
 
   must 'render /sports/' do
     get "/sports/"
@@ -42,39 +52,6 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     assert_equal 200, last_response.status
   end
 
-  must 'present a create message form for logged-in members' do
-    club = create_club
-    
-    log_in_regular_member(1)
-    get club.href_e
-    form = Nokogiri::HTML(last_response.body).css('form#form_club_message_create').first
-    
-    assert_equal Nokogiri::XML::Element, form.class
-  end
-
-  must 'include club filename for :club_filename in message create form' do
-    club = create_club
-    
-    log_in_regular_member(1)
-    get club.href_e
-    target_ids = Nokogiri.HTML(last_response.body).css(
-      'form#form_club_message_create input[name=club_filename]'
-    ).first
-    
-    assert_equal club.data.filename.to_s, target_ids.attributes['value'].value
-  end
-
-  must 'include member\'s username for :username in message create form' do
-    club = create_club
-    
-    log_in_regular_member(1)
-    get club.href_e
-    un = Nokogiri.HTML(last_response.body).css(
-      'form#form_club_message_create input[name=username]'
-    ).first
-    
-    assert_equal regular_member(1).lifes.usernames.first, un.attributes['value'].value
-  end
 
   must 'not show follow club link to strangers.' do
     club = create_club
@@ -99,54 +76,6 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
     assert_equal nil, last_response.body['following']
   end
 
-  must 'not show follow club link to followers.' do
-    club = create_club(regular_member(1))
-    club.create_follower( regular_member(2), regular_member(2).lifes._ids.first )
-
-    log_in_regular_member(2)
-    get club.href
-
-    assert_not_equal club.href_follow, last_response.body[club.href_follow]
-  end
-
-  must 'show follow club link to members.' do
-    club = create_club(regular_member(1))
-
-    log_in_regular_member(2)
-    get club.href
-    
-    assert_equal club.href_follow, last_response.body[club.href_follow]
-  end
-
-  # must 'allow members to follow someone else\'s club' do
-  #   club = create_club(regular_member(2))
-
-  #   log_in_regular_member(1)
-  #   get File.join('/', club.href, 'follow/')
-  #   club = Club.find._id(club.data._id).go_first!
-  #   follows = club.find.followers.go_first! Club.find.followers(
-  #     :club_id=>, 
-  #     :follower_id=>regular_member(1).lifes._ids.first
-  #   ).to_a
-
-  #   assert_equal 1, follows.size
-  # end
-
-  must 'show a form if user has multiple usernames' do
-    if regular_member(3).lifes.usernames.size == 1
-      Member.update(
-        regular_member(3).data._id, 
-        regular_member(3), 
-        :add_username=>"username-#{rand(2000)}"
-      )
-    end
-
-    club = create_club(regular_member(1))
-    log_in_regular_member(3)
-    get club.href
-
-    assert Nokogiri::HTML(last_response.body).css('form#form_follow_create').first
-  end
 
   # ================ Club Search ===========================
 
@@ -175,7 +104,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   must 'redirect to life if keyword is a member username' do
     un = regular_member(1).lifes.usernames.first
     post "/search/", :keyword=>un
-    assert_redirect "/life/#{un}/", 303
+    assert_redirect "/life/#{un}/", 302 # Temporary redirect.
   end
 
   # ================= Club Parts ===========================
@@ -212,7 +141,6 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
       assert_equal nil, last_response.body['empty_m']
     end
   }
-
 
   must 'show questions in Q&A section' do
     club = create_club(mem)

@@ -15,8 +15,8 @@ module Sinatra
 
     def the_club_with messages
       action :"read_#{request.path_info.split('/').last}"
-			the_club
-      results = the.club.find.messages.send(messages).go!
+      the_club
+      results = the.club.find.messages.send(messages).merge(:owner).go!
       the.send("#{messages}=", results  )
     end
 

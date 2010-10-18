@@ -8,7 +8,8 @@ class Gather
   end
 
   def method_missing name, *args, &blok
-    meths << [name, args, blok]
+    meths << [name, args, blok && Gather.new.instance_eval( &blok )]
+    self
   end
   
 end
