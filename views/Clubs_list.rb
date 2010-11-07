@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Clubs_list.rb
-# SASS  ~/megauni/templates/en-us/sass/Clubs_list.sass
+# MAB   ~/megauni/templates/en-us/html/Clubs_list.rb
+# SASS  ~/megauni/templates/en-us/css/Clubs_list.sass
 # NAME  Clubs_list
 
 class Clubs_list < Base_View

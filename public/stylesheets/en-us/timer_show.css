@@ -8,6 +8,9 @@ html, body {
   font-family: inherit;
   vertical-align: baseline; }
 
+html {
+  font-size: 100.01%; }
+
 div, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
 pre, a, abbr, acronym, address, code, del, dfn, em, img,
 dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr {
@@ -67,22 +70,16 @@ a img {
 
 #container {
   overflow: hidden;
-  display: inline-block; }
-  #container {
-    display: block; }
+  *zoom: 1; }
 
 #content {
   overflow: hidden;
-  display: inline-block;
+  *zoom: 1;
   float: left; }
-  #content {
-    display: block; }
 
 #the_content {
   overflow: hidden;
-  display: inline-block; }
-  #the_content {
-    display: block; }
+  *zoom: 1; }
 
 #nav_bar {
   float: left;
@@ -199,9 +196,7 @@ body {
   padding-bottom: 50px;
   padding-top: 20px;
   overflow: hidden;
-  display: inline-block; }
-  #content {
-    display: block; }
+  *zoom: 1; }
   #content p {
     font-size: 16px; }
   #content ul {
@@ -299,9 +294,7 @@ form fieldset {
     height: 200px; }
 form div.group {
   overflow: hidden;
-  display: inline-block; }
-  form div.group {
-    display: block; }
+  *zoom: 1; }
   form div.group fieldset {
     float: left; }
 form div.checkboxes {
@@ -313,9 +306,7 @@ form div.buttons button {
 
 div.body {
   overflow: hidden;
-  display: inline-block; }
-  div.body {
-    display: block; }
+  *zoom: 1; }
 
 div.news_post {
   padding-bottom: 10px;
@@ -384,11 +375,9 @@ div.message, div.club {
 
 #work div.job {
   overflow: hidden;
-  display: inline-block;
-  background: #d4ebf1 url('"/eggs/images/blue_sky_bg.jpg"') repeat-x;
+  *zoom: 1;
+  background: #d4ebf1 url("/eggs/images/blue_sky_bg.jpg") repeat-x;
   margin-bottom: 20px; }
-  #work div.job {
-    display: block; }
   #work div.job div.undo {
     display: none; }
   #work div.job ul.control_panel li {
@@ -472,7 +461,7 @@ div.message, div.club {
     padding: 0 0 35px 35px;
     line-height: 1em;
       line-height-font-size: 20px;
-    background: transparent url('"/skins/jinx/images/i_one.jpg"') no-repeat; }
+    background: transparent url("/skins/jinx/images/i_one.jpg") no-repeat; }
     #instructions ol li div.body {
       font-size: 18px;
       font-weight: bold;
@@ -482,12 +471,12 @@ div.message, div.club {
         font-size: 18px;
         text-transform: none; }
   #instructions ol li.one {
-    background-image: url('"/skins/jinx/images/i_one.jpg"');
+    background-image: url("/skins/jinx/images/i_one.jpg");
     background-position: 3px 0; }
   #instructions ol li.two {
-    background-image: url('"/skins/jinx/images/i_two.jpg"'); }
+    background-image: url("/skins/jinx/images/i_two.jpg"); }
   #instructions ol li.three {
-    background-image: url('"/skins/jinx/images/i_three.jpg"');
+    background-image: url("/skins/jinx/images/i_three.jpg");
     background-position: 3px 0; }
 
 #create_countdown div.time_units_block fieldset {

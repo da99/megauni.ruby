@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_economy.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_economy.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_economy.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_economy.sass
 # NAME  Topic_economy
 
 class Topic_economy < Base_View

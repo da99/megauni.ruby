@@ -1,5 +1,5 @@
-# MAB   /home/da01/MyLife/apps/megauni/templates/en-us/mab/News_Control_edit.rb
-# SASS  /home/da01/MyLife/apps/megauni/templates/en-us/sass/News_Control_edit.sass
+# MAB   /home/da01/MyLife/apps/megauni/templates/en-us/html/News_Control_edit.rb
+# SASS  /home/da01/MyLife/apps/megauni/templates/en-us/css/News_Control_edit.sass
 # NAME  News_Control_edit
 
 require 'modules/Enum_Map_Html_Menu'

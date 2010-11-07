@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_lifes.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_lifes.sass
+# MAB   ~/megauni/templates/en-us/html/Members_lifes.rb
+# SASS  ~/megauni/templates/en-us/css/Members_lifes.sass
 # NAME  lifes
 # CONTROL models/Member.rb
 # MODEL   controls/Member.rb

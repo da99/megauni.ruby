@@ -1,5 +1,5 @@
-# ~/megauni/templates/en-us/mab/Hellos_list.rb
-# ~/megauni/templates/en-us/sass/Hellos_list.sass
+# ~/megauni/templates/en-us/html/Hellos_list.rb
+# ~/megauni/templates/en-us/css/Hellos_list.sass
 # ~/megauni/controls/Hellos.rb
 
 class Hellos_list < Base_View

@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_flu.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_flu.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_flu.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_flu.sass
 # NAME  Topic_flu
 
 class Topic_flu < Base_View

@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_life_e.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_life_e.sass
+# MAB   ~/megauni/templates/en-us/html/Members_life_e.rb
+# SASS  ~/megauni/templates/en-us/css/Members_life_e.sass
 # NAME  Members_life_e
 
 class Members_life_e < Base_View

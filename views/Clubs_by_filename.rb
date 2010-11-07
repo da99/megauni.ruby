@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Clubs_by_filename.rb
-# SASS  ~/megauni/templates/en-us/sass/Clubs_by_filename.sass
+# MAB   ~/megauni/templates/en-us/html/Clubs_by_filename.rb
+# SASS  ~/megauni/templates/en-us/css/Clubs_by_filename.sass
 # MODEL ~/megauni/models/Club.rb
 # CONTROL ~/megauni/controls/Clubs.rb
 # NAME  Clubs_by_filename

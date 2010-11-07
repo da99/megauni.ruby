@@ -1,0 +1,201 @@
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?> <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n <html xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\">\n  <head>\n   <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\"/>\n   <meta content=\"text/javascript\" http-equiv=\"Content-Script-Type\"/>\n   <meta content=\"text/css\" http-equiv=\"Content-Style-Type\"/>\n   <meta content=\"en-US\" http-equiv=\"Content-Language\"/>\n   <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\"/>\n   <meta content=\"en-US\" http-equiv=\"Content-Language\"/>\n\n#{      if v = ctx[:meta_menu]
+        if v == true
+          "<meta content=\"#{CGI.escapeHTML(ctx[:content].to_s)}\" name=\"#{CGI.escapeHTML(ctx[:name].to_s)}\"/>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<meta content=\"#{CGI.escapeHTML(ctx[:content].to_s)}\" name=\"#{CGI.escapeHTML(ctx[:name].to_s)}\"/>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<meta content=\"#{CGI.escapeHTML(ctx[:content].to_s)}\" name=\"#{CGI.escapeHTML(ctx[:name].to_s)}\"/>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:page]
+        if v == true
+          "<title>#{CGI.escapeHTML(ctx[:title].to_s)}</title>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<title>#{CGI.escapeHTML(ctx[:title].to_s)}</title>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<title>#{CGI.escapeHTML(ctx[:title].to_s)}</title>\n\n"; ctx.pop; r }.join
+        end
+      end
+}<link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\"/>\n\n#{      if v = ctx[:not_mobile_request?]
+        if v == true
+          "<link rel=\"stylesheet\" href=\"#{CGI.escapeHTML(ctx[:css_file].to_s)}?time=1289027967\" type=\"text/css\" media=\"screen\"/>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<link rel=\"stylesheet\" href=\"#{CGI.escapeHTML(ctx[:css_file].to_s)}?time=1289027967\" type=\"text/css\" media=\"screen\"/>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<link rel=\"stylesheet\" href=\"#{CGI.escapeHTML(ctx[:css_file].to_s)}?time=1289027967\" type=\"text/css\" media=\"screen\"/>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{CGI.escapeHTML(ctx[:head_content].to_s)}\n\n  </head>\n  <body id=\"the_body\">\n\n#{      if v = ctx[:flash_msg?]
+        if v == true
+          "<div id=\"flash_msg\">\n\n#{      if v = ctx[:flash_success]
+        if v == true
+          "<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:flash_errors]
+        if v == true
+          "<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</div>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<div id=\"flash_msg\">\n\n#{      if v = ctx[:flash_success]
+        if v == true
+          "<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:flash_errors]
+        if v == true
+          "<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</div>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<div id=\"flash_msg\">\n\n#{      if v = ctx[:flash_success]
+        if v == true
+          "<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<div class=\"success\">\n      <h4>Success</h4>\n      <div class=\"msg\">#{CGI.escapeHTML(ctx[:msg].to_s)}</div>\n     </div>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:flash_errors]
+        if v == true
+          "<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<div class=\"errors\">\n      <h4>#{CGI.escapeHTML(ctx[:title].to_s)}</h4>\n      <div class=\"msg\">\n       <ul>\n\n#{      if v = ctx[:errors]
+        if v == true
+          "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>#{CGI.escapeHTML(ctx[:err].to_s)}</li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n      </div>\n     </div>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</div>\n\n"; ctx.pop; r }.join
+        end
+      end
+}<div id=\"the_content\">\n   </div>\n\n#{      if v = ctx[:include_tracking?]
+        if v == true
+          "<script type=\"text/javascript\"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src=\"' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js\" type=\"text/javascript\"%3E%3C/script%3E')); </script> \n        <script type=\"text/javascript\"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>\n        <script type=\"text/javascript\">mpmetrics.track(\"eveything\", { 'referer' : '#{CGI.escapeHTML(ctx[:http_referer].to_s)}' });</script>\n      \n"
+        elsif v.is_a?(Proc)
+          v.call("<script type=\"text/javascript\"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src=\"' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js\" type=\"text/javascript\"%3E%3C/script%3E')); </script> \n        <script type=\"text/javascript\"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>\n        <script type=\"text/javascript\">mpmetrics.track(\"eveything\", { 'referer' : '#{CGI.escapeHTML(ctx[:http_referer].to_s)}' });</script>\n      \n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<script type=\"text/javascript\"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src=\"' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js\" type=\"text/javascript\"%3E%3C/script%3E')); </script> \n        <script type=\"text/javascript\"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>\n        <script type=\"text/javascript\">mpmetrics.track(\"eveything\", { 'referer' : '#{CGI.escapeHTML(ctx[:http_referer].to_s)}' });</script>\n      \n"; ctx.pop; r }.join
+        end
+      end
+}</body>\n </html>\n"

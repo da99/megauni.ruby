@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Messages_edit.rb
-# SASS  ~/megauni/templates/en-us/sass/Messages_edit.sass
+# MAB   ~/megauni/templates/en-us/html/Messages_edit.rb
+# SASS  ~/megauni/templates/en-us/css/Messages_edit.sass
 # NAME  Messages_edit
 
 class Messages_edit < Base_View

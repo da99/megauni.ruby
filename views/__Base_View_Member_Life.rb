@@ -1,12 +1,12 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_life.rb
-# MAB   ~/megauni/templates/en-us/mab/Members_life_e.rb
-# MAB   ~/megauni/templates/en-us/mab/Members_life_qa.rb
-# MAB   ~/megauni/templates/en-us/mab/Members_life_status.rb
+# MAB   ~/megauni/templates/en-us/html/Members_life.rb
+# MAB   ~/megauni/templates/en-us/html/Members_life_e.rb
+# MAB   ~/megauni/templates/en-us/html/Members_life_qa.rb
+# MAB   ~/megauni/templates/en-us/html/Members_life_status.rb
 # 
-# SASS  ~/megauni/templates/en-us/sass/Members_life.sass
-# SASS  ~/megauni/templates/en-us/sass/Members_life_e.sass
-# SASS  ~/megauni/templates/en-us/sass/Members_life_qa.sass
-# SASS  ~/megauni/templates/en-us/sass/Members_life_status.sass
+# SASS  ~/megauni/templates/en-us/css/Members_life.sass
+# SASS  ~/megauni/templates/en-us/css/Members_life_e.sass
+# SASS  ~/megauni/templates/en-us/css/Members_life_qa.sass
+# SASS  ~/megauni/templates/en-us/css/Members_life_status.sass
 # 
 # CONTROL ~/megauni/controls/Members.rb
 #

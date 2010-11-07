@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_change_password.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_change_password.sass
+# MAB   ~/megauni/templates/en-us/html/Members_change_password.rb
+# SASS  ~/megauni/templates/en-us/css/Members_change_password.sass
 # NAME  Members_change_password
 
 class Members_change_password < Base_View

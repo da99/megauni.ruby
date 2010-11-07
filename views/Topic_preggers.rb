@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_preggers.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_preggers.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_preggers.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_preggers.sass
 # NAME  Topic_preggers
 
 class Topic_preggers < Base_View

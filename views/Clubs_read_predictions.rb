@@ -1,6 +1,6 @@
-# MODULE templates/en-us/mab/extensions/MAB_Clubs_read_predictions.rb
-# MAB   ~/megauni/templates/en-us/mab/Clubs_read_predictions.rb
-# SASS  ~/megauni/templates/en-us/sass/Clubs_read_predictions.sass
+# MODULE templates/en-us/html/extensions/MAB_Clubs_read_predictions.rb
+# MAB   ~/megauni/templates/en-us/html/Clubs_read_predictions.rb
+# SASS  ~/megauni/templates/en-us/css/Clubs_read_predictions.sass
 # NAME  Clubs_read_predictions
 
 require 'views/extensions/Base_Club'

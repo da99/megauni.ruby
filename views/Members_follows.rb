@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_follows.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_follows.sass
+# MAB   ~/megauni/templates/en-us/html/Members_follows.rb
+# SASS  ~/megauni/templates/en-us/css/Members_follows.sass
 # NAME  follows
 # CONTROL models/Member.rb
 # MODEL   controls/Member.rb

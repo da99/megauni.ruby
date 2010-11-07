@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_life.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_life.sass
+# MAB   ~/megauni/templates/en-us/html/Members_life.rb
+# SASS  ~/megauni/templates/en-us/css/Members_life.sass
 # NAME  Members_life
 
 require 'views/__Base_View_Member_Life'

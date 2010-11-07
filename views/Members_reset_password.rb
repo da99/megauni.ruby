@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_reset_password.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_reset_password.sass
+# MAB   ~/megauni/templates/en-us/html/Members_reset_password.rb
+# SASS  ~/megauni/templates/en-us/css/Members_reset_password.sass
 # CONTROL ~/megauni/controls/Members.rb
 # NAME  Members_reset_password
 

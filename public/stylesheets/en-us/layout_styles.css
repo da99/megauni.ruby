@@ -109,9 +109,7 @@ body {
   padding-bottom: 50px;
   padding-top: 20px;
   overflow: hidden;
-  display: inline-block; }
-  #content {
-    display: block; }
+  *zoom: 1; }
   #content p {
     font-size: 16px; }
   #content ul {
@@ -209,9 +207,7 @@ form fieldset {
     height: 200px; }
 form div.group {
   overflow: hidden;
-  display: inline-block; }
-  form div.group {
-    display: block; }
+  *zoom: 1; }
   form div.group fieldset {
     float: left; }
 form div.checkboxes {
@@ -223,9 +219,7 @@ form div.buttons button {
 
 div.body {
   overflow: hidden;
-  display: inline-block; }
-  div.body {
-    display: block; }
+  *zoom: 1; }
 
 div.news_post {
   padding-bottom: 10px;

@@ -1,5 +1,5 @@
-# MAB   /home/da01tv/MyLife/apps/megauni/templates/en-us/mab/Messages_by_date.rb
-# SASS  /home/da01tv/MyLife/apps/megauni/templates/en-us/sass/Messages_by_date.sass
+# MAB   /home/da01tv/MyLife/apps/megauni/templates/en-us/html/Messages_by_date.rb
+# SASS  /home/da01tv/MyLife/apps/megauni/templates/en-us/css/Messages_by_date.sass
 # NAME  Messages_by_date
 
 class Messages_by_date < Base_View

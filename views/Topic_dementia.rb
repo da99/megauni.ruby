@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_dementia.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_dementia.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_dementia.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_dementia.sass
 # NAME  Topic_dementia
 
 class Topic_dementia < Base_View

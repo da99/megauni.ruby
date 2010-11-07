@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_depression.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_depression.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_depression.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_depression.sass
 # NAME  Topic_depression
 
 class Topic_depression < Base_View

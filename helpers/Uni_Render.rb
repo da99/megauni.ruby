@@ -28,41 +28,39 @@ module Sinatra
     end
 
     def process_mustache ext, file_name
-
-      template_content = if Uni_App.production? 
-                           File.read(mustache)
+      
+      # Get contexts.
+      require "views/#{file_name}.rb"
+      view_class                       = Object.const_get(file_name)
+      view_class.raise_on_context_miss = true
+      view_ctx  = view_class.new(self)
+      ctx                              = Mustache::Context.new(view_ctx)
+      
+      # Use newly created contexts to compile templates.
+      template_content = unless Uni_App.development? 
+                           File.read("templates/#{lang}/mustache/#{view_ctx.viewer_level}/#{file_name}.#{ext}")
                          else
-                           disguise = case ext
-                                      when :html
-                                        'Mab'
-                                      when :xml
-                                        'Xml'
-                                      else
-                                        raise ArgumentError, "Don't know what to do with: #{file_name}"
-                                      end
+                           case ext
+                           when :html, :xml
+                             ext
+                           else
+                             raise ArgumentError, "Don't know what to do with: #{file_name}"
+                           end
                                         
-                           original    = "templates/#{lang}/#{disguise.downcase}/#{file_name}.rb"
-                           file_path   = "templates/#{lang}/#{disguise.downcase}/#{file_name}.#{ext}"
+                           original    = "templates/#{lang}/#{ext}/#{file_name}.rb"
+                           file_path   = "templates/#{lang}/#{ext}/#{file_name}.#{ext}"
                            time_format = '%M:%d:%H:%m:%Y'
 
                            puts("Compiling templated instead of using cached Mustache...") if Uni_App.development?
                           
-                           klass_name = "#{disguise}_In_Disguise"
-                           require( "middleware/#{klass_name}"  )
-                           disguise_class = eval(klass_name)
-                           disguise_class.compile_all(file_name)
-
-                           Mustache::Generator.new.compile(
-                             Mustache::Parser.new.compile(
-                               disguise_class.compile( original ).to_s 
-                             )
-                           )
+                          
+                           klass_name = "Ruby_To_#{ext.to_s.upcase}"
+                           require "templates/#{ext}"
+                           klass = eval(klass_name)
+                           klass.compile_all(original, true, view_ctx.viewer_level)
                          end
 
-      require "views/#{file_name}.rb"
-      view_class                       = Object.const_get(file_name)
-      view_class.raise_on_context_miss = true
-      ctx                              = Mustache::Context.new(view_class.new(self))
+      # Eval the compiled mustache code.
       eval(template_content, nil, file_name, 1)
     end
 

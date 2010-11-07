@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_health.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_health.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_health.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_health.sass
 # NAME  Topic_health
 
 class Topic_health < Base_View

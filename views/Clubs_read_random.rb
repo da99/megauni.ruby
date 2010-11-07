@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Clubs_read_random.rb
-# SASS  ~/megauni/templates/en-us/sass/Clubs_read_random.sass
+# MAB   ~/megauni/templates/en-us/html/Clubs_read_random.rb
+# SASS  ~/megauni/templates/en-us/css/Clubs_read_random.sass
 # NAME  Clubs_read_random
 
 require 'views/extensions/Base_Club'

@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Clubs_edit.rb
-# SASS  ~/megauni/templates/en-us/sass/Clubs_edit.sass
+# MAB   ~/megauni/templates/en-us/html/Clubs_edit.rb
+# SASS  ~/megauni/templates/en-us/css/Clubs_edit.sass
 # NAME  Clubs_edit
 
 require 'views/__Base_View_Club'

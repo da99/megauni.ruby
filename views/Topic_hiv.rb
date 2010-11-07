@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_hiv.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_hiv.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_hiv.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_hiv.sass
 # NAME  Topic_hiv
 
 class Topic_hiv < Base_View

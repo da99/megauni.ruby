@@ -1,4 +1,4 @@
-# /home/da01/megauni/templates/en-us/mab/Account_list.rb
+# /home/da01/megauni/templates/en-us/html/Account_list.rb
 class Account_list < Base_View
 
   def title 

@@ -1,5 +1,5 @@
-# MAB   templates/en-us/mab/Clubs_read_e.rb
-# SASS  templates/en-us/sass/Clubs_read_e.sass
+# MAB   templates/en-us/html/Clubs_read_e.rb
+# SASS  templates/en-us/css/Clubs_read_e.sass
 # NAME  Clubs_read_e
 
 module Base_View_Club

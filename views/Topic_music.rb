@@ -1,5 +1,5 @@
-# MAB   /home/da01tv/MyLife/apps/megauni/templates/en-us/mab/Topic_music.rb
-# SASS  /home/da01tv/MyLife/apps/megauni/templates/en-us/sass/Topic_music.sass
+# MAB   /home/da01tv/MyLife/apps/megauni/templates/en-us/html/Topic_music.rb
+# SASS  /home/da01tv/MyLife/apps/megauni/templates/en-us/css/Topic_music.sass
 # NAME  Topic_music
 
 class Topic_music < Base_View

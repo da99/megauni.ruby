@@ -1,5 +1,5 @@
 # mab   ~/megauni/templates/en-us/xml/Hellos_sitemap_xml.rb
-# SASS  ~/megauni/templates/en-us/sass/Hellos_sitemap_xml.sass
+# SASS  ~/megauni/templates/en-us/css/Hellos_sitemap_xml.sass
 # NAME  Hellos_sitemap_xml
 
 class Hellos_sitemap_xml < Base_View

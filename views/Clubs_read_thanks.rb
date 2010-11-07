@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Clubs_read_thanks.rb
-# SASS  ~/megauni/templates/en-us/sass/Clubs_read_thanks.sass
+# MAB   ~/megauni/templates/en-us/html/Clubs_read_thanks.rb
+# SASS  ~/megauni/templates/en-us/css/Clubs_read_thanks.sass
 # NAME  Clubs_read_thanks
 
 require 'views/extensions/Base_Club'

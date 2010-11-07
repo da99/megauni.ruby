@@ -14,14 +14,14 @@ html, body, div, h1, h2, h3, h4, h5, h6, ul, ol, dl, li, dt, dd, p, blockquote, 
 #busy_body {
   text-align: center;
   background-color: #a2d3e0;
-  background-image: url('"/egg/images/logo_bg.gif"');
+  background-image: url("/egg/images/logo_bg.gif");
   background-repeat: repeat-x; }
 
 #content {
   margin: 0 auto;
   text-align: left;
   width: 790px;
-  background-image: url('"/egg/images/spotlights.gif"');
+  background-image: url("/egg/images/spotlights.gif");
   background-repeat: no-repeat;
   background-position: 0 51px; }
 
@@ -31,7 +31,7 @@ html, body, div, h1, h2, h3, h4, h5, h6, ul, ol, dl, li, dt, dd, p, blockquote, 
   height: 70px;
   position: absolute;
   text-align: center;
-  background-image: url('"/egg/images/current_time_bg.gif"');
+  background-image: url("/egg/images/current_time_bg.gif");
   background-repeat: no-repeat;
   background-position: top right; }
   #current_time #big_date {
@@ -55,7 +55,7 @@ h1 {
   width: 100%;
   overflow: hidden;
   text-indent: -200px;
-  background-image: url('"/egg/images/logo.gif"');
+  background-image: url("/egg/images/logo.gif");
   background-repeat: no-repeat;
   background-position: 567px 0;
   font-size: 10px;
@@ -160,7 +160,7 @@ form {
     border-style: dashed;
     border-color: #073d6f; }
   #add_stuff #folders #instructions {
-    background-image: url('"/egg/images/instruction_arrows.gif"');
+    background-image: url("/egg/images/instruction_arrows.gif");
     background-repeat: no-repeat;
     background-position: 360px 10px; }
     #add_stuff #folders #instructions ol {
@@ -172,7 +172,7 @@ form {
         padding: 20px 0 10px 50px;
         font-size: 22px;
         font-weight: bold;
-        background-image: url('"/egg/images/instruction_numbers.gif"');
+        background-image: url("/egg/images/instruction_numbers.gif");
         background-repeat: no-repeat; }
         #add_stuff #folders #instructions ol li div.title {
           color: #f00919; }
@@ -219,7 +219,7 @@ form {
     padding-bottom: 10px;
     font-family: helvetica, arial, sans-serif;
     background-color: #d3ecf2;
-    background-image: url('"/egg/images/blue_sky_bg.jpg"');
+    background-image: url("/egg/images/blue_sky_bg.jpg");
     background-repeat: repeat-x; }
     #work div.egg a:link, #work div.egg a:visited, #work div.edit_egg a:link, #work div.edit_egg a:visited {
       text-transform: uppercase;
@@ -258,7 +258,7 @@ form {
         font-family: helvetica, arial, sans-serif; }
       #work div.egg div.status div.selected_buzzer, #work div.edit_egg div.status div.selected_buzzer {
         padding-left: 33px;
-        background-image: url('"/egg/images/music_note.gif"');
+        background-image: url("/egg/images/music_note.gif");
         background-repeat: no-repeat;
         background-position: 8px 0; }
       #work div.egg div.status div.time_status_in_words, #work div.edit_egg div.status div.time_status_in_words {
@@ -298,7 +298,7 @@ form {
   #work div.at_play {
     color: white;
     background-color: #f00919;
-    background-image: url('"/egg/images/humble_red_bg.gif"');
+    background-image: url("/egg/images/humble_red_bg.gif");
     background-repeat: repeat-x; }
     #work div.at_play a:link, #work div.at_play a:visited {
       color: white; }
@@ -329,7 +329,7 @@ form {
   #work div.x_marked div.status {
     width: 72px;
     height: 70px;
-    background-image: url('"/egg/images/xmark.gif"');
+    background-image: url("/egg/images/xmark.gif");
     background-repeat: no-repeat;
     background-position: 15px 10px; }
     #work div.x_marked div.status div.time_status, #work div.x_marked div.status div.buzzer_option, #work div.x_marked div.status div.time_status_in_words {
@@ -344,7 +344,7 @@ form {
   #work div.check_marked div.status {
     width: 72px;
     height: 70px;
-    background-image: url('"/egg/images/checkmark.gif"');
+    background-image: url("/egg/images/checkmark.gif");
     background-repeat: no-repeat;
     background-position: 15px 10px; }
     #work div.check_marked div.status div.time_status, #work div.check_marked div.status div.buzzer_option, #work div.check_marked div.status div.time_status_in_words {

@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Messages_doc_log.rb
-# SASS  ~/megauni/templates/en-us/sass/Messages_doc_log.sass
+# MAB   ~/megauni/templates/en-us/html/Messages_doc_log.rb
+# SASS  ~/megauni/templates/en-us/css/Messages_doc_log.sass
 # NAME  Messages_doc_log
 
 class Messages_doc_log < Base_View

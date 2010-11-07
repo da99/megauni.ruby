@@ -7,13 +7,11 @@ namespace :views do
       require 'megauni'
     end
 
-    require 'middleware/Mab_In_Disguise'
-    require 'middleware/Xml_In_Disguise'
-    require 'middleware/Render_Css'
+    %w{ html xml css }.each { |ext|
+      require "templates/#{ext}"
+      Object.const_get("Ruby_To_#{ext.upcase}").compile_all
+    }
     
-    Mab_In_Disguise.compile_all
-    Xml_In_Disguise.compile_all
-    Render_Css.compile_all
     sh('rm -v -r .sass-cache')
   end
 

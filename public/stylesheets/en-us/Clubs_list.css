@@ -8,6 +8,9 @@ html, body {
   font-family: inherit;
   vertical-align: baseline; }
 
+html {
+  font-size: 100.01%; }
+
 div, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
 pre, a, abbr, acronym, address, code, del, dfn, em, img,
 dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption, tbody, tfoot, thead, tr {
@@ -173,9 +176,7 @@ body {
   padding-bottom: 50px;
   padding-top: 20px;
   overflow: hidden;
-  display: inline-block; }
-  #content {
-    display: block; }
+  *zoom: 1; }
   #content p {
     font-size: 16px; }
   #content ul {
@@ -273,9 +274,7 @@ form fieldset {
     height: 200px; }
 form div.group {
   overflow: hidden;
-  display: inline-block; }
-  form div.group {
-    display: block; }
+  *zoom: 1; }
   form div.group fieldset {
     float: left; }
 form div.checkboxes {
@@ -287,9 +286,7 @@ form div.buttons button {
 
 div.body {
   overflow: hidden;
-  display: inline-block; }
-  div.body {
-    display: block; }
+  *zoom: 1; }
 
 div.news_post {
   padding-bottom: 10px;
@@ -340,9 +337,7 @@ div.message, div.club {
 
 #content {
   overflow: hidden;
-  display: inline-block; }
-  #content {
-    display: block; }
+  *zoom: 1; }
 
 #nav_bar {
   width: 180px;

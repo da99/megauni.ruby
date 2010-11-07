@@ -1,5 +1,5 @@
-# ~/megauni/templates/en-us/mab/Members_create_account.rb
-# ~/megauni/templates/en-us/sass/Members_create_account.sass
+# ~/megauni/templates/en-us/html/Members_create_account.rb
+# ~/megauni/templates/en-us/css/Members_create_account.sass
 # Members_create_account
 
 class Members_create_account < Base_View

@@ -1,4 +1,4 @@
-# /home/da01/megauni/templates/en-us/mab/Inspect_Control_list.rb
+# /home/da01/megauni/templates/en-us/html/Inspect_Control_list.rb
 
 class Inspect_Control_list < Base_View
 

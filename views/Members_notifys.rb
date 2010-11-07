@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_notifys.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_notifys.sass
+# MAB   ~/megauni/templates/en-us/html/Members_notifys.rb
+# SASS  ~/megauni/templates/en-us/css/Members_notifys.sass
 # NAME  notifys
 # CONTROL models/Member.rb
 # MODEL   controls/Member.rb

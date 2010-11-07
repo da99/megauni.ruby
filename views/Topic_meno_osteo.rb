@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Topic_meno_osteo.rb
-# SASS  ~/megauni/templates/en-us/sass/Topic_meno_osteo.sass
+# MAB   ~/megauni/templates/en-us/html/Topic_meno_osteo.rb
+# SASS  ~/megauni/templates/en-us/css/Topic_meno_osteo.sass
 # NAME  Topic_meno_osteo
 
 class Topic_meno_osteo < Base_View

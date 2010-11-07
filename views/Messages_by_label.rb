@@ -1,5 +1,5 @@
-# MAB   /home/da01tv/MyLife/apps/megauni/templates/en-us/mab/Messages_by_label.rb
-# SASS  /home/da01tv/MyLife/apps/megauni/templates/en-us/sass/Messages_by_label.sass
+# MAB   /home/da01tv/MyLife/apps/megauni/templates/en-us/html/Messages_by_label.rb
+# SASS  /home/da01tv/MyLife/apps/megauni/templates/en-us/css/Messages_by_label.sass
 # NAME  Messages_by_label
 
 class Messages_by_label < Base_View

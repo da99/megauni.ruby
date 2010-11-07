@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_life_random.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_life_random.sass
+# MAB   ~/megauni/templates/en-us/html/Members_life_random.rb
+# SASS  ~/megauni/templates/en-us/css/Members_life_random.sass
 # NAME  Members_life_random
 
 class Members_life_random < Base_View

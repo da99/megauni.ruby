@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Members_life_shop.rb
-# SASS  ~/megauni/templates/en-us/sass/Members_life_shop.sass
+# MAB   ~/megauni/templates/en-us/html/Members_life_shop.rb
+# SASS  ~/megauni/templates/en-us/css/Members_life_shop.sass
 # NAME  Members_life_shop
 
 class Members_life_shop < Base_View

@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Clubs_hearts.rb
-# SASS  ~/megauni/templates/en-us/sass/Clubs_hearts.sass
+# MAB   ~/megauni/templates/en-us/html/Clubs_hearts.rb
+# SASS  ~/megauni/templates/en-us/css/Clubs_hearts.sass
 # NAME  Clubs_hearts
 
 class Clubs_hearts < Base_View

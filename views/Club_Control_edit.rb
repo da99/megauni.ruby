@@ -1,5 +1,5 @@
-# MAB   /home/da01/MyLife/apps/megauni/templates/en-us/mab/Club_Control_edit.rb
-# SASS  /home/da01/MyLife/apps/megauni/templates/en-us/sass/Club_Control_edit.sass
+# MAB   /home/da01/MyLife/apps/megauni/templates/en-us/html/Club_Control_edit.rb
+# SASS  /home/da01/MyLife/apps/megauni/templates/en-us/css/Club_Control_edit.sass
 # NAME  Club_Control_edit
 
 class Club_Control_edit < Club_Control_Base_View

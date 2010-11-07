@@ -1,5 +1,5 @@
-# MAB   ~/megauni/templates/en-us/mab/Messages_by_id.rb
-# SASS  ~/megauni/templates/en-us/sass/Messages_by_id.sass
+# MAB   ~/megauni/templates/en-us/html/Messages_by_id.rb
+# SASS  ~/megauni/templates/en-us/css/Messages_by_id.sass
 # NAME  Messages_by_id
 # MODEL models/Message
 

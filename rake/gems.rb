@@ -139,5 +139,15 @@ namespace :gem do
     #   development machine.
     sh('gem update') 
   end   
+  
+  desc "Uninstalls all gems, then installs all gems from .gems and .development_gems."
+  task :reinstall_everything do
+    
+    # Command from: http://geekystuff.net/2009/1/14/remove-all-ruby-gems
+    puts `gem list | cut -d" " -f1 | xargs gem uninstall -aIx`
+    
+    gems = File.read('.gems') + File.read('.development_gems')
+    gems.split("\n").each { |cmdl| puts `gem install #{cmdl}` }
+  end
      
 end # === namespace :gem

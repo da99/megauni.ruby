@@ -1,0 +1,351 @@
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?> <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n <html xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\">\n  <head>\n   <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\"/>\n   <meta content=\"text/javascript\" http-equiv=\"Content-Script-Type\"/>\n   <meta content=\"text/css\" http-equiv=\"Content-Style-Type\"/>\n   <meta content=\"en-US\" http-equiv=\"Content-Language\"/>\n   <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\"/>\n   <meta content=\"en-US\" http-equiv=\"Content-Language\"/>\nmeta_menu ===> #<Proc:0x00000000024bb8b8@templates/en-us/html/layout.rb:19>\n#{      if v = ctx[:page]
+        if v == true
+          "<title>#{CGI.escapeHTML(ctx[:title].to_s)}</title>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<title>#{CGI.escapeHTML(ctx[:title].to_s)}</title>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<title>#{CGI.escapeHTML(ctx[:title].to_s)}</title>\n\n"; ctx.pop; r }.join
+        end
+      end
+}<link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\"/>\n\n#{      if v = ctx[:not_mobile_request?]
+        if v == true
+          "<link rel=\"stylesheet\" href=\"#{CGI.escapeHTML(ctx[:css_file].to_s)}?time=1289116783\" type=\"text/css\" media=\"screen\"/>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<link rel=\"stylesheet\" href=\"#{CGI.escapeHTML(ctx[:css_file].to_s)}?time=1289116783\" type=\"text/css\" media=\"screen\"/>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<link rel=\"stylesheet\" href=\"#{CGI.escapeHTML(ctx[:css_file].to_s)}?time=1289116783\" type=\"text/css\" media=\"screen\"/>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{CGI.escapeHTML(ctx[:head_content].to_s)}\n\n  </head>\n  <body id=\"the_body\">\n   <div id=\"the_content\">\n     <div id=\"content\">\n      <p>Not done.</p>\n     </div>\n      <div id=\"nav_bar\">\n       <div id=\"logo\">\n        <p class=\"english\">\n         <a href=\"/\">#{CGI.escapeHTML(ctx[:site_title].to_s)}</a>\n        </p>\n        <h4 class=\"site_tag_line\">\n~~ ? ! @ ~~        </h4>\n       </div>\n       <ul class=\"nav_bar help\">\n         <li>\n          <a href=\"/help/\"> Help </a>\n         </li>\n\n#{      if v = ctx[:logged_in?]
+        if v == true
+          "<li>\n          <a href=\"/log-out/\"> Log-out </a>\n         </li>\n         <li>\n          <a href=\"/lifes/\"> [ My Lifes ] </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"/log-out/\"> Log-out </a>\n         </li>\n         <li>\n          <a href=\"/lifes/\"> [ My Lifes ] </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"/log-out/\"> Log-out </a>\n         </li>\n         <li>\n          <a href=\"/lifes/\"> [ My Lifes ] </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_logged_in?]
+        if v == true
+          "<li>\n          <a href=\"/log-in/\"> Log-in </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"/log-in/\"> Log-in </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"/log-in/\"> Log-in </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n\n#{      if v = ctx[:logged_in?]
+        if v == true
+          "#{      if v = ctx[:not_mini_nav_bar?]
+        if v == true
+          "<h4>Lifes</h4>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<h4>Lifes</h4>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<h4>Lifes</h4>\n\n"; ctx.pop; r }.join
+        end
+      end
+}<ul class=\"nav_bar lifes\">\n\n#{      if v = ctx[:username_nav]
+        if v == true
+          "#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}"
+        elsif v.is_a?(Proc)
+          v.call("#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_mini_nav_bar?]
+        if v == true
+          "<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("#{      if v = ctx[:not_mini_nav_bar?]
+        if v == true
+          "<h4>Lifes</h4>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<h4>Lifes</h4>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<h4>Lifes</h4>\n\n"; ctx.pop; r }.join
+        end
+      end
+}<ul class=\"nav_bar lifes\">\n\n#{      if v = ctx[:username_nav]
+        if v == true
+          "#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}"
+        elsif v.is_a?(Proc)
+          v.call("#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_mini_nav_bar?]
+        if v == true
+          "<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "#{      if v = ctx[:not_mini_nav_bar?]
+        if v == true
+          "<h4>Lifes</h4>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<h4>Lifes</h4>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<h4>Lifes</h4>\n\n"; ctx.pop; r }.join
+        end
+      end
+}<ul class=\"nav_bar lifes\">\n\n#{      if v = ctx[:username_nav]
+        if v == true
+          "#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}"
+        elsif v.is_a?(Proc)
+          v.call("#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "#{      if v = ctx[:selected?]
+        if v == true
+          "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li class=\"selected\">\n          <span>&lt; #{CGI.escapeHTML(ctx[:username].to_s)} &gt;</span>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_selected?]
+        if v == true
+          "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\"> #{CGI.escapeHTML(ctx[:username].to_s)} </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:not_mini_nav_bar?]
+        if v == true
+          "<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<li>\n          <a href=\"/lifes/\"> [ Create ] </a>\n         </li>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</ul>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:logged_in?]
+        if v == true
+          "<h4>Your Clubs</h4>\n       <ul class=\"nav_bar your_clubs\">\n         <li>\n          <a href=\"/club-create/\"> [ Create ] </a>\n         </li>\nyour_clubs ===> #<Proc:0x00000000024a8650@/home/da01/MyLife/apps/megauni/templates/en-us/html/__nav_bar.rb:93>       </ul>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<h4>Your Clubs</h4>\n       <ul class=\"nav_bar your_clubs\">\n         <li>\n          <a href=\"/club-create/\"> [ Create ] </a>\n         </li>\nyour_clubs ===> #<Proc:0x00000000024a8650@/home/da01/MyLife/apps/megauni/templates/en-us/html/__nav_bar.rb:93>       </ul>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<h4>Your Clubs</h4>\n       <ul class=\"nav_bar your_clubs\">\n         <li>\n          <a href=\"/club-create/\"> [ Create ] </a>\n         </li>\nyour_clubs ===> #<Proc:0x00000000024a8650@/home/da01/MyLife/apps/megauni/templates/en-us/html/__nav_bar.rb:93>       </ul>\n\n"; ctx.pop; r }.join
+        end
+      end
+}#{      if v = ctx[:mini_nav_bar?]
+        if v == true
+          "<ul class=\"nav_bar\">\n        <li>\n          <li>\n           <a href=\"/uni/\"> Clubs </a>\n          </li>\n        </li>\n       </ul>\n\n"
+        elsif v.is_a?(Proc)
+          v.call("<ul class=\"nav_bar\">\n        <li>\n          <li>\n           <a href=\"/uni/\"> Clubs </a>\n          </li>\n        </li>\n       </ul>\n\n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<ul class=\"nav_bar\">\n        <li>\n          <li>\n           <a href=\"/uni/\"> Clubs </a>\n          </li>\n        </li>\n       </ul>\n\n"; ctx.pop; r }.join
+        end
+      end
+}</div>\n   </div>\n\n#{      if v = ctx[:include_tracking?]
+        if v == true
+          "<script type=\"text/javascript\"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src=\"' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js\" type=\"text/javascript\"%3E%3C/script%3E')); </script> \n        <script type=\"text/javascript\"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>\n        <script type=\"text/javascript\">mpmetrics.track(\"eveything\", { 'referer' : '#{CGI.escapeHTML(ctx[:http_referer].to_s)}' });</script>\n      \n"
+        elsif v.is_a?(Proc)
+          v.call("<script type=\"text/javascript\"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src=\"' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js\" type=\"text/javascript\"%3E%3C/script%3E')); </script> \n        <script type=\"text/javascript\"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>\n        <script type=\"text/javascript\">mpmetrics.track(\"eveything\", { 'referer' : '#{CGI.escapeHTML(ctx[:http_referer].to_s)}' });</script>\n      \n")
+        else
+          v = [v] unless v.is_a?(Array) # shortcut when passed non-array
+          v.map { |h| ctx.push(h); r = "<script type=\"text/javascript\"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src=\"' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js\" type=\"text/javascript\"%3E%3C/script%3E')); </script> \n        <script type=\"text/javascript\"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>\n        <script type=\"text/javascript\">mpmetrics.track(\"eveything\", { 'referer' : '#{CGI.escapeHTML(ctx[:http_referer].to_s)}' });</script>\n      \n"; ctx.pop; r }.join
+        end
+      end
+}</body>\n </html>\n"
