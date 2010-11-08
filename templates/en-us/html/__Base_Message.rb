@@ -63,6 +63,7 @@ module Base_Message
               
           }
 
+          logged_in {
           show_if 'has_parent_message?' do
             show_if 'suggest?' do
               show_if 'parent_message_owner?' do
@@ -93,6 +94,7 @@ module Base_Message
               end
             end
           end
+          }
 
           show_if 'has_parent_message?' do
             div.permalink {
@@ -103,7 +105,7 @@ module Base_Message
           if opts.ask.permalink?
             show_if 'parent_message?' do
               div.permalink {
-                show_if 'logged_in?' do
+                logged_in do
                   a('Reply', :href=>"{{href}}")
                   span " to this "
                   strong " {{message_model_in_english}} "

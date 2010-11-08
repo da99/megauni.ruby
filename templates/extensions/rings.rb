@@ -45,7 +45,10 @@ module MAB::RINGS
           
           mod = "MAB_\#{template_name}_#{level.to_s.upcase}"
           clone = self.clone
-          clone.extend Object.const_get(mod)
+          begin
+            clone.extend Object.const_get(mod)
+          rescue NameError
+          end
           show_if "#{level}?" do
             clone.instance_eval &blok
           end

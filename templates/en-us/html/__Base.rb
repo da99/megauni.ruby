@@ -1,12 +1,4 @@
 
-class String
-  def m!
-    self[/[^a-z0-9\_]/] ? 
-      self : 
-      "{{#{self}}}"
-  end
-end # === class
-
 module Base
   
   def a! txt, href
@@ -32,11 +24,9 @@ module Base
       text "\n{{#{mus}}}\n\n"
     end
   end
-  def loop mus, &blok
-    text "#{mus} ===> #{blok.inspect}"
-  end
+  
   alias_method :show_if, :mustache
-  # alias_method :loop,    :mustache
+  alias_method :loop,    :mustache
 
   def if_not mus, &blok
     text "\n{{^#{mus}}}\n\n"
