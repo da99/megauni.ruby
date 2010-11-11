@@ -74,11 +74,10 @@ class Ruby_To_Html
 
     def compile only_level = nil, glob = '*'
 
-      content = nil
-      files   = Dir.glob( path( :rb_html, glob ) )
-      
-      allowed_levels       = only_level ? [only_level] : Ruby_To_Html::Rings::LEVELS
-      compiler             = self
+      content        = nil
+      files          = Dir.glob( path( :rb_html, glob ) )
+      allowed_levels = only_level ? [only_level] : Ruby_To_Html::Rings::LEVELS
+      compiler       = self
 
       files.each { |mab_file|
         
@@ -113,26 +112,24 @@ class Ruby_To_Html
 
           } # === Markaby::Builder.new
           
-          # Save Mustache content.
-          content = begin 
-
-                      FILER.
-                        from(mab).
-                        write(mustache, tache)
-
-                      # Compile Mustache file.
-                      output = Mustache::Generator.new.compile(
+          # Compile Mustache file.
+          content = Mustache::Generator.new.compile(
                         Mustache::Parser.new.compile(
                           tache.to_s
                       ))
+                      
+          unless Uni_App.development?
+            # Save Mustache content.
+            FILER.
+              from(mab).
+              write(mustache, tache)
 
-                      # Save compiled Mustache file.
-                      FILER.
-                        from(mustache).
-                        write(html, output)
 
-                      output
-                    end 
+            # Save compiled Mustache file.
+            FILER.
+              from(mustache).
+              write(html, content)
+          end
 
         } # === Ruby_To_Html::LEVELS.each
 
