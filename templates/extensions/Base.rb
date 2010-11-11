@@ -69,7 +69,7 @@ module Ruby_To_Html::Base
   def partial( raw_file_name )
     calling_file = caller[0].split(':').first
     calling_dir  = File.dirname(calling_file)
-    file_name    = File.expand_path(File.join(calling_dir,raw_file_name)).to_s
+    file_name    = File.expand_path(File.join(calling_dir,raw_file_name.to_s))
     file_name += '.rb' if !file_name['.rb']
     
     # Find template file.

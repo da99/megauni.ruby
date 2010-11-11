@@ -8,18 +8,24 @@ class Ruby_To_Html
   class << self
     
     def path type, *args
-      pattern = eval(type.to_s.upcase)
+			
       case type
       when :rb_html
         args.unshift( 'en-us' ) if args.size == 1
       when :mustache, :html
         args.unshift( 'en-us' ) if args.size == 2
+			when :layout
+				file_path = path( :rb_html, *args )
+				dir       = File.dirname(file_path)
+				return File.join(dir, 'layout.rb')
       else
         raise ArgumentError, "Unknown type: #{type.inspect}"
       end
       
+      pattern = eval(type.to_s.upcase)
       pattern % args
-    end
+			
+    end # === def path
     
   end # === class << self
   

@@ -26,41 +26,14 @@ end # === Markaby::Builder
 class Ruby_To_Html
   
   FILER = Safe_Writer.new do
-
     sync_modified_time
-    
     read_folder  %w{ rb_xml rb_html mustache }
     write_folder %w{ stranger owner member insider }
-    
   end
 
   class << self
     
     include Optional_Constants
-
-    def save_file level, file_name, tache
-
-      # Save Mustache file.
-      mab      = path(:rb_html, file_name )
-      mustache = path(:mustache, level, file_name)
-      html     = path(:html, level, file_name)
-      
-      FILER.
-        from(mab).
-        write(mustache, tache)
-
-      # Save compiled Mustache file.
-      output = Mustache::Generator.new.compile(
-        Mustache::Parser.new.compile(
-          tache.to_s
-      ))
-
-      FILER.
-        from(mustache).
-        write(html, output)
-
-      output
-    end
 
     def levels
       @levels ||= Ruby_To_Html::Rings::LEVELS.inject({}) {  |memo, level| 
@@ -104,44 +77,62 @@ class Ruby_To_Html
       content = nil
       files   = Dir.glob( path( :rb_html, glob ) )
       
-      mab_dir              = File.dirname( files.first )
-      layout_file          = File.join(mab_dir, 'layout.rb')
-      layout_file_contents = File.read(layout_file)
       allowed_levels       = only_level ? [only_level] : Ruby_To_Html::Rings::LEVELS
       compiler             = self
 
       files.each { |mab_file|
-
-        basename   = File.basename(mab_file)
-        file_name  = basename.sub('.rb', '').to_sym
         
+        basename   = File.basename(mab_file)
         is_partial = basename[/^__/]
         is_layout  = basename[/\Alayout/]
         next if is_partial || is_layout
+
+        file_name       = basename.sub('.rb', '').to_sym
+        layout          = path( :layout, file_name )
+        layout_contents = File.read(layout)
+        mab             = path(:rb_html, file_name )
         
         allowed_levels.each { |level|
 
           puts "Compiling: #{mab_file} for #{level}" if Uni_App.development?
           
-          mab_content = Markaby::Builder.new(:template_name=>file_name) { 
+          mustache = path(:mustache, level, file_name)
+          html     = path(:html, level, file_name)
+          
+          # Turn Markaby file into Mustache content.
+          tache = Markaby::Builder.new(:template_name=>file_name) { 
 
             extend Ruby_To_Html::Base
             extend Ruby_To_Html::Template_Embed
-            
+
             compiler.extensions_for_file_name( level, file_name ).each { |mod|
               extend mod
             }
 
-            eval(
-              layout_file_contents.sub("{{content_file}}", basename),
-              nil, 
-              layout_file, 
-              1
-            )
+            eval( layout_contents, nil, layout, 1 )
 
           } # === Markaby::Builder.new
+          
+          # Save Mustache content.
+          content = begin 
 
-          content = save_file(level, file_name, mab_content)
+                      FILER.
+                        from(mab).
+                        write(mustache, tache)
+
+                      # Compile Mustache file.
+                      output = Mustache::Generator.new.compile(
+                        Mustache::Parser.new.compile(
+                          tache.to_s
+                      ))
+
+                      # Save compiled Mustache file.
+                      FILER.
+                        from(mustache).
+                        write(html, output)
+
+                      output
+                    end 
 
         } # === Ruby_To_Html::LEVELS.each
 
