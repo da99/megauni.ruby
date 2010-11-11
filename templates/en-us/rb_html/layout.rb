@@ -20,13 +20,13 @@ tag!(:html, :xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en", :lang 
       meta( :name=>'{{name}}', :content=>"{{content}}")
     end
 
-    mustache 'page' do
+    show_if 'page' do
       title( "{{title}}" )
     end
 
     link( :rel=>"shortcut icon", :href=>"/favicon.ico", :type=>"image/x-icon")
     
-    mustache("not_mobile_request?") {
+    if_not("mobile_request?") {
       link( 
         :rel=>"stylesheet",  
         :href=>"{{css_file}}?time=#{Time.now.utc.to_i}", 
@@ -57,7 +57,7 @@ tag!(:html, :xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en", :lang 
     #   script '', :src=>'{{src}}?{{time_i}}', :type=>'text/javascript'
     # end
 
-    mustache 'include_tracking?' do
+    show_if 'include_tracking?' do
       text %~
         <script type="text/javascript"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src="' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js" type="text/javascript"%3E%3C/script%3E')); </script> 
         <script type="text/javascript"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>

@@ -15,26 +15,6 @@ module Base
     }
   end
 
-  def mustache mus, &blok
-    if block_given?
-      text "\n{{\##{mus}}}\n\n"
-      yield
-      text "\n{{/#{mus}}}\n\n" 
-    else
-      text "\n{{#{mus}}}\n\n"
-    end
-  end
-  
-  alias_method :show_if, :mustache
-  alias_method :loop,    :mustache
-
-  def if_not mus, &blok
-    text "\n{{^#{mus}}}\n\n"
-    yield
-    text "\n{{/#{mus}}}\n\n" 
-  end
-  alias_method :if_no,    :if_not
-  alias_method :if_empty, :if_not
   
   def javascript_files
     (@js_files ||= []).compact.uniq
