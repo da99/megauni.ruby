@@ -1,45 +1,25 @@
-require 'builder'
-require 'templates/html'
 
-class Ruby_To_XML
+class Ruby_To_Xml
   
-  def self.compile_all *args
-    vals = compile
-    vals.each do |xml_file_name, v|
-      MAB::RINGS::LEVELS.each { |level|
-        Ruby_To_HTML.save_file( level, xml_file_name, v.first, v.last)
-      }
-    end
-  end
+  RB_XML = 'templates/%s/rb_xml/%s.rb'
+  XML    = 'templates/%s/xml/%s/%s.xml'
 
-  def self.compile file_name = '*'
-    
-    vals = {}
-
-    glob_pattern = file_name == '*' ?
-                        "templates/*/xml/#{file_name}.rb" :
-                        file_name
-                        
-    Dir.glob(glob_pattern).each { |xml_file|
-
-      file_basename = File.basename(xml_file)
-      xml_dir       = File.dirname(xml_file)
-      mus_dir       = xml_dir.sub('xml/', 'mustache/')
-      mus_file      = xml_file.sub('xml/', 'mustache/').sub('.rb', '.xml')
-      content       = File.read(xml_file)
-      str           = ''
+	class << self
+		
+    def path type, *args
+      pattern = eval(type.to_s.upcase)
+      case type
+      when :rb_xml
+        args.unshift( 'en-us' ) if args.size == 1
+      when :xml
+        args.unshift( 'en-us' ) if args.size == 2
+      else
+        raise ArgumentError, "Unknown type: #{type.inspect}"
+      end
       
-      compiled      = Builder::XmlMarkup.new( :target => str )
-      compiled.instance_eval content, xml_file, 1
+      pattern % args
+    end
 
-      compiled.target!
-      vals[xml_file] = [mus_file, str]
-    }
-    
-    file_name == '*' ?
-      vals :
-      vals[file_name].last
-    
-  end
+	end # === class << self
 
-end # === Ruby_To_XML
+end # === class

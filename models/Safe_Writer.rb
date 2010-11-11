@@ -1,5 +1,6 @@
 require 'models/Delegator_Dsl'
 require 'modules/Dslicious'
+require 'models/Config_Switches'
 
 def String_for_Safe_Writer raw_txt
   txt = raw_txt.dup

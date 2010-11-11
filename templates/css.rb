@@ -2,95 +2,89 @@
 require 'sass'
 require 'compass'
 require 'ninesixty'
+require 'models/Safe_Writer'
 
 class Ruby_To_CSS
   
-  def self.sass_files
-    Dir.glob('templates/*/css/*.sass')
+  SASS = 'templates/%s/sass/%s.sass'
+  CSS  = 'public/stylesheets/%s/%s.css'
+  
+  FILER = Safe_Writer.new do
+    read_folder %w{ sass }
+    write_folder %w{ css }
   end
 
-  def self.compile_all
-    new_files = {}
-    sass_files.each do |sass_file|
+  class << self
+
+    def file_name unknown
+      case unknown
+      when Symbol
+        return unknown
+      else
+        unknown.to_s.
+          split('/').last.
+          sub('.sass', '').
+          sub('.css', '').
+          to_sym
+      end
+    end
+
+    def path type, *args
+      pattern = eval("#{type.to_s.upcase}")
       
-      sass_dir      = File.dirname(sass_file)
-      css_file_name = sass_file.
-                        gsub('.sass', '.css').
-                        sub('templates', 'stylesheets').
-                        gsub('sass', '').
-                        sub('css/', '')
+      case args.size
+      when 1
+        args.unshift 'en-us'
+      end
       
-      css_file      = File.join( 'public', css_file_name )
+      # Ensure last argument is a file_name 
+      # and not a file path.
+      file_path = args.pop
+      args.push file_name(file_path).to_s
       
-      eng = Sass::Engine.new(
-        File.read(sass_file), 
-        :load_paths => [ sass_dir ] + Compass.sass_engine_options[:load_paths] 
-      )
-      
-      begin
-        css_content = eng.render
-        puts "Writing: #{css_file}"
-        File.open(File.expand_path(css_file), 'w' ) do |f|
-          f.write css_content
+      pattern % args
+    end
+
+    def compile file_name = '*'
+      sass_files = Dir.glob( path( :sass, file_name ) )
+      output = nil
+
+      sass_files.each do |sass_file|
+
+        sass_dir   = File.dirname(sass_file)
+        css_file   = path( :css, sass_file )
+        load_paths = [ sass_dir ] + Compass.sass_engine_options[:load_paths] 
+
+        eng = Sass::Engine.new(
+          File.read(sass_file), 
+          :load_paths => load_paths
+        )
+
+        begin
+          output = css = eng.render
+          puts "Writing: #{css_file}"
+
+          FILER.
+          from(sass_file).
+          write( css_file, css )
+
+        rescue Sass::SyntaxError
+          if File.read(sass_file)['IGNORE UNDEFINED'] && $!.message =~ /Undefined variable/
+            puts "IGNORING: #{sass_file}: #{$!.class} - #{$!.message}"
+            next
+          else
+            raise $!
+          end
         end
-      rescue Sass::SyntaxError
-        if File.read(sass_file)['IGNORE UNDEFINED'] && $!.message =~ /Undefined variable/
-          puts "IGNORING: #{sass_file}: #{$!.class} - #{$!.message}"
-          next
-        else
-          raise $!
-        end
+
       end
 
-    end
+      return output if sass_files.size == 1
+      true
 
-    new_files
+    end # === def compile
     
-  end
-
-  def self.compile file_name = nil
-    
-    vals = {} 
-    
-    Dir.glob(file_name || 'templates/*/css/*.sass').each do |sass_file|
-      
-      sass_dir    = File.dirname(sass_file)
-      css_file    = File.join( 'public', sass_file.gsub('.sass', '.css').sub('templates', 'stylesheets').sub('sass/', '') )
-      css_content = Sass::Engine.new(
-        File.read(sass_file), 
-        :load_paths => [ sass_dir ] + Compass.sass_engine_options[:load_paths] 
-      ).render
-
-      vals[sass_file] = [css_file, css_content]
-      
-    end
-
-    file_name ?
-      vals[file_name].last :
-      vals
-  end
-
-  def self.delete_css
-    Dir.glob('public/styles/*/*.css').each { |file|
-      puts file
-    }
-  end
+  end # === class << self
 
 end # === class
 
-
-
-
-
-
-
-
-    # output = `compass --dry-run --trace -r ninesixty -f 960 --sass-dir templates/en-us/sass --css-dir public/styles/en-us -s compressed 2>&1`
-    # puts output
-    # puts $?.exitstatus.to_s
-    #   clean_results   = results.split("\n").reject { |line| 
-    #     line =~ /^unchanged\ / ||
-    #       line.strip =~ /^(compile|exists|create)/
-    #   }.join("\n")
-
-    #   raise( clean_results ) if results['WARNING:'] || results['Error']

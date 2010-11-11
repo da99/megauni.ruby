@@ -9,7 +9,7 @@ namespace :views do
 
     %w{ html xml css }.each { |ext|
       require "templates/#{ext}"
-      Object.const_get("Ruby_To_#{ext.upcase}").compile_all
+      Object.const_get("Ruby_To_#{ext.upcase}").compile
     }
     
     sh('rm -v -r .sass-cache')
