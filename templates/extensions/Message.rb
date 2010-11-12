@@ -75,7 +75,7 @@ module Ruby_To_Html::Message
                     
                   div {
                       show_if 'not_accepted?' do
-                        toggle('Accept', Message::ACCEPT)
+                        toggle('Accept', 1)
                       end
                       
                       show_if 'pending?' do
@@ -83,12 +83,12 @@ module Ruby_To_Html::Message
                       end
                       
                       show_if 'not_declined?' do
-                        toggle('Decline', Message::DECLINE)
+                        toggle('Decline', -1)
                       end
                       
                       show_if 'not_pending?' do
                         span ' or '
-                        toggle('I don\'t know.', Message::PENDING)
+                        toggle('I don\'t know.', 0)
                       end
                     }
                   }

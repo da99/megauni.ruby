@@ -2,11 +2,6 @@ namespace :views do
 
   desc 'Generates mustache and css files from mab and sass files.'
   task :compile do
-    if !ENV['RACK_ENV'] 
-      ENV['RACK_ENV'] = 'test'
-    end
-    
-    require 'megauni'
 
     %w{ html xml css }.each { |ext|
       require "templates/#{ext}"

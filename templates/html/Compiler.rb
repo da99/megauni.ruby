@@ -100,7 +100,7 @@ class Ruby_To_Html
         
         allowed_levels.each { |level|
 
-          puts "Compiling: #{mab_file} for #{level}" if Uni_App.development?
+          puts "Compiling: #{mab_file} for #{level}" if Object.const_defined?( :Uni_App )
           
           mustache = path(:mustache, level, file_name)
           html     = path(:html, level, file_name)
@@ -128,7 +128,7 @@ class Ruby_To_Html
               tache.to_s
           ))
                       
-          unless Uni_App.development?
+          unless Object.const_defined?( :Uni_App )
             # Save Mustache content.
             FILER.
               from(mab).

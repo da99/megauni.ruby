@@ -32,8 +32,10 @@ class Ruby_To_Xml
         compiled.instance_eval content, xml_file, 1
         compiled.target!
         
-        FILER.
-          write( mustache, str )
+        unless Object.const_defined?( :Uni_App )
+          FILER.
+            write( mustache, str )
+        end
         
         content = str
       }

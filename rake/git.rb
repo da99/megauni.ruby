@@ -60,7 +60,7 @@ namespace 'git' do
     end
     
     ENV['allow_compiled_views'] = 'yes'
-    Rake::Task['views:compile'].invoke
+		sh 'rake views:compile'
     ENV['msg'] = 'Compilation checkpoint: HTML, CSS, XML'
     Rake::Task['git:dev_check'].invoke
     
