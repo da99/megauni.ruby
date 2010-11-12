@@ -37,7 +37,7 @@ div( :id=>"nav_bar" ) {
       h4 'Lifes' 
     end
     ul.nav_bar.lifes {
-      mustache 'username_nav' do
+      show_if 'username_nav' do
         show_if 'selected?' do
           nav_bar_li_selected '{{username}}'
         end

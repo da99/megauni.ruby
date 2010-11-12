@@ -5,7 +5,7 @@
 # CONTROL models/Club.rb
 # MODEL   controls/Club.rb
 
-module MAB_Clubs_as_life
+module Ruby_To_Html::Actions::Clubs_as_life
   
   include BASE_MAB
 

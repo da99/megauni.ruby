@@ -1,5 +1,5 @@
 
-module BASE_MAB_Clubs
+module Ruby_To_Html::Controls::Clubs
 
   def messages! &blok
     div.col.messages! &blok

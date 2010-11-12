@@ -1,5 +1,5 @@
 # ~/megauni/views/Members_create_account.rb
-# ~/megauni/templates/en-us/css/Members_create_account.sass
+# ~/megauni/templates/en-us/sass/Members_create_account.sass
 # Members_create_account 
 
 partial('__nav_bar')

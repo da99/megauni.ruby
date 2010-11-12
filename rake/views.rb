@@ -3,13 +3,15 @@ namespace :views do
   desc 'Generates mustache and css files from mab and sass files.'
   task :compile do
     if !ENV['RACK_ENV'] 
-      ENV['RACK_ENV'] = 'development'
-      require 'megauni'
+      ENV['RACK_ENV'] = 'test'
     end
+    
+    require 'megauni'
 
     %w{ html xml css }.each { |ext|
       require "templates/#{ext}"
-      Object.const_get("Ruby_To_#{ext.upcase}").compile
+      require "templates/#{ext}/Compiler"
+      Object.const_get("Ruby_To_#{ext.capitalize}").compile
     }
     
     sh('rm -v -r .sass-cache')
@@ -73,8 +75,6 @@ partial('__nav_bar')
 
 module #{mab_mod_class}
   
-  include BASE_MAB
-
 end # === module #{mab_mod_class}
       ~.lstrip
 

@@ -8,7 +8,7 @@ class Members
   top_slash # =============================================
   
   get '/create-account', :STRANGER do
-    action :new
+    action :create_account
     template :html
   end
 

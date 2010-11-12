@@ -44,7 +44,7 @@ module Ruby_To_Html::Message
             }
           end
         
-          show_if 'title' do
+          show_if 'title?' do
             h5 {
               a 'title'.m!, :href=>'href'.m!
             }
@@ -54,10 +54,12 @@ module Ruby_To_Html::Message
           
           div.owner {
             span 'Author: '
+						
             show_if 'owner?' do
               span 'you'
             end
-            show_if 'not_owner?' do
+					
+            if_not 'owner?' do
               a('{{owner_username}}', :href=>'{{owner_href}}')
             end
               

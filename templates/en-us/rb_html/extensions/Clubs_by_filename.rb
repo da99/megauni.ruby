@@ -6,111 +6,111 @@
 # MODEL   controls/Club.rb
 # 
 
-module MAB_Clubs_by_filename_STRANGER
-  
-  def about
-    super("About this {{club_type}}:", 'club_teaser')
-  end
-  
-end # === module
 
-module MAB_Clubs_by_filename_MEMBER
-  
-  def about
-    super("About this {{club_type}}:", 'club_teaser')
-  end
-  
-end # === module
+module Ruby_To_Html::Actions::Clubs_by_filename
 
-module MAB_Clubs_by_filename_INSIDER
-  
-  def publisher_guide
-    guide('Stuff you should do:') {
-      ul {
-        li "Share a memory in \"Encyclopedia\" section."
-        li "Share fun webpages in \"Random\" section."
-        li %~ Visit "Q & A" section. ~
-      }
-    }
-  end
-  
-  def about
-    super "You're an insider:", 'club_teaser'
-  end
-end # === module
-
-module MAB_Clubs_by_filename_OWNER
-  
-  def memberships 
-    super('all')
+  module STRANGER
     
-    show_if 'memberships?' do
-      div.section.memberships {
-        h4 'Memberships:'
+    def about
+      super("About this {{club_type}}:", 'club_teaser')
+    end
+    
+  end # === module
+
+  module MEMBER
+    
+    def about
+      super("About this {{club_type}}:", 'club_teaser')
+    end
+    
+  end # === module
+
+  module INSIDER
+    
+    def publisher_guide
+      guide('Stuff you should do:') {
         ul {
-          loop 'all_memberships' do
-            li { a! "Withdraw as: #{'name'.m!}", 'href' }
-          end
+          li "Share a memory in \"Encyclopedia\" section."
+          li "Share fun webpages in \"Random\" section."
+          li %~ Visit "Q & A" section. ~
         }
       }
     end
     
-    div.section.add_memberships {
-      h4 'Add Members:'
-      p %~Members are given special powers.
-      Separate each with a new line.~
-      form_post('add_member' + rand(1000).to_s) {
-        textarea '!!add here!!'
+    def about
+      super "You're an insider:", 'club_teaser'
+    end
+  end # === module
+
+  module OWNER
+    
+    def memberships 
+      super('all')
+      
+      show_if 'memberships?' do
+        div.section.memberships {
+          h4 'Memberships:'
+          ul {
+            loop 'all_memberships' do
+              li { a! "Withdraw as: #{'name'.m!}", 'href' }
+            end
+          }
+        }
+      end
+      
+      div.section.add_memberships {
+        h4 'Add Members:'
+        p %~Members are given special powers.
+        Separate each with a new line.~
+        form_post('add_member' + rand(1000).to_s) {
+          textarea '!!add here!!'
+        }
+      } # === add_memberships!
+    end # === memberhips
+
+    def messages
+      loop_messages 'all_messages'
+    end
+
+    def memberships_list
+      'all_memberships'
+    end
+    
+    def publisher_guide
+      guide('Stuff you should do:') {
+        ul {
+          li "Post something in the \"Encyclopedia\" section."
+          li "Write anything in the \"Random\" section."
+          li %~ Recommend a product in the "Shop" section. ~
+          li %~ Ask a question in the "Q & A" section. ~
+        }
       }
-    } # === add_memberships!
-  end # === memberhips
+    end
 
-  def messages
-    loop_messages 'all_messages'
-  end
-
-  def memberships_list
-    'all_memberships'
-  end
-  
-  def publisher_guide
-    guide('Stuff you should do:') {
-      ul {
-        li "Post something in the \"Encyclopedia\" section."
-        li "Write anything in the \"Random\" section."
-        li %~ Recommend a product in the "Shop" section. ~
-        li %~ Ask a question in the "Q & A" section. ~
+    def post_membership!
+      div.section { p 'Post form membership goes here.' }
+    end
+    
+    def memberships_guide!
+      div.section { p 'Memberrship guide goes here.' }
+    end
+    
+    def about
+      super(
+        "This {{club_type}} is yours:", 
+        'You own it. You can edit it, destroy it, or publish to it.'
+      )
+    end
+    
+    def edit!
+      div.edit_settings! {
+        a_button 'Edit settings.', 'href_edit'   
+        p %~
+          Edit title, teaser, or choose to delete this {{club_type}}
+        ~
       }
-    }
-  end
-
-  def post_membership!
-    div.section { p 'Post form membership goes here.' }
-  end
-  
-  def memberships_guide!
-    div.section { p 'Memberrship guide goes here.' }
-  end
-  
-  def about
-    super(
-      "This {{club_type}} is yours:", 
-      'You own it. You can edit it, destroy it, or publish to it.'
-    )
-  end
-  
-  def edit!
-    div.edit_settings! {
-      a_button 'Edit settings.', 'href_edit'   
-      p %~
-        Edit title, teaser, or choose to delete this {{club_type}}
-      ~
-    }
-  end
-end # === module
-
-
-module MAB_Clubs_by_filename
+    end
+  end # === module
 
   def memberships_list
     'public_memberships'

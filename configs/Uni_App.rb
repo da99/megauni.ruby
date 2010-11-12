@@ -48,6 +48,36 @@ class Uni_App
     %w{ development test }.include?(ENV['RACK_ENV']) 
   end
   
+  class Redirector
+    
+    attr_reader :control
+
+    def initialize control, original = nil, &blok
+      if !original && !block_given?
+        raise ArgumentError, "No path or block given."
+      end
+      
+      @control = control
+      from( original ) if original
+      instance_eval( &blok ) if block_given?
+    end
+    
+    def from *old_paths
+      @path = old_paths.flatten
+    end
+    
+    def to final
+      raise "Originating path must be stated first." unless @path
+      @path.each { |path|
+        control.instance_eval %~
+          get( #{ path.inspect }, :STRANGER ) {
+            redirect #{ final.inspect }
+          }
+        ~
+      }
+    end
+
+  end # === class
   # Redirect      = Class.new(StandardError)
   # HTTP_404      = Class.new(StandardError)
   # HTTP_403      = Class.new(StandardError)

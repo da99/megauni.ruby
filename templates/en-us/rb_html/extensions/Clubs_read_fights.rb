@@ -6,36 +6,36 @@
 # MODEL   controls/Club.rb
 # 
 
-module MAB_Clubs_read_fights_STRANGER
-end
+module Ruby_To_Html::Actions::Clubs_read_fights
 
-module MAB_Clubs_read_fights_MEMBER
-end
-
-module MAB_Clubs_read_fights_INSIDER
-  def publisher_guide
-    guide('Stuff you can do:') {
-      p %~
-        Express negative feelings. Try to use
-        polite profanity, like meathead instead of 
-        doo-doo head.
-      ~
-    }
+  module STRANGER
   end
-end
 
-module MAB_Clubs_read_fights_OWNER
-  def publisher_guide
-    guide('Stuff you can do:') {
-      p %~
-        You can start fights or let others 
-        start fightss with you.
-      ~
-    }
+  module MEMBER
   end
-end
 
-module MAB_Clubs_read_fights
+  module INSIDER
+    def publisher_guide
+      guide('Stuff you can do:') {
+        p %~
+          Express negative feelings. Try to use
+          polite profanity, like meathead instead of 
+          doo-doo head.
+        ~
+      }
+    end
+  end
+
+  module OWNER
+    def publisher_guide
+      guide('Stuff you can do:') {
+        p %~
+          You can start fights or let others 
+          start fightss with you.
+        ~
+      }
+    end
+  end
   
   def messages_list
     'passions'

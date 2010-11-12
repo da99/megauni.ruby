@@ -76,15 +76,19 @@ module Base_Control
       pattern
     end
 
-    def redirect *args
-      puts "Not done: redirect in control definition"
-      self
+    def redirect path = nil, &blok
+      Uni_App::Redirector.new(self, path, &blok)
     end
-    alias_method :to, :redirect
 
     def method_missing name, *args, &blok
       return super unless [:get, :post, :put, :delete].include?(name)
       
+      raise(
+        ArgumentError, 
+        "Arguments must contain at least: " + 
+        "1 path, 1 security level: #{args.inspect}"
+      ) if args.size < 2
+
       sub_path = args.shift
       level    = Member.const_get( args.shift )
       raise ArgumentError, "Unknown arguments: #{args.inspect}" unless args.empty?

@@ -5,35 +5,36 @@
 # CONTROL models/Club.rb
 # MODEL   controls/Club.rb
 
-module MAB_Clubs_read_magazine_STRANGER
-end
 
-module MAB_Clubs_read_magazine_MEMBER
-end
-
-module MAB_Clubs_read_magazine_INSIDER
-  def publisher_guide
-      guide( 'Stuff you can do:' ) {
-        ul {
-          li 'Write a story.'
-        }
-      }
+module Ruby_To_Html::Actions::Clubs_read_magazine
+  
+  module STRANGER
   end
-end
 
-module MAB_Clubs_read_magazine_OWNER
-  def publisher_guide
-      guide( 'Stuff you can do:' ) {
-        ul {
-          li 'Write a story.'
-          li 'Review a restaurant.'
-          li 'Write about a family reunion.'
-        }
-      }
+  module MEMBER
   end
-end
 
-module MAB_Clubs_read_magazine
+  module INSIDER
+    def publisher_guide
+        guide( 'Stuff you can do:' ) {
+          ul {
+            li 'Write a story.'
+          }
+        }
+    end
+  end
+
+  module OWNER
+    def publisher_guide
+        guide( 'Stuff you can do:' ) {
+          ul {
+            li 'Write a story.'
+            li 'Review a restaurant.'
+            li 'Write about a family reunion.'
+          }
+        }
+    end
+  end
   
   def messages_list
     'storys'
@@ -60,5 +61,5 @@ module MAB_Clubs_read_magazine
     super('* * *', '- - -')
   end
 
-end # === module MAB_Clubs_read_magazine
+end # === module Ruby_To_Html::Actions::Clubs_read_magazine
       

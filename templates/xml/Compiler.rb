@@ -4,43 +4,45 @@ require 'templates/html'
 
 class Ruby_To_Xml
   
-  # def self.compile *args
-  #   vals = compile
-  #   vals.each do |xml_file_name, v|
-  #     Ruby_To_Html::Rings::LEVELS.each { |level|
-  #       Ruby_To_HTML.save_file( level, xml_file_name, v.first, v.last)
-  #     }
-  #   end
-  # end
-
-  def self.compile file_name = '*'
-    
-    vals = {}
-
-    glob_pattern = file_name == '*' ?
-                        "templates/*/xml/#{file_name}.rb" :
-                        file_name
-                        
-    Dir.glob(glob_pattern).each { |xml_file|
-
-      file_basename = File.basename(xml_file)
-      xml_dir       = File.dirname(xml_file)
-      mus_dir       = xml_dir.sub('xml/', 'mustache/')
-      mus_file      = xml_file.sub('xml/', 'mustache/').sub('.rb', '.xml')
-      content       = File.read(xml_file)
-      str           = ''
-      
-      compiled      = Builder::XmlMarkup.new( :target => str )
-      compiled.instance_eval content, xml_file, 1
-
-      compiled.target!
-      vals[xml_file] = [mus_file, str]
-    }
-    
-    file_name == '*' ?
-      vals :
-      vals[file_name].last
-    
+  FILER = Safe_Writer.new do
+    sync_modified_time
+    read_folder  %w{ rb_xml }
+    write_folder %w{ stranger owner member insider }
   end
+  
+  class << self
+    
+    def compile file_name = '*'
+      
+      content = nil
+
+      glob_pattern = file_name == '*' ?
+                          "templates/*/rb_xml/#{file_name}.rb" :
+                          file_name
+                          
+      files = Dir.glob(glob_pattern)
+      files.each { |xml_file|
+
+        file_name = self.file_name(xml_file)
+        mustache  = path( :xml, :stranger, file_name )
+        content   = File.read(xml_file)
+        str       = ''
+        
+        compiled      = Builder::XmlMarkup.new( :target => str )
+        compiled.instance_eval content, xml_file, 1
+        compiled.target!
+        
+        FILER.
+          write( mustache, str )
+        
+        content = str
+      }
+      
+      return content if files.size == 1
+      true
+      
+    end
+    
+  end # === class << self
 
 end # === Ruby_To_Xml

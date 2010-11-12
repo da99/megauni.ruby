@@ -18,7 +18,7 @@ class Render_Css
 
     lang, file_name = $1, $2
     sass_file_name  = file_name.sub('.css', '') + '.sass'
-    css_content     = Ruby_To_CSS.compile("templates/#{lang}/css/#{sass_file_name}")
+    css_content     = Ruby_To_Css.compile("templates/#{lang}/css/#{sass_file_name}")
     [200, {'Content-Type' => 'text/css'}, css_content ]
     
   end

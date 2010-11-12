@@ -6,6 +6,13 @@ class Ruby_To_Xml
 
 	class << self
 		
+    def file_name unknown
+      unknown.to_s.
+        strip.
+        split('/').last.
+        sub(/\.(rb|xml)$/, '')
+    end
+
     def path type, *args
       pattern = eval(type.to_s.upcase)
       case type
@@ -17,7 +24,7 @@ class Ruby_To_Xml
         raise ArgumentError, "Unknown type: #{type.inspect}"
       end
       
-      pattern % args
+      pattern % args.map(&:to_s)
     end
 
 	end # === class << self

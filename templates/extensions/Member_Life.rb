@@ -51,7 +51,7 @@ module Ruby_To_Html::Member_Life
           end
         }
 
-        mustache 'logged_in?' do
+        show_if 'logged_in?' do
           li { a('Log-out', :href=>'/log-out/') }
         end
         
@@ -85,11 +85,11 @@ module Ruby_To_Html::Member_Life
           end
         }
 
-        mustache 'logged_in?' do
+        show_if 'logged_in?' do
           li { a('Log-out', :href=>'/log-out/') }
         end
 
-        mustache 'not_logged_in?' do
+        if_not 'logged_in?' do
           li { a('Log-in', :href=>'/log-in/') }
         end
         

@@ -9,7 +9,6 @@ class Hellos
   get '/', :STRANGER do
     action :list
     cache_for 5
-    # render :text, 'Hello, World'
     template :html
   end
 

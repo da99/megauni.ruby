@@ -241,11 +241,11 @@ module Ruby_To_Html::Forms
     
     txt = (capture { 
       select(select_attrs) {
-        mustache coll do
-          mustache 'selected?' do
+        loop coll do
+          show_if 'selected?' do
             option "{{#{opt_txt}}}", {:selected=>'selected'}.update(attrs)
           end 
-          mustache 'not_selected?' do
+          if_not 'selected?' do
             option "{{#{opt_txt}}}"
           end
         end

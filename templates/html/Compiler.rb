@@ -10,7 +10,7 @@ class Markaby::Builder
 
 end # === Markaby::Builder
 
-%w{ 
+MARKABY_EXTENSIONS = %w{ 
   Base 
   Js
   Forms
@@ -19,7 +19,9 @@ end # === Markaby::Builder
   Member_Life 
   Rings
   Template_Embed
-}.each { |mod|
+}
+
+MARKABY_EXTENSIONS.each { |mod|
   require( "templates/extensions/#{mod}" ) 
 }
 
@@ -27,10 +29,16 @@ class Ruby_To_Html
   
   FILER = Safe_Writer.new do
     sync_modified_time
-    read_folder  %w{ rb_xml rb_html mustache }
+    read_folder  %w{ rb_html mustache }
     write_folder %w{ stranger owner member insider }
   end
+  
+  module Controls
+  end
 
+  module Actions
+  end
+  
   class << self
     
     include Optional_Constants
@@ -65,10 +73,9 @@ class Ruby_To_Html
       action_extension      = require_if_exists( action_extension_file ) && Ruby_To_Html::Actions.const_get( file_name )
       if action_extension
         exts << action_extension 
-        if action_extension.const_defined?( levels[level][:cap] )
-          exts << action_extension.const_get(levels[level][:cap])
-        end
+        exts << action_extension.const_get(levels[level][:upcase])
       end
+      
       exts
     end
 
@@ -103,6 +110,9 @@ class Ruby_To_Html
 
             extend Ruby_To_Html::Base
             extend Ruby_To_Html::Template_Embed
+            MARKABY_EXTENSIONS.each { |mod|
+              extend eval("Ruby_To_Html::#{mod}")
+            }
 
             compiler.extensions_for_file_name( level, file_name ).each { |mod|
               extend mod
@@ -114,9 +124,9 @@ class Ruby_To_Html
           
           # Compile Mustache file.
           content = Mustache::Generator.new.compile(
-                        Mustache::Parser.new.compile(
-                          tache.to_s
-                      ))
+            Mustache::Parser.new.compile(
+              tache.to_s
+          ))
                       
           unless Uni_App.development?
             # Save Mustache content.

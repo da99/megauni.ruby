@@ -67,7 +67,8 @@ module Ruby_To_Html::Base
   alias_method :app_vars, :the_app
 
   def partial( raw_file_name )
-    calling_file = caller[0].split(':').first
+    template_caller = caller.detect { |line| line[%r!templates/..-../rb_html/!] }
+    calling_file = template_caller.split(':').first
     calling_dir  = File.dirname(calling_file)
     file_name    = File.expand_path(File.join(calling_dir,raw_file_name.to_s))
     file_name += '.rb' if !file_name['.rb']

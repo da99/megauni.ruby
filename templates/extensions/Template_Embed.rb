@@ -42,6 +42,12 @@ module Ruby_To_Html::Template_Embed
   alias_method :if_no,    :if_not
   alias_method :if_empty, :if_not
 
+	def show_if mus, &blok
+		unless mus['?']
+			raise ArgumentError, ':show_if only works with __? messages'
+		end
+		mustache_statement mus, &blok
+	end
 
   def mustache_statement mus, delim = '#', &blok
     text %~
@@ -55,8 +61,8 @@ module Ruby_To_Html::Template_Embed
 
       ~ 
   end
-  alias_method :show_if, :mustache_statement
   alias_method :loop, :mustache_statement
+  alias_method :as, :mustache_statement
 
 
 end # === module Ruby_To_Html::Template_Embed

@@ -8,7 +8,7 @@ module Ruby_To_Html::Club
           h4 {
             a('{{title}}', :href=>'{{href}}')
           }
-          show_if 'teaser' do
+          show_if 'teaser?' do
             div.teaser '{{teaser}}'
           end
           
@@ -45,11 +45,11 @@ module Ruby_To_Html::Club
           end
         }
 
-        mustache 'logged_in?' do
+        show_if 'logged_in?' do
           li { a('Log-out', :href=>'/log-out/') }
         end
 
-        mustache 'not_logged_in?' do
+        if_not 'logged_in?' do
           li { a('Log-in', :href=>'/log-in/') }
         end
         

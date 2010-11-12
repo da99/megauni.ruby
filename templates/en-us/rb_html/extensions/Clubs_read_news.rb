@@ -5,34 +5,35 @@
 # CONTROL models/Club.rb
 # MODEL   controls/Club.rb
 
-module MAB_Clubs_read_news_STRANGER
-end
 
-module MAB_Clubs_read_news_MEMBER
-end
-
-module MAB_Clubs_read_news_INSIDER
-end
-
-module MAB_Clubs_read_news_OWNER
-  def publisher_guide
-        guide( 'Stuff you can do here:' ) {
-          p %~
-            Post only important news. 
-          Examples:
-          ~
-          ul {
-            li 'Your plane landed in Dallas.'
-            li 'You got a job demotion.'
-            li 'You broke up with your dog walker.'
-            li 'You got arrested... again.'
-          }
-        }
+module Ruby_To_Html::Actions::Clubs_read_news
+  
+  module STRANGER
   end
-end
 
+  module MEMBER
+  end
 
-module MAB_Clubs_read_news
+  module INSIDER
+  end
+
+  module OWNER
+    def publisher_guide
+          guide( 'Stuff you can do here:' ) {
+            p %~
+              Post only important news. 
+            Examples:
+            ~
+            ul {
+              li 'Your plane landed in Dallas.'
+              li 'You got a job demotion.'
+              li 'You broke up with your dog walker.'
+              li 'You got arrested... again.'
+            }
+          }
+    end
+  end
+
   
   def messages_list
     'news'
@@ -59,5 +60,5 @@ module MAB_Clubs_read_news
     p "No news posted yet."
   end
 
-end # === module MAB_Clubs_read_news
+end # === module Ruby_To_Html::Actions::Clubs_read_news
       

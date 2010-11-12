@@ -6,31 +6,31 @@
 # MODEL   controls/Club.rb
 # 
 
-module MAB_Clubs_read_e_STRANGER
-end # === module
-
-
-module MAB_Clubs_read_e_MEMBER
-end # === module
-
-module MAB_Clubs_read_e_INSIDER
-end # === module
-
-module MAB_Clubs_read_e_OWNER
-  def about
-    about_section(
-      'About this encyclopedia', 
-      'Write important information worth remembering here. Use it as a referece for your {{club_type}}.'
-    )
-  end
-
-  def publisher_guide
-    p 'publisher guide goes here'
-  end
-end # === module
-
-module MAB_Clubs_read_e
+module Ruby_To_Html::Actions::Clubs_read_e
   
+  module STRANGER
+  end # === module
+
+
+  module MEMBER
+  end # === module
+
+  module INSIDER
+  end # === module
+
+  module OWNER
+    def about
+      about_section(
+        'About this encyclopedia', 
+        'Write important information worth remembering here. Use it as a referece for your {{club_type}}.'
+      )
+    end
+
+    def publisher_guide
+      p 'publisher guide goes here'
+    end
+  end # === module
+
   def messages_list
     [ 
       { 'quotes' => 'Quotations'},
