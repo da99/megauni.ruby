@@ -3,6 +3,10 @@ require 'models/Config_Switches'
 
 module Ruby_To_Html::Message
 
+	ACCEPT = 1
+	DECLINE = -1
+	PENDING = 0
+
   def loop_messages_with_opening mess, h4_txt, empty_txt = nil
     text(capture {
 
@@ -75,7 +79,7 @@ module Ruby_To_Html::Message
                     
                   div {
                       show_if 'not_accepted?' do
-                        toggle('Accept', 1)
+                        toggle('Accept', ACCEPT)
                       end
                       
                       show_if 'pending?' do
@@ -83,12 +87,12 @@ module Ruby_To_Html::Message
                       end
                       
                       show_if 'not_declined?' do
-                        toggle('Decline', -1)
+                        toggle('Decline', DECLINE)
                       end
                       
                       show_if 'not_pending?' do
                         span ' or '
-                        toggle('I don\'t know.', 0)
+                        toggle('I don\'t know.', PENDING)
                       end
                     }
                   }
