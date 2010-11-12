@@ -11,7 +11,7 @@ div.content! {
 
   div.news! {
     
-    mustache 'no_news?' do
+    if_not 'news?' do
       p.empty 'No news posted yet.'
     end
 

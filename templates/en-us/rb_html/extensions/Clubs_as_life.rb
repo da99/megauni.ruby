@@ -7,7 +7,17 @@
 
 module Ruby_To_Html::Actions::Clubs_as_life
   
-  include BASE_MAB
-
+  module STRANGER
+  end # ==== module 
+  
+  module MEMBER
+  end # ==== module 
+  
+  module INSIDER
+  end # ==== module 
+  
+  module OWNER
+  end # ==== module 
+  
 end # === module MAB_Clubs_as_life
       

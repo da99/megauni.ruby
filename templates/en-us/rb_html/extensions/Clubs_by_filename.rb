@@ -144,7 +144,7 @@ module Ruby_To_Html::Actions::Clubs_by_filename
               a.button("Follow this universe.", :href=>"href_follow".m! )
             }
           end
-          mustache 'multiple_usernames?' do
+          show_if 'multiple_usernames?' do
             form.form_follow_create!(:action=>"/uni/follow/", :method=>'post') do
               fieldset {
                 label 'Follow this club as: ' 

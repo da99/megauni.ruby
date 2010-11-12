@@ -12,7 +12,7 @@ div.col {
   }
   show_if 'stream?' do  
     h4 'The latest from your subscriptions:'
-    show_if 'stream' do
+    loop 'stream' do
       div.message do
         div.body( '{{{compiled_body}}}' )
         div.permalink {

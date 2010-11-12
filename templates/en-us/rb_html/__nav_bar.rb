@@ -36,8 +36,10 @@ div( :id=>"nav_bar" ) {
     show_if 'not_mini_nav_bar?' do
       h4 'Lifes' 
     end
+    
     ul.nav_bar.lifes {
-      show_if 'username_nav' do
+      
+      as 'username_nav' do
         show_if 'selected?' do
           nav_bar_li_selected '{{username}}'
         end
@@ -45,9 +47,11 @@ div( :id=>"nav_bar" ) {
           nav_bar_li_unselected '{{username}}', '{{href}}'
         end
       end
-    show_if 'not_mini_nav_bar?' do
-      nav_bar_li :Members, :create_life, "/lifes/", "[ Create ]"
-    end
+    
+      if_not 'mini_nav_bar?' do
+        nav_bar_li :Members, :create_life, "/lifes/", "[ Create ]"
+      end
+    
     }
   end
   

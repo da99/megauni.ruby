@@ -11,7 +11,7 @@ div.content! {
       input_hidden 'editor_id', '{{editor_id}}'
     }
 
-    show_if 'mess_data' do
+    as 'mess_data' do
       fieldset {
         label 'Title:'
         input_text 'title', '{{title}}'

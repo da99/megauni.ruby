@@ -38,14 +38,14 @@ module Ruby_To_Html::Controls::Clubs
               a_button("Follow this universe.", "href_follow".m! )
             }
           end
-          mustache 'multiple_usernames?' do
+          show_if 'multiple_usernames?' do
             form.form_follow_create(:action=>"/uni/follow/", :method=>'post') do
               fieldset {
                 label 'Follow this club as: ' 
                 select(:name=>'username') {
-                  mustache('current_member_usernames') {
-                  option('{{username}}', :value=>'{{username}}')
-                }
+                  loop('current_member_usernames') {
+                    option('{{username}}', :value=>'{{username}}')
+                  }
                 }
               }
               div.buttons { button 'Follow.' }

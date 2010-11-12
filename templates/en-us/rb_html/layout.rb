@@ -20,7 +20,7 @@ tag!(:html, :xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en", :lang 
       meta( :name=>'{{name}}', :content=>"{{content}}")
     end
 
-    show_if 'page' do
+    as 'page' do
       title( "{{title}}" )
     end
 

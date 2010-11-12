@@ -9,7 +9,7 @@ div.nav_bar! {
   ul {  
     li { a('Home', :href=>'/') }
     
-    mustache 'logged_in?' do
+    show_if 'logged_in?' do
       li { a('Logout', :href=>'/log-out/') }
     end
 

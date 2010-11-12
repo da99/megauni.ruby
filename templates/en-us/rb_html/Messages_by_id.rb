@@ -21,7 +21,7 @@ div.substance! {
   
     div.message!{
 
-      mustache 'data' do
+      as 'data' do
         div.body { '{{{compiled_body}}}' }
       end
 
