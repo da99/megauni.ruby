@@ -12,10 +12,10 @@ class Mustache::Generator
 
   def on_section(name, content)
     code = compile(content)
-
+    
     ev(<<-compiled)
-        ctx.compile #{name.to_sym.inspect}, #{code.inspect}
-      compiled
+ctx.compile( #{name.to_sym.inspect} ) { #{code} }
+compiled
   end
   
 end # === class
@@ -42,12 +42,12 @@ module Ruby_To_Html::Template_Embed
   alias_method :if_no,    :if_not
   alias_method :if_empty, :if_not
 
-	def show_if mus, &blok
-		unless mus['?']
-			raise ArgumentError, ':show_if only works with __? messages'
-		end
-		mustache_statement mus, &blok
-	end
+  def show_if mus, &blok
+    unless mus['?']
+      raise ArgumentError, ':show_if only works with __? messages'
+    end
+    mustache_statement mus, &blok
+  end
 
   def mustache_statement mus, delim = '#', &blok
     text %~
