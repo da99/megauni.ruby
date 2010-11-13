@@ -11,18 +11,22 @@ namespace :server do
     exec('ssh da01@174.121.79.154')
   end
 
-  desc 'Start the server.'
+  desc 'Start the server. Uses: ENV[\'opts\']'
   task :http do
     sh 'rake server:db' unless db_running?
-    exec "thin -p 4567 -R config.ru -t 5 start"
+    line = "thin #{ENV['opts']} -p 4567 -R config.ru -t 5 start"
+    puts line
+    exec line
   end
 
-  desc 'Start Shotgun.
+  desc 'Start Shotgun. Uses: ENV[\'rack_opts\']
     shotgun --server=thin --port=4567 --public /no_public config.ru
   '
   task :shotgun do
     sh 'rake server:db' unless db_running?
-    exec "shotgun --server=thin --port=4567 --public /no_public config.ru"
+    line = "shotgun #{ENV['rack_opts']} --server=thin --port=4567 --public /no_public config.ru"
+    puts line
+    exec line
   end
 
   task :nginx do

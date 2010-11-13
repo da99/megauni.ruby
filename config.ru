@@ -19,9 +19,9 @@ begin
   use Old_App_Redirect
 
   
-  if Uni_App.non_production?
+  if Uni_App.development?
     use Rack::CommonLogger
-    use Rack::ShowExceptions if Uni_App.development?
+    use Rack::ShowExceptions
     require 'middleware/Render_Css' 
     use Render_Css
   end
