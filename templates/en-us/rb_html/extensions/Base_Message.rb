@@ -1,7 +1,7 @@
 require 'models/Data_Pouch'
 require 'models/Config_Switches'
 
-module Ruby_To_Html::Message
+module Ruby_To_Html::Base_Message
 
 	ACCEPT = 1
 	DECLINE = -1

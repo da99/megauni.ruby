@@ -1,5 +1,5 @@
 
-module Ruby_To_Html::Member_Life
+module Ruby_To_Html::Base_Member_Life
 
   def div_filter_options type
     div.col.filter! {

@@ -1,7 +1,7 @@
 require 'models/Delegator_Dsl'
 require 'models/Sentry_Sender'
 
-module Ruby_To_Html::Rings
+module Ruby_To_Html::Base_Rings
   
   LEVELS = %w{
     stranger

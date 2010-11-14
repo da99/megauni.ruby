@@ -23,7 +23,7 @@ end # === class
 # This module is included into
 # Markaby to generate the template
 # delimiters.
-module Ruby_To_Html::Template_Embed
+module Ruby_To_Html::Base_Template_Embed
 
 
   def mustache name

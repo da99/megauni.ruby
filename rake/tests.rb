@@ -1,7 +1,6 @@
 
 
 namespace :tests do
-  
 
   desc %! Runs tests for your app using glob: tests/test_*.rb 
   GEM_UPDATE = false!

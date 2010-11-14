@@ -1,4 +1,4 @@
-require 'templates/extensions/Template_Context'
+require 'templates/html/Template_Context'
 require 'templates/html'
 
 module Sinatra

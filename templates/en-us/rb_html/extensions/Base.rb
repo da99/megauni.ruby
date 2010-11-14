@@ -67,25 +67,21 @@ module Ruby_To_Html::Base
   alias_method :app_vars, :the_app
 
   def partial( raw_file_name )
-    template_caller = caller.detect { |line| line[%r!templates/..-../rb_html/!] }
-    calling_file = template_caller.split(':').first
-    calling_dir  = File.dirname(calling_file)
-    file_name    = File.expand_path(File.join(calling_dir,raw_file_name.to_s))
-    file_name += '.rb' if !file_name['.rb']
     
     # Find template file.
-    partial_filepath = if File.exists?(file_name)
-       file_name 
-    end
+    view    = raw_file_name.to_s 
+    file_name = view + '.rb'
+    dir     = File.dirname( @file_path )
+    partial = File.join( dir, file_name )
 
-    if !partial_filepath
+    if !partial
       raise "Partial template file not found: #{file_name}"
     end
     
     # Get & Render the contents of template file.
     text( 
       capture { 
-        eval( File.read(partial_filepath), nil, partial_filepath, 1  )
+        eval( File.read(partial), nil, partial, 1  )
       } 
     )
     ''

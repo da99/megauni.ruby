@@ -1,7 +1,7 @@
 require 'models/Private_Mab'
 require 'models/Concise_Attrs'
 
-module Ruby_To_Html::Forms
+module Ruby_To_Html::Base_Forms
 
   extend Concise_Attrs
   attr_reader :as_type, :config_scope

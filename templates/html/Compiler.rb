@@ -12,17 +12,16 @@ end # === Markaby::Builder
 
 MARKABY_EXTENSIONS = %w{ 
   Base 
-  Js
-  Forms
-  Club
-  Message
-  Member_Life 
-  Rings
-  Template_Embed
+  Base_Js
+  Base_Forms
+  Base_Message
+  Base_Member_Life 
+  Base_Rings
+  Base_Template_Embed
 }
 
 MARKABY_EXTENSIONS.each { |mod|
-  require( "templates/extensions/#{mod}" ) 
+  require( "templates/en-us/rb_html/extensions/#{mod}" ) 
 }
 
 class Ruby_To_Html
@@ -44,12 +43,12 @@ class Ruby_To_Html
     include Optional_Constants
 
     def levels
-      @levels ||= Ruby_To_Html::Rings::LEVELS.inject({}) {  |memo, level| 
+      @levels ||= Ruby_To_Html::Base_Rings::LEVELS.inject({}) {  |memo, level| 
         memo[level] = { 
           :cap => level.capitalize.to_sym, 
           :upcase => level.upcase.to_sym
         }
-        memo[level][ :module ] = Ruby_To_Html::Rings.const_get( memo[level][:cap] )
+        memo[level][ :module ] = Ruby_To_Html::Base_Rings.const_get( memo[level][:cap] )
         memo
       } 
     end
@@ -83,7 +82,7 @@ class Ruby_To_Html
 
       content        = nil
       files          = Dir.glob( path( :rb_html, glob ) )
-      allowed_levels = only_level ? [only_level] : Ruby_To_Html::Rings::LEVELS
+      allowed_levels = only_level ? [only_level] : Ruby_To_Html::Base_Rings::LEVELS
       compiler       = self
 
       files.each { |mab_file|
@@ -106,10 +105,10 @@ class Ruby_To_Html
           html     = path(:html, level, file_name)
           
           # Turn Markaby file into Mustache content.
-          tache = Markaby::Builder.new(:template_name=>file_name) { 
+          tache = Markaby::Builder.new(:file_path => mab_file, :template_name=>file_name) { 
 
             extend Ruby_To_Html::Base
-            extend Ruby_To_Html::Template_Embed
+            extend Ruby_To_Html::Base_Template_Embed
             MARKABY_EXTENSIONS.each { |mod|
               extend eval("Ruby_To_Html::#{mod}")
             }
