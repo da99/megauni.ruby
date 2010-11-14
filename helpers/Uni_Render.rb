@@ -1,5 +1,6 @@
 require 'templates/html/Template_Context'
 require 'templates/html'
+require 'templates/xml'
 
 module Sinatra
   
@@ -26,11 +27,12 @@ module Sinatra
       # Process the template.
       template_content = compile(ext, file_name)
 
-			# Set the appropriate headers.
+      # Set the appropriate headers.
       render ext, template_content
     end # === def template
 
-    def compile ext, file_name
+    def compile raw_ext, file_name
+      ext = raw_ext.to_sym
       
       # Get contexts.
       require "views/#{file_name}.rb"
@@ -38,33 +40,28 @@ module Sinatra
       view_class.raise_on_context_miss = true
       view_ctx                         = view_class.new(self)
       ctx                              = Mustache::Context.new(view_ctx)
-      compiled_file_path               = Ruby_To_Html.path( :html, view_ctx.viewer_level, file_name )
-      
+      converter                        = Object.const_get( :"Ruby_To_#{ext.to_s.capitalize}" )
+      compile_args                     = case ext
+                                         when :html
+                                           [ view_ctx.viewer_level, file_name ]
+                                         else
+                                           [ file_name ]
+                                         end
+      compiled_file_path               = converter.path( ext, *compile_args )
       # Use newly created contexts to compile templates.
       template_content = unless Uni_App.development? 
                            File.read( compiled_file_path )
                          else
-                           case ext
-                           when :html, :xml
-                             ext
-                           else
-                             raise ArgumentError, "Don't know what to do with: #{file_name}"
-                           end
-                                        
-                           puts("Compiling templated instead of using cached Mustache...") if Uni_App.development?
-                          
-                          
-                           klass_name = "Ruby_To_#{ext.to_s.capitalize}"
+                           puts("Compiling templated instead of using cached Mustache...")
                            require "templates/#{ext}/Compiler"
-                           klass = eval(klass_name)
-                           klass.compile(view_ctx.viewer_level, file_name)
+                           converter.compile( *compile_args )
                          end
 
       # Eval the compiled mustache code.
       eval(template_content, nil, compiled_file_path, 1)
     end
 
-	end # === module Uni_Render
+  end # === module Uni_Render
 
   helpers Uni_Render
   

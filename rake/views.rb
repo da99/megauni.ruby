@@ -1,14 +1,15 @@
 namespace :views do
 
-  desc 'Generates mustache and css files from mab and sass files.'
+  desc %~Generates mustache and css files from mab and sass files.
+		Uses: ENV['name']
+	~
   task :compile do
-
     %w{ html xml css }.each { |ext|
       require "templates/#{ext}"
       require "templates/#{ext}/Compiler"
-      Object.const_get("Ruby_To_#{ext.capitalize}").compile
+			Object.const_get(:"Ruby_To_#{ext.capitalize}").compile ENV['name']
     }
-    
+		
     sh('rm -v -r .sass-cache')
   end
 

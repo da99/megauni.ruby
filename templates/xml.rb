@@ -2,7 +2,7 @@
 class Ruby_To_Xml
   
   RB_XML = 'templates/%s/rb_xml/%s.rb'
-  XML    = 'templates/%s/xml/%s/%s.xml'
+  XML    = 'templates/%s/xml/%s.xml'
 
 	class << self
 		
@@ -15,16 +15,17 @@ class Ruby_To_Xml
 
     def path type, *args
       pattern = eval(type.to_s.upcase)
+      
       case type
       when :rb_xml
         args.unshift( 'en-us' ) if args.size == 1
       when :xml
-        args.unshift( 'en-us' ) if args.size == 2
+        args.unshift( 'en-us' ) if args.size == 1
       else
         raise ArgumentError, "Unknown type: #{type.inspect}"
       end
       
-      pattern % args.map(&:to_s)
+			pattern % args.map(&:to_s)
     end
 
 	end # === class << self

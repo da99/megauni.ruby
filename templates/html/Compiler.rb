@@ -1,4 +1,5 @@
 require 'models/Safe_Writer'
+require 'models/Argumentor'
 require 'markaby'
 require 'models/Gather'
 require 'modules/Optional_Constants'
@@ -78,7 +79,17 @@ class Ruby_To_Html
       exts
     end
 
-    def compile only_level = nil, glob = '*'
+    def compile *args
+
+      ops = Argumentor.argue(args) {
+        allow :only_level => nil, :glob => '*'
+        single :glob
+        multi  :only_level, :glob
+      }
+      
+      only_level = ops.only_level
+      glob       = ops.glob
+
 
       content        = nil
       files          = Dir.glob( path( :rb_html, glob ) )
@@ -129,12 +140,14 @@ class Ruby_To_Html
                       
           unless Object.const_defined?( :Uni_App )
             # Save Mustache content.
+            puts "Writing: #{mustache}"
             FILER.
               from(mab).
               write(mustache, tache)
 
 
             # Save compiled Mustache file.
+            puts "Writing: #{html}"
             FILER.
               from(mustache).
               write(html, content)
