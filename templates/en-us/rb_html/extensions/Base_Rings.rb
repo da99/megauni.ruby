@@ -50,7 +50,7 @@ module Ruby_To_Html::Base_Rings
           rescue NameError
           end
           show_if "#{level}?" do
-            clone.instance_eval &blok
+            clone.instance_eval( &blok )
           end
           # ring nil
         end

@@ -9,7 +9,7 @@ class Angry_Snoopy
   end
 
   def do_this &blok
-    instance_eval &blok
+    instance_eval( &blok )
   end
 
 end # ======== Angry_Snoopy

@@ -1,8 +1,8 @@
-# mab   ~/megauni/templates/en-us/xml/Hellos_sitemap_xml.rb
-# SASS  ~/megauni/templates/en-us/css/Hellos_sitemap_xml.sass
-# NAME  Hellos_sitemap_xml
+# mab   ~/megauni/templates/en-us/xml/Hellos_sitemap.rb
+# SASS  ~/megauni/templates/en-us/css/Hellos_sitemap.sass
+# NAME  Hellos_sitemap
 
-class Hellos_sitemap_xml < Base_View
+class Hellos_sitemap < Base_View
 
   def last_modified_at
     latest_post = news.first

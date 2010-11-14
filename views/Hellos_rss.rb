@@ -1,8 +1,8 @@
-# XML   /home/da01tv/MyLife/apps/megauni/templates/en-us/xml/Hellos_rss_xml.rb
-# CONTROL ~/megauni/controls/Hellos.rb
-# NAME  Hellos_rss_xml
+# XML   templates/en-us/xml/Hellos_rss.rb
+# CONTROL controls/Hellos.rb
+# NAME  Hellos_rss
 
-class Hellos_rss_xml < Base_View
+class Hellos_rss < Base_View
 
   def posts
     @news ||= Message.public.map { |post|
@@ -14,4 +14,4 @@ class Hellos_rss_xml < Base_View
     }
   end
   
-end # === Hellos_rss_xml 
+end # === Hellos_rss

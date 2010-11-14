@@ -61,7 +61,7 @@ module CoreFuncs
 
     if !pow_file.exists? 
       if block_given?
-        return instance_eval &blok
+        return instance_eval( &blok )
       else
         raise ArgumentError, "Proc/lambda required."
       end

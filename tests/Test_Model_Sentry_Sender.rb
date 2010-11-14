@@ -9,7 +9,7 @@ class Bird_Forest
 
   def do_this &blok
     received_methods << :do_this
-    instance_eval &blok
+    instance_eval( &blok )
   end
 
   def name

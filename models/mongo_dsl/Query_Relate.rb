@@ -6,7 +6,7 @@ class Mongo_Dsl::Query_Relate
   
   include Mongo_Dsl::Query_Common
   
-  attr_reader :parent, :child,
+  attr_reader :parent, 
               :type, :name, :child_name, 
               :selector, :params, :dyno_querys, :filters, 
               :overrides, :pending_overrides
@@ -57,7 +57,7 @@ class Mongo_Dsl::Query_Relate
       
       relate = spawn!
       relate.instance_variable_set '@name', name
-      relate.instance_eval &blok
+      relate.instance_eval( &blok )
       # origin.overrides << relate
       origin.parent.relations[name] = relate
     }

@@ -122,7 +122,7 @@ module Base_Control
           puts "PATH: #{request.path_info} CONTROL: #{control} ACTION: #{action_name}"
         end
       
-        instance_eval &blok
+        instance_eval( &blok )
       end
 
       allow :NO_ACCESS

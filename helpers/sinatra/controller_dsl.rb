@@ -13,7 +13,7 @@ configure do
 
     def initialize raw_name, &blok
       self.name = raw_name
-      instance_eval &blok
+      instance_eval( &blok )
     end
 
     [:get, :put, :post, :delete].each { |action|
@@ -33,7 +33,7 @@ configure do
       code = %~
         #{action_name}(*(#{args.inspect})) do
           controller #{name.inspect}
-          instance_eval &(options.#{option_name})
+          instance_eval( &(options.#{option_name}) )
           # options.#{option_name}.inspect
         end
       ~

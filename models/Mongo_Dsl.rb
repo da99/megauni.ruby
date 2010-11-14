@@ -37,7 +37,7 @@ module Mongo_Dsl
       @collection            = name
       @key_stack             = []
       @stack[@collection]  ||= []
-      add &blok
+      add( &blok )
     end
     
     def add_to_keys fld, order
@@ -58,7 +58,7 @@ module Mongo_Dsl
 
     def add &blok
       @key_stack = { :keys => [] , :options => {:background=>true, :unique=>false}}
-      instance_eval &blok
+      instance_eval( &blok )
       @key_stack[:options][:name] = \
         @key_stack[:keys].map { |pair| pair.map(&:to_s).join('_') }.join('_')
       @stack[@collection] << @key_stack
@@ -1032,7 +1032,7 @@ module Mongo_Dsl
       #   :parent => self, 
       #   :child  => class_name,
       #   :foreign_key => foreign_key )
-      # gather.instance_eval &blok
+      # gather.instance_eval( &blok )
       # gather
       name_sym = name.to_sym
       raise ArgumentError, "Already defined: #{name_sym}" if relations[name_sym]

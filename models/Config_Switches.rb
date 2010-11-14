@@ -29,7 +29,7 @@ class  Config_Switches
       end
 
     if block_given?
-      instance_eval &blok
+      instance_eval( &blok )
     end
   end
     
@@ -42,7 +42,7 @@ class  Config_Switches
 
   def put &configuration
     if block_given?
-      @put.instance_eval &configuration
+      @put.instance_eval( &configuration )
     end
     @put
   end

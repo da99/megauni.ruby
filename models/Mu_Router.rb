@@ -228,7 +228,7 @@ class Mu_Router
   def top_slash &blok
     old_prefix = prefix
     @prefix = '/'
-    instance_eval &blok
+    instance_eval( &blok )
     @prefix = old_prefix
   end
   

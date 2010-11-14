@@ -64,7 +64,7 @@ module Ruby_To_Html::Base_Forms
   def fieldset_hidden &blok
     text(capture {
       fieldset.hidden {
-        instance_eval &blok
+        instance_eval( &blok )
       }
     })
   end
@@ -399,7 +399,7 @@ module Ruby_To_Html::Base_Forms
     config.put {
       id         "post_to_universes_#{raw_id}"
       collection "#{raw_id}_menu"
-      instance_eval &configuration
+      instance_eval( &configuration )
     }
     
     get = config.get
@@ -430,7 +430,7 @@ module Ruby_To_Html::Base_Forms
       id              "post_to_username_#{raw_form_id}"
       collection_name "#{raw_form_id}_menu"
       field( 'owner_id' ) unless has_field
-      instance_eval &blok
+      instance_eval( &blok )
     }
 
     form_post(config) {

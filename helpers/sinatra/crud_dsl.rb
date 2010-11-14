@@ -142,7 +142,7 @@ configure do
       @model_class      = new_model_class
       @model_underscore = model_class.to_s.underscore
 
-      instance_eval &blok
+      instance_eval( &blok )
 
       options_to_struct
 

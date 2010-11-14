@@ -6,7 +6,7 @@ module Rumspringa
       def #{meth_name} &blok
         clone = self.clone
         clone.extend #{mod}
-        clone.instance_eval &blok
+        clone.instance_eval( &blok )
       end
     ~
   end

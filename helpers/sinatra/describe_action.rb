@@ -6,7 +6,7 @@ helpers {
 
   def describe(c_name = nil, a_name = nil, &blok)
     if block_given?
-      instance_eval &blok 
+      instance_eval( &blok  )
     else
       controller c_name if c_name
       action     a_name if a_name
@@ -99,7 +99,7 @@ helpers {
          if !txt && !block_given?
             case @#{meth}
             when Proc
-              instance_eval &@#{meth}
+              instance_eval( &@#{meth} )
             else
               @#{meth}
             end

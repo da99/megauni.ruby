@@ -8,7 +8,7 @@ module Ruby_To_Html::Base_Js
   
   def js! &blok
     Js_Dsl.new {
-      instance_eval &blok
+      instance_eval( &blok )
       return_false
     }.to_s
   end

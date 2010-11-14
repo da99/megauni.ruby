@@ -4,7 +4,7 @@ class Js_Dsl
   def initialize &blok
     @txt = []
     if blok
-      instance_eval &blok
+      instance_eval( &blok )
     end
   end
 
@@ -69,7 +69,7 @@ class Js_Dsl
   
   def element e_id, &blok
     @txt << "$('#{e_id}')"
-    instance_eval &blok
+    instance_eval( &blok )
     self
   end
 

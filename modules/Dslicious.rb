@@ -21,19 +21,19 @@ module Dslicious
   end
 
   def inside obj, &blok
-    obj.instance_eval &blok
+    obj.instance_eval( &blok )
     obj
   end
 
   def inside_map enum, &blok
     enum.map { |obj|
-      obj.instance_eval &blok
+      obj.instance_eval( &blok )
     }
   end
 
   def all? *args, &blok
     answers = args.map { |obj|
-      obj.instance_eval &blok
+      obj.instance_eval( &blok )
     }
     
     all_true? answers

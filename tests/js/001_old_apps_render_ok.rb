@@ -84,7 +84,7 @@ class H8JS
   end
 
   def to_js &blok
-    instance_eval &blok
+    instance_eval( &blok )
     get_as_js
   end
 

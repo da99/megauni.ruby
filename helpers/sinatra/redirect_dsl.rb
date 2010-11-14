@@ -10,7 +10,7 @@ configure do
   
     def initialize &blok
 
-      instance_eval &blok
+      instance_eval( &blok )
       
       if !@from || !@to
         raise ArgumentError, "Both need to be set: :to, :from (#{@to.inspect}, #{@from.inspect})"
