@@ -31,7 +31,7 @@ begin
   
   # === Helpers
   use Rack::MethodOverride
-  use Rack::Session::Mongo, {:server=>File.join(MONGODB_CONN_STRING, DB_SESSION_TABLE) , :expire_after => (60*60*24*14) }
+  use Rack::Session::Mongo, {:server=>File.join( ENV['MONGO_DB'], DB_SESSION_TABLE ) , :expire_after => (60*60*24*14) }
   use Strip_If_Head_Request
   
   # === Low-level Helpers 

@@ -1,7 +1,7 @@
 require 'uri'
 
 if not ENV['MONGO_DB']
-  ENV['MONGO_DB'] = ENV["MONGO_DB_#{ENV['RACK_ENV']}"]
+  ENV['MONGO_DB'] = ENV["MONGO_DB_#{ENV['RACK_ENV'].to_s.upcase}"]
 end
 
 # === DB urls/connections ===
@@ -18,6 +18,6 @@ at_exit do
   DB_CONN.close
 end
 
-DB_URI = URI.parse(ENV['MONG_DB'])
+DB_URI = URI.parse(ENV['MONGO_DB'])
 DB = DB_CONN.db( File.basename( ENV['MONGO_DB'] ) )
 
