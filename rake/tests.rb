@@ -32,13 +32,13 @@ namespace :tests do
         name= 
         ('tests/tests_' and '.rb' is automatically added.)
         warn    = True
-        compile = True
+        compile = True # Compiles views related to :name.
   ~.strip
   task :file do
     file_name    = ENV['name'].sub(/\ATest_/, '')
-    ENV['compile'] ||= true
+    ENV['compile'] ||= 'true'
      
-    do_compile = ENV['name']['Control_'] && ENV['compile'] == true
+    do_compile = ENV['name']['Control_'] && ENV['compile'] == 'true'
     if do_compile
       pieces = file_name.to_s.split('_')
       pieces.shift
@@ -48,10 +48,19 @@ namespace :tests do
     use_debugger = ENV['debug']
     exec_name    = use_debugger ? 'rdebug' : 'ruby'
     warn         = !ENV['warn'] ? '-w' : ''
-    Dir.glob( "tests/Test_#{file_name}.rb" ).each { |path| 
-      sh %~ 
-         #{exec_name} #{warn} -r "tests/__helper__" "#{path}"
-      ~.strip
+    
+    require 'tests/__helper__'
+
+    glob  = "tests/Test_#{file_name}.rb"
+    files = Dir.glob( glob )
+    
+    if files.empty?
+      puts_red "No files found: #{glob}"
+      exit 1
+    end
+
+    files.each { |path| 
+      require path
     }
   end
   
