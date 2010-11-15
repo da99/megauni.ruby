@@ -17,7 +17,7 @@ class Test_Control_Lifes_Read < Test::Unit::TestCase
     life = Club.by_filename_or_member_username(un)
     get life.href
     assert_equal msg, last_response.body[msg]
-	end
+  end
 
   must 'show "This life is yours" to owner of life club' do
     msg = "This life is yours"

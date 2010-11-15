@@ -4,8 +4,8 @@ class Ruby_To_Xml
   RB_XML = 'templates/%s/rb_xml/%s.rb'
   XML    = 'templates/%s/xml/%s.xml'
 
-	class << self
-		
+  class << self
+    
     def file_name unknown
       unknown.to_s.
         strip.
@@ -25,9 +25,9 @@ class Ruby_To_Xml
         raise ArgumentError, "Unknown type: #{type.inspect}"
       end
       
-			pattern % args.map(&:to_s)
+      pattern % args.map(&:to_s)
     end
 
-	end # === class << self
+  end # === class << self
 
 end # === class

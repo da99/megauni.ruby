@@ -392,13 +392,13 @@ class Base_View < Mustache
     @app.logged_in?
   end
 
-	def viewer_level
-		if logged_in?
-			'member'
-		else
-			'stranger'
-		end
-	end
+  def viewer_level
+    if logged_in?
+      'member'
+    else
+      'stranger'
+    end
+  end
 
   # === FLASH MESSAGES ===
 

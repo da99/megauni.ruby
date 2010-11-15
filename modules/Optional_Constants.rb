@@ -15,7 +15,7 @@ module Optional_Constants
     def require_if_exists path
       begin
         require path
-				true
+        true
       rescue LoadError => e
         raise( e ) unless e.message =~ /no such file to load -- #{path}/
           false

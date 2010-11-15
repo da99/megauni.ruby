@@ -3,9 +3,9 @@ require 'models/Config_Switches'
 
 module Ruby_To_Html::Base_Message
 
-	ACCEPT = 1
-	DECLINE = -1
-	PENDING = 0
+  ACCEPT = 1
+  DECLINE = -1
+  PENDING = 0
 
   def loop_messages_with_opening mess, h4_txt, empty_txt = nil
     text(capture {
@@ -58,11 +58,11 @@ module Ruby_To_Html::Base_Message
           
           div.owner {
             span 'Author: '
-						
+            
             show_if 'owner?' do
               span 'you'
             end
-					
+          
             if_not 'owner?' do
               a('{{owner_username}}', :href=>'{{owner_href}}')
             end
