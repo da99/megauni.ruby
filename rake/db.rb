@@ -4,6 +4,13 @@ require 'mongo'
 require 'mongo'
 # COLLS = %w{Clubs Members Member_Usernames Messages}
 
+def ensure_no_rack_env
+  if ENV['RACK_ENV']
+    puts_red "RACK_ENV already defined."
+    exit 1
+  end
+end
+
 def compile_with_mongo_ids hsh
   case hsh
   when Array
@@ -26,15 +33,17 @@ end
 # PRODUCTION_DB = File.read(File.expand_path '~/cloud.txt').strip
 # DB_PRODUCTION = [ File.dirname(PRODUCTION_DB), File.basename(PRODUCTION_DB) ]
 namespace :db do
-  
+
   desc 'Check if MongoDB is approaching size limit.'
   task :check_size do
-    orig_env = ENV['RACK_ENV']
-    ENV['RACK_ENV'] = 'production'
-    require 'megauni'
     
     puts_white "Checking size of MongoDB account..."
-    db_size = `mongo #{DB_HOST} -u #{DB_USER} -p #{DB_PASSWORD}  --eval "db.stats().storageSize / 1024 / 1024;" 2>&1`.strip.split.last.to_f
+    
+    require 'uri'
+    url = ENV['MONGO_DB_PRODUCTION']
+    uri = URI.parse( url )
+    
+    db_size = `mongo #{uri.host}:#{uri.port} -u #{uri.user} -p #{uri.password}  --eval "db.stats().storageSize / 1024 / 1024;" 2>&1`.strip.split.last.to_f
     if db_size > MAX_DB_SIZE_IN_MB 
       puts_red "DB Size too big: #{db_size} MB"
       exit
@@ -42,45 +51,37 @@ namespace :db do
       puts_white "DB Size is ok: #{db_size} MB"
     end
     
-    ENV['RACK_ENV'] = orig_env
   end
   
   desc 'Delete all data in database.'
   task :clear! do
+    # Don't use MongoDB :drop_database
+    # because that erases all system/user info. 
+    # for DB.
+
     ENV['RACK_ENV'] ||= 'development'
     if not ['development', 'test'].include?(ENV['RACK_ENV'])
       raise "Not allowed in environment: #{ENV['RACK_ENV']}" 
     end
 
     require 'megauni'
-
     Mongo_Dsl.reset_db!
     puts_white "Removed all records and added new indexes (if any)."
-    
-    # Don't use MongoDB :drop_database
-    # because that erases all system/user info. 
-    # for DB.
-
   end
 
-  desc "Delete, then re-create database. Uses ENV['RACK_ENV']. Defaults to 'development'." 
+  desc "%~ 
+      Delete, then re-create database. 
+      ENV['RACK_ENV'] ||= 'development'
+  ".strip
   task :reset! do
     
-    Rake::Task['db:clear!'].invoke
-    Rake::Task['db:import_development'].invoke
+    sh 'rake db:clear!'
+    sh 'rake db:import_development'
     if ENV['RACK_ENV'] === 'test'
-      Rake::Task['db:test_sample_data'].invoke
+      sh 'rake db:test_sample_data'
     end
     
   end # ===
-
-  desc 'Reset db for RACK_ENV = "test" '
-  task :test_reset! do
-    orig_env = ENV['RACK_ENV']
-    ENV['RACK_ENV'] = 'test'
-    Rake::Task['db:reset!'].invoke
-    ENV['RACK_ENV'] = orig_env
-  end
 
   desc 'Grab some sample data from production database'
   task :sample_data do
@@ -127,8 +128,7 @@ namespace :db do
 
   desc 'Update design document only. Uses ENV[\'RACK_ENV\']. Development by default.'
   task :reset_design_doc do
-    ENV['RACK_ENV'] ||= 'development'
-    require File.basename(File.expand_path('.'))
+    require 'megauni'
     Mongo_Dsl.ensure_indexes
     puts_white "Updated indexes."
   end
@@ -136,10 +136,14 @@ namespace :db do
   desc "Add in sample data for tests."
   task :test_sample_data do
 
+    ENV['RACK_ENV'] = 'test'
+    require 'megauni'
+
     # === Create Regular Member 1 ==========================
     "regular-member-1" # password: regular-password
     "regular-member-2" # password: regular-password
     "regular-member-3" # password: regular-password
+    
     # === Create Admin Member ==========================
     "admin-member-1" # password: admin-password
 
@@ -191,7 +195,7 @@ namespace :db do
   desc 'Import sample development data to MongoDB.'
   task :import_development do
     require 'megauni'
-    Dir.glob("rake/sample/#{DB.name}/*.bson").each { |file|
+    Dir.glob("rake/sample/megauni_dev/*.bson").each { |file|
       collection = File.basename(file).sub( /\.bson\Z/, '' )
       sh("mongorestore -v --db #{DB.name} --collection #{collection} --drop #{file}")
     }
