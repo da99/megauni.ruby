@@ -17,7 +17,7 @@ class Test_Model_Mongo_Dsl_Indexes < Test::Unit::TestCase
     assert_equal target, result
   end
 
-  must 'drop, insert an index if :background value changed' do
-  end
+  # must 'drop, insert an index if :background value changed' do
+  # end
 
 end # === class Test_Model_Mongo_Dsl_Indexes

@@ -21,7 +21,12 @@ module Mongo_Dsl::Query_Common
     self
   end
   
-  def sort val
+  # Either 1) a key to sort by
+	# or 2) an array of [key, direction] pairs to sort by. 
+	#    Direction should be specified as 
+	#    Mongo::ASCENDING (or :ascending / :asc) or 
+	#    Mongo::DESCENDING (or :descending / :desc) 
+	def sort val
     params[:sort] = val
     self
   end

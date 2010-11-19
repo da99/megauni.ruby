@@ -11,7 +11,7 @@ namespace :tests do
       puts_white shell_out('gem update')
     end
     
-    ENV['RACK_ENV'] ||= 'test'
+    ENV['RACK_ENV'] = 'test'
     Rake::Task['db:reset!'].invoke
     rb_files = Dir.glob('tests/Test_*.rb').sort.reverse.map { |file| file.sub('.rb', '')}
     

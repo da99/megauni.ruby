@@ -5,7 +5,7 @@
 class Hellos_rss < Base_View
 
   def posts
-    @news ||= Message.public.map { |post|
+    @news ||= Message.news.go!.map { |post|
       {:published_at_rfc822 => rfc822_date(post['created_at']),
        :url => File.join(site_url, 'mess', post['_id'].to_s + '/' ),
        :body => post['body'],
