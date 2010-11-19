@@ -250,8 +250,10 @@ class Test::Unit::TestCase
     end
   end
 
+  # 301 - Permanent
+  # 302 - Temporay
   def assert_redirect(loc, status = 301)
-    assert_equal loc, last_response.headers['Location'] 
+    assert_equal loc, last_response.headers['Location'].sub('http://example.org', '')
     assert_equal status, last_response.status
   end
 

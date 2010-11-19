@@ -95,8 +95,7 @@ class Test_Control_Clubs_Read < Test::Unit::TestCase
   must 'redirect to club profile page if only one club found' do
     club = create_club(regular_member(1), :filename=>"sf_#{rand(10000)}")
     post "/search/", :keyword=>club.data.filename
-    follow_redirect!
-    assert_equal "/uni/#{club.data.filename}/", last_request.fullpath
+    assert_redirect "/uni/#{club.data.filename}/", 302
   end
 
   must 'redirect to life if keyword is a member username' do
