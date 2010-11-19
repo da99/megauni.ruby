@@ -418,6 +418,7 @@ class Member
                                _ids.each_index { |ind|
                                  arr[ _ids[ind] ] = usernames[ind]
                               }
+                              arr
                              end
     end
     

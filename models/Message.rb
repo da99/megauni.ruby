@@ -216,10 +216,10 @@ class Message
 
   class << self
 
-		def news
-			club_id = Club.db.collection.find_one(:filename=>'megauni')['_id']
-			find.target_ids(club_id).privacy('public').sort(['_id', :asc])
-		end
+    def news
+      club_id = Club.db.collection.find_one(:filename=>'megauni')['_id']
+      find.target_ids(club_id).privacy('public').sort(['_id', :asc])
+    end
 
     def message_model?( str_or_hash )
       case str_or_hash

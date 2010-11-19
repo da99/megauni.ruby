@@ -7,8 +7,8 @@ module Mongo_Dsl::Query_Common
 
   %w{ gt gte lt lte }.each { |name|
     eval %~
-      def #{name} raw_field, val
-        field = raw_field.to_sym
+      def #{name} val
+        field = current_field
         selector[field] ||= {}
         selector[field][:$#{name}] = val
         self
@@ -22,11 +22,11 @@ module Mongo_Dsl::Query_Common
   end
   
   # Either 1) a key to sort by
-	# or 2) an array of [key, direction] pairs to sort by. 
-	#    Direction should be specified as 
-	#    Mongo::ASCENDING (or :ascending / :asc) or 
-	#    Mongo::DESCENDING (or :descending / :desc) 
-	def sort val
+  # or 2) an array of [key, direction] pairs to sort by. 
+  #    Direction should be specified as 
+  #    Mongo::ASCENDING (or :ascending / :asc) or 
+  #    Mongo::DESCENDING (or :descending / :desc) 
+  def sort val
     params[:sort] = val
     self
   end

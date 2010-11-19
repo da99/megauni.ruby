@@ -23,6 +23,8 @@ module Sinatra
     def the_life
       the.username = clean_room[:filename]
       the.life = Life.find.username(the.username).go_first!
+      the.owner = the.life.find.owner.go_first!
+      the.life
     end
     
     def the_life_with messages

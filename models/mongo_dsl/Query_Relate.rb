@@ -226,34 +226,3 @@ class Mongo_Dsl::Query_Relate::Spawn
 end # === class Spawn
 
 
-
-# class Mongo_Dsl::Query_Relation
-# 
-#   include Mongo_Dsl::Query_Common
-#   
-#   def initialize klass, query_name
-#     @query_location = [klass, query_name]
-#   end
-#   
-#   def get_meta val
-#     qu = @query_location.first.querys[@query_location.last]
-#     qu.meths.first[1].first[val]
-#   end
-# 
-#   def parent
-#     get_meta :parent
-#   end
-# 
-#   def type
-#     get_meta :parent
-#   end
-# 
-#   def child_name
-#     get_meta :parent
-#   end
-# 
-#   def child
-#   end
-# 
-# 
-# end # === class Mongo_Dsl::Query_Relation

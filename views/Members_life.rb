@@ -13,7 +13,12 @@ class Members_life < Base_View
   end
 
   def stream
-    compiled_owner_messages :$in=>%w{fact question status buy comment}
+    @stream ||= begin
+                  compile_messages app.the.life.find.messages.
+                    privacy('public').
+                    message_model(%w{fact question status buy comment}).
+                    go!
+                end
   end
   
 end # === Members_life 

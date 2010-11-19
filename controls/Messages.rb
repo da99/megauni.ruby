@@ -21,12 +21,16 @@ class Messages
 
     the.year     = year
     the.month    = month
-    the.messages = Message.by_published_at(year, month)
+    the.club     = Club.find.filename(club_filename).go_first!
+    the.messages = the.club.find.
+      messages.
+      published_at.between(year, month).
+      go!
     
     template :html
   end
 
-  post '/message-create', :MEMBER do # CREATE
+  post '/messages', :MEMBER do # CREATE
     begin
       mess = Message.create( current_member, clean_room )
       flash_msg.success = "Your message has been saved."

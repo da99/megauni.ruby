@@ -48,7 +48,7 @@ class Test_Control_Hellos < Test::Unit::TestCase
 
   must "shows: sitemap.xml as xml" do
     get '/sitemap.xml' 
-    assert_equal 'application/xml; charset=utf-8', last_response.content_type
+    assert_equal 'application/xml;charset=utf-8', last_response.content_type
   end
 
   must "redirect /help/ to /uni/megauni/" do

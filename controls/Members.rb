@@ -58,6 +58,12 @@ class Members
 
   path "/life/:filename" # ======================================
   
+  get '/', :STRANGER do
+    action :life
+    the_life
+    template :html
+  end
+
   %w{e qa news shop predictions random }.each { |path|
     get path.to_sym, :STRANGER do
       the_life_with path.to_sym

@@ -102,6 +102,10 @@ namespace 'my_computer' do
       FiDi.directory(DROPBOX).mkdir
       FiDi.directory(BACKUP_DIR).mkdir
 
+      if !shell_out('which trash')['trash']
+        puts_red 'Install trash-cli.'
+      end
+
       if !shell_out('which dropbox')['dropbox']
         puts_red 'Install DropBox.'
       end
