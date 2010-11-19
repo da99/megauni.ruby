@@ -53,15 +53,6 @@ class Find_The_Bunny
     if new_env['redirect_to']
       return redirect(new_env['redirect_to'])
     end
-      
-    if new_env['PATH_INFO']['/+/']
-      new_url = File.join( *(new_env['PATH_INFO'].split('+').reject { |piece| piece == '+'}) )
-      return redirect(new_url)
-    end
-    
-    if new_env['PATH_INFO'] == '/templates/' || new_env['HTTP_USER_AGENT'].to_s['TwengaBot']
-      return redirect('/')
-    end
     
     raise Uni_App::HTTP_404, "Not found: #{new_env['REQUEST_METHOD']} #{new_env['PATH_INFO']}"
   end

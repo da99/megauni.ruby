@@ -42,7 +42,7 @@ namespace :tests do
     if do_compile
       pieces = file_name.to_s.split('_')
       pieces.shift
-      sh "rake views:compile name=\"*#{pieces.first}*\""
+      sh "rake views:compile name=\"#{pieces.first}\""
     end
 
     use_debugger = ENV['debug']

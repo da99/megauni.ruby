@@ -29,7 +29,12 @@ class Old_App_Redirect
     if path_info == '/member/' && %w{HEAD GET}.include?(new_env['HTTP_METHOD'])
       return hearty_redirect('/')
     end
-
+    
+    # =========== WRONG URLS ==============================
+    if new_env['PATH_INFO'] == '/templates/'
+      return hearty_redirect('/')
+    end 
+    
     # =========== BAD AGENTS ==============================
     if [
      %r!\A/MSOffice/cltreq.asp!,
@@ -50,8 +55,15 @@ class Old_App_Redirect
       return hearty_redirect("http://www.bing.com#{wrong_path}")
     end
 
+    if new_env['PATH_INFO']['/+/']
+      new_url = File.join( *(new_env['PATH_INFO'].split('+').reject { |piece| piece == '+'}) )
+      return hearty_redirect(new_url)
+    end
+
+    
     ua = new_env['HTTP_USER_AGENT']
-    if ua && [ 'libwww-perl', 'LinkWalker/', 'panscient', 'aiHitBot' , "WebSurfer text" , "Yandex/", 'YandexBot', "Sosospider"].detect { |ua_s|  
+    if ua && [ 'libwww-perl', 'LinkWalker/', 'TwengaBot',  
+    'panscient', 'aiHitBot' , "WebSurfer text" , "Yandex/", 'YandexBot', "Sosospider"].detect { |ua_s|  
       ua[ua_s]
     }
       return hearty_redirect("http://www.bing.com/")
