@@ -17,7 +17,70 @@ class Test_Model_Mongo_Dsl_Indexes < Test::Unit::TestCase
     assert_equal target, result
   end
 
-  # must 'drop, insert an index if :background value changed' do
-  # end
+  must 'allow unique indexes' do
+    name       = 'Lifers'
+    coll       = DB.collection(name)
+    index_name = 'username_1'
+    coll.drop_index index_name
+
+    Mongo_Dsl.update_indexes( Mongo_Dsl::Db_Indexer.new.collection( name ) {
+      unique
+      asc :username
+    })
+    
+    assert_equal true, coll.index_information[index_name]['unique']
+  end
+
+  must 'drop/insert an index if :background value changed' do
+    name       = 'Cafes_On_The_Block'
+    index_name = 'date_1_name_-1'
+    bg         = lambda {
+      DB.collection(name).index_information[index_name]['background']
+    }
+    
+    DB.collection(name).drop_index index_name
+    
+    DB.collection(name).create_index(
+      [['date', Mongo::ASCENDING], ['name', Mongo::DESCENDING]], 
+      'background' => false,
+      'unique' => false
+    )
+    
+    assert_equal false, bg.call
+    
+    Mongo_Dsl.update_indexes Mongo_Dsl::Db_Indexer.new.collection( name ) {
+      asc :date
+      desc :name
+    }
+    
+    assert_equal true, bg.call
+  end
+  
+
+  must 'drop/insert an index if :unique value changed' do
+    name       = 'Cafes_On_The_Block'
+    index_name = 'date_1_name_-1'
+    opt_unique = lambda {
+      DB.collection(name).index_information[index_name]['unique']
+    }
+    
+    DB.collection(name).drop_index index_name
+    
+    DB.collection(name).create_index(
+      [['date', Mongo::ASCENDING], ['name', Mongo::DESCENDING]], 
+      'background' => false,
+      'unique' => false
+    )
+    
+    assert_equal false, opt_unique.call
+    
+    Mongo_Dsl.update_indexes( Mongo_Dsl::Db_Indexer.new.collection( name ) {
+      asc :date
+      desc :name
+      unique
+    } )
+    
+    assert_equal true, opt_unique.call
+  end
 
 end # === class Test_Model_Mongo_Dsl_Indexes

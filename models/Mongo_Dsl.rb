@@ -35,9 +35,9 @@ module Mongo_Dsl
 
     def collection name, &blok
       @collection            = name
-      @key_stack             = []
       @stack[@collection]  ||= []
       add( &blok )
+      self
     end
     
     def add_to_keys fld, order
@@ -157,11 +157,14 @@ module Mongo_Dsl
 
       # Insert new indexs.
       new_names.each_index { |index|
-        fresh = arr[index]
-        old   = index_info[ fresh[:options][:name] ]
-        drop_old = old && fresh[:options][:background] != old['background']
-        insert_new = drop_old || !names.include?(fresh[:options][:name] )
+        fresh       = arr[index]
+        old         = index_info[ fresh[:options][:name] ]
+        diff_bg     = old && fresh[:options][:background] != old['background']
+        diff_unique = old && fresh[:options][:unique] != old['unique']
+        drop_old    = old && ( diff_bg || diff_unique)
         
+        insert_new = drop_old || !names.include?(fresh[:options][:name] )
+
         if drop_old
           DB.collection(coll).drop_index(old['name'])
         end
