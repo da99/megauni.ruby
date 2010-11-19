@@ -81,6 +81,8 @@ namespace :db do
       sh 'rake db:test_sample_data'
     end
     
+    require 'megauni'
+    Mongo_Dsl.ensure_indexes
   end # ===
 
   desc 'Grab some sample data from production database'
