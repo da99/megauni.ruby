@@ -1,0 +1,118 @@
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?> <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n  <head>\n   <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\"/>\n   <meta content=\"text/javascript\" http-equiv=\"Content-Script-Type\"/>\n   <meta content=\"text/css\" http-equiv=\"Content-Style-Type\"/>\n   <meta content=\"en-US\" http-equiv=\"Content-Language\"/>\n   <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\"/>\n   <meta content=\"en-US\" http-equiv=\"Content-Language\"/>\n\n        #{ctx.compile( :meta_menu ) { "<meta content=\"#{CGI.escapeHTML(ctx[:content].to_s)}\" name=\"#{CGI.escapeHTML(ctx[:name].to_s)}\"/>\n\n        " }
+}#{ctx.compile( :page ) { "<title>#{CGI.escapeHTML(ctx[:title].to_s)}</title>\n\n        " }
+}<link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\"/>\n\n        #{      v = ctx[:mobile_request?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<link rel=\"stylesheet\" href=\"#{CGI.escapeHTML(ctx[:css_file].to_s)}?time=1289638301\" type=\"text/css\" media=\"screen\"/>\n\n        "
+      end
+}#{CGI.escapeHTML(ctx[:head_content].to_s)}\n        </head>\n  <body id=\"the_body\">\n   <div id=\"the_content\">\n\n        #{ctx.compile( :show_moving_message? ) { "<div id=\"notice\">\n      <span>I'm moving content from my old site, </span>\n      <a href=\"http://www.surferhearts.com/\">SurferHearts.com</a>\n      <span>, over to this new site.</span>\n     </div>\n\n        " }
+}<h3 id=\"club_title\">#{CGI.escapeHTML(ctx[:club_title].to_s)}</h3>\n      <ul class=\"nav_bar\" id=\"club_nav_bar\">\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}\">Home</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}e/\">Encyclopedia</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}news/\">News</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}magazine/\">Magazine</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}fights/\">Fights</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}qa/\">Q &amp; A</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}shop/\">Shop</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}predictions/\">Predictions</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}random/\">Random</a>\n       </li>\n       <li>\n        <a href=\"#{CGI.escapeHTML(ctx[:club_href].to_s)}thanks/\">Thanks</a>\n       </li>\n\n        #{ctx.compile( :logged_in? ) { "<li>\n        <a href=\"/log-out/\">Log-out</a>\n       </li>\n\n        " }
+}#{      v = ctx[:logged_in?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<li>\n        <a href=\"/log-in/\">Log-in</a>\n       </li>\n\n        "
+      end
+}#{      v = ctx[:logged_in?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<li>\n        <a href=\"/\">megaUNI.com</a>\n       </li>\n\n        "
+      end
+}#{ctx.compile( :logged_in? ) { "<li>\n        <a href=\"/lifes/\">My Lifes</a>\n       </li>\n\n        " }
+}</ul>\n     <h3 class=\"message_title\">#{CGI.escapeHTML(ctx[:title].to_s)}</h3>\n     <div id=\"substance\">\n      <div id=\"message\">\n\n        #{ctx.compile( :data ) { "<div class=\"body\">\n#{ctx[:compiled_body]}       </div>\n\n        " }
+}#{ctx.compile( :logged_in? ) { "<div id=\"notify_me\">\n\n        #{      v = ctx[:notify_me?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<form action=\"#{CGI.escapeHTML(ctx[:href_notify].to_s)}\" class=\"hidden\" method=\"post\" name=\"post_to_username_notify\" id=\"post_to_username_notify\">\n\n        #{ctx.compile( :notify_menu ) { "<div class=\"radio\">\n          <input type=\"radio\" value=\"#{CGI.escapeHTML(ctx[:username_id].to_s)}\" name=\"radio_523_#{CGI.escapeHTML(ctx[:username_id].to_s)}\" id=\"radio_523_#{CGI.escapeHTML(ctx[:username_id].to_s)}\"/>\n          <label for=\"radio_523_#{CGI.escapeHTML(ctx[:username_id].to_s)}\">#{CGI.escapeHTML(ctx[:username].to_s)}</label>\n         </div>\n\n        " }
+}<div class=\"buttons\">\n          <div class=\"buttons\">\n           <button class=\"create\">Notify me.</button>\n          </div>\n         </div>\n        </form>\n        <div>\n          <a href=\"#show-post_to_username_notify\" onclick=\"$('#post_to_username_notify').removeClass('hidden'); $(this).parent('div').remove(); return false;\">Notify me </a>\n          <span> of activity for this #{CGI.escapeHTML(ctx[:message_model_in_english].to_s)}.</span>\n        </div>\n\n        "
+      end
+}#{ctx.compile( :notify_me? ) { "<form action=\"#{CGI.escapeHTML(ctx[:href_notify].to_s)}\" class=\"\" method=\"post\" name=\"delete_form_notify\" id=\"delete_form_notify\">\n          <fieldset class=\"hidden\">\n            <input type=\"hidden\" value=\"delete\" name=\"_method\"/>\n          </fieldset>\n         <a href=\"#show-delete_form_notify\" onclick=\"$('#delete_form_notify').removeClass('hidden'); $(this).parent('div').remove(); return false;\">Stop</a>\n         <span> notifying me.</span>\n        </form>\n\n        " }
+}</div>\n\n        #{      v = ctx[:reposts?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<div id=\"repost\">\n        <form action=\"#{CGI.escapeHTML(ctx[:href_repost].to_s)}\" class=\"hidden\" method=\"post\" name=\"post_to_universes_repost\" id=\"post_to_universes_repost\">\n\n        #{ctx.compile( :repost_menu ) { "<h4>#{CGI.escapeHTML(ctx[:username].to_s)}</h4>\n\n        #{ctx.compile( :clubs ) { "#{ctx.compile( :selected? ) { "<div class=\"box selected\">\n           <input type=\"checkbox\" checked=\"checked\" value=\"#{CGI.escapeHTML(ctx[:_id].to_s)}\" name=\"clubs[]\" id=\"selected_checkbox_673_#{CGI.escapeHTML(ctx[:_id].to_s)}\"/>\n           <label for=\"selected_checkbox_673_#{CGI.escapeHTML(ctx[:_id].to_s)}\">#{CGI.escapeHTML(ctx[:title].to_s)}</label>\n          </div>\n\n        " }
+}#{      v = ctx[:selected?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<div class=\"box\">\n           <input type=\"checkbox\" value=\"#{CGI.escapeHTML(ctx[:_id].to_s)}\" name=\"clubs[]\" id=\"checkbox_229_#{CGI.escapeHTML(ctx[:_id].to_s)}\"/>\n           <label for=\"checkbox_229_#{CGI.escapeHTML(ctx[:_id].to_s)}\">#{CGI.escapeHTML(ctx[:title].to_s)}</label>\n          </div>\n\n        "
+      end
+}" }
+}" }
+}<div class=\"buttons\">\n          <div class=\"buttons\">\n           <button class=\"create\">Re-post.</button>\n          </div>\n         </div>\n        </form>\n        <div>\n          <a href=\"#show-post_to_universes_repost\" onclick=\"$('#post_to_universes_repost').removeClass('hidden'); $(this).parent('div').remove(); return false;\">Re-post.</a>\n        </div>\n       </div>\n\n        "
+      end
+}" }
+}<div id=\"about\">\n        <h4>About this content:</h4>\n        <div>\n         <strong>Published on:</strong>\n         <br/>\n         <span>#{CGI.escapeHTML(ctx[:published_at].to_s)}</span>\n        </div>\n        <div>\n         <strong>Type:</strong>\n         <br/>\n         <span>#{CGI.escapeHTML(ctx[:message_model_in_english].to_s)}.</span>\n        </div>\n        <div>\n         <strong>Publication:</strong>\n         <br/>\n         <a href=\"#{CGI.escapeHTML(ctx[:href_club].to_s)}\">#{CGI.escapeHTML(ctx[:club_title].to_s)}</a>\n        </div>\n        <div>\n         <strong>Section: </strong>\n         <br/>\n         <a href=\"#{CGI.escapeHTML(ctx[:href_section].to_s)}\">#{CGI.escapeHTML(ctx[:message_section].to_s)}</a>\n        </div>\n\n        #{ctx.compile( :has_parent? ) { "<div>\n         <strong>A reply to:</strong>\n         <br/>\n         <a href=\"#{CGI.escapeHTML(ctx[:href_parent].to_s)}\">this message</a>\n        </div>\n\n        " }
+}#{ctx.compile( :updator? ) { "<div>\n         <strong>Actions:</strong>\n         <br/>\n         <a href=\"#{CGI.escapeHTML(ctx[:href_edit].to_s)}\">Edit.</a>\n\n        #{ctx.compile( :updated? ) { "<br/>\n         <a href=\"#{CGI.escapeHTML(ctx[:href_log].to_s)}\">View changes.</a>\n\n        " }
+}</div>\n\n        " }
+}</div>\n       <div id=\"replies\">\n        <div id=\"responds\">\n\n        #{ctx.compile( :suggests? ) { "<div id=\"suggests\">\n          <h4>#{CGI.escapeHTML(ctx[:suggestions_or_answers].to_s)}</h4>\n\n        #{ctx.compile( :suggests ) { "<div class=\"message\">\n\n        #{ctx.compile( :suggest? ) { "#{ctx.compile( :accepted? ) { "<div class=\"accepted\">\n             <span>Accepted</span>\n            </div>\n\n        " }
+}#{ctx.compile( :pending? ) { "<div class=\"pending\">\n             <span>Pending</span>\n            </div>\n\n        " }
+}#{ctx.compile( :declined? ) { "<div class=\"declined\">\n             <span>Declined</span>\n            </div>\n\n        " }
+}" }
+}#{ctx.compile( :title? ) { "<h5>\n             <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">#{CGI.escapeHTML(ctx[:title].to_s)}</a>\n            </h5>\n\n        " }
+}<div class=\"body\">#{ctx[:compiled_body]}</div>\n            <div class=\"owner\">\n             <span>Author: </span>\n\n        #{ctx.compile( :owner? ) { "<span>you</span>\n\n        " }
+}#{      v = ctx[:owner?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<a href=\"#{CGI.escapeHTML(ctx[:owner_href].to_s)}\">#{CGI.escapeHTML(ctx[:owner_username].to_s)}</a>\n\n        "
+      end
+}</div>\n\n        #{ctx.compile( :owner? ) { "#{ctx.compile( :has_parent_message? ) { "#{ctx.compile( :suggest? ) { "#{ctx.compile( :parent_message_owner? ) { "<div class=\"toggle_suggest\">\n             <div>\n\n        #{ctx.compile( :not_accepted? ) { "<a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(1);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">Accept</a>\n\n        " }
+}#{ctx.compile( :pending? ) { "<span> or </span>\n\n        " }
+}#{ctx.compile( :not_declined? ) { "<a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(-1);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">Decline</a>\n\n        " }
+}#{ctx.compile( :not_pending? ) { "<span> or </span>\n              <a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(0);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">I don't know.</a>\n\n        " }
+}</div>\n            </div>\n\n        " }
+}" }
+}" }
+}" }
+}#{ctx.compile( :has_parent_message? ) { "<div class=\"permalink\">\n             <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">reply</a>\n            </div>\n\n        " }
+}#{ctx.compile( :parent_message? ) { "<div class=\"permalink\">\n\n        #{ctx.compile( :owner? ) { "<a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">Reply</a>\n             <span> to this </span>\n             <strong> #{CGI.escapeHTML(ctx[:message_model_in_english].to_s)} </strong>\n\n        " }
+}#{ctx.compile( :not_logged_in? ) { "<a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">link to this #{CGI.escapeHTML(ctx[:message_model_in_english].to_s)}</a>\n\n        " }
+}</div>\n\n        " }
+}</div>\n\n        " }
+}</div>\n\n        " }
+}#{ctx.compile( :critiques? ) { "<div id=\"critiques\">\n          <h4>Praise &amp; Criticism:</h4>\n\n        #{ctx.compile( :critiques ) { "<div class=\"message\">\n\n        #{ctx.compile( :suggest? ) { "#{ctx.compile( :accepted? ) { "<div class=\"accepted\">\n             <span>Accepted</span>\n            </div>\n\n        " }
+}#{ctx.compile( :pending? ) { "<div class=\"pending\">\n             <span>Pending</span>\n            </div>\n\n        " }
+}#{ctx.compile( :declined? ) { "<div class=\"declined\">\n             <span>Declined</span>\n            </div>\n\n        " }
+}" }
+}#{ctx.compile( :title? ) { "<h5>\n             <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">#{CGI.escapeHTML(ctx[:title].to_s)}</a>\n            </h5>\n\n        " }
+}<div class=\"body\">#{ctx[:compiled_body]}</div>\n            <div class=\"owner\">\n             <span>Author: </span>\n\n        #{ctx.compile( :owner? ) { "<span>you</span>\n\n        " }
+}#{      v = ctx[:owner?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<a href=\"#{CGI.escapeHTML(ctx[:owner_href].to_s)}\">#{CGI.escapeHTML(ctx[:owner_username].to_s)}</a>\n\n        "
+      end
+}</div>\n\n        #{ctx.compile( :owner? ) { "#{ctx.compile( :has_parent_message? ) { "#{ctx.compile( :suggest? ) { "#{ctx.compile( :parent_message_owner? ) { "<div class=\"toggle_suggest\">\n             <div>\n\n        #{ctx.compile( :not_accepted? ) { "<a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(1);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">Accept</a>\n\n        " }
+}#{ctx.compile( :pending? ) { "<span> or </span>\n\n        " }
+}#{ctx.compile( :not_declined? ) { "<a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(-1);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">Decline</a>\n\n        " }
+}#{ctx.compile( :not_pending? ) { "<span> or </span>\n              <a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(0);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">I don't know.</a>\n\n        " }
+}</div>\n            </div>\n\n        " }
+}" }
+}" }
+}" }
+}#{ctx.compile( :has_parent_message? ) { "<div class=\"permalink\">\n             <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">reply</a>\n            </div>\n\n        " }
+}#{ctx.compile( :parent_message? ) { "<div class=\"permalink\">\n\n        #{ctx.compile( :owner? ) { "<a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">Reply</a>\n             <span> to this </span>\n             <strong> #{CGI.escapeHTML(ctx[:message_model_in_english].to_s)} </strong>\n\n        " }
+}#{ctx.compile( :not_logged_in? ) { "<a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">link to this #{CGI.escapeHTML(ctx[:message_model_in_english].to_s)}</a>\n\n        " }
+}</div>\n\n        " }
+}</div>\n\n        " }
+}</div>\n\n        " }
+}#{ctx.compile( :questions? ) { "<div id=\"questions\">\n          <h4>Questions:</h4>\n\n        #{ctx.compile( :questions ) { "<div class=\"message\">\n\n        #{ctx.compile( :suggest? ) { "#{ctx.compile( :accepted? ) { "<div class=\"accepted\">\n             <span>Accepted</span>\n            </div>\n\n        " }
+}#{ctx.compile( :pending? ) { "<div class=\"pending\">\n             <span>Pending</span>\n            </div>\n\n        " }
+}#{ctx.compile( :declined? ) { "<div class=\"declined\">\n             <span>Declined</span>\n            </div>\n\n        " }
+}" }
+}#{ctx.compile( :title? ) { "<h5>\n             <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">#{CGI.escapeHTML(ctx[:title].to_s)}</a>\n            </h5>\n\n        " }
+}<div class=\"body\">#{ctx[:compiled_body]}</div>\n            <div class=\"owner\">\n             <span>Author: </span>\n\n        #{ctx.compile( :owner? ) { "<span>you</span>\n\n        " }
+}#{      v = ctx[:owner?]
+      if v.nil? || v == false || v.respond_to?(:empty?) && v.empty?
+        "<a href=\"#{CGI.escapeHTML(ctx[:owner_href].to_s)}\">#{CGI.escapeHTML(ctx[:owner_username].to_s)}</a>\n\n        "
+      end
+}</div>\n\n        #{ctx.compile( :owner? ) { "#{ctx.compile( :has_parent_message? ) { "#{ctx.compile( :suggest? ) { "#{ctx.compile( :parent_message_owner? ) { "<div class=\"toggle_suggest\">\n             <div>\n\n        #{ctx.compile( :not_accepted? ) { "<a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(1);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">Accept</a>\n\n        " }
+}#{ctx.compile( :pending? ) { "<span> or </span>\n\n        " }
+}#{ctx.compile( :not_declined? ) { "<a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(-1);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">Decline</a>\n\n        " }
+}#{ctx.compile( :not_pending? ) { "<span> or </span>\n              <a href=\"#toggle_form_message_accept\" onclick=\"\n          $(this).parent('div').addClass('loading');\n          $('#toggle_form_message_accept input[name=owner_accept]').val(0);\n          $('#toggle_form_message_accept').submit();\n          return false;\n        \">I don't know.</a>\n\n        " }
+}</div>\n            </div>\n\n        " }
+}" }
+}" }
+}" }
+}#{ctx.compile( :has_parent_message? ) { "<div class=\"permalink\">\n             <a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">reply</a>\n            </div>\n\n        " }
+}#{ctx.compile( :parent_message? ) { "<div class=\"permalink\">\n\n        #{ctx.compile( :owner? ) { "<a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">Reply</a>\n             <span> to this </span>\n             <strong> #{CGI.escapeHTML(ctx[:message_model_in_english].to_s)} </strong>\n\n        " }
+}#{ctx.compile( :not_logged_in? ) { "<a href=\"#{CGI.escapeHTML(ctx[:href].to_s)}\">link to this #{CGI.escapeHTML(ctx[:message_model_in_english].to_s)}</a>\n\n        " }
+}</div>\n\n        " }
+}</div>\n\n        " }
+}</div>\n\n        " }
+}</div>\n\n        #{ctx.compile( :logged_in? ) { "<div id=\"reply\">\n         <div id=\"guide\">\n          <h4>Stuff you can do:</h4>\n          <p>\n                Express negative feelings. Try to use\n              polite profanity, like meathead instead of \n              doo-doo head.\n              </p>\n         </div>\n          <div class=\"club_message_create\">\n           <form action=\"/messages/\" class=\"\" method=\"post\" name=\"form_club_message_create_571\" id=\"form_club_message_create_571\">\n            <h4>Publish a new:</h4>\n            <fieldset>\n             <select name=\"message_model\">\n              <option value=\"question\">Question</option>\n              <option value=\"cheer\">Praise &amp; Cheer</option>\n              <option value=\"jeer\">Criticize</option>\n              <option value=\"suggest\">Suggestion</option>\n             </select>\n            </fieldset>\n            <fieldset class=\"hidden\">\n             <input type=\"hidden\" value=\"\" name=\"body_images_cache\"/>\n             <input type=\"hidden\" value=\"#{CGI.escapeHTML(ctx[:url].to_s)}\" name=\"return_url\"/>\n             <input type=\"hidden\" value=\"public\" name=\"privacy\"/>\n             <input type=\"hidden\" value=\"#{CGI.escapeHTML(ctx[:_id].to_s)}\" name=\"parent_message_id\"/>\n\n        #{ctx.compile( :single_username? ) { "<input type=\"hidden\" value=\"#{CGI.escapeHTML(ctx[:first_username].to_s)}\" name=\"username\"/>\n\n        " }
+}</fieldset>\n            <fieldset>\n             <textarea name=\"body\"></textarea>\n            </fieldset>\n\n        #{ctx.compile( :multiple_usernames? ) { "<fieldset>\n             <label>Post as:</label>\n             <select name=\"owner_id\">\n\n        #{ctx.compile( :multiple_usernames ) { "<option value=\"#{CGI.escapeHTML(ctx[:username].to_s)}\">#{CGI.escapeHTML(ctx[:username].to_s)}</option>\n\n        " }
+}</select>\n            </fieldset>\n\n        " }
+}<div class=\"buttons\">\n             <button class=\"create\">Save</button>\n            </div>\n           </form>\n          </div>\n        </div>\n\n        " }
+}</div>\n      </div>\n     </div>\n\n        #{ctx.compile( :logged_in? ) { "" }
+}</div>\n   <script type=\"text/javascript\" src=\"/js/vendor/jquery-1.4.2.min.js?1289638301\"></script>\n   <script type=\"text/javascript\" src=\"/js/pages/Megauni_Base.js?1289638301\"></script>\n\n        #{ctx.compile( :include_tracking? ) { "<script type=\"text/javascript\"> var mp_protocol = (('https:' == document.location.protocol) ? 'https://' : 'http://'); document.write(unescape('%3Cscript src=\"' + mp_protocol + 'api.mixpanel.com/site_media/js/api/mixpanel.js\" type=\"text/javascript\"%3E%3C/script%3E')); </script> \n        <script type=\"text/javascript\"> try {  var mpmetrics = new MixpanelLib('86bbd0a09d702cd9eef7ba93d59dca93'); } catch(err) { null_fn = function () {}; var mpmetrics = {  track: null_fn,  track_funnel: null_fn,  register: null_fn,  register_once: null_fn, register_funnel: null_fn }; } </script>\n        <script type=\"text/javascript\">mpmetrics.track(\"eveything\", { 'referer' : '#{CGI.escapeHTML(ctx[:http_referer].to_s)}' });</script>\n      \n        " }
+}</body>\n </html>\n"

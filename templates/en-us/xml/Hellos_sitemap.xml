@@ -1,0 +1,2 @@
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.google.com/schemas/sitemap/0.84\"><url><loc>#{CGI.escapeHTML(ctx[:site_url].to_s)}</loc><lastmod>#{CGI.escapeHTML(ctx[:last_modified_at].to_s)}</lastmod><changefreq>daily</changefreq></url>#{ctx.compile( :news ) { "<url><loc>#{CGI.escapeHTML(ctx[:url].to_s)}</loc><lastmod>#{CGI.escapeHTML(ctx[:last_modified_at].to_s)}</lastmod><changefreq>monthly</changefreq></url>" }
+}</urlset>"
