@@ -17,11 +17,27 @@ class Test_Model_Mongo_Dsl_Indexes < Test::Unit::TestCase
     assert_equal target, result
   end
 
+  must 'allow set :background option to true' do
+    name       = 'Jobs'
+    coll       = DB.collection(name)
+    index_name = 'name_1'
+    if coll.index_information[ index_name ]
+      coll.drop_index index_name
+    end
+
+    Mongo_Dsl.update_indexes( Mongo_Dsl::Db_Indexer.new.collection( name ) {
+      asc :name
+    })
+    
+    assert_equal true, coll.index_information[index_name]['background']
+  end
   must 'allow unique indexes' do
     name       = 'Lifers'
     coll       = DB.collection(name)
     index_name = 'username_1'
-    coll.drop_index index_name
+    if coll.index_information[ index_name ]
+      coll.drop_index index_name
+    end
 
     Mongo_Dsl.update_indexes( Mongo_Dsl::Db_Indexer.new.collection( name ) {
       unique
