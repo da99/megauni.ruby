@@ -46,7 +46,18 @@ class Life
   #   club_ids.include?(Mongo_Dsl.mongofy_id(club_id))
   # end
   
-  has_many :messages, :Message, :owner_id
+  has_many :messages, :Message, :owner_id do
+
+    %w{e qa news shop predictions random }.each { |model|
+      filter model.to_sym do
+        where :message_model, model
+      end
+    }
+    
+    where :privacy, 'public'
+    limit 10
+    sort [:_id, :desc]
+  end
 
   has_many :owned_clubs, :Club
     # Club.ids_by_owner_id(:$in=>current_username_ids)

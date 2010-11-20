@@ -143,7 +143,8 @@ class Mongo_Dsl::Query_Relate::Spawn
     !!(
       filters[name] ||
           respond_to?(name) ||
-          (origin.child.querys[ name ] && composer.grabs.include?(name) || composer.merges.include?(name)) 
+            origin.child.allowed_field?( name ) ||
+              (origin.child.querys[ name ] && composer.grabs.include?(name) || composer.merges.include?(name)) 
     )
   end
   

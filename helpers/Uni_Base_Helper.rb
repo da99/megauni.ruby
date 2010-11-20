@@ -29,7 +29,7 @@ module Sinatra
     
     def the_life_with messages
       the_life
-      the.send("#{messages}=", the.life.find.messsages.send(messages).go! )
+      the.send("#{messages}=", the.life.find.messages.send(messages).go! )
     end
 
     def current_path path = :show_me_current_path

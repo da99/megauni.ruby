@@ -66,6 +66,7 @@ class Members
 
   %w{e qa news shop predictions random }.each { |path|
     get path.to_sym, :STRANGER do
+      action :"life_#{path}"
       the_life_with path.to_sym
       template :html
     end

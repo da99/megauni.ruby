@@ -115,7 +115,7 @@ module Base_View_Club
 
   def your_clubs
     @cache_your_clubs ||= if logged_in?
-                               compile_clubs(current_member.owned_clubs)
+                               compile_clubs(current_member.find.lifes.owned_clubs.go!)
                              else
                                []
                              end

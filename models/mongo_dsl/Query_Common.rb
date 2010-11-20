@@ -1,6 +1,11 @@
 
 module Mongo_Dsl::Query_Common
 
+  def method_missing name, *args
+    return super unless child.allowed_field?(name)
+    where name, *args
+  end
+
   def between start_ , _end
     gte(start_).lt(_end)
   end

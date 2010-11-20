@@ -239,6 +239,23 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     assert_equal [planet.data.as_hash], cafe.find.employees.women.grab(:planet).go!
   end
   
+  must 'grab relations from other relations using just the name: cafe.find.employees.planet.go!' do
+    cafe = create_cafe
+    planet_1 = create_planet
+    planet_2 = create_planet
+    
+    roles = %w{ woman man }
+    planet_ids = [ planet_1.data._id, planet_2.data._id ]
+    
+    (0..5).to_a.map { |index|
+      create_employee(cafe, :role=>roles[rand(2)], :planet_id=>planet_ids[rand(2)])
+    }
+    
+    wish = [ planet_1 , planet_2 ].map { |planet| planet.data.as_hash }
+    
+    assert_equal wish, cafe.find.employees.planets.go!
+  end
+
   must 'return an initialized Mongo_Dsl model when using :go_first!' do
     emp_id = Cafe_Galaxy_Employee.db.collection.find_one()['_id']
     assert_equal Cafe_Planet, Cafe_Galaxy_Employee.find._id(emp_id).grab(:planet).go_first!.class
@@ -272,6 +289,24 @@ class Test_Model_Mongo_Dsl_Relations < Test::Unit::TestCase
     )
   end
   
+  must 'allow searching relations based on where querys: cafe.find.planets.where(:title, "Riven").go!' do
+    cafe = create_cafe
+    planet_1 = create_planet( :title => 'Riven 1' )
+    emp_1 = create_employee( cafe, :planet_id => planet_1.data._id )
+
+    assert_equal emp_1, cafe.find.employees.where(:planet_id, planet_1.data._id ).go_first!
+  end
+  
+  must 'allow searching relations based on dynamic fields querys: cafe.find.planets.title("Riven").go!' do
+    cafe = create_cafe
+    planet_1 = create_planet( :title => 'Riven 1' )
+    planet_2 = create_planet( :title => 'Riven 2' )
+    emp_1 = create_employee( cafe, :planet_id => planet_1.data._id )
+    emp_2 = create_employee( cafe, :planet_id => planet_2.data._id )
+
+    assert_equal emp_2, cafe.find.employees.planet_id( planet_2.data._id ).go_first!
+  end
+
 end # === class _create
 
 
