@@ -147,6 +147,19 @@ namespace 'my_computer' do
           puts_red "Change Firefox option: #{k} ===>> #{v}" 
         end
       end
+      
+      turn_off = []
+      turn_off << %r!DivX\ {1,3}Web Player!
+      turn_off << %r!The IcedTea NPR Web!
+
+      Dir.glob('/home/da01/.mozilla/firefox/**/pluginreg.dat').map { |file| 
+        content = IO.read(file)
+        turn_off.each do |k|
+          if !content[%r!4:\$\n#{k}!]
+            puts_red "Please disable Firefox plugin: #{k.inspect}"
+          end
+        end
+      }
 
       plugins = [ 
           "Adblock Plus"
