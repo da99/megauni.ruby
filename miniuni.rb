@@ -137,10 +137,10 @@ get('/') do
   %~
     <html>
       <head>
-        <title>Got no time...</title>
+        <title>Be back soon...</title>
       </head>
       <body>
-        Mega Fail.
+        <p>Website will be back up on Dec. 5, 2010.</p>
       </body>
     </html>
   ~
