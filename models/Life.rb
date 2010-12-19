@@ -68,17 +68,7 @@ class Life
   # ==== Class Methods  ====
     
   class << self
-    
-    def relationize docs, namespace = 'owner'
-      Mongo_Dsl.relationize( 
-        docs, 
-        Life,   
-        "#{namespace}_id",
-        '_id'      => "#{namespace}_id", 
-        'username' => "#{namespace}_username"
-      )
-      docs
-    end
+
     
   end # === self
 

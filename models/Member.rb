@@ -88,11 +88,7 @@ class Member
         false
       end
     end
-    
-    def relationize docs, namespace = 'owner'
-      Mongo_Dsl.relationize( docs, Member, "#{namespace}_id",  namespace => :doc)
-      Life.relationize docs, namespace
-    end
+
     
     # Based on Sinatra-authentication (on github).
     # 

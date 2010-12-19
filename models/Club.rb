@@ -167,13 +167,3 @@ end # === Club
 __END__
 
     
-    def relationize docs, namespace = 'club'
-      Mongo_Dsl.relationize(
-        doc,
-        self,
-        'target_ids', 
-        'title'    => "#{namespace}_title",
-        'filename' => "#{namespace}_filename"
-      )
-    end
-    
