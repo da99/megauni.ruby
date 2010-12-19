@@ -2,7 +2,7 @@
 
 class Member_Reposts
 
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   enable_timestamps
   

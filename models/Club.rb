@@ -2,7 +2,7 @@ require 'models/Message'
 
 class Club
 
-  include Mongo_Dsl
+  include Go_Mon::Model
   
   HREF_NAMESPACE = '/uni'
   HREF_PATTERN   = [ '/uni/%s/', 'filename' ]

@@ -5,7 +5,7 @@ require 'models/Failed_Log_In_Attempt'
 
 class Member 
 
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   # ==== CONSTANTS ====
   
@@ -160,7 +160,6 @@ class Member
         ask_for :email
         demand  :password
         generate_id
-        save_create_life
         save_create
       end
     end
@@ -179,18 +178,10 @@ class Member
         end
         un_id = nil
         
-        save_update :if_valid => lambda {
-          if raw_data.add_username
-            un_id = __prep_new_username__
-          end
-        }
-        if un_id
-          __complete_new_username__ un_id
-        end
+        save_update 
       end
-
     end
-    
+
     def delete id, editor
       obj = begin
               by_id(id)
@@ -205,6 +196,29 @@ class Member
     end
     
   end # === self
+
+  def before_create
+    return false if not valid?
+
+    set_default :_id
+    
+    begin
+      life = Life.create( self, 
+                         :username   => cleanest(:add_username) || raw_data.add_username,  
+                         :owner_id   => (data && data._id) || cleanest(:_id),
+                         :category   => cleanest(:category) || raw_data.category
+                        )
+
+    rescue Life::Invalid => err
+      errors.concat $!.doc.errors
+    end
+  end
+
+  def before_update
+    if raw_data.add_username
+      before_create
+    end
+  end
 
   def allow_to? action, editor # NEW, CREATE
     case action
@@ -221,22 +235,6 @@ class Member
         allow_to? :update, editor
     end
   end
-
-  def save_create_life
-    return false if not valid?
-    
-    begin
-      life = Life.create( self, 
-                         :username   => cleanest(:add_username) || raw_data.add_username,  
-                         :owner_id   => (data && data._id) || cleanest(:_id),
-                         :category   => cleanest(:category) || raw_data.category
-                        )
-      
-    rescue Life::Invalid => err
-      errors.concat $!.doc.errors
-    end
-  end
-
 
 
   # ==== UPDATORS ======================================================

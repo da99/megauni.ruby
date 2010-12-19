@@ -1,8 +1,11 @@
 # === The most basic stuff first... ===
 
 $KCODE = 'UTF8'
-ENV['RACK_ENV'] ||= 'development'
 require 'jcode'
+
+ENV['RACK_ENV'] ||= 'development'
+require "always_verify_ssl_certificates"
+
 require 'sinatra/base'
 require 'mongo'
 require 'mongo_rack'
@@ -36,7 +39,6 @@ require 'configs/DB'
 # === Require models. ===
 
 %w{
-  Mongo_Dsl
   Doc_Log
   Club
   Message

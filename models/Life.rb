@@ -2,7 +2,7 @@
 
 class Life
 
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   CATEGORIES = %w{ real celebrity pet baby fantasy }
   HREF_NAMESPACE = '/life'

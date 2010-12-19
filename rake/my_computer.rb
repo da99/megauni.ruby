@@ -83,6 +83,10 @@ namespace 'my_computer' do
       irbrc = File.join(MY_PREFS, 'ruby', 'irbrc.rb')
       FiDi.file(irbrc).create_alias '~/.irbrc'
 
+      puts_white 'git configuration file:'
+      gitconfig = File.join( MY_PREFS, '_gitconfig')
+      FiDi.file(gitconfig).create_alias '~/.gitconfig'
+
       puts_white '
         Checking if hidden files are 
         displayed by default in Nautilus.
@@ -152,7 +156,15 @@ namespace 'my_computer' do
       turn_off << %r!DivX\ {1,3}Web Player!
       turn_off << %r!The IcedTea NPR Web!
 
-      Dir.glob('/home/da01/.mozilla/firefox/**/pluginreg.dat').map { |file| 
+      pluginregs = Dir.glob('/home/da01/.mozilla/firefox/**/pluginreg.dat')
+      if pluginregs.empty?
+        puts_red %~
+          You have to update the way this file checks for disabled/enabled
+          plugins.
+        ~
+      end
+
+      pluginregs.map { |file| 
         content = IO.read(file)
         turn_off.each do |k|
           if !content[%r!4:\$\n#{k}!]

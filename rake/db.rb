@@ -64,8 +64,12 @@ namespace :db do
       raise "Not allowed in environment: #{ENV['RACK_ENV']}" 
     end
 
-    require 'megauni'
-    Mongo_Dsl.reset_db!
+    require 'Go_Mon'
+    ind = Go_Mon::Indexer.new {
+      eval( File.read("configs/indexes.rb") )
+    }
+    ind.reset_db!
+    
     puts_white "Removed all records and added new indexes (if any)."
   end
 

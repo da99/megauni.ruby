@@ -1,7 +1,7 @@
 # === Custom Classes for Testing ===
 
 class Cafe_Le_Roger
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   %w{ 
     title

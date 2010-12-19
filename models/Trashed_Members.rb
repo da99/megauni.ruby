@@ -2,7 +2,7 @@
 
 class Trashed_Members
 
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   enable_timestamps
   

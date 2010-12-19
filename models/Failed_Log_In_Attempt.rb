@@ -4,7 +4,7 @@ class Failed_Log_In_Attempt
 
   Too_Many = Class.new( StandardError )
   
-  include Mongo_Dsl
+  include Go_Mon::Model
   MAX = 4
   
   make :owner_id,   :mongo_object_id
@@ -62,8 +62,8 @@ class Failed_Log_In_Attempt
         raw_raw_data.delete fld
         raw_raw_data.delete fld.to_sym
       }
-      raw_raw_data['date'] = Mongo_Dsl.utc_date_now 
-      raw_raw_data['time'] = Mongo_Dsl.utc_time_now
+      raw_raw_data['date'] = Go_Mon.utc_date_now 
+      raw_raw_data['time'] = Go_Mon.utc_time_now
       
       super.instance_eval do
         ask_for :owner_id, :username, :date, :time,

@@ -2,7 +2,7 @@
 # === Custom Classes for Testing ===
 
 class Cafe_Galaxy
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   %w{ 
     title
@@ -70,7 +70,7 @@ class Cafe_Galaxy
 end # === Cafe_Galaxy
 
 class Cafe_Galaxy_Employee
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   ROLES = %w{ boss man woman }
   make :cafe_id, :not_empty
@@ -96,7 +96,7 @@ class Cafe_Galaxy_Employee
 end # === class
 
 class Cafe_Planet 
-  include Mongo_Dsl
+  include Go_Mon::Model
   make :title, :not_empty
 
   has_many :employees, :Cafe_Galaxy_Employee

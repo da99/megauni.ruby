@@ -64,17 +64,17 @@ class Message
   
   MODELS = MODEL_HASH.keys
   
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   enable_timestamps
   
-  make_psuedo :editor_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
+  # make_psuedo :editor_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
 
   make :message_model, [:in_array, MODELS]
   make :important, :not_empty
   make :rating, :not_empty
   make :privacy, [:in_array, ['private', 'public', 'friends_only'] ]
-  make :owner_id, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
+  # make :owner_id, :life_id #, :mongo_object_id, [:in_array, lambda { manipulator.lifes._ids } ]
   make :parent_message_id, :mongo_object_id, [:set_raw_data, [:target_ids, lambda { 
     mess = Message.by_id(raw_data.parent_message_id)
     mess.data.target_ids
@@ -158,57 +158,84 @@ class Message
   end
   
   # ==== Authorizations ====
- 
-  class << self
     
-    def create editor, raw_data
-      d = new do
-        self.manipulator = editor
-        self.raw_data = raw_data
-        new_data.labels = []
-        new_data.public_labels = []
-        ask_for_or_default :lang
-        ask_for :parent_message_id
-        demand :owner_id, :target_ids, :body, :message_model
-        ask_for :title, :category, :privacy, :labels,
-            :emotion, :rating,
-            :labels, :public_labels,
-            :important,
-            :body_images_cache
-        save_create 
-      end
-    end
-
-    def update id, editor, new_raw_data
-      doc = new(id) do
-        self.manipulator = editor
-        self.raw_data    = new_raw_data
-        ask_for :title, :body, :teaser, :public_labels, 
-          :private_labels, :published_at,
-          :message_model, :important,
-          :body_images_cache,
-          :editor_id,
-          :owner_accept
-        save_update :record_diff => true
-      end
-    end
-
-
-  end # === self
-
-  def allow_to? action, editor # NEW, CREATE
-    case action
-    when :create
-      return false unless editor
-      editor.has_power_of? :MEMBER
-    when :read
-      true
-    when :update
-      owner? editor
-    when :delete
-      owner? editor
-    end
+  creator :owner do
+    # set default for: 
+    # labels, public_labels, lang
+    
+    demand :owner_id, :target_ids, :body, :message_model
+    ask_for :title, :category, :privacy, :labels,
+      :emotion, :rating,
+      :labels, :public_labels,
+      :important,
+      :body_images_cache, 
+      :parent_message_id, :lang
   end
+  
+  reader :all
+
+  updator :owner, :Admin do
+    ask_for :title, :body, :teaser, :public_labels, 
+      :private_labels, :published_at,
+      :message_model, :important,
+      :body_images_cache,
+      :editor_id,
+      :owner_accept
+    save :diff
+  end
+
+  deletor :owner
+
+  # class << self
+  #   
+  #   def create editor, raw_data
+  #     d = new do
+  #       self.manipulator = editor
+  #       self.raw_data = raw_data
+  #       new_data.labels = []
+  #       new_data.public_labels = []
+  #       ask_for_or_default :lang
+  #       ask_for :parent_message_id
+  #       demand :owner_id, :target_ids, :body, :message_model
+  #       ask_for :title, :category, :privacy, :labels,
+  #           :emotion, :rating,
+  #           :labels, :public_labels,
+  #           :important,
+  #           :body_images_cache
+  #       save_create 
+  #     end
+  #   end
+
+  #   def update id, editor, new_raw_data
+  #     doc = new(id) do
+  #       self.manipulator = editor
+  #       self.raw_data    = new_raw_data
+  #       ask_for :title, :body, :teaser, :public_labels, 
+  #         :private_labels, :published_at,
+  #         :message_model, :important,
+  #         :body_images_cache,
+  #         :editor_id,
+  #         :owner_accept
+  #       save_update :record_diff => true
+  #     end
+  #   end
+
+
+  # end # === self
+
+  # def allow_to? action, editor # NEW, CREATE
+  #   case action
+  #   when :create
+  #     return false unless editor
+  #     editor.has_power_of? :MEMBER
+  #   when :read
+  #     true
+  #   when :update
+  #     owner? editor
+  #   when :delete
+  #     owner? editor
+  #   end
+  # end
 
   # ==== Accessors ====
   

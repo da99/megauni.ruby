@@ -2,7 +2,7 @@
 
 class Password_Reset
 
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   attr_reader :code
 

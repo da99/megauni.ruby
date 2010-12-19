@@ -3,7 +3,7 @@ require 'models/Member'
 
 class Doc_Log
 
-  include Mongo_Dsl
+  include Go_Mon::Model
 
   enable_timestamps
   
@@ -17,7 +17,7 @@ class Doc_Log
     demand :old_doc, :new_doc
     o = raw_data.old_doc
     n = raw_data.new_doc
-    o.extend Mongo_Dsl::Diff_Document
+    o.extend Go_Mon::Diff_Document
     o.diff_document n
   }]
 

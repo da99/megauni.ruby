@@ -13,6 +13,9 @@ compass-960-plugin
 markaby
 wirble
 ruby-debug
-heroku
 tenjin
 rack-test
+heroku
+jeweler
+turn
+awesome_print
