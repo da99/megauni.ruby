@@ -154,7 +154,7 @@ namespace 'my_computer' do
       
       turn_off = []
       turn_off << %r!DivX\ {1,3}Web Player!
-      turn_off << %r!The IcedTea NPR Web!
+      turn_off << %r!The IcedTea NPR Web! # Disable Java.
 
       pluginregs = Dir.glob('/home/da01/.mozilla/firefox/**/pluginreg.dat')
       if pluginregs.empty?
