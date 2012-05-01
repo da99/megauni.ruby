@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# -*- bash -*-
+# 
+
+wget -mpk --continue --user-agent="" -e robots=off --wait 1 http://www.megauni.com/
