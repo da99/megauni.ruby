@@ -7,7 +7,7 @@ class The_App < Sinatra::Base
   not_found {
     e = env['sinatra.error']
     
-    archive = File.join("archive/www.megauni.com/", request.path_info )
+    archive = File.join("public/heroku-mongo/", request.path_info )
     archive_index = File.join(archive, "/index.html")
     
     txt = case e.code
