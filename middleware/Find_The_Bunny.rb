@@ -1,4 +1,4 @@
-require 'models/Mu_Router'
+require './models/Mu_Router'
 
 class Find_The_Bunny
 

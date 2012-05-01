@@ -37,13 +37,12 @@ if ARGV === %w{ install all}
 end
 
 
-require "helpers/app/Color_Puts"
-require "helpers/app/kernel"
+require "./helpers/app/Color_Puts"
+require "./helpers/app/kernel"
 
 
 include Color_Puts
 
-require 'models/FiDi'
 
 def compile_for_production
   spaces = %w{ sass mab xml }
@@ -61,6 +60,29 @@ end
 
 %w{ 
   git
+  tests
+  my_computer
+  server
+}.each { |lib|
+  require "./rake/#{lib}"
+}
+
+puts "\n\n"
+
+at_exit do
+  puts "\n\n"
+end
+
+task :thin do
+  exec "bundle exec thin -e development start"
+end
+
+__END__
+
+require './models/FiDi'
+
+%w{ 
+  git
   sass
   mab
   xml
@@ -72,16 +94,6 @@ end
   models
   gems
 }.each { |lib|
-  require "rake/#{lib}"
+  require "./rake/#{lib}"
 }
-
-puts "\n\n"
-
-at_exit do
-  puts "\n\n"
-end
-
-
-
-
 

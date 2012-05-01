@@ -1,8 +1,8 @@
-$KCODE = 'utf8'
 
+ENV['RACK_ENV'] ||= 'production'
 begin
 
-  require 'megauni'
+  require './megauni'
   
   my_app_root     = File.expand_path( File.dirname(__FILE__) )
   down_time_file  = File.join( my_app_root, '/helpers/sinatra/maintain')
@@ -11,28 +11,33 @@ begin
   
   # === Protective
   use Rack::ContentLength
-  use Allow_Only_Roman_Uri
-  use Squeeze_Uri_Dots
-  use Slashify_Path_Ending
-  use Redirect_Mobile
-  use Old_App_Redirect
+  %w{
+  Allow_Only_Roman_Uri
+  Squeeze_Uri_Dots
+  Slashify_Path_Ending
+  Redirect_Mobile
+  Old_App_Redirect
+  }.each { |name|
+    require "./middleware/#{name}"
+    use Object.const_get(name)
+  }
 
   
-  if Uni_App.development?
+  if The_App.development?
+    
     use Rack::CommonLogger
     use Rack::ShowExceptions
-    require 'middleware/Render_Css' 
-    use Render_Css
+    
   end
 
   # === Content Generators
-  use Always_Find_Favicon
-  use Serve_Public_Folder, ['/busy-noise/', '/my-egg-timer/', '/styles/', '/skins/']
+  # use Always_Find_Favicon
+  # use Serve_Public_Folder, ['/busy-noise/', '/my-egg-timer/', '/styles/', '/skins/']
   
   # === Helpers
   use Rack::MethodOverride
-  use Rack::Session::Mongo, {:server=>File.join( ENV['MONGO_DB'], DB_SESSION_TABLE ) , :expire_after => (60*60*24*14) }
-  use Strip_If_Head_Request
+  # use Rack::Session::Mongo, {:server=>File.join( ENV['MONGO_DB'], DB_SESSION_TABLE ) , :expire_after => (60*60*24*14) }
+  # use Strip_If_Head_Request
   
   # === Low-level Helpers 
   # === (specifically designed to run before Uni_App).
@@ -43,15 +48,17 @@ begin
   #   # use Find_The_Bunny
   # end
   
-  use Flash_Msg
+  # use Flash_Msg
 
   # Finally, start the app.
-  run Uni_App
+  run The_App
 
   
 rescue Object => e
   
-  if ['test', 'development'].include?(ENV['RACK_ENV'])
+  raise e
+  
+  if ENV['RACK_ENV'][%r!(dev|test)!]
     raise e
   else
     begin

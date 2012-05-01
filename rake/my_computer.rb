@@ -1,5 +1,5 @@
 require 'open3'
-require 'models/FiDi'
+# require 'models/FiDi'
 
 MY_EMAIL = 'diego@miniuni.com'
 MY_NAME = 'da01'

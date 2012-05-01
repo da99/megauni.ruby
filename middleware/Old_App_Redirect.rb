@@ -1,4 +1,5 @@
 
+require "./middleware/Find_The_Bunny"
 class Old_App_Redirect
 
   def initialize new_app
