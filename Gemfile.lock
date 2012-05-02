@@ -1,16 +1,29 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    Bacon_Colored (0.1.0)
+      bacon
+      colored
     addressable (2.2.7)
+    bacon (1.1.0)
+    coderay (1.0.6)
+    colored (1.2)
     daemons (1.1.8)
     eventmachine (0.12.10)
     fattr (2.2.1)
     launchy (2.1.0)
       addressable (~> 2.2.6)
+    method_source (0.7.1)
     mime-types (1.18)
+    pry (0.9.9.4)
+      coderay (~> 1.0.5)
+      method_source (~> 0.7.1)
+      slop (>= 2.4.4, < 3)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
+    rack-test (0.6.1)
+      rack (>= 1.0)
     rake (0.9.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -24,6 +37,7 @@ GEM
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
+    slop (2.4.4)
     term-ansicolor (1.0.7)
     thin (1.3.1)
       daemons (>= 1.0.9)
@@ -35,7 +49,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  Bacon_Colored
   launchy
+  pry
+  rack-test
   rake
   rest-client
   rush

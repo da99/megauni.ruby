@@ -4,7 +4,7 @@ namespace :tests do
 
   desc %! Runs tests for your app using glob: tests/test_*.rb 
   GEM_UPDATE = false!
-  task :all do
+  task :all_old do
     
     if ENV['GEM_UPDATE']
       puts_white 'Updating gems...'

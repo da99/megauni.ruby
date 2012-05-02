@@ -77,6 +77,13 @@ task :thin do
   exec "bundle exec thin -e development start"
 end
 
+task :bacon do
+  ENV['RACK_ENV']='test'
+  cmd = "bundle exec ruby tests/main.rb #{ARGV.map(&:inspect).join ''}"
+  puts cmd
+  exec cmd
+end
+
 __END__
 
 require './models/FiDi'

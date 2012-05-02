@@ -19,8 +19,10 @@ begin
   %w{
     Allow_Only_Roman_Uri
     Squeeze_Uri_Dots
+    Always_Find_Favicon
     Slashify_Path_Ending
     Redirect_Mobile
+    Strip_If_Head_Request
     Mu_Archive_Redirect
     Mu_Archive
   }.each { |name|

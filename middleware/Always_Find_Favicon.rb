@@ -9,7 +9,7 @@ class Always_Find_Favicon
     status, headers, body = @app.call( new_env )
     
     if status === 404 && 
-       !(new_env['PATH_INFO'][/\A\/favicon\.ico/]) &&
+       !(new_env['PATH_INFO'][%r!\A/favicon\.ico!]) &&
        new_env['PATH_INFO']['favicon.ico']
       
       request  = Rack::Request.new(new_env)
@@ -17,7 +17,7 @@ class Always_Find_Favicon
       full_uri = request.url.split('/')[0,3]
 
       # Redirec to http[s]://domain.com/favicon.ico
-      response.redirect "#{full_uri.first}//#{full_uri.last}/favicon.ico", 301 # Permanent
+      response.redirect '/favicon.ico', 301 # Permanent
       response.finish
     else
       [status, headers, body]
