@@ -11,24 +11,22 @@ begin
   
   # === Protective
   use Rack::ContentLength
+  if The_App.development?
+    use Rack::CommonLogger
+    use Rack::ShowExceptions
+  end
+  
   %w{
-  Allow_Only_Roman_Uri
-  Squeeze_Uri_Dots
-  Slashify_Path_Ending
-  Redirect_Mobile
-  Old_App_Redirect
+    Allow_Only_Roman_Uri
+    Squeeze_Uri_Dots
+    Slashify_Path_Ending
+    Redirect_Mobile
+    Mu_Archive_Redirect
+    Mu_Archive
   }.each { |name|
     require "./middleware/#{name}"
     use Object.const_get(name)
   }
-
-  
-  if The_App.development?
-    
-    use Rack::CommonLogger
-    use Rack::ShowExceptions
-    
-  end
 
   # === Content Generators
   # use Always_Find_Favicon

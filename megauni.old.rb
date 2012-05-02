@@ -23,7 +23,7 @@ require 'helpers/mongo_rack_with_proper_uri_parser'
     Email_Exception
     Strip_If_Head_Request
     Flash_Msg
-    Old_App_Redirect
+    Mu_Archive_Redirect
   }.each { |middle|
     require "middleware/#{middle}"
   }
