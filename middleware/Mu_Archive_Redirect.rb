@@ -11,6 +11,12 @@ class Mu_Archive_Redirect
     path_info = new_env['PATH_INFO']
     bing_site = 'http://www.bing.com/'
 
+    %w{ e qa news shop predictions random }.each { |suffix|
+      if path_info[ %r!\A/uni/(da01tv)/#{suffix}/\Z! ]
+        return hearty_redirect("/life/#{$1}/#{suffix}/")
+      end
+    }
+
     if path_info == '/timer/'
       return hearty_redirect( '/busy-noise/' )
     end

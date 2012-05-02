@@ -6,6 +6,10 @@ class The_App < Sinatra::Base
   Missing = 404
   set :sessions, false
   
+  get "/today/" do
+    redirect to("/"), Perma
+  end
+
   %w{ sitemap rss }.each { |name|
     get "/#{name}.xml" do
       headers 'Content-Type' => 'application/xml;charset=utf-8'
