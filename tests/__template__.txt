@@ -1,9 +1,0 @@
-{{file}}
-
-class {{name}} < Test::Unit::TestCase
-
-  must 'do_something' do
-    assert_equal 'true', 'true'
-  end
-
-end # === class {{name}}

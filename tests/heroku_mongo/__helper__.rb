@@ -50,17 +50,6 @@ class QuietBacktrace::BacktraceCleaner
 end # === class
 
 
-require 'megauni'
-raise '$KCODE not set to UTF8 in start file.' unless $KCODE == 'UTF8'
-
-
-puts_white " ===================================== "
-
-at_exit do
-  puts ''
-end
-
-
 
 class Test::Unit::TestCase
   
