@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+# -*- ruby -*-
+# 
+
+require "mongo"
+
+c = Mongo::Connection.new( "pearl.mongohq.com", 27027 )
+
+db = c.db("mu02")
+
+auth = db.authenticate( "da01", "isle569vxwo103" )
+
+db.collection_names.each { |name|
+
+  file = "data/#{name}.json"
+  next if %w{ rack_sessions }.include?(name)
+  next if File.file? file
+  coll = db.collection(name)
+
+  arr = coll.find.map { |doc|
+    doc["_id"] = doc["_id"].to_s
+    doc
+  }
+  File.write(file, arr.inspect)
+  
+  puts "Wrote: #{name}"
+  
+}
+
+messes = "data/mess_ids.txt"
+
+  coll = db.collection("Messages")
+  coll.find.each { |doc|
+    cmd = %! echo "#{doc["_id"].to_s}" >> #{messes} !
+    puts cmd
+    puts `#{cmd} 2>&1`
+    exit $?.exitstatus unless $?.exitstatus.zero?
+  }
+unless File.file?(messes)
+end
+
+puts "Wrote: #{messes}"
