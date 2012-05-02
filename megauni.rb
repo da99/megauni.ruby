@@ -6,6 +6,13 @@ class The_App < Sinatra::Base
   Missing = 404
   set :sessions, false
   
+  %w{ sitemap rss }.each { |name|
+    get "/#{name}.xml" do
+      headers 'Content-Type' => 'application/xml;charset=utf-8'
+      Mu_Archive_Read "/#{name}.xml"
+    end
+  }
+
   post "/search/" do 
     name = params['name'] || params['keyword']
     retro = "/#{name}/"
