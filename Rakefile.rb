@@ -79,7 +79,7 @@ end
 
 task :bacon do
   ENV['RACK_ENV']='test'
-  cmd = "bundle exec ruby tests/main.rb #{ARGV.map(&:inspect).join ''}"
+  cmd = "bundle exec ruby tests/libs/main.rb #{ARGV.map(&:inspect).join ''}"
   puts cmd
   exec cmd
 end

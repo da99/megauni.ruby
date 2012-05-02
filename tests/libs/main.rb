@@ -1,51 +1,53 @@
+require 'rubygems'
+require 'bundler'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.print e.message, "\n"
+  $stderr.print "Run `bundle install` to install missing gems\n"
+  exit e.status_code
+end
+
+require 'bacon'
+
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+
+Bacon.summary_on_exit
+
+ENV['RACK_ENV'] = 'test'
+require 'rack/test'
+require 'Bacon_Colored'
+require 'pry'
+require './middleware/Fake_Server'
+
+Dir.glob("./tests/libs/*.rb").each { |f|
+  require f unless File.basename(f) == File.basename($0)
+}
 
 class Bacon::Context
   
-  # === Custom Helpers ===
+  include Rack::Test::Methods
 
-  def utc_string
-    Time.now.utc.strftime('%Y-%m-%d %H:%M:%S')
-  end
+  def app
+    @app ||= begin
+               rack    = Rack::Builder.new
+               rack.use Fake_Server
+               file    = File.expand_path('config.ru')
+               content = File.read(file)
+               rack.instance_eval(content, file, 1)
+               rack.to_app
+             end
+  end  
+  
+end # === class
 
-  def ssl_hash
-    {'HTTP_X_FORWARDED_PROTO' => 'https', 'rack.url_scheme'  => 'https' }
-  end
+# ======== Include the tests.
 
-  def last_response_should_be_xml
-    last_response.headers['Content-Type'].should == 'application/xml;charset=utf-8'
-  end
-
-  def follow_ssl_redirect!
-    follow_redirect!
-    follow_redirect!
-  end
-
-  def assert_equal a, b
-    a.should == b
-  end
-
-  def assert_raises_with_message( err_class, err_msg, &blok )
-    err = assert_raises(err_class, &blok)
-    case err_msg
-    when String
-      err_msg.should ==  err.message
-    when Regexp
-      err_msg.should.match err.message
-    else
-      raise ArgumentError, "Unknown class for error message: #{err_msg.inspect}"
-    end
-  end
-
-  # 301 - Permanent
-  # 302 - Temporay
-  def assert_redirect(loc, status = 301)
-    loc.should == last_response.headers['Location'].sub('http://example.org', '')
-    status.should == last_response.status
-  end
-
-  def assert_last_response_ok
-    200.should == last_response.status
-  end
-
-end # === Bacon::Context
-
+if ARGV.size > 1 && ARGV[1, ARGV.size - 1].detect { |a| File.exists?(a) }
+  # Do nothing. Bacon grabs the file.
+else
+  Dir.glob('./tests/*.rb').each { |file|
+    require(file.sub '.rb', '' ) if File.basename(file)[%r!\A(C|M|V)_!]
+  }
+end
