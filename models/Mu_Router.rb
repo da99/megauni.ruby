@@ -91,6 +91,7 @@ class Mu_Router
     map '/' do
       to Hellos
       path '/', :list
+      path '/googlehostedservice.html', :google_verify
       path '/salud' , :salud
       path '/rss.xml', :rss_xml
       path '/sitemap.xml', :sitemap_xml

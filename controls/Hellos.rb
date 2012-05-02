@@ -44,5 +44,8 @@ class Hellos
     redirect "http://megauni.s3.amazonaws.com/beeping.#{exts}" 
   end
 
+  def GET_google_verify
+    render_text_plain "googleb9009ed100e7fc31"
+  end
 
 end # === Hello
