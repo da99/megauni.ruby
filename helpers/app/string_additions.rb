@@ -1,3 +1,4 @@
+__END__
 class String
 
   def strip_slashes

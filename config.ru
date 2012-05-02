@@ -10,13 +10,17 @@ begin
   
   
   # === Protective
+ 
+  use Rack::Lint
   use Rack::ContentLength
+  
   if The_App.development?
     use Rack::CommonLogger
     use Rack::ShowExceptions
   end
   
   %w{
+    Surfer_Hearts_Archive
     Allow_Only_Roman_Uri
     Squeeze_Uri_Dots
     Always_Find_Favicon

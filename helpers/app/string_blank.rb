@@ -1,3 +1,4 @@
+__END__
 # The blank extension adds the blank? method to all objects (e.g. Object#blank?).
 
 class FalseClass

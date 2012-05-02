@@ -24,6 +24,12 @@ class Bacon::Context
     a.should == b
   end
 
+  def should_render
+    last_response.should.be.ok
+    [ nil, last_response.body.size.to_s ]
+    .should.include last_response['Content-Length']
+  end
+
   def assert_raises_with_message( err_class, err_msg, &blok )
     err = assert_raises(err_class, &blok)
     case err_msg

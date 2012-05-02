@@ -5,7 +5,7 @@ class The_App < Sinatra::Base
   Perma = 301
   Missing = 404
   set :sessions, false
-  
+
   get "/today/" do
     redirect to("/"), Perma
   end

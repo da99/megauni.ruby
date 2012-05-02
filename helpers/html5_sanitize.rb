@@ -1,3 +1,4 @@
+__END__
 # ============================================================================
 # Example use: HTML5_Sanitize.html(old_str)
 # Originall found at: 

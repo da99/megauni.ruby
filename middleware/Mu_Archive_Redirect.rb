@@ -6,8 +6,13 @@ class Mu_Archive_Redirect
     @app = new_app
   end
 
-  def call new_env
+  def call e
+    dup._call e
+  end
 
+  def _call new_env
+
+    @e = new_env
     path_info = new_env['PATH_INFO']
     bing_site = 'http://www.bing.com/'
 

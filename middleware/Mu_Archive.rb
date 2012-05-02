@@ -36,11 +36,13 @@ class Mu_Archive
     f = Mu_Archive(path_info)
     return orig unless f
     
-    request = Rack::Request.new(new_env)
-    response = Rack::Response.new
-    response.body= [ File.read(f) ]
-    response.finish
+    r = Rack::Response.new
+    r.body= [ File.read(f) ]
+    r.finish
 
+    # r = Rack::Response.new
+    # r.body= [ File.read(f) ]
+    # r.finish
   end
 
 end # === class
