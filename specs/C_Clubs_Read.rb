@@ -38,6 +38,18 @@ describe :Control_Clubs_Read do
 
   # ================ Club Search ===========================
 
+  it "redirects /club-search/ to /search/ (both using POST)" do
+    post "/club-search/", :keyword=>"factor"
+    assert_redirect "/search/", 301
+  end
+
+  %w{ menopause osteoporosis }.each { |k|
+    it "redirects /search/ for menopause to /meno-osteo/" do
+      post "/search/", :keyword=>k
+      assert_redirect "/meno-osteo/", PERM
+    end
+  }
+
   it 'shows full list of clubs for /search/{filename}/' do
     keyword = 'factor' + rand(1000).to_s
     post "/search/", :keyword=>keyword

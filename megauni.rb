@@ -10,7 +10,17 @@ class The_App < Sinatra::Base
     name = params['name'] || params['keyword']
     retro = "/#{name}/"
     redirect(to("/#{name}/"), Perma) if Mu_Archive(retro)
-    Mu_Archive_Read "/search/index.html", :name=>name
+    
+    case name
+    when %r!menop..se!, %r!ost[eo]+p[oris]+!
+      redirect to("/meno-osteo/"), Perma
+    else
+      Mu_Archive_Read "/search/index.html", :name=>name
+    end
   end # === post search
+
+  post "/club-search/" do
+    redirect to("/search/"), Perma
+  end
 
 end # === class The_App
