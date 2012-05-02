@@ -17,6 +17,10 @@ class Mu_Archive_Redirect
       end
     }
 
+    if path_info[ %r!/uni/?\Z! ]
+      return hearty_redirect("/search/")
+    end
+
     if path_info == '/timer/'
       return hearty_redirect( '/busy-noise/' )
     end

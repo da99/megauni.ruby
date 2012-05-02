@@ -2,17 +2,7 @@
 
 describe :Control_Clubs_Read do
 
-  it "does not render /uni/" do
-    get '/uni/'
-    assert_equal false, last_response.ok?
-  end
-
-  it 'renders /salud/' do
-    get "/salud/"
-    assert_equal 200, last_response.status
-  end
-
-  %w{ meno-osteo back-pain }.each { |name|
+  %w{ salud meno-osteo back-pain  uni/mike-in-tokyo-rogers uni/liberty }.each { |name|
     it "renders /#{name}/" do
       get "/#{name}/"
       assert_equal 200, last_response.status
@@ -37,6 +27,16 @@ describe :Control_Clubs_Read do
   end
 
   # ================ Club Search ===========================
+
+  it "redirects /uni/ to /search/" do
+    get '/uni/'
+    assert_redirect "/search/"
+  end
+
+  it "redenrs GET /search/" do
+    get "/search/"
+    last_response.should.be.ok
+  end
 
   it "redirects /club-search/ to /search/ (both using POST)" do
     post "/club-search/", :keyword=>"factor"
