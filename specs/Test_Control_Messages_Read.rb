@@ -1,5 +1,4 @@
 # controls/Messages.rb
-require 'tests/__rack_helper__'
 
 class Test_Control_Messages_Read < Test::Unit::TestCase
 

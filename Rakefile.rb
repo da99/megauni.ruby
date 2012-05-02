@@ -79,7 +79,9 @@ end
 
 task :bacon do
   ENV['RACK_ENV']='test'
-  cmd = "bundle exec ruby tests/libs/main.rb #{ARGV.map(&:inspect).join ''}"
+  args = ARGV.dup
+  bacon = ARGV.shift
+  cmd = "bundle exec #{bacon} specs/libs/main.rb #{ARGV.map(&:inspect).join ' '}"
   puts cmd
   exec cmd
 end

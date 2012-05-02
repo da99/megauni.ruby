@@ -5,9 +5,9 @@ class Find_The_Bunny
   VALID_HTTP_VERBS = %w{ HEAD GET POST PUT DELETE }
   Old_Topics = %w{
     arthritis
-    back_pain
+    back-pain
     cancer
-    child_care
+    child-care
     computer
     dementia
     depression
@@ -19,7 +19,7 @@ class Find_The_Bunny
     hiv
     housing
     music
-    meno_osteo
+    meno-osteo
     news
     preggers
     sports

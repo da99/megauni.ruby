@@ -1,5 +1,4 @@
 # middleware/Mu_Archive_Redirect.rb
-require 'tests/__rack_helper__'
 
 class Test_Control_Old_Apps_Read < Test::Unit::TestCase
 

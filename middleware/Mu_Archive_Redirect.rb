@@ -19,10 +19,13 @@ class Mu_Archive_Redirect
       return hearty_redirect( '/myeggtimer/' )
     end
 
-    if path_info === '/meno-osteo/'
-      return hearty_redirect( '/meno_osteo/' )
-    end
-
+    %w{ back-pain meno-osteo child-care }.each { |right|
+      wrong = right.sub '-', '_'
+      if path_info =~ %r!#{wrong}!
+        return hearty_redirect( path_info.gsub(wrong,right) )
+      end
+    }
+    
     if path_info === '/' && new_env['HTTP_METHOD'] === 'POST'
       return hearty_redirect( new_env['HTTP_REFERER'] || '/my-egg-timer/' )
     end
@@ -97,24 +100,17 @@ class Mu_Archive_Redirect
     end
 
     if new_env['PATH_INFO'] === "/child_care/clubs/child_care/"
-      return hearty_redirect("/uni/child_care/")
-    end
-
-    if new_env['PATH_INFO'] === "/child_care/clubs/child_care/"
-      return hearty_redirect("/uni/child_care/")
+      return hearty_redirect("/child-care/")
     end
 
     if new_env['PATH_INFO'] === "/back_pain/clubs/back_pain/"
-      return hearty_redirect("/uni/back_pain/")
+      return hearty_redirect("/back-pain/")
     end
     
     if new_env['PATH_INFO'] === "/help/"
-      return hearty_redirect("/uni/megauni/")
+      return hearty_redirect("/megauni/")
     end
 
-    if ['/back-pain/', '/meno-uni/'].include?(new_env['PATH_INFO'])
-      return hearty_redirect("/uni#{new_env['PATH_INFO']}".sub('-', '_'))
-    end
     
     if ['/salud/robots.txt'].include?(new_env['PATH_INFO'])
       return hearty_redirect("/robots.txt")
@@ -133,12 +129,8 @@ class Mu_Archive_Redirect
       return hearty_redirect('/busy-noise/moving.html')
     end
 
-    if new_env['PATH_INFO'] == '/child-care/' 
-      return hearty_redirect("/uni/child_care")
-    end
-
-    if new_env['PATH_INFO'] =~ %r!\A/(#{Find_The_Bunny::Old_Topics.join('|')})/\Z!
-      return hearty_redirect("/uni/#{$1}/")
+    if new_env['PATH_INFO'] =~ %r!\A/uni/(#{Find_The_Bunny::Old_Topics.join('|')})/\Z!
+      return hearty_redirect("/#{$1}/")
     end
 
     if ['/about.html', '/about/'].include?(new_env['PATH_INFO'])

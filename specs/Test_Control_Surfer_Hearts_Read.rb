@@ -1,5 +1,4 @@
 # controls/Clubs.rb
-require 'tests/__rack_helper__'
 
 # Originally, the Hearts Club used to be it's own
 # website at: SurferHearts.com

@@ -1,5 +1,4 @@
 # controls/Lifes.rb
-require 'tests/__rack_helper__'
 
 class Test_Control_Lifes_Read < Test::Unit::TestCase
 

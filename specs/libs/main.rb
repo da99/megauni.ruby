@@ -21,9 +21,11 @@ require 'Bacon_Colored'
 require 'pry'
 require './middleware/Fake_Server'
 
-Dir.glob("./tests/libs/*.rb").each { |f|
-  require f unless File.basename(f) == File.basename($0)
+Dir.glob("./specs/libs/*.rb").each { |f|
+  require f unless File.basename(f) == File.basename(__FILE__)
 }
+
+PERM = 301
 
 class Bacon::Context
   
@@ -42,12 +44,12 @@ class Bacon::Context
   
 end # === class
 
-# ======== Include the tests.
+# ======== Include the specs.
 
 if ARGV.size > 1 && ARGV[1, ARGV.size - 1].detect { |a| File.exists?(a) }
   # Do nothing. Bacon grabs the file.
 else
-  Dir.glob('./tests/*.rb').each { |file|
+  Dir.glob('./specs/*.rb').each { |file|
     require(file.sub '.rb', '' ) if File.basename(file)[%r!\A(C|M|V)_!]
   }
 end

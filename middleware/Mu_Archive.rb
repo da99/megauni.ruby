@@ -1,3 +1,17 @@
+require 'mustache'
+
+def Mu_Archive path_info
+  archive = File.join("public/heroku-mongo/", path_info )
+  archive_index = File.join(archive, "/index.html")
+
+  [archive, archive_index].detect { |f| File.file? f }
+end # === def Mu_Archive
+
+def Mu_Archive_Read path_info, vals = Hash[]
+  content = File.read(Mu_Archive(path_info))
+  Mustache.raise_on_context_miss = true
+  Mustache.render( content, vals )
+end
 
 class Mu_Archive
 
@@ -12,7 +26,7 @@ class Mu_Archive
     
     return(orig) unless orig.first.to_s == "404"
     
-    f = file(path_info)
+    f = Mu_Archive(path_info)
     return(orig) unless f
     
     request = Rack::Request.new(new_env)
@@ -20,13 +34,6 @@ class Mu_Archive
     response.body= [ File.read(f) ]
       
     response.finish
-  end
-
-  def file path_info
-    archive = File.join("public/heroku-mongo/", path_info )
-    archive_index = File.join(archive, "/index.html")
-    
-    [archive, archive_index].detect { |f| File.file? f }
   end
 
 end # === class

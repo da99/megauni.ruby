@@ -7,6 +7,7 @@ group :production do
   gem 'term-ansicolor'
   gem 'rake'
   gem 'thin'
+  gem 'mustache'
 end
 
 group :development do

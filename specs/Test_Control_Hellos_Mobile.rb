@@ -1,5 +1,4 @@
 # controls/Hellos.rb
-require 'tests/__rack_helper__' 
 
 
 class Test_Control_Hellos_Mobile < Test::Unit::TestCase

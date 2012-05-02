@@ -15,6 +15,7 @@ GEM
       addressable (~> 2.2.6)
     method_source (0.7.1)
     mime-types (1.18)
+    mustache (0.99.4)
     pry (0.9.9.4)
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
@@ -51,6 +52,7 @@ PLATFORMS
 DEPENDENCIES
   Bacon_Colored
   launchy
+  mustache
   pry
   rack-test
   rake
