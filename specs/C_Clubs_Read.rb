@@ -26,6 +26,18 @@ describe :Control_Clubs_Read do
     assert_equal 200, last_response.status
   end
 
+  it 'redirect /child_care/clubs/child_care/ to /child-care/' do
+    get '/child_care/clubs/child_care/'
+    follow_redirect!
+    assert_equal '/child-care/', last_request.fullpath
+  end
+
+  it 'redirect /back_pain/clubs/back_pain/ to /clubs/back_pain/' do
+    get '/back_pain/clubs/back_pain/'
+    follow_redirect!
+    assert_equal '/back-pain/', last_request.fullpath
+  end
+
   # ================ Club Search ===========================
 
   it "redirects /uni/ to /search/" do

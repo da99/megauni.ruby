@@ -29,6 +29,13 @@ class Mu_Archive_Redirect
       return hearty_redirect( '/myeggtimer/' )
     end
 
+    %w{ back.pain meno.osteo child.care }.each { |wrong|
+      right = wrong.gsub('.', '-')
+      if new_env['PATH_INFO'] =~ %r"/#{wrong}/clubs/#{wrong}/(.+)?"
+        return hearty_redirect("/#{right}/#{$1}")
+      end
+    }
+
     %w{ back-pain meno-osteo child-care }.each { |right|
       wrong = right.sub '-', '_'
       if path_info =~ %r!#{wrong}!
@@ -109,14 +116,6 @@ class Mu_Archive_Redirect
       return hearty_redirect("/stylesheets/en-us/Hellos_list.css")
     end
 
-    if new_env['PATH_INFO'] === "/child_care/clubs/child_care/"
-      return hearty_redirect("/child-care/")
-    end
-
-    if new_env['PATH_INFO'] === "/back_pain/clubs/back_pain/"
-      return hearty_redirect("/back-pain/")
-    end
-    
     if new_env['PATH_INFO'] === "/help/"
       return hearty_redirect("/megauni/")
     end
