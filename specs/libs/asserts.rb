@@ -62,8 +62,12 @@ class Bacon::Context
   # 301 - Permanent
   # 302 - Temporay
   def assert_redirect(loc, status = 301)
-    loc.should == last_response.headers['Location'].sub('http://example.org', '')
-    status.should == last_response.status
+    l = last_response.headers['Location']
+    if !l
+      fail "Not a redirect."
+    end
+    l.sub('http://example.org', '').should == loc.should
+    last_response.status.should == status
   end
 
   def assert_last_response_ok

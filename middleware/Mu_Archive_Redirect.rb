@@ -151,11 +151,6 @@ class Mu_Archive_Redirect
       return hearty_redirect('/help/')
     end
 
-    if ['/blog/', '/blog.html', '/archives.html', '/archives/', 
-        '/bubblegum/','/hearts/' ].include?(new_env['PATH_INFO'])
-      return hearty_redirect('/uni/hearts/')
-    end
-
     if new_env['PATH_INFO'] =~ %r!/media/heart_links/images(.+)!
       return hearty_redirect( File.join('http://surferhearts.s3.amazonaws.com/heart_links', $1))
     end
@@ -167,10 +162,6 @@ class Mu_Archive_Redirect
     if new_env['PATH_INFO'] =~ %r!/blog/(\d+)/0/\Z! 
       return hearty_redirect("/uni/hearts/by_date/#{$1}/1" )
     end
-
-    if new_env['PATH_INFO'] =~ %r!\A/hearts/by_date/(\d+)/(\d+)/\Z! 
-      return hearty_redirect("/uni/hearts/by_date/#{$1}/#{$2}/")
-    end # ===
 
     if new_env['PATH_INFO'] =~ %r!\A/hearts/m/\Z!
       return hearty_redirect("/uni/hearts/")

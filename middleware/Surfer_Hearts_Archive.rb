@@ -132,7 +132,7 @@ class Surfer_Hearts_Archive
     end
 
     # /uni/hearts/
-    if p =~ %r"/uni/hearts/?" 
+    if p =~ %r"\A/uni/hearts/?\Z" 
       return redirect( "/blog/" )
     end
 
@@ -144,6 +144,39 @@ class Surfer_Hearts_Archive
     if m = path?( path_info, %r"/heart_link/(\d{1,3})/" )
       f = "heart_link/#{m.captures.first}.html"
       return render( f ) if File.file?(join f)
+    end
+
+    # /uni/hearts/by_date/2007/01/
+    # /hearts/by_date/2007/01/
+    # /heart_links/by_date/2007/01/
+    # ---> /blog/2007/01/
+    if p =~ %r!\A/(uni/hearts|heart_links|hearts)/by_date/(\d+)/(\d+)/\Z!
+      return redirect("/blog/#{$2}/#{$3}/")
+    end # ===
+    
+    if p == "/blog/2007/0/"
+      return redirect("/blog/2007/")
+    end
+
+    if p =~ %r!\A/blog/(\d+)/(\d)/\Z!
+      return render( "blog/#{$1}/#{$2.to_i}.html" )
+    end
+
+    if p =~ %r!\A/blog/(\d+)/\Z!
+      return redirect("/blog/")
+    end
+
+    if %w{ 
+      /uni/hearts/ /blog/ /blog.html 
+      /archives.html /archives/ /bubblegum/
+      /hearts/ /club/hearts/
+      /hearts/m/
+    }.include?(p)
+      return redirect("/blog/")
+    end
+
+    if p == '/blog/'
+      return render("/blog/index.html")
     end
 
     @app.call(new_env)

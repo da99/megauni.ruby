@@ -18,18 +18,10 @@ describe :Control_Surfer_Hearts_Read do
       assert_redirect "/heart_link/#{id}/", 301
     }
   end
-
-  it 'redirects /hearts/ to /club/hearts/' do
-    get "/hearts/"
-    follow_redirect!
-    assert_equal( "/uni/hearts/", last_request.fullpath)
-  end
   
-  it 'redirects /hearts/m/ to /uni/hearts/' do 
+  it 'redirects /hearts/m/ to /blog/' do 
     get '/hearts/m/'
-    follow_redirect! # to /hearts/
-    follow_redirect! # finally, to our destination.
-    assert_equal '/uni/hearts/', last_request.fullpath 
+    assert_redirect '/blog/'
   end
   
   it 'renders page w/assets: /blog/' do
@@ -48,10 +40,10 @@ describe :Control_Surfer_Hearts_Read do
     assert_equal '/help/', last_request.fullpath
   end
 
-  it 'redirects blog archives (e.g. "/blog/2007/8/" ) to news archives. ' do
-    get '/blog/2007/8/'
+  it 'redirects /uni/hearts/by_date/2007/8/ to /blog/2007/8/. ' do
+    get '/uni/hearts/by_date/2007/8/'
     follow_redirect!
-    assert_equal '/uni/hearts/by_date/2007/8/', last_request.fullpath
+    assert_equal '/blog/2007/8/', last_request.fullpath
   end
 
   it 'redirects /uni/hearts/by_label/stuff_for_dudes/ => /heart_links/by_category/14/' do
@@ -87,4 +79,41 @@ describe :Control_Surfer_Hearts_Read do
     
   }
 
+  %w{ /hearts/by_date /uni/hearts/by_date /heart_links/by_date }.each { |pre|
+    it "redirects #{pre}/2007/01/ to /blog/2007/01/" do
+      get "#{pre}/2007/01/"
+      assert_redirect "/blog/2007/01/"
+    end
+  }
+
+  it "renders page w/ assets: /blog/2007/1/" do
+    get "/blog/2007/1/"
+    should_render
+  end
+  
+  %w{ 1 2 3 4 8 }.each { |id|
+    it "renders /blog/2007/#{id}/" do
+      get "/blog/2007/#{id}/"
+      should_render
+    end
+  }
+
+  it "redirects /blog/2007/ to /blog/" do
+    get "/blog/2007/" 
+    assert_redirect "/blog/"
+  end
+
+  it "renders /blog/" do
+    get "/blog/" 
+    should_render
+  end
+
+  %w{ /club/hearts/ /uni/hearts/ /hearts/ }.each { |url|
+    it "redirects #{url} to /blog/" do
+      get url
+      assert_redirect '/blog/'
+    end
+  }
+
+  
 end # === class Test_Control_Club_Hearts_Read
