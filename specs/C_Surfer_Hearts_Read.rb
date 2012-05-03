@@ -34,12 +34,6 @@ describe :Control_Surfer_Hearts_Read do
     assert_redirect '/blog/'
   end
 
-  it 'redirects /about/ to /help/' do
-    get '/about/'
-    follow_redirect!
-    assert_equal '/help/', last_request.fullpath
-  end
-
   it 'redirects /uni/hearts/by_date/2007/8/ to /blog/2007/8/. ' do
     get '/uni/hearts/by_date/2007/8/'
     follow_redirect!
@@ -115,5 +109,14 @@ describe :Control_Surfer_Hearts_Read do
     end
   }
 
+  it "redirects /about.html to /about/" do
+    get "/about.html"
+    assert_redirect "/about/"
+  end
+
+  it 'renders /about/' do
+    get "/about/"
+    should_render
+  end
   
 end # === class Test_Control_Club_Hearts_Read

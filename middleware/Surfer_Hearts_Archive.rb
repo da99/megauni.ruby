@@ -179,6 +179,20 @@ class Surfer_Hearts_Archive
       return render("/blog/index.html")
     end
 
+    # media, images
+    if p =~ %r!/media/heart_links/images(.+)!
+      return redirect( File.join('http://surferhearts.s3.amazonaws.com/heart_links', $1))
+    end
+
+    # about
+    if ['/about.html'].include? p
+      return redirect('/about/')
+    end
+
+    if p == '/about/'
+      return render('/about.html')
+    end
+
     @app.call(new_env)
   end
 
