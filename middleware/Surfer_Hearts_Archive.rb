@@ -34,8 +34,13 @@ class Surfer_Hearts_Archive
     resp.finish
   end
 
-  def call new_env
+  def call e
+    dup._call e
+  end
 
+  def _call new_env
+
+    e = new_env
     path_info = new_env['PATH_INFO']
     
     if path?( path_info, "/uni/hearts/?" )

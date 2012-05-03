@@ -7,11 +7,9 @@
 # on MegaUni.com
 describe :Control_Surfer_Hearts_Read do
 
-  it 'render /uni/hearts/' do
+  it 'renders /uni/hearts/ w/ assets' do
     get '/uni/hearts/'
     should_render
-    File.read(Surfer_Hearts_Archive.join('index.html'))
-    .should == last_response.body
   end
 
   it 'redirects /hearts/ to /club/hearts/' do

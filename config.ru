@@ -34,9 +34,11 @@ begin
     use Object.const_get(name)
   }
 
+  require './middleware/Public_Files'
+  use Public_Files, ['/busy-noise/', '/my-egg-timer/', '/styles/', '/skins/', Mu_Archive::Dir, Surfer_Hearts_Archive::Dir]
+
   # === Content Generators
   # use Always_Find_Favicon
-  # use Serve_Public_Folder, ['/busy-noise/', '/my-egg-timer/', '/styles/', '/skins/']
   
   # === Helpers
   use Rack::MethodOverride
