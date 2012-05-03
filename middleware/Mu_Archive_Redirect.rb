@@ -121,11 +121,6 @@ class Mu_Archive_Redirect
       return redirect("/stylesheets/en-us/Hellos_list.css")
     end
 
-    if new_env['PATH_INFO'] === "/help/"
-      return redirect("/megauni/")
-    end
-
-    
     if ['/salud/robots.txt'].include?(new_env['PATH_INFO'])
       return redirect("/robots.txt")
     end

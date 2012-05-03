@@ -1,6 +1,12 @@
 require 'mustache'
 
 def Mu_Archive path_info
+  p = path_info
+  
+  if p == '/help/'
+    return Mu_Archive.join("/uni/megauni/index.html")
+  end
+
   archive       = Mu_Archive.join path_info
   archive_index = Mu_Archive.join path_info, "/index.html"
 

@@ -46,15 +46,14 @@ describe :Control_Hellos do
     assert_equal 'application/xml;charset=utf-8', last_response.content_type
   end
 
-  it "redirect /help/ to /uni/megauni/" do
+  it "renders /help/" do
     get '/help/'
-    follow_redirect!
-    assert_equal "/megauni/", last_request.fullpath
+    should_render
   end
 
   it "renders /salud/" do
     get '/salud/'
-    assert_equal 200, last_response.status
+    should_render
   end
 
   it 'render /rss.xml as xml' do
