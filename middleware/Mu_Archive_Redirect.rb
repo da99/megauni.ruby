@@ -179,42 +179,7 @@ class Mu_Archive_Redirect
     if new_env['PATH_INFO'] === '/rss/'
       return hearty_redirect("/rss.xml")
     end
-
-    if new_env['PATH_INFO'] =~ %r!\A/hearts?_links?/(\d+)/\Z! || #  /hearts_links/29/
-       new_env['PATH_INFO'] =~ %r!\A/hearts?_links?/(\d+)\.html?!  # /hearts/20.html
-      return hearty_redirect( "/mess/#{ $1 }/"  )
-    end
-
-    if new_env['PATH_INFO'] =~ %r!/(heart_link|new)s?/([A-Za-z0-9\-]+)/\Z!  #  /heart_link/29/
-      return hearty_redirect("/mess/#{$2}/")
-    end
     
-    if new_env['PATH_INFO'] =~ %r!\A/(heart|new|heart_link)s?/by_(tag|category)/(\d+)/\Z! ||
-       new_env['PATH_INFO'] =~ %r!\A/(heart_link|new)s?/by_(category|tag)/(\d+)\.html?!
-      tags = { 167 => 'stuff_for_dudes', 
-        168 => 'stuff_for_dudettes', 
-        169 => 'stuff_for_pets', 
-        170 => 'stuff_for_mommies_and_dads', 
-        171 => 'edible_delicious', 
-        172 => 'books_articles', 
-        173 => 'techie_wonders', 
-        174 => 'miscellaneous', 
-        175 => 'art_design', 
-        176 => 'surfer_hearts' 
-      }
-      news_tag = tags[ Integer($3) ]
-      if !news_tag
-        return hearty_redirect("/uni/hearts/by_label/unknown-label/")
-      else
-        return hearty_redirect("/uni/hearts/by_label/#{news_tag}/")
-      end
-    end
-
-    if new_env['PATH_INFO'] =~ %r!\A/(heart_link|heart|new)s/by_tag/([a-zA-Z0-9\-]+)/\Z! 
-      tag_name = $1
-      return hearty_redirect("/uni/hearts/by_label/#{tag_name}/")
-    end
-
     if new_env['PATH_INFO'] =~ %r!\A/news/by_date/(\d+)/(\d+)! ||
        new_env['PATH_INFO'] =~ %r!\A/blog/(\d+)/(\d+)/\Z! 
       return hearty_redirect("/uni/hearts/by_date/#{$1}/#{$2}/")

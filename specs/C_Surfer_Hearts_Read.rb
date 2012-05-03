@@ -7,11 +7,6 @@
 # on MegaUni.com
 describe :Control_Surfer_Hearts_Read do
 
-  it 'renders page w/assets: /uni/hearts/' do
-    get '/uni/hearts/'
-    should_render
-  end
-
   it 'renders page w/ assets: /heart_link/{id}/' do
     get '/heart_link/10/'
     should_render
@@ -36,12 +31,15 @@ describe :Control_Surfer_Hearts_Read do
     follow_redirect! # finally, to our destination.
     assert_equal '/uni/hearts/', last_request.fullpath 
   end
-
-  it 'redirects /blog/ to /uni/hearts/' do 
+  
+  it 'renders page w/assets: /blog/' do
     get '/blog/'
-    follow_redirect!
-    assert_equal '/uni/hearts/', last_request.fullpath
-    assert_equal 200, last_response.status
+    should_render
+  end
+
+  it 'redirects /uni/hearts/ to /blog/' do 
+    get '/uni/hearts/'
+    assert_redirect '/blog/'
   end
 
   it 'redirects /about/ to /help/' do
@@ -56,16 +54,13 @@ describe :Control_Surfer_Hearts_Read do
     assert_equal '/uni/hearts/by_date/2007/8/', last_request.fullpath
   end
 
-  it 'redirects archives by_category to messages archives by_label. ' +
-     '(E.g.: /heart_links/by_category/16/)' do
-      get '/heart_links/by_category/167/'
-      follow_redirect!
-      assert_equal '/uni/hearts/by_label/stuff_for_dudes/', last_request.fullpath 
+  it 'redirects /uni/hearts/by_label/stuff_for_dudes/ => /heart_links/by_category/14/' do
+    get '/uni/hearts/by_label/stuff_for_dudes/'
+    assert_redirect '/heart_links/by_category/14/'
   end
 
   it 'responds with 404 for a heart link that does not exist.' do
     get "/heart_link/1000000/"
-    follow_redirect!
     last_response.status.should == 404
     # assert_match( /Document not found for Message id: .1000000./, err.message )
   end
@@ -76,5 +71,20 @@ describe :Control_Surfer_Hearts_Read do
     assert_equal '/rss.xml', last_request.fullpath 
   end
 
+  (14..22).to_a.each { |id|
+
+    prefix = "/heart_links/by_category/#{id}"
+    
+    it "renders page w/assets: #{prefix}/" do
+      get "#{prefix}/"
+      should_render
+    end
+    
+    it "redirects #{prefix}.html to .../#{id}/" do
+      get "#{prefix}.html"
+      assert_redirect "#{prefix}/", 301
+    end
+    
+  }
 
 end # === class Test_Control_Club_Hearts_Read

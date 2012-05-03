@@ -31,11 +31,9 @@ class Bacon::Context
 
   def should_render!
     last_response.should.be.ok
-    [ nil, last_response.body.size.to_s ]
-    .should.include last_response['Content-Length']
 
-    last_response.body.size
-    .should == last_response['Content-Length'].to_i
+    [ nil, last_response.body.bytesize.to_s ]
+    .should.include last_response['Content-Length']
   end
 
   def should_render_assets
