@@ -20,22 +20,32 @@ begin
   end
   
   %w{
-    Surfer_Hearts_Archive
+    
     Allow_Only_Roman_Uri
+    
     Squeeze_Uri_Dots
+    
+    Surfer_Hearts_Archive
+    
     Always_Find_Favicon
+    
     Slashify_Path_Ending
+    
     Redirect_Mobile
+    
     Strip_If_Head_Request
+    
     Mu_Archive_Redirect
+    
     Mu_Archive
+    
   }.each { |name|
     require "./middleware/#{name}"
     use Object.const_get(name)
   }
 
   require './middleware/Public_Files'
-  use Public_Files, ['/busy-noise/', '/my-egg-timer/', '/styles/', '/skins/', Mu_Archive::Dir, Surfer_Hearts_Archive::Dir]
+  use Public_Files, ['public/busy-noise', 'public/my-egg-timer', 'public/styles', 'public/skins', Mu_Archive::Dir, Surfer_Hearts_Archive::Dir]
 
   # === Content Generators
   # use Always_Find_Favicon

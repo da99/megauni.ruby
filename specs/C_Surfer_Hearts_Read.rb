@@ -7,9 +7,21 @@
 # on MegaUni.com
 describe :Control_Surfer_Hearts_Read do
 
-  it 'renders /uni/hearts/ w/ assets' do
+  it 'renders page w/assets: /uni/hearts/' do
     get '/uni/hearts/'
     should_render
+  end
+
+  it 'renders page w/ assets: /heart_link/{id}/' do
+    get '/heart_link/10/'
+    should_render
+  end
+
+  it 'redirects /mess/{id}/ with ids under 200 to /heart_link/{id}/' do
+    [1, 10, 143].each { |id|
+      get "/mess/#{id}/"
+      assert_redirect "/heart_link/#{id}/", 301
+    }
   end
 
   it 'redirects /hearts/ to /club/hearts/' do
@@ -49,12 +61,6 @@ describe :Control_Surfer_Hearts_Read do
       get '/heart_links/by_category/167/'
       follow_redirect!
       assert_equal '/uni/hearts/by_label/stuff_for_dudes/', last_request.fullpath 
-  end
-
-  it 'redirects a "/heart_link/10/" to "/mess/10/".' do
-    get "/heart_link/10/"
-    follow_redirect!
-    assert_equal "/mess/10/", last_request.fullpath 
   end
 
   it 'responds with 404 for a heart link that does not exist.' do

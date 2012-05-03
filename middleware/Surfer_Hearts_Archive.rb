@@ -13,7 +13,8 @@ class Surfer_Hearts_Archive
   end
 
   def self.path? path, r
-    path[ %r!\A#{r}\Z! ]
+    path =~ %r!\A#{r}\Z!
+    $~ 
   end
 
   def initialize new_app
@@ -43,20 +44,20 @@ class Surfer_Hearts_Archive
     e = new_env
     path_info = new_env['PATH_INFO']
     
-    if path?( path_info, "/uni/hearts/?" )
+    if m = path?( path_info, %r"/mess/(\d{1,3})/?" )
+      r = Rack::Response.new
+      r.redirect "/heart_link/#{m.captures.first}/", Perma
+      return r.finish
+    end
+
+    if path?( path_info, %r"/uni/hearts/?" )
       r = render( join("index.html") )
       return r
     end
 
-    if path?( path_info, "/heart.link/(\d+)/?" )
-      resp = Rack::Response.new
-      resp.redirect "/mess/#{$1}/", Perma
-      return resp.finish
-    end
-
-    if path?( path_info, "/mess/(\d{1,3})/?" )
-      file = join("heart_link/#{$1}/index.html")
-      return render( file) if File.file?(file)
+    if m = path?( path_info, %r"/heart_link/(\d{1,3})/?" )
+      file = join("heart_link/#{m.captures.first}.html")
+      return render( file ) if File.file?(file)
     end
 
     @app.call(new_env)
