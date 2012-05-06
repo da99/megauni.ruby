@@ -8,6 +8,7 @@ group :production do
   gem 'rake'
   gem 'thin'
   gem 'mustache'
+  gem 'Dex'
 end
 
 group :development do
