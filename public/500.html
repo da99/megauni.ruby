@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
-    <title>Error...</title>
+    <title>Error: Page Not Found</title>
     <style type="text/css">
     <!--
         a:link, a:visited {
@@ -22,67 +22,43 @@
         p, blockquote, pre, form, fieldset, table, th, td { 
           margin: 0; padding: 0; 
         }
-
-        #loading {
-          font-size: 2em; 
-          padding: 20px 10px 10px 10px; 
-          text-transform: lowercase; 
-          font-weight: bold; }
-          #loading img { margin: 0 10px 0 0;}
-
-        #content { display: none; }
-
-        #busy_body {
-          padding: 0;
-          margin: 0;
-          background: #A2D3E0 none no-repeat top center;
-          background-image: none;
+        
+        body {
           text-align: center;
-          font-size: 62.5%;
+          padding-top: 20px;
         }
-
-        #busy_container {
-           width: 800px;
-           margin: 0 auto;
-           text-align: center;
-           padding-top: 50px;
+        
+        p {
+          padding: 10px;
+          font-family: Segoe, sans-serif;
         }
-
-        #error_msg {
-	        margin: 0 auto;
-	        overflow: hidden;
-	        width: 225px;
-	        height: 107px;
-	        font-size: x-small;
+        
+        h1, h2 {
+          font-family: Segoe, sans-serif;
+          text-transform: uppercase;
+          font-size: 20px;
         }
-
-
-        #tagline { 
-	        color: #A2D3E0;
-         }
-        #status_msg { 
-	        text-align: center;
-	        font-family: helvetica, arial, sans-serif;
-	        color: #073D6F;
-	        font-size: large;
-	        padding: 10px 0 0 0;
-	        font-weight: bold;
-	        font-style: italic;
+        
+        h2 {
+          font-size: 18px;
+          color: #f00919;
+        }
+        div.href {
+          font-size: 28px;
         }
     //-->
     </style>
-	<!--[if IE]> 
-	<style type="text/css">
-	#error_msg img {display: none} 
-	</style>
-	<![endif]-->
+
   </head>
   <body id="busy_body">
     	<div id="busy_container">
-    		<p id="error_msg">=(</p>
-				<p id="tagline">Sorry:</p>
-				<p id="status_msg">The website is being fixed :( <br /> Please come back later.</p>
-				
+    		<h1>Error: </h1>
+				<h2>You found a bug in this website.</h2>
+				<p id="status_msg">Check back later today or tomorrow after the error is fixed.</p>
+				<div class="href"><script>
+				  document.writeln(window.location.href);
+				</script></div>
+        <p><a href="/">Homepage.</a></p>
     	</div>
   </body>
 </html>
