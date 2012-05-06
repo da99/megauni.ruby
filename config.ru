@@ -21,6 +21,8 @@ begin
   
   %w{
     
+    Custom_Errors
+
     Allow_Only_Roman_Uri
     
     Squeeze_Uri_Dots

@@ -24,13 +24,17 @@ class Bacon::Context
     a.should == b
   end
 
-  def should_render
-    should_render!
+  def should_render *args
+    should_render! *args
     should_render_assets
   end
 
-  def should_render!
+  def should_render! txt = nil
     last_response.should.be.ok
+
+    if txt
+      last_response.body.should.match %r!#{txt}!
+    end
 
     [ nil, last_response.body.bytesize.to_s ]
     .should.include last_response['Content-Length']
