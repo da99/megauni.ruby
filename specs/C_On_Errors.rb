@@ -21,6 +21,13 @@ describe "Custom 404" do
     e[:REQUEST_PATH].should == target
   end
 
+  it "sets exception log message to: 404 /path" do
+    target = "/missing-page-#{rand 100}/"
+    get target
+    e = Dex.reverse_order(:created_at).limit(1).first
+    e[:message].should == "404 #{target}"
+  end
+
 end # === 404
 
 describe "Custom 500" do

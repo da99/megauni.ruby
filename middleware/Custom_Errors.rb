@@ -42,6 +42,10 @@ class Custom_Errors
 
       aux  = Hash[ keys.zip e.values_at(*keys) ]                                
       
+      if excp.is_a?(Sinatra::NotFound)
+        aux[:message] = "#{orig.first} #{aux['REQUEST_URI']}"
+      end
+      
       Dex.insert excp, aux
       
       status  = orig.first
