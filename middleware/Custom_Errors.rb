@@ -1,5 +1,4 @@
 
-
 class Custom_Errors
 
   def initialize the_app, general_err = RuntimeError

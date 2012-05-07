@@ -46,7 +46,8 @@ end # === class
 
 # ======== Include the specs.
 
-require "Dex"
+require "./megauni"
+
 db_file = "/tmp/mu.dex.test.db"
 if File.exists? db_file
   File.unlink db_file
@@ -54,7 +55,6 @@ end
 
 Dex.db db_file
 
-require "./megauni"
 
 The_App.get "/raise-error-test/" do
   raise NoMethodError, "raise error test"

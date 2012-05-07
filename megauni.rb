@@ -1,5 +1,8 @@
 
 require 'sinatra/base'
+require "Dex"
+
+Dex.db "/apps/mu.dex.db"
 
 class The_App < Sinatra::Base
   HTTP_Status_Error = Class.new(RuntimeError)
