@@ -2,15 +2,16 @@
 
 class Custom_Errors
 
-  def initialize the_app
+  def initialize the_app, general_err = RuntimeError
     @app = the_app
+    @e_klass = general_err
   end
 
   def call e
     orig = @app.call e
     
     case orig.first
-    when 100..399
+    when 401, 100..399
       orig
     else
       keys = %w{ 
@@ -32,13 +33,32 @@ class Custom_Errors
         SERVER_PROTOCOL 	
       }
       
-      Dex.insert e['sinatra.error'], Hash[ keys.zip e.values_at(*keys) ]
-      r = Rack::Response.new
-      r.status= orig.first
-      r.body = [ File.read("public/#{orig.first}.html") ]
-      r.finish
+      excp = if e['sinatra.error'] 
+               e['sinatra.error']
+             else 
+               temp = @e_klass.new("#{orig.first} #{e['REQUEST_URI']}")
+               temp.set_backtrace caller
+               temp
+             end
+
+      aux  = Hash[ keys.zip e.values_at(*keys) ]                                
+      
+      Dex.insert excp, aux
+      
+      status  = orig.first
+      headers = orig[1]
+      body    = get_body(orig.first) || orig.last
+      headers.delete 'Content-Length'
+      
+      [status, headers, body]
     end
     
   end # === def call e
+
+  def get_body num
+    file = "public/#{num}.html"
+    return nil unless File.exists?(file)
+    [ File.read(file) ]
+  end
   
 end # === class Custom_Errors

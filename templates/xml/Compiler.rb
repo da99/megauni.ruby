@@ -36,7 +36,7 @@ class Ruby_To_Xml
         )
 
         unless Object.const_defined?( :Uni_App )
-          puts "Writing: #{mustache}"
+          print "Writing: #{mustache}\n"
           FILER.
             write( mustache, tache )
         end

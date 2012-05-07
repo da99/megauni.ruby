@@ -19,10 +19,11 @@ begin
     use Rack::ShowExceptions
   end
   
+  require "./middleware/Custom_Errors"
+  use Custom_Errors, The_App::HTTP_Status_Error
+  
   %w{
     
-    Custom_Errors
-
     Allow_Only_Roman_Uri
     
     Squeeze_Uri_Dots

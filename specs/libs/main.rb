@@ -60,6 +60,21 @@ The_App.get "/raise-error-test/" do
   raise NoMethodError, "raise error test"
 end
 
+The_App.get "/set-status/:num/" do |num|
+  status num.to_i
+  "Error for test: #{num}"
+end
+
+def last_exception
+  Dex.reverse_order(:created_at).limit(1).first
+end
+
+def raise_errors_false
+  The_App.set :raise_errors, false
+  r = yield
+  The_App.set :raise_errors, true
+  r
+end
 
 if ARGV.size > 1 && ARGV[1, ARGV.size - 1].detect { |a| File.exists?(a) }
   # Do nothing. Bacon grabs the file.

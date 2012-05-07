@@ -2,6 +2,7 @@
 require 'sinatra/base'
 
 class The_App < Sinatra::Base
+  HTTP_Status_Error = Class.new(RuntimeError)
   Perma = 301
   Missing = 404
   set :sessions, false
