@@ -30,9 +30,14 @@ describe :Control_Hellos do
     assert_equal 200, last_response.status
   end
 
-  it "adds a slash to a file path" do
+  it "adds a slash to a path" do
     get '/busy-noise'
     last_response.headers['Location'].should.match /noise\/$/
+  end
+
+  it "adds a slash to path, not query string" do
+    get '/shiina-ringo?album=1'
+    should_redirect "/shiina-ringo/?album=1", 301
   end
 
   it "does not add a slash to a missing file: cat.png" do

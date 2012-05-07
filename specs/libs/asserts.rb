@@ -70,8 +70,12 @@ class Bacon::Context
     if !l
       fail "Not a redirect."
     end
-    l.sub('http://example.org', '').should == loc.should
+    l.sub('http://example.org', '').should == loc
     last_response.status.should == status
+  end
+
+  def should_redirect *args
+    assert_redirect(*args)
   end
 
   def assert_last_response_ok

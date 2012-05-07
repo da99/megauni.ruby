@@ -12,9 +12,13 @@ class Slashify_Path_Ending
        ext === '')
     return(@app.call( new_env )) unless add_slash
 
-    request  = Rack::Request.new(new_env)
+    req  = Rack::Request.new(new_env)
     response = Rack::Response.new
-    response.redirect( request.url + '/', 301 ) # permanent
+    
+    qs = req.query_string.strip.empty? ? nil : req.query_string
+    new = [ req.path_info + '/', qs ].compact.join('?')
+    
+    response.redirect( new, 301 ) # permanent
     response.finish
     
   end
