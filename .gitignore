@@ -37,3 +37,5 @@ db/data.yml
 shoes2.run
 shoes-and-a-shotgun.rb
 
+.bundle/*
+vendor/*
