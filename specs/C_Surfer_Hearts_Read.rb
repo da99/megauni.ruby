@@ -119,4 +119,9 @@ describe :Control_Surfer_Hearts_Read do
     should_render
   end
   
+  it 'redirects /uni/hearts/magazine/ to /blog/2007/1/' do
+    get '/uni/hearts/magazine/'
+    should_redirect "/blog/2007/1/"
+  end
+
 end # === class Test_Control_Club_Hearts_Read

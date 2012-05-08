@@ -193,6 +193,10 @@ class Surfer_Hearts_Archive
       return render('/about.html')
     end
 
+    if p == '/uni/hearts/magazine/'
+      return redirect("/blog/2007/1/")
+    end
+
     @app.call(new_env)
   end
 
