@@ -17,10 +17,11 @@ class Custom_Errors
         rack.request.query_hash 	
         rack.request.query_string 	
         rack.url_scheme 	
+        HTTP_REFERER 
+        HTTP_USER_AGENT 	
+        HTTP_HOST 	
         HTTP_ACCEPT 	
         HTTP_ACCEPT_LANGUAGE 	
-        HTTP_HOST 	
-        HTTP_USER_AGENT 	
         PATH_INFO 	
         QUERY_STRING 	
         REMOTE_ADDR 	
