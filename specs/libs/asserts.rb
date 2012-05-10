@@ -78,6 +78,7 @@ class Bacon::Context
     assert_redirect(*args)
   end
 
+  # For: backwards compatbility
   def assert_last_response_ok
     200.should == last_response.status
   end
