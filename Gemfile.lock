@@ -1,14 +1,25 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    Backtrace_Array (0.1.0)
+      Split_Lines
     Bacon_Colored (0.1.0)
       bacon
       colored
-    Dex (0.2.2)
+    Bacon_Rack (0.1.0)
+    Dex (0.4.4)
+      Backtrace_Array
+      chronic_duration
       sequel
       sqlite3
+      term-ansicolor
+      terminal-table
+      trollop
+    Split_Lines (1.0.0)
     addressable (2.2.8)
     bacon (1.1.0)
+    chronic_duration (0.9.6)
+      numerizer (~> 0.1.1)
     coderay (1.0.6)
     colored (1.2)
     daemons (1.1.8)
@@ -19,7 +30,8 @@ GEM
     method_source (0.7.1)
     mime-types (1.18)
     mustache (0.99.4)
-    pry (0.9.9.4)
+    numerizer (0.1.1)
+    pry (0.9.9.6)
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
       slop (>= 2.4.4, < 3)
@@ -45,17 +57,20 @@ GEM
     slop (2.4.4)
     sqlite3 (1.3.6)
     term-ansicolor (1.0.7)
+    terminal-table (1.4.5)
     thin (1.3.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
     tilt (1.3.3)
+    trollop (1.16.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   Bacon_Colored
+  Bacon_Rack
   Dex
   launchy
   mustache

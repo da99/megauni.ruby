@@ -40,6 +40,11 @@ describe :Control_Surfer_Hearts_Read do
     assert_equal '/blog/2007/8/', last_request.fullpath
   end
 
+  it 'redirects /clubs/hearts/by_label/stuff_for_dudes/ => /heart_links/by_category/14/' do
+    get "/clubs/hearts/by_label/stuff_for_dudes/"
+    redirects_to 301, "/heart_links/by_category/14/"
+  end
+
   it 'redirects /uni/hearts/by_label/stuff_for_dudes/ => /heart_links/by_category/14/' do
     get '/uni/hearts/by_label/stuff_for_dudes/'
     assert_redirect '/heart_links/by_category/14/'

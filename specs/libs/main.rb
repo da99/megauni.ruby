@@ -18,6 +18,7 @@ Bacon.summary_on_exit
 ENV['RACK_ENV'] = 'test'
 require 'rack/test'
 require 'Bacon_Colored'
+require 'Bacon_Rack'
 require 'pry'
 require './middleware/Fake_Server'
 

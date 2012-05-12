@@ -16,6 +16,7 @@ group :development do
   gem 'rush'
   gem 'launchy'
   gem 'Bacon_Colored'
+  gem 'Bacon_Rack'
   gem 'rest-client'
   gem 'pry'
   gem 'rack-test'

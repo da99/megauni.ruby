@@ -107,9 +107,9 @@ class Surfer_Hearts_Archive
     end
     
     # /uni/hearts/by_label/{tag}/ =>  /heart_links/by_category/{id}/
-    if m = path?(p, %r!/uni/hearts/by_label/([^/]+)/! )
+    if m = path?(p, %r!/(clubs|uni)/hearts/by_label/([^/]+)/! )
       
-      t = Tags.key(m.captures.first)
+      t = Tags.key(m.captures.last)
       if t
         return redirect("/heart_links/by_category/#{t}/") 
       end
