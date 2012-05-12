@@ -22,6 +22,10 @@ class Mu_Archive_Redirect
       end
     }
 
+    if path_info == '/manager/status/'
+      return redirect("http://www.honoringhomer.net/")
+    end
+
     if path_info[ %r!/uni/?\Z! ]
       return redirect("/search/")
     end

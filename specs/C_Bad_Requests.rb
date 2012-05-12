@@ -30,4 +30,9 @@ describe :Control_Bad_Requests do
 
   it_redirects 301, "/manager/status/", 'http://www.honoringhomer.net/'
 
+  it "redirects 'head /manager/status/' to http://www.honoringhomer.net/" do
+    head "/manager/status/"
+    redirects_to 301, "http://www.honoringhomer.net/"
+  end
+
 end # === class Test_Control_Bad_Requests
