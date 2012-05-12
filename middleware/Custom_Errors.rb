@@ -31,7 +31,7 @@ class Custom_Errors
         SCRIPT_NAME 	
         SERVER_NAME 	
         SERVER_PROTOCOL 	
-      }
+      } 
       
       excp = if e['sinatra.error'] 
                e['sinatra.error']
@@ -41,7 +41,18 @@ class Custom_Errors
                temp
              end
 
-      aux  = Hash[ keys.zip e.values_at(*keys) ]                                
+      aux  = begin
+               e.inject(Hash[]) do |m, (k,v)|
+                 m[k.to_s] = case v
+                             when String, Integer
+                               v
+                             else
+                               v.inspect
+                             end
+                 m
+               end
+             end
+      
       
       if excp.is_a?(Sinatra::NotFound)
         aux[:message] = "#{orig.first} #{aux['REQUEST_URI']}"
