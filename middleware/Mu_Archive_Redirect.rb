@@ -2,6 +2,8 @@
 require "./middleware/Find_The_Bunny"
 class Mu_Archive_Redirect
 
+  BAD_AGENT_FK = %r! f.cking !i
+
   def initialize new_app
     @app = new_app
   end
@@ -21,6 +23,10 @@ class Mu_Archive_Redirect
         return redirect("/life/#{$1}/#{suffix}/")
       end
     }
+
+    if @e['HTTP_USER_AGENT'][BAD_AGENT_FK]
+      return redirect("http://www.bing.com/")
+    end
 
     if path_info == '/manager/status/'
       return redirect("http://www.honoringhomer.net/")

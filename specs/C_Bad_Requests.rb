@@ -35,4 +35,10 @@ describe :Control_Bad_Requests do
     redirects_to 301, "http://www.honoringhomer.net/"
   end
 
+  it "redirects all user agents ' F.cking ' to http://www.bing.com/" do
+    header 'USER_AGENT', "Morfeus Fucking Scanner"
+    get "/"
+    redirects_to 301, "http://www.bing.com/"
+  end
+
 end # === class Test_Control_Bad_Requests
