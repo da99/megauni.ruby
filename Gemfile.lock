@@ -6,7 +6,7 @@ GEM
     Bacon_Colored (0.1.0)
       bacon
       colored
-    Bacon_Rack (0.1.0)
+    Bacon_Rack (0.2.0)
     Dex (0.4.4)
       Backtrace_Array
       chronic_duration

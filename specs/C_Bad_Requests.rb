@@ -22,10 +22,12 @@ describe :Control_Bad_Requests do
   end
 
   %w{ vb forum forums old vbulletin}.each { |dir|
-    it "redirect /#{dir}/ to http://www.bing.com/ if Googlebot" do
+    it "redirects /#{dir}/ to http://www.bing.com/ if Googlebot" do
       get "/#{dir}/", {}, 'HTTP_USER_AGENT' => 'SOMETHING Googlebot/5.1'
       assert_redirect "http://www.bing.com/"
     end
   }
+
+  it_redirects 301, "/manager/status/", 'http://www.honoringhomer.net/'
 
 end # === class Test_Control_Bad_Requests
