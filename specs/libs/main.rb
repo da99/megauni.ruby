@@ -28,6 +28,8 @@ Dir.glob("./specs/libs/*.rb").each { |f|
 
 PERM = 301
 TEMP = 302
+BING_URL = 'http://www.mises.org/'
+  
 
 class Bacon::Context
   

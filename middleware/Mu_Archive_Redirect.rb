@@ -3,6 +3,8 @@ require "./middleware/Find_The_Bunny"
 class Mu_Archive_Redirect
 
   BAD_AGENT_FK = %r! f.cking !i
+  BAD_AGENTS = %w{ fucking ZmEu }.map(&:downcase)
+  BING_URL = 'http://www.mises.org/'
 
   def initialize new_app
     @app = new_app
@@ -17,18 +19,18 @@ class Mu_Archive_Redirect
     @e = new_env
     path_info = new_env['PATH_INFO']
     user_agent = @e['HTTP_USER_AGENT'] || ""
-    bing_site = 'http://www.bing.com/'
+
+    BAD_AGENTS.each { |a|
+      if user_agent.downcase[a]
+        return redirect(BING_URL)
+      end
+    }
 
     %w{ e qa news shop predictions random }.each { |suffix|
       if path_info[ %r!\A/uni/(da01tv)/#{suffix}/\Z! ]
         return redirect("/life/#{$1}/#{suffix}/")
       end
     }
-
-    
-    if user_agent[BAD_AGENT_FK]
-      return redirect(bing_site)
-    end
 
     if path_info == '/manager/status/'
       return redirect("http://www.honoringhomer.net/")
@@ -39,7 +41,7 @@ class Mu_Archive_Redirect
     end
 
     if ["/admin/spaw/spacer.gif"].include?(path_info)
-      return redirect(bing_site)
+      return redirect(BING_URL)
     end
 
     if path_info[ %r!/uni/?\Z! ]
@@ -90,7 +92,7 @@ class Mu_Archive_Redirect
      %r!awstats.pl\Z!,
      %r!\A/my-egg-timer/stylesheets/\Z!
     ].detect { |str| new_env['PATH_INFO'] =~ str }
-      return redirect("http://www.bing.com/")
+      return redirect(BING_URL)
     end
 
     wrong_path = %w{
@@ -112,19 +114,19 @@ class Mu_Archive_Redirect
     'panscient', 'aiHitBot' , "WebSurfer text" , "Yandex/", 'YandexBot', "Sosospider"].detect { |ua_s|  
       ua[ua_s]
     }
-      return redirect("http://www.bing.com/")
+      return redirect(BING_URL)
     end
 
     if ua 
       
       if ua['Yahoo! Slurp/'] && path_info['/SlurpConfirm404']
-        return redirect( bing_site )
+        return redirect( BING_URL )
       end
       
       if ua['Googlebot/']
         wrong_paths = %w{ vb forum forums old vbulletin }.map { |dir| "/#{dir}/" }
         if wrong_paths.include?(path_info)
-          return redirect( bing_site )
+          return redirect( BING_URL )
         end
       end
       

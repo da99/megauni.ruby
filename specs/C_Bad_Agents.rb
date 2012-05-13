@@ -3,48 +3,59 @@
 
 describe :Control_Bad_Agents do
 
-  BING_URL = 'http://www.bing.com/'
-  
-  it 'redirect any path ending with .php to http://www.bing.com/' do
+  it "redirect any path ending with .php to #{BING_URL}" do
     get '/get_orders_list.php'
-    BING_URL.should == last_response.headers['Location']
+    redirects_to BING_URL
   end
   
-  it 'redirect any deep path (/.+/.+/index.php) to http://www.bing.com/' do
+  it "redirect any deep path (/.+/.+/index.php) to #{BING_URL}" do
     get '/Site_old/administrator/index.php'
-    BING_URL.should == last_response.headers['Location']
+    redirects_to BING_URL
   end
 
-  it 'redirect any path ending with .asp to http://www.bing.com/' do
+  it "redirect any path ending with .asp to #{BING_URL}" do
     get '/downloads/search.asp'
-    BING_URL.should == last_response.headers['Location']
+    redirects_to BING_URL
   end
 
-  it 'redirect any user agent containing "panscient" to http://www.bing.com' do
-    get '/', {}, 'HTTP_USER_AGENT' => 'panscient.com'
-    BING_URL.should == last_response.headers['Location']
+  it "redirect any user agent containing 'panscient' to #{BING_URL}" do
+    header 'USER_AGENT', 'panscient.com'
+    get '/'
+    redirects_to BING_URL
   end
 
   it( 'redirect any user agent containing "Yahoo! Slurp/" and ' +
        'looking for path start with /SlurpConfirm404' ) do
-    get( 
-      '/SlurpConfirm404/drodgers.htm', 
-      {}, 
-      'HTTP_USER_AGENT' => 'Mozilla/5.0 (compatible; Yahoo! Slurp/3.0; http://help.yahoo.com/help/us/ysearch/slurp)'
-    )
-    BING_URL.should == last_response.headers['Location']
+    
+    header 'USER_AGENT', 'Mozilla/5.0 (compatible; Yahoo! Slurp/3.0; http://help.yahoo.com/help/us/ysearch/slurp)'
+    get '/SlurpConfirm404/drodgers.htm'
+    
+    redirects_to BING_URL
   end
 
-  it 'redirect to http://www.bing.com/ if user agent is TwengaBot-Discover and page is missing' do
+  it "redirect to #{BING_URL} if user agent is TwengaBot-Discover and page is missing" do
     ua = 'TwengaBot-Discover (http://www.twenga.fr/bot-discover.html)'
-    get('/some/missin/page/', {}, 'HTTP_USER_AGENT' => ua)
-    BING_URL.should == last_response.headers['Location']
+    header 'USER_AGENT', ua
+    get '/some/missin/page/'
+    redirects_to PERM, BING_URL
   end
 
-  it 'redirect to http://www.bing.com/ if Sosospider and file is CSS' do
-    ua = "Sosospider+(+http://help.soso.com/webspider.htm)"
-    get("/stylesheets/en-us/hellos_list.css", {}, 'HTTP_USER_AGENT' => ua)
+  it "redirect to #{BING_URL} if Sosospider and file is CSS" do
+    header 'USER_AGENT', "Sosospider+(+http://help.soso.com/webspider.htm)"
+    get "/stylesheets/en-us/hellos_list.css"
     assert_redirect BING_URL
+  end
+
+  it "redirects all user agents ' F.cking ' to #{BING_URL}" do
+    header 'USER_AGENT', "Morfeus Fucking Scanner"
+    get "/"
+    redirects_to 301, BING_URL
+  end
+
+  it "redirects user agent 'ZmEu' to bing site" do
+    header 'USER_AGENT', 'ZmEu'
+    get "/"
+    redirects_to 301, BING_URL
   end
 
 end # === class Test_Control_Old_Apps_Read

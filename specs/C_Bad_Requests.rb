@@ -22,9 +22,10 @@ describe :Control_Bad_Requests do
   end
 
   %w{ vb forum forums old vbulletin}.each { |dir|
-    it "redirects /#{dir}/ to http://www.bing.com/ if Googlebot" do
-      get "/#{dir}/", {}, 'HTTP_USER_AGENT' => 'SOMETHING Googlebot/5.1'
-      assert_redirect "http://www.bing.com/"
+    it "redirects /#{dir}/ to #{BING_URL} if Googlebot" do
+      header 'USER_AGENT', 'SOMETHING Googlebot/5.1'
+      get "/#{dir}/"
+      redirects_to BING_URL
     end
   }
 
@@ -35,12 +36,6 @@ describe :Control_Bad_Requests do
     redirects_to 301, "http://www.honoringhomer.net/"
   end
 
-  it "redirects all user agents ' F.cking ' to http://www.bing.com/" do
-    header 'USER_AGENT', "Morfeus Fucking Scanner"
-    get "/"
-    redirects_to 301, "http://www.bing.com/"
-  end
-
-  it_redirects PERM, "/admin/spaw/spacer.gif", "http://www.bing.com/"
+  it_redirects PERM, "/admin/spaw/spacer.gif", BING_URL
 
 end # === class Test_Control_Bad_Requests
