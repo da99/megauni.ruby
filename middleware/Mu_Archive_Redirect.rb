@@ -34,6 +34,10 @@ class Mu_Archive_Redirect
       return redirect("http://www.honoringhomer.net/")
     end
 
+    if %w{ /heart_links/by_category/new/ }.include?(path_info)
+      return redirect("/blog/", 302)
+    end
+
     if ["/admin/spaw/spacer.gif"].include?(path_info)
       return redirect(bing_site)
     end
@@ -175,9 +179,9 @@ class Mu_Archive_Redirect
 
   private
 
-  def redirect new_url
+  def redirect new_url, stat = 301
     response = Rack::Response.new
-    response.redirect( new_url, 301 ) # permanent
+    response.redirect( new_url, stat ) # permanent
     response.finish
   end
 

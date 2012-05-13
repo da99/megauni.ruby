@@ -27,6 +27,7 @@ Dir.glob("./specs/libs/*.rb").each { |f|
 }
 
 PERM = 301
+TEMP = 302
 
 class Bacon::Context
   

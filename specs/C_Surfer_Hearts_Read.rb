@@ -134,4 +134,6 @@ describe :Control_Surfer_Hearts_Read do
     redirects_to PERM, '/heart_link/57/'
   end
 
+  it_redirects TEMP, "/heart_links/by_category/new/", "/blog/"
+  
 end # === class Test_Control_Club_Hearts_Read
