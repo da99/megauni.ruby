@@ -16,6 +16,7 @@ class Mu_Archive_Redirect
 
     @e = new_env
     path_info = new_env['PATH_INFO']
+    user_agent = @e['HTTP_USER_AGENT'] || ""
     bing_site = 'http://www.bing.com/'
 
     %w{ e qa news shop predictions random }.each { |suffix|
@@ -24,7 +25,8 @@ class Mu_Archive_Redirect
       end
     }
 
-    if @e['HTTP_USER_AGENT'][BAD_AGENT_FK]
+    
+    if user_agent[BAD_AGENT_FK]
       return redirect("http://www.bing.com/")
     end
 
