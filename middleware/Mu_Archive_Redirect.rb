@@ -160,8 +160,8 @@ class Mu_Archive_Redirect
       return redirect('/busy-noise/moving.html')
     end
 
-    if new_env['PATH_INFO'] =~ %r!\A/uni/(#{Find_The_Bunny::Old_Topics.join('|')})/\Z!
-      return redirect("/#{$1}/")
+    if new_env['PATH_INFO'] =~ %r!\A/(uni|clubs)/(#{Find_The_Bunny::Old_Topics.join('|')})/\Z!
+      return redirect("/#{$2}/")
     end
     
     if new_env['PATH_INFO'] === '/rss/'

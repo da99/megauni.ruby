@@ -5,6 +5,8 @@
 
 class Surfer_Hearts_Archive
 
+  HEARTS_BY_DATE = %r!\A/(clubs\/hearts|uni/hearts|heart_links|hearts|news)/by_date/(\d+)/(\d+)/\Z!
+  
   Tags = { 
     14 => 'stuff_for_dudes', 
     15 => 'stuff_for_dudettes', 
@@ -70,9 +72,9 @@ class Surfer_Hearts_Archive
     resp.finish
   end
 
-  def redirect path
+  def redirect path, stat = Perma
     respond { |r|
-      r.redirect path, Perma
+      r.redirect path, stat
     }
   end
 
@@ -92,6 +94,10 @@ class Surfer_Hearts_Archive
     path_info = e['PATH_INFO']
     p = e['PATH_INFO']
     
+    if path_info == "/uni/hearts/qa/"
+      return redirect("/blog/", 302)
+    end
+
     # heart_link categorys
     # 
     if m = path?(p, %r!/(heart|new|heart_link|new)s?/by_tag/(\d+)(/|\.html)?!) ||
@@ -150,7 +156,7 @@ class Surfer_Hearts_Archive
     # /hearts/by_date/2007/01/
     # /heart_links/by_date/2007/01/
     # ---> /blog/2007/01/
-    if p =~ %r!\A/(uni/hearts|heart_links|hearts)/by_date/(\d+)/(\d+)/\Z!
+    if p =~ HEARTS_BY_DATE
       return redirect("/blog/#{$2}/#{$3}/")
     end # ===
     

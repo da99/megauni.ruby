@@ -136,4 +136,10 @@ describe :Control_Surfer_Hearts_Read do
 
   it_redirects TEMP, "/heart_links/by_category/new/", "/blog/"
   
+  it_redirects TEMP, "/uni/hearts/qa/", "/blog/"
+
+  %w{ 1 2 3 4 8 }.each { |mo|
+    it_redirects PERM, "/news/by_date/2007/#{mo}/", "/blog/2007/#{mo}/"
+    it_redirects PERM, "/clubs/hearts/by_date/2007/#{mo}/", "/blog/2007/#{mo}/"
+  }
 end # === class Test_Control_Club_Hearts_Read

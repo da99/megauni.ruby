@@ -75,19 +75,23 @@ describe :Control_Clubs_Read do
     assert_redirect "/meno-osteo/", PERM
   end
 
+  it "displays /sports/"  do
+    get "/sports/"
+    last_response.should.be.ok
+  end
+
   %w{ 
     arthritis back-pain cancer child-care computer dementia
     depression flu hair health heart hiv housing
     meno-osteo preggers 
   }.each { |name|
-    it "redirects /uni/#{name}/ to /#{name}/" do
-      get "/uni/#{name}/"
-      assert_redirect "/#{name}/", PERM
-    end
+
+    it_redirects PERM, "/uni/#{name}/",   "/#{name}/"
+    it_redirects PERM, "/clubs/#{name}/", "/#{name}/"
 
     it "renders /#{name}/" do
       get "/#{name}/"
-      last_response.status.should == 200
+      last_response.should.be.ok
     end
   }
 

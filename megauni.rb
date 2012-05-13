@@ -21,6 +21,17 @@ class The_App < Sinatra::Base
     end
   }
 
+  get '/sports/' do
+    %~
+     <html>
+     <body>
+     Not done. In the meantime, check out
+     <a href="http://blog.mises.org/5402/the-amtraking-of-sports/">this article</a>.
+     </body>
+     </html>
+    ~
+  end
+
   post "/search/" do 
     name = params['name'] || params['keyword']
     retro = "/#{name}/"
