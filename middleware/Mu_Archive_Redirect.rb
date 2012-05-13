@@ -27,11 +27,15 @@ class Mu_Archive_Redirect
 
     
     if user_agent[BAD_AGENT_FK]
-      return redirect("http://www.bing.com/")
+      return redirect(bing_site)
     end
 
     if path_info == '/manager/status/'
       return redirect("http://www.honoringhomer.net/")
+    end
+
+    if ["/admin/spaw/spacer.gif"].include?(path_info)
+      return redirect(bing_site)
     end
 
     if path_info[ %r!/uni/?\Z! ]

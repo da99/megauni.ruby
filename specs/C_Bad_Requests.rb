@@ -41,4 +41,6 @@ describe :Control_Bad_Requests do
     redirects_to 301, "http://www.bing.com/"
   end
 
+  it_redirects PERM, "/admin/spaw/spacer.gif", "http://www.bing.com/"
+
 end # === class Test_Control_Bad_Requests
