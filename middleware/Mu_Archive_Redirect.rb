@@ -153,14 +153,20 @@ class Mu_Archive_Redirect
     if new_env['PATH_INFO'] =~ %r!\A/uni/(#{Find_The_Bunny::Old_Topics.join('|')})/\Z!
       return redirect("/#{$1}/")
     end
-
     
     if new_env['PATH_INFO'] === '/rss/'
       return redirect("/rss.xml")
     end
     
-    @app.call(new_env)
+    o = @app.call(new_env)
 
+    return o unless o.first == 404
+
+    if path_info['surfboard-usb']
+      return redirect("/heart_link/57/")
+    end
+
+    o
   end
 
   private

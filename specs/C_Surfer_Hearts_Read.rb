@@ -129,4 +129,9 @@ describe :Control_Surfer_Hearts_Read do
     should_redirect "/blog/2007/1/"
   end
 
+  it 'redirects /[rand]/surfboard-usb-drives/ to ' do
+    get "/#{rand 1000}surfboard-usb-drives/"
+    redirects_to PERM, '/heart_link/57/'
+  end
+
 end # === class Test_Control_Club_Hearts_Read
