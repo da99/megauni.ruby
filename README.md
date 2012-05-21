@@ -2,12 +2,19 @@
 What's can you do with it?
 -------------------------
 
-megaUni: Never get bored.
+It's an omni-morph implemented as an Uni-Lang app with a default 
+configuration for the user. 
 
+Publicly: megaUni: Never get bored.
 Why: The Majority demands it.
 How: Unlimited activities (aspects + timing) + uni-lang
 Unlimited activities: like music/songs/shows/etc.
 Everything becomes easy with: Computer system + libraries 
+
+**Why was it so hard to come up with this program model?**
+I was looking for a specific set of activities/apps
+the Majority wanted. It turns out, The Majority does
+not care as long as it is activities it involves friends.
 
 Default Configuration
 ---------------------
