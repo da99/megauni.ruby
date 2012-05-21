@@ -2,42 +2,71 @@
 What's can you do with it?
 -------------------------
 
-megaUni provides activities for every aspect of your life.  
+megaUni: Never get bored.
 
-* Control + Understanding
-  * Clubs
-  * friends: gifts = functionality
-  * "I'm bored.": friends + mU, scarcity, anticipation (timer)
-  
-* activities
+Why: The Majority demands it.
+How: Unlimited activities (aspects + timing) + uni-lang
+Unlimited activities: like music/songs/shows/etc.
+Everything becomes easy with: Computer system + libraries 
 
-Activities
----------
-Purpose: waiting until something to publish/conversate
+Default Configuration
+---------------------
+
+* Lifes
+* Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
+* Calendar
+* Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
+* Bored? (Suggetion box on message stream) 
+* Reliability ratings: as friend, consumer, boss, etc.
+
+Optional Configuration
+----------------------
+
+**Clubs:**
+Why: 
+* adds functionality. 
+* abstraction to prevent mU awesomeness turning into user confusion.
+* prevent spam
+
+**Friends:**
+Adds functionality through paid features.
+
+**"I'm bored":**
+Why: 
+* timing.
+How:
+* friends + mU, scarcity, anticipation (timer)
+
+Building Blocks of Activities
+-----------------------------
 
   * publication, self-expression
     * life
       * real || celebrity || pet || baby || fantasy
       * "Console Game"-like interface for profiles
       * turn profiles into a HTML5 game instead of regular navigation menu + content
+      
   * conversations
     * life
       * post a heartwarming story about this person in their UNI
       * check out someone's profile that you haven't seen in a while, 
         or some company/college, and add stuff to it.
 
+    * Run my life:
+      * Maintain your friends' blog, encycolopedia/manual, etc.
+
   * consumer-to-consumer commerce
     * productivity
     
-  * Genre-specific activities:
+  * Genres:
     * Movies
     * Sports
     * Books
     * Profession
     * shopping as entertainment
-
-Building Blocks of Activities
------------------------------
+    * baby/newborns
+      * human
+      * animal
 
   * scarcity
     * pictures + video
@@ -75,6 +104,8 @@ Building Blocks of Activities
     * jesters, haikus, raps, "yo mama", story telling
     * judges/voting, coachs, fans, scouts (used in communities), cheerleaders, crew, teams & individuals
     * scarcity, forced to take turns being gladiator/judge/manager/crew/etc.
+    
+  * convenience <=> usage
 
 
 
