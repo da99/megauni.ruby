@@ -16,6 +16,16 @@ I was looking for a specific set of activities/apps
 the Majority wanted. It turns out, The Majority does
 not care as long as it is activities it involves friends.
 
+Other thoughts: Let's forget about expanding
+our ways of thinking. There are billions of people 
+on this planet. Let's first make it easy for them to
+express themselves as they want, then on the Internet
+they can publish their thoughts and individuals can 
+follow the path they want.
+
+Make it easier to have the Genius Minority be exposed 
+to ALL schools of thought.
+
 Default Configuration
 ---------------------
 
