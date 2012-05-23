@@ -23,8 +23,13 @@ express themselves as they want, then on the Internet
 they can publish their thoughts and individuals can 
 follow the path they want.
 
-Make it easier to have the Genius Minority be exposed 
-to ALL schools of thought.
+mU changes the world by increasing the demand for 
+variety of architectures (aka thinking).
+A higher demand for Kays, Wirths, Konrad Zuses, 
+Slava Pestovs, Wallace Thornhills, Hans Hoppes, 
+Bill Sardis, etc. 
+Plus, the Majority shrinks in size.
+My genius comes from my laziness and my desire for perfection.
 
 Default Configuration
 ---------------------
