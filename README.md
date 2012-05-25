@@ -38,7 +38,11 @@ Default Configuration
 * Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
 * Calendar
 * Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
-* Bored? (Suggetion box on message stream) 
+* Bored? 
+  * The Majority like being told what to do within their frames of stimulation:
+    * Make a friend happy: do this
+    * Be polite: do this
+    * Get Smarter: play this
 * Reliability ratings: as friend, consumer, boss, etc.
 
 Optional Configuration
