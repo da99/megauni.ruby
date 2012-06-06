@@ -6,7 +6,7 @@ What's can you do with it?
 
 Overnight success:
   * Uni-Lang hosting.
-  * COuter jester game/activity for your mU life(s).
+  * Court jester game/activity for your mU life(s).
 
 Privately
 ---------
