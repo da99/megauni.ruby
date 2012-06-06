@@ -2,10 +2,19 @@
 What's can you do with it?
 -------------------------
 
+*Express your lifes as websites.*
+
+Overnight success:
+  * Uni-Lang hosting.
+  * COuter jester game/activity for your mU life(s).
+
+Privately
+---------
+  
 It's an omni-morph implemented as an Uni-Lang app with a default 
 configuration for the user. 
 
-Publicly: megaUni: Never get bored.
+Publicly: megaUni: Never get bored strategy.
 Why: The Majority demands it.
 How: Unlimited activities (aspects + timing) + uni-lang
 Unlimited activities: like music/songs/shows/etc.
