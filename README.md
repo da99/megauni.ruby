@@ -2,11 +2,22 @@
 What's can you do with it?
 -------------------------
 
-*Express your lifes as websites.*
+*Express your life as a website.*
 
-Overnight success:
+2-weeks:
   * Uni-Lang hosting.
+    * Code examples.
+    * mU customization, alterations
   * Court jester game/activity for your mU life(s).
+    * Guide/suggestions
+  * Publications: 
+    * Early adopters -> impress friends -> college students -> everyone
+    * Examples:
+      * robot, baby, pet, human
+      * default functionality: magazine, hoots, etc.
+      * masks
+      * privacy
+      * add-ons
 
 Privately
 ---------
