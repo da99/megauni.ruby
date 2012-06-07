@@ -2,9 +2,10 @@
 What's can you do with it?
 -------------------------
 
-*Express your life as a website.*
+*You and your friends mess around with your life's website.*
 
-2-weeks:
+2-week overnight success:
+
   * Uni-Lang hosting.
     * Code examples.
     * mU customization, alterations
@@ -14,11 +15,19 @@ What's can you do with it?
     * Early adopters -> impress friends -> college students -> everyone
     * Examples:
       * robot, baby, pet, human
-      * default functionality: magazine, hoots, etc.
-      * masks
-      * privacy
-      * add-ons
-
+      * Privacy: 4 masks 
+      * chatroom
+      * friends post and manage your website
+      * me publising: news, random, q&a, events/maps, magazine, hoots, etc.
+  * Paid features:
+      * use it w/ co-workers, projects, classmates, fun & surprise
+      
+This gets mU 2 waves of early adopters: 
+  * computation thinkers (designers + coders)
+  * personal publishers
+Another wave, court jesters of circle of friends, then comes in.
+Keep adding features and complete mU.
+ 
 Privately
 ---------
   
