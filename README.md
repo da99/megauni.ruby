@@ -5,22 +5,87 @@ What's can you do with it?
 *You and your friends mess around with your life's website.*
 
 2-week overnight success:
-
-  * Uni-Lang hosting.
-    * Code examples.
-    * mU customization, alterations
+    
+  * Early adopters -> impress friends -> college students -> everyone
+  
   * Court jester game/activity for your mU life(s).
     * Guide/suggestions
-  * Publications: 
-    * Early adopters -> impress friends -> college students -> everyone
-    * Examples:
-      * robot, baby, pet, human
-      * Privacy: 4 masks 
-      * chatroom
-      * friends post and manage your website
-      * me publising: news, random, q&a, events/maps, magazine, hoots, etc.
+    
+  * mU customization, alterations
+    * Code examples showing the beauty and usability of UniLang
+    
+  * Examples:
+    * robot, baby, pet, human
+    
+  * Privacy: 4 masks 
+  
+  * Search
+    * ad revenue
+
+  * Lifes Inboxs
+    
+    all: 
+      Stream of messages:
+        [Text]
+      [Unfollow website/author.] [Archive it.] [Quote it.]
+                
+    1: stream
+    
+      Priv. Mess.
+        Write
+        
+      Drafts
+      
+      Website
+        Write
+        Settings
+        
+      Website
+        Write
+        Settings
+        
+      Trash
+      
+      Archive
+        New Folder
+        
+      Settings: 
+                Delete Life
+                Change Username
+      People
+        Fans
+        Friends
+        Enemies
+        [New Group]
+      
+    2: stream
+      [expand]
+
+    [New Life]
+    [New Website]
+
+    [Addons]
+    [Mass Market Friend-to-Friend] $20-$60/mo
+    [New Unibot]
+    [etc].
+
+    Account Settings:
+  
+  * chatroom
+    * unibots
+    * follow
+    * multi-conversations/rooms
+    
+  * me publising: 
+    * friends as editors/contributors
+    * addons: 
+      * news, random, q&a, events/maps, magazine, hoots, etc.
+      * surveys/questionnaires
+      * montage backgrounds
+        
   * Paid features:
       * use it w/ co-workers, projects, classmates, fun & surprise
+      * addons
       
 This gets mU 2 waves of early adopters: 
   * computation thinkers (designers + coders)
@@ -162,6 +227,9 @@ Building Blocks of Activities
     
   * convenience <=> usage
 
+Activities:
+      * Photo Bingo: can't continue unless your other friends play.
+      * Quiz Chain: Create 2 questions, pass it on. 
 
 
               
