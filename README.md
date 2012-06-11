@@ -6,30 +6,44 @@ What's can you do with it?
 
 2-week overnight success:
     
-  * Early adopters -> impress friends -> college students -> everyone
-  
-  * Court jester game/activity for your mU life(s).
-    * Guide/suggestions
+  * Focus on easiest markets:
+    * students, IT, creative class, females 18-41, males 18-29
+      -> (100,000 * ($40 - $10)) per mo.
+    * tougher markets will use a mix of (high barrier of entry digital goods) + physical goods:
+      white collar, blue collar, scientists, academic, other goods for easiest markets, etc.
     
-  * mU customization, alterations
-    * Code examples showing the beauty and usability of UniLang
-    
-  * Examples:
-    * robot, baby, pet, human
-    
-  * Elimination of all ads:
-    * Hosting: more profitable than advertising, never annoying
+  * No advertising rev. Only retail sales. Bigger market than adventising, less costly profits.
+    * Hosting
     * Paid limit expansion: websites and productivity apps (more profitable than advertising)
     * friend limits: pleases the students, punishes the adults
-    ----------------------------------------------------------
-    culmination: search + store saturation
+    * add-ons
     ----------------------------------------------------------
     *general idea*: as long as students are captivated,
       braindead morons will follow.
       Make it easy/convenient/intuitive to pay.
 
-  * Privacy: 4 masks 
+  * Early adopters -> impress friends -> college students -> everyone
+
+  * Creative class: mU customization, alterations
+    * Code examples showing the beauty and usability of UniLang
+    * Create UniBots
   
+  * Everyone: 
+    * Court jester game/activity for your mU life(s).
+      * Guide/suggestions
+    * Examples:
+      * robot, baby, pet, human
+    * Privacy: 4 masks 
+    * me publising: 
+      * friends as editors/contributors
+      * addons: 
+        * news, random, q&a, events/maps, magazine, hoots, etc.
+        * surveys/questionnaires
+        * montage backgrounds
+    * Paid features:
+        * use it w/ co-workers, projects, classmates, fun & surprise
+        * addons
+        
   * Lifes Inboxs
     
     all: 
@@ -83,17 +97,6 @@ What's can you do with it?
     * unibots
     * follow
     * multi-conversations/rooms
-    
-  * me publising: 
-    * friends as editors/contributors
-    * addons: 
-      * news, random, q&a, events/maps, magazine, hoots, etc.
-      * surveys/questionnaires
-      * montage backgrounds
-        
-  * Paid features:
-      * use it w/ co-workers, projects, classmates, fun & surprise
-      * addons
       
 This gets mU 2 waves of early adopters: 
   * computation thinkers (designers + coders)
@@ -247,7 +250,7 @@ Elimination of all ads:
   They pose no threat when you use: architecture, abstractions, automation, ind. design.
   The end result is saturation using high quality content, and making it hard to find mediocre content.
 
-  * Search & Store/Mall
+  * Search & Store/Mall -> saturation, apis, etc.
     * ad revenue
   * Factory automation + crazy simple maintenance + plant-based materials
   * humor-based products: e.g. Ph.D, Dilbert, etc.
