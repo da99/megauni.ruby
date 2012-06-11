@@ -242,6 +242,11 @@ Activities:
 Elimination of all ads:
 -----------------------
 
+  Advertising is where middlemen make money by helping 
+  producers of mediocre products sell on digital billboards on mediocre content.
+  They pose no threat when you use: architecture, abstractions, automation, ind. design.
+  The end result is saturation using high quality content, and making it hard to find mediocre content.
+
   * Search & Store/Mall
     * ad revenue
   * Factory automation + crazy simple maintenance + plant-based materials
@@ -254,8 +259,9 @@ Elimination of all ads:
 
   *Online "marketing" companies:*
     Get rid of them through: search, stores, saturation of free content.
-    Also, become internet service provider and computer provider.
-    Saturation of publishing and communication sites and apps.
+    Internet service provider, computer provider: Adblock, defaults, etc.
+    Saturation of publishing (blogs, etc) and communication sites and apps (instagram, tumblr, etc).
+    Saturation of manufacturer (ie users of Doubleclick, Google ADs, etc)
   
   *Example: StackOverflow alternative w/o ads*
   1) Integrated + Related products: bug tracking, employee survey/collaboration
@@ -271,7 +277,8 @@ Elimination of all ads:
   4) Comics: Integrated ads/entertainment
   5) freelancer finder OR provide services
   6) instructional videos
-  7) UniBot subscriptions
+  7) Turn profession into online game/activity for humor and instruction.
+     - UniBot subscriptions, games/activities for humor/instruction
 
   *Example: Tech. Comics*
   1) bi-weekly, variety
@@ -279,7 +286,7 @@ Elimination of all ads:
   3) search through archives, high-resolution images, charge for access, 
      search through labels or text.  give some away for free.
   4) Factory: t-shirts, books, calendares with ertain themes (bash, C, unilang, etc)
-  5) Turn profession into online game/activity for humor and instruction.
+  5) Fodder for digital goods/activities/addons. Funnel audience.
   
   *Example: free blogs/websites*
   1) Related articles, books, products, unibots, games, etc.
@@ -287,6 +294,7 @@ Elimination of all ads:
   3) Paid themes.
   4) Addons, activities, foto manipulation, etc.
   5) Submit article to club (w/ links to hotel deals, related content, etc.)
+  6) Saturation to prevent competitors (eg Doubleclick, Google ads, content farms/mills.)
 
   *Example: freelance portal competitor*
   1) focus on PHP, C#, etc.
