@@ -239,20 +239,32 @@ Activities:
       * Photo Bingo: can't continue unless your other friends play.
       * Quiz Chain: Create 2 questions, pass it on. 
 
-ELimination of all ads.
+Elimination of all ads:
+-----------------------
+
   * Search & Store/Mall
     * ad revenue
   * Factory automation + crazy simple maintenance + plant-based materials
   * humor-based products: e.g. Ph.D, Dilbert, etc.
+  * instructional content/software/apps
+  * Digital Products:
+    Use content to generate ideas for digital products (games, activities, unibots, goods, etc.).
+    Use instructional or humor or both aspects.
+    Content becomes funnel to new games, activities, addons, etc.
+
+  *Online "marketing" companies:*
+    Get rid of them through: search, stores, saturation of free content.
+    Also, become internet service provider and computer provider.
+    Saturation of publishing and communication sites and apps.
   
-  Example: StackOverflow alternative w/o ads
+  *Example: StackOverflow alternative w/o ads*
   1) Integrated + Related products: bug tracking, employee survey/collaboration
   2) Private (hosting, customization, official) and installable versions
   3) Charge for API/Integration access
   4) related products (factory)
   5) Charge for consulting, customization, finding employees/freelancer
 
-  Example: water cooler talk for professions: people post stories, anecdotes
+  *Example: water cooler talk for professions: people post stories, anecdotes*
   1) Factory: humor, turn child into you, customize products w/fotos
   2) Focus on age/gender: sports, games/activities, biz/boss owner games, etc.
   3) Catalog: DVD, paper, online video
@@ -261,26 +273,28 @@ ELimination of all ads.
   6) instructional videos
   7) UniBot subscriptions
 
-  Example: Tech. Comics
+  *Example: Tech. Comics*
   1) bi-weekly, variety
   2) integrate ads with entertainment. occasionally instructional, funny videos
   3) search through archives, high-resolution images, charge for access, 
      search through labels or text.  give some away for free.
   4) Factory: t-shirts, books, calendares with ertain themes (bash, C, unilang, etc)
+  5) Turn profession into online game/activity for humor and instruction.
   
-  Example: free blogs/websites
-  1) Related articles, books, products, etc.
+  *Example: free blogs/websites*
+  1) Related articles, books, products, unibots, games, etc.
   2) Pay to increase fan limit.
   3) Paid themes.
   4) Addons, activities, foto manipulation, etc.
   5) Submit article to club (w/ links to hotel deals, related content, etc.)
 
-  Example: freelance portal competitor
+  *Example: freelance portal competitor*
   1) focus on PHP, C#, etc.
   2) offer intro. discounts to first customers.
   3) be 10% higher than elance.
   4) saturate market.
   5) charge higher prices than UniLang/higher end.
+
   
   
   
