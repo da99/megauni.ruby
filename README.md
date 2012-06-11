@@ -17,11 +17,15 @@ What's can you do with it?
   * Examples:
     * robot, baby, pet, human
     
+  * Elimination of all ads:
+    * Hosting: more valuable than competitors
+    * Paid limit expansion: websites and productivity apps
+    * friend limits: pleases the students, punishes the adults
+    ----------------------------------------------------------
+    culmination: search + store saturation
+
   * Privacy: 4 masks 
   
-  * Search
-    * ad revenue
-
   * Lifes Inboxs
     
     all: 
@@ -230,6 +234,21 @@ Building Blocks of Activities
 Activities:
       * Photo Bingo: can't continue unless your other friends play.
       * Quiz Chain: Create 2 questions, pass it on. 
+
+ELimination of all ads.
+  * Search & Store/Mall
+    * ad revenue
+  * Factory automation + crazy simple maintenance + plant-based materials
+  * humor-based products: e.g. Ph.D, Dilbert, etc.
+  Example: StackOverflow alternative w/o ads
+  1) Integrated + Related products: bug tracking, employee survey/collaboration
+  2) Private (hosting, customization, official) and installable versions
+  3) Charge for API/Integration access
+  4) related products (factory)
+  5) Charge for consulting, customization, finding employees/freelancer
+  
+  
+  
 
 
               
