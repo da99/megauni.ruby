@@ -9,8 +9,21 @@ What's can you do with it?
   * Focus on easiest markets:
     * students, IT, creative class, females 18-41, males 18-29
       -> (100,000 * ($40 - $10)) per mo.
+      -> Entertainment centered around (friends, family, relatives, strangers/hobbies).
+      -> Easier markets are the most important:
+         -> They make everything else EASY.
+         -> Ever professional/manager/establishmentarian is connected to:
+            students, family, relatives, friends
+            -> If you captivate their connections, they have no excuse to go with you
+               when you enter the tougher markets.
+              
+  *In other words: The Mass Market Rules The World. Who rules the Mass Market?*
+      
     * tougher markets will use a mix of (high barrier of entry digital goods) + physical goods:
       white collar, blue collar, scientists, academic, other goods for easiest markets, etc.
+      -> Products centered around: job/biz, productivity, customer interaction, dread/boredom, etc.
+      -> EASY to take on when you have their friends/family/students captivated.
+      -> EVERYONE wants to be connected to the Mass Market. It is 100% of the economy.
     
   * No advertising rev. Only retail sales. Bigger market than adventising, less costly profits.
     * Hosting
@@ -306,6 +319,17 @@ Elimination of all ads:
   4) saturate market.
   5) charge higher prices than UniLang/higher end.
 
+Advertising & Marketing
+-----------------------
+
+1) Don't talk to marketers. They are braindead, 
+   impossible to understand the power and magic of ind. design.
+2) Create products. More profitable than marketing them.
+3) Marketers can only change perceptions. Ind. Designers can change the product.
+4) Creating 10-20 products people want regularly, is different 
+   than marketing 100 products few people want or already have.
+5) A conglomerate is civilization. Marketing is desperation, the cesspool
+   of mediocrity and limited POVs.
   
   
   
