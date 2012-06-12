@@ -322,10 +322,17 @@ Elimination of all ads:
 Advertising & Marketing
 -----------------------
 
-1) Don't talk to marketers. They are braindead, 
+1) Don't talk to marketers. They are braindead + LOUDMOUTHS. 
    impossible to understand the power and magic of ind. design.
+   You give them 120%, they still want banner ads for an extra 1%.
 2) Create products. More profitable than marketing them.
+   ANY resource used for ads/marketing means it is one less for product
+   creation.  In one hour, you can create 10 ideas. Ad/marketing does not 
+   come close.
 3) Marketers can only change perceptions. Ind. Designers can change the product.
+   * Lousy at computational thinking & ind. design.
+   * Marketing = mediocre profits = A/B testing
+     Ind. design = superior profits
 4) Creating 10-20 products people want regularly, is different 
    than marketing 100 products few people want or already have.
 5) A conglomerate is civilization. Marketing is desperation, the cesspool
