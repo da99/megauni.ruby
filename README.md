@@ -323,7 +323,7 @@ Advertising & Marketing
 -----------------------
 
 1) Don't talk to marketers. They are braindead + LOUDMOUTHS. 
-   impossible to understand the power and magic of ind. design.
+   Impossible to understand the power and magic of ind. design.
    You give them 120%, they still want banner ads for an extra 1%.
 2) Create products. More profitable than marketing them.
    ANY resource used for ads/marketing means it is one less for product
@@ -333,11 +333,23 @@ Advertising & Marketing
    * Lousy at computational thinking & ind. design.
    * Marketing = mediocre profits = A/B testing
      Ind. design = superior profits
+     20% vs 140%+
+   * If they were creative, they would go out and 
+     start their own companies/products.
 4) Creating 10-20 products people want regularly, is different 
    than marketing 100 products few people want or already have.
 5) A conglomerate is civilization. Marketing is desperation, the cesspool
    of mediocrity and limited POVs.
   
+   megauni was created by someone tired of all marketing: 
+     direct, guerilla, social media, etc.
+   Talking to maketers/advertisers makes me less creative.
+   They are toxic to me.
+
+
+
+
+
   
   
   
