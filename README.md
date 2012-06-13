@@ -366,12 +366,12 @@ Startups & Equity:
     * 5+ years in payout
   * exception: won't compete in biz
   * exception: long-lasting company
+  * exception: automated investments/equity
   * safety: $1 mil per mo. * mass markets -> $20 mil/mo.
-  * barter for OSS contributions and take on The Big 5.
-  * automated investments/equity
   
 Focus:
   * Building the computer that will take on The Internet.
+  * barter for OSS contributions and take on The Big 5.
   * $1 bill/mo.: fiber/air, friend comm, biz comm, b2c comm,
     hobbies/topics/strangers, media ent., games, HTML5 games,
     fear
