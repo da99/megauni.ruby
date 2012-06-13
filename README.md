@@ -346,6 +346,17 @@ Advertising & Marketing
    Talking to maketers/advertisers makes me less creative.
    They are toxic to me.
 
+Anyone who does not love ind design and computational 
+thinking is toxic.
+
+Startup factory *&* bartering.  No equity, just automated competition.
+
+Go after core business of buyer (of startup).
+Provide technology for startup, regardless of owner of startup.
+If you do accept equity, make a profit and get equity.
+  * comparative/comparison shopping.
+  * startups want to feel like they have an edge "compared to
+    competitors"
 
 
 
