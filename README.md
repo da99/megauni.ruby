@@ -357,7 +357,19 @@ If you do accept equity, make a profit and get equity.
   * comparative/comparison shopping.
   * startups want to feel like they have an edge "compared to
     competitors"
-
+  * discount on prices = equity in companies.
+    * only in companies you do not plan on competting in.
+Startup:
+  * too long for pocket change. (mass market: faster, more profitable)
+    * tied up in private stock.
+    * 5+ years in payout
+  * exception: won't compete in biz
+  * exception: long-lasting company
+  * safety: $1 mil per mo. * mass markets -> $20 mil/mo.
+  * barter for OSS contributions and take on The Big 5.
+  
+  
+  
 
 
 
