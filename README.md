@@ -376,6 +376,10 @@ Focus:
     hobbies/topics/strangers, media ent., games, HTML5 games,
     fear
   
+Until Brainiac is built:
+  * high fees (income + prop. edge)
+  * equity (startups + old comp.)
+
   
 
 
