@@ -359,7 +359,8 @@ If you do accept equity, make a profit and get equity.
     competitors"
   * discount on prices = equity in companies.
     * only in companies you do not plan on competting in.
-Startup:
+    
+Startups & Equity:
   * too long for pocket change. (mass market: faster, more profitable)
     * tied up in private stock.
     * 5+ years in payout
@@ -368,6 +369,11 @@ Startup:
   * safety: $1 mil per mo. * mass markets -> $20 mil/mo.
   * barter for OSS contributions and take on The Big 5.
   
+Focus:
+  * Building the computer that will take on The Internet.
+  * $1 bill/mo.: fiber/air, friend comm, biz comm, b2c comm,
+    hobbies/topics/strangers, media ent., games, HTML5 games,
+    fear
   
   
 
