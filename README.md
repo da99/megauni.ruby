@@ -368,6 +368,7 @@ Startups & Equity:
   * exception: long-lasting company
   * safety: $1 mil per mo. * mass markets -> $20 mil/mo.
   * barter for OSS contributions and take on The Big 5.
+  * automated investments/equity
   
 Focus:
   * Building the computer that will take on The Internet.
