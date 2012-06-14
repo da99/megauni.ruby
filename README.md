@@ -392,6 +392,12 @@ Mass Market:
   Focus on nothing but the Mass Market.
   Everything else gives you mediocre profits.
   The Mass Market ALWAYS gives you superior profits.
+    Build your own products, don't market others.
+    Build your own startups, give up on investing in others.
+    Build your own companies with less than $1 mill.
+      (Profitable within 6 mos.)
+      No need to worry about "the one that got away"
+        when you get 100x profit than what you put in.
   
   
   
