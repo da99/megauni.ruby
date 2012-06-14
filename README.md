@@ -378,7 +378,13 @@ Focus:
   
 Until Brainiac is built:
   * high fees (income + prop. edge)
-  * equity (startups + old comp.)
+  * equity (startups + old comp.): Only in companies in an incubator, 
+    if you avoid the situation of owing taxes on worthless fin. 
+    instruments.
+  * Still not worth it because even if you get 10 companies
+    and each sells for $250 mill., you still could have gotten
+    more using Brainiac.
+  *Brainiac: completely forget about "the one that got away".*
 
 Mass Market:
  * ( $1 -> $100 ) * mo.
