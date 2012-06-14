@@ -380,6 +380,22 @@ Until Brainiac is built:
   * high fees (income + prop. edge)
   * equity (startups + old comp.)
 
+Mass Market:
+ * ( $1 -> $100 ) * mo.
+ * Arch. + Automation + Saturation = BRAINIAC
+ * Advertising, Startup/Old Comp, B2B, etc. 
+   -> Chump Change, distraction, expensive,
+      time consuming, legal, etc.
+      because it involves angry people.
+      Think of Std. Oil acquisitions.
+
+  Focus on nothing but the Mass Market.
+  Everything else gives you mediocre profits.
+  The Mass Market ALWAYS gives you superior profits.
+  
+  
+  
+
   
 
 
