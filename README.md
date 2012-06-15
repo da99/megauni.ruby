@@ -376,7 +376,28 @@ Focus:
     hobbies/topics/strangers, media ent., games, HTML5 games,
     fear
   
+
+Startups & Big Companies
+------------------------
+*Mediocrity is like heroin:* it only takes one big hit
+to get addicted. 
+In other words: as long as people
+believe they are making progress with their preferred methods,
+they will continue to use them and avoid superior ideas.
+Examples: 
+Sony vs. Apple
+HP vs Acer
+MSFT vs everyone
+
+Which is why it is easy to compete against 99.999% of the market.
+Startups, Big Co.s, etc. They are all mediocre or incompetent.
+Brainiac will let you captivate The Mass Market and all niches.
+Superior Thinking combined with Brainiac will let you 
+revolutionize EVERY single industry.  No industry has reached 
+perfection.
+
 Until Brainiac is built:
+------------------------
   * high fees (income + prop. edge)
   * equity (startups + old comp.): Only in companies in an incubator, 
     if you avoid the situation of owing taxes on worthless fin. 
@@ -384,9 +405,10 @@ Until Brainiac is built:
   * Still not worth it because even if you get 10 companies
     and each sells for $250 mill., you still could have gotten
     more using Brainiac.
-  *Brainiac: completely forget about "the one that got away".*
+  *Brainiac: lets you completely forget about "the one that got away".*
 
 Mass Market:
+------------
  * ( $1 -> $100 ) * mo.
  * Arch. + Automation + Saturation = BRAINIAC
  * Advertising, Startup/Old Comp, B2B, etc. 
