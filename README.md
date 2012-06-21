@@ -427,6 +427,16 @@ Mass Market:
       No need to worry about "the one that got away"
         when you get 100x profit than what you put in.
   
+Conversation Characteristics
+----------------
+
+Automated: Games, Archives
+Privacy: All, Select (Email, etc.)
+Time:    Instant (IM, Chat), Delayed (Email, Comments, etc.)
+Space:   by default, Internet
+Payment Reliability
+"I know this person"
+Possible Friend: topic websites + surveys
   
   
 
