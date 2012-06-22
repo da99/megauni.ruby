@@ -97,6 +97,12 @@ Lack of Power (LivelyKernel, Brent Victor)
   and the creatives/geniuses will follow.
   e.g. VPRI website
       
+* 1) People are not meta-artists. They do not want meta-tools, just tools.
+  2) Artists go where the people are, despite difficulty of development (eg WWW, Windows, Java).
+  3) mU/Uni-Lang is an extension of the WWW.  Therefore, people will use it.
+  4) Code is still needed, even with the right abstractions, because there is always the need to
+     improve upon the abstractions someone else has made for your profession. WYSIWYG is not enough.
+  
 Privately
 ---------
   
