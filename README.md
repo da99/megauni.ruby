@@ -85,12 +85,17 @@ Lack of Power (LivelyKernel, Brent Victor)
 * Clipart: People do not want to make graphics. They want to consume them.
 * Graphics: People who want to make graphics will already know how to use Illustrator, 
     Gimp, Photoshop, etc.
-* Animations: Good for cutscenes, video.  You still have to code for interactivity.
+* Animations: Good for cutscenes, video.  
+  You still have to code for interactivity. In other words: if you are creating a game,
+  you are already working mostly in code.  Libraries and customization is good enough
+  until you get the full Brent Victor experience.
 
 * People will create tools on top of yours IF your environment is popular enough:
   e.g. WWW, Windows, etc.
   The market for editors is tiny. The market for consumption is huge. There is no need
-  to worry about lack of graphics/animation editing.
+  to worry about lack of graphics/animation editing. Focus on what the consumers want, 
+  and the creatives/geniuses will follow.
+  e.g. VPRI website
       
 Privately
 ---------
