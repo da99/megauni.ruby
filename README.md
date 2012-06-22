@@ -2,7 +2,7 @@
 What's can you do with it?
 -------------------------
 
-*You and your friends mess around with your life's website.*
+*Websites and chat bots. No HTML: point, type, and click.*
 
 2-week overnight success:
     
