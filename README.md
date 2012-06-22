@@ -117,6 +117,10 @@ Lack of Power (LivelyKernel, Brent Victor)
      than WYSIWYG. It's better to make profits from Uni-Lang and then hire proper programmers
      for WYSIWYG. (Ideally, an alternative browser based on Squeak/Pharo/Factor environment.)
 
+  4) WYSIYG in the browser: HTML4/5 + Flash, Illustrator/Fireworks/etc, etc. 
+     This is the way it will be for the next 10 years or a WWW-alternative is
+     developed. LivelyKernel is too esoteric and Squeak/Pharo is focused on education and
+     business uses. They will not become into Mass Market.
   
 Privately
 ---------
