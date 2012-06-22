@@ -120,8 +120,7 @@ Keep adding features and complete mU.
 Privately
 ---------
   
-It's an omni-morph implemented as an Uni-Lang app with a default 
-configuration for the user. 
+The easiest way to host/develop conversation-based AJAX/HTML5 apps.
 
 Publicly: megaUni: Never get bored strategy.
 Why: The Majority demands it.
@@ -431,12 +430,13 @@ Conversation Characteristics
 ----------------
 
 Automated: Games, Archives
-Privacy: All, Select (Email, etc.)
-Time:    Instant (IM, Chat), Delayed (Email, Comments, etc.)
-Space:   by default, Internet
-Payment Reliability
-"I know this person"
-Possible Friend: topic websites + surveys
+Privacy:   All, Select (Email, etc.)
+Time:      Instant (IM, Chat), Delayed (Email, Comments, etc.)
+Space:     by default, Internet
+Reliability:
+  Payment
+  "I know this person"
+  Possible Friend (topic websites + surveys)
   
   
 
