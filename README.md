@@ -97,11 +97,26 @@ Lack of Power (LivelyKernel, Brent Victor)
   and the creatives/geniuses will follow.
   e.g. VPRI website
       
-* 1) People are not meta-artists. They do not want meta-tools, just tools.
+* 1) Most artists do not want want meta-tools, just tools.
   2) Artists go where the people are, despite difficulty of development (eg WWW, Windows, Java).
   3) mU/Uni-Lang is an extension of the WWW.  Therefore, people will use it.
   4) Code is still needed, even with the right abstractions, because there is always the need to
      improve upon the abstractions someone else has made for your profession. WYSIWYG is not enough.
+     Code provides more precision.  It is easier to change code textual, than visually.
+  5) Code + WYSIWYG is not enough. Voice/narration, layout, design, etc. They are all used properly
+     by people with talent. People with talent are not afraid to write code or learn UI design.
+     They are a minority, and will never be a majority.
+  -------------------------------------------------------------------------------------------------
+  In other words, demand/supply. Thefore, mU will still succeed just with Uni-Lang.
+
+  Other reasons:
+  1) Revenue/profits come from the Mass Market, not by selling tools, like Balsamiq.
+  2) I have no skills for Kay/Ingall WYSIWYG.
+  3) K/I WYSIWYG still requires a base language, like Uni-Lang. Any effort taken away from
+     the language, would hurt both WYSIWYG and the language.  The language is far more important
+     than WYSIWYG. It's better to make profits from Uni-Lang and then hire proper programmers
+     for WYSIWYG. (Ideally, an alternative browser based on Squeak/Pharo/Factor environment.)
+
   
 Privately
 ---------
