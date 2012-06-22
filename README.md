@@ -4,18 +4,49 @@ What's can you do with it?
 
 *Websites and chat bots. No HTML required.*
 
+AJAX and HTML5 is more than enough to have fun with your friend.
+Conversations plus satisfactory interaction + graphics.
+
+Abstractions
+-----------
+* Inbox
+  * Calendar
+* Websites
+  * Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
+* Chat Bots
+* Chat Rooms integrated with private conversations.
+* Addons
+* Lifes
+  * Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
+* Chat Bots
+  * The Majority like being told what to do within their frames of stimulation:
+    * Make a friend happy: do this
+    * Be polite: do this
+    * Get Smarter: play this
+    * rss/news feeds
+
 2-week overnight success:
-    
+----------------------
+
+Keep adding chat bots and websites.
+Don't focus on megaUNI itself. Only the content/activities.
+This gets mU 2 waves of early adopters: 
+  * computation thinkers (designers + coders)
+  * personal publishers
+Another wave, court jesters of circle of friends, then comes in.
+Keep adding features and complete mU.
+ 
+
+Afraid?
+------
   * Focus on easiest markets:
-    * students, IT, creative class, females 18-41, males 18-29
-      -> (100,000 * ($40 - $10)) per mo.
-      -> Entertainment centered around (friends, family, relatives, strangers/hobbies).
-      -> Easier markets are the most important:
-         -> They make everything else EASY.
-         -> Ever professional/manager/establishmentarian is connected to:
-            students, family, relatives, friends
-            -> If you captivate their connections, they have no excuse to go with you
-               when you enter the tougher markets.
+    * (100,000 * ($40 - $10)) per mo.
+    * Easier markets are the most important:
+       -> They make everything else EASY.
+       -> Ever professional/manager/establishmentarian is connected to:
+          students, family, relatives, friends
+          -> If you captivate their connections, they have no excuse to go with you
+             when you enter the tougher markets.
               
   *In other words: The Mass Market Rules The World. Who rules the Mass Market?*
       
@@ -34,12 +65,6 @@ What's can you do with it?
     *general idea*: as long as students are captivated,
       braindead morons will follow.
       Make it easy/convenient/intuitive to pay.
-
-  * Early adopters -> impress friends -> college students -> everyone
-
-  * Creative class: mU customization, alterations
-    * Code examples showing the beauty and usability of UniLang
-    * Create UniBots
   
   * Everyone: 
     * Court jester game/activity for your mU life(s).
@@ -53,70 +78,8 @@ What's can you do with it?
         * news, random, q&a, events/maps, magazine, hoots, etc.
         * surveys/questionnaires
         * montage backgrounds
-    * Paid features:
-        * use it w/ co-workers, projects, classmates, fun & surprise
-        * addons
         
-  * Lifes Inboxs
-    
-    all: 
-      Stream of messages:
-        [Text]
-      [Unfollow website/author.] [Archive it.] [Quote it.]
-                
-    1: stream
-    
-      Priv. Mess.
-        Write
-        
-      Drafts
       
-      Website
-        Write
-        Settings
-        
-      Website
-        Write
-        Settings
-        
-      Trash
-      
-      Archive
-        New Folder
-        
-      Settings: 
-                Delete Life
-                Change Username
-      People
-        Fans
-        Friends
-        Enemies
-        [New Group]
-      
-    2: stream
-      [expand]
-
-    [New Life]
-    [New Website]
-
-    [Addons]
-    [Mass Market Friend-to-Friend] $20-$60/mo
-    [New Unibot]
-    [etc].
-
-    Account Settings:
-  
-  * chatroom
-    * unibots
-    * follow
-    * multi-conversations/rooms
-      
-This gets mU 2 waves of early adopters: 
-  * computation thinkers (designers + coders)
-  * personal publishers
-Another wave, court jesters of circle of friends, then comes in.
-Keep adding features and complete mU.
- 
 Privately
 ---------
   
@@ -148,38 +111,6 @@ Bill Sardis, etc.
 Plus, the Majority shrinks in size.
 My genius comes from my laziness and my desire for perfection.
 
-Default Configuration
----------------------
-
-* Lifes
-* Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
-* Calendar
-* Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
-* Bored?: Chat Bots
-  * The Majority like being told what to do within their frames of stimulation:
-    * Make a friend happy: do this
-    * Be polite: do this
-    * Get Smarter: play this
-    * rss/news feeds
-* Reliability ratings: as friend, consumer, boss, etc.
-
-Optional Configuration
-----------------------
-
-**Clubs:**
-Why: 
-* adds functionality. 
-* abstraction to prevent mU awesomeness turning into user confusion.
-* prevent spam
-
-**Friends:**
-Adds functionality through paid features.
-
-**"I'm bored":**
-Why: 
-* timing.
-How:
-* friends + mU, scarcity, anticipation (timer)
 
 Building Blocks of Activities
 -----------------------------
