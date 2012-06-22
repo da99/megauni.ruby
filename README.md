@@ -5,7 +5,7 @@ What's can you do with it?
 *Websites and chat bots. No HTML required.*
 
 AJAX and HTML5 is more than enough to have fun with your friend.
-Conversations plus satisfactory interaction + graphics.
+Conversations and satisfactory (interaction + graphics).
 
 Abstractions
 -----------
@@ -79,6 +79,18 @@ Afraid?
         * surveys/questionnaires
         * montage backgrounds
         
+Lack of Power (LivelyKernel, Brent Victor)
+------------------------------------------
+
+* Clipart: People do not want to make graphics. They want to consume them.
+* Graphics: People who want to make graphics will already know how to use Illustrator, 
+    Gimp, Photoshop, etc.
+* Animations: Good for cutscenes, video.  You still have to code for interactivity.
+
+* People will create tools on top of yours IF your environment is popular enough:
+  e.g. WWW, Windows, etc.
+  The market for editors is tiny. The market for consumption is huge. There is no need
+  to worry about lack of graphics/animation editing.
       
 Privately
 ---------
