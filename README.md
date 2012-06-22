@@ -2,7 +2,7 @@
 What's can you do with it?
 -------------------------
 
-*Websites and chat bots. No HTML: point, type, and click.*
+*Websites and chat bots. No HTML required.*
 
 2-week overnight success:
     
