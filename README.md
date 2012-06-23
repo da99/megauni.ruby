@@ -1,8 +1,21 @@
+
+What's can you do with it?
+-------------------------
+
+*Websites and chat bots. No HTML required.*
+
+Uni-Lang is included for WWW artists.
+
 Short-term Success
 ------------------
 
-Make it fun to create web aps for holding 20 conversations 
+Make it fun to create web apps for holding 20 **different**  conversations 
 at the same time.
+
+AJAX and HTML5 is more than enough to have fun with friends.
+Specialized apps are used for media creation (graphics, audio, etc.) are
+beyond the limitations of the browser. The main focus is on the
+Mass Market: conversations + media sharing.
 
 Long-term Success
 ----------------
@@ -13,16 +26,6 @@ Apps are obsolete, Factor/Pharo/etc.
 
 This will provide the profits for R&D and takeover of 95% of the 
 human market.  The remaining 5% is your competition/R&D.
-
-What's can you do with it?
--------------------------
-
-*Websites and chat bots. No HTML required.*
-
-AJAX and HTML5 is more than enough to have fun with your friend.
-Specialized apps are used for media creation (graphics, audio, etc.)
-beyond the limitations of the browser. The main focus is on the
-Mass Market: conversations + media sharing.
 
 Abstractions
 -----------
