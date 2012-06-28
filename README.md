@@ -48,21 +48,27 @@ Abstractions
 2-week overnight success:
 ----------------------
 
-Keep adding chat bots and websites.
-  * Websites:
+  * Chat Bots: Activities until friends come online.
+  * Outlandish Stranger-to-Stranger, special interest websites.
+    * barter, collaboration, etc.
+  * Websites for life:
     1) Expression/Personality, Reputation/Verification, Status Symbols, Thank Yous
       * Chat bot tells friends to post stuff and entertain you.
       * Chat bot tells people about new websites: citys, bars, etc.
       * Website addons are bought through barter.
       * HTML5 games w/ content as prizes
-      * In other words: website as locker, scrap book, and archives
-    2) Stranger-to-Stranger: early adopters brought together by common interests.
+      * In other words: website as a
+        collaborative locker, scrap book, timeline/archives, etc.
+        The use changes as you change: business card, reputation, status symbol, etc.
+        The main use will be as a blog/journal/g+ alternative. The novelty is:
+        magazine vs. blog.
+
 Don't focus on megaUNI itself. Only the content/activities.
 This gets mU 2 waves of early adopters: 
   * computation thinkers (designers + coders)
   * personal publishers
 Another wave, court jesters of circle of friends, then comes in.
-Keep adding features and complete mU.
+*Keep adding features and complete mU.*
  
 
 Afraid?
