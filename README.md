@@ -51,17 +51,17 @@ Abstractions
   * Chat Bots: Activities until friends come online.
   * Outlandish Stranger-to-Stranger, special interest websites.
     * barter, collaboration, etc.
+    * Reputation/Verification (super hero profile)
   * Websites for life:
-    1) Expression/Personality, Reputation/Verification, Status Symbols, Thank Yous
-      * Chat bot tells friends to post stuff and entertain you.
-      * Chat bot tells people about new websites: citys, bars, etc.
-      * Website addons are bought through barter.
-      * HTML5 games w/ content as prizes
-      * In other words: website as a
-        collaborative locker, scrap book, timeline/archives, etc.
-        The use changes as you change: business card, reputation, status symbol, etc.
-        The main use will be as a blog/journal/g+ alternative. The novelty is:
-        magazine vs. blog.
+    Expression/Personality, Status Symbols, Thank Yous
+    * Chat bot tells friends to post stuff and entertain you.
+    * Chat bot tells people about new websites: citys, bars, etc.
+    * Website addons are bought through barter.
+    * In other words: website as a
+      collaborative locker, scrap book, timeline/archives, etc.
+      The use changes as you change: business card, reputation, status symbol, etc.
+      The main use will be as a blog/journal/g+ alternative. The novelty is:
+      magazine vs. blog.
 
 Don't focus on megaUNI itself. Only the content/activities.
 This gets mU 2 waves of early adopters: 
