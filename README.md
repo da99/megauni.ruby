@@ -48,12 +48,24 @@ Abstractions
 2-week overnight success:
 ----------------------
 
+*Keep adding features and complete mU.*
+uniChat and chat bots are the core functionality. All other functionality
+is minor. The user just wants to stay in chat as much as possible.
+Websites are for exploration/archives related to uniChat/chat-bots. 
+In other words: short bursts of activity. 
+Prolonged activity/engagement is in uniChat w/ chat bots.  Nothing else
+matters to The Majority.
+
+Websites: Find new people to talk to. Record/search history. Find new things
+  and events to write about.
+uniChat:  the end goal of The Majority.
+
+  * uniChat
   * Chat Bots: Activities until friends come online.
   * Outlandish Stranger-to-Stranger, special interest websites.
     * barter, collaboration, etc.
     * Reputation/Verification (super hero profile)
-  * Websites for life:
-    Expression/Personality, Status Symbols, Thank Yous
+  * Websites for life: Expression/Personality, Status Symbols, Thank Yous
     * Chat bot tells friends to post stuff and entertain you.
     * Chat bot tells people about new websites: citys, bars, etc.
     * Website addons are bought through barter.
@@ -68,7 +80,6 @@ This gets mU 2 waves of early adopters:
   * computation thinkers (designers + coders)
   * personal publishers
 Another wave, court jesters of circle of friends, then comes in.
-*Keep adding features and complete mU.*
  
 
 Afraid?
