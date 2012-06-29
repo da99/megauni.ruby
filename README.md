@@ -45,19 +45,43 @@ Abstractions
     * Get Smarter: play this
     * rss/news feeds
 
+Logn-term success:
+------------------
+*Keep adding features and complete mU.*
+Don't focus on megaUNI itself. Only the content/activities.
+Another wave, court jesters of circle of friends, then comes in.
+
+Rules of the Social Universe:
+-----------------------------
+
+*1) It's not about "social". It's about talking, not learning.*
+    Entertainment, not learning. Their minds are only entertained when
+    they are talking to others. Preferably face-to-face.
+  
+*2) The Majority only cares about chat.*
+    Look at their actions/inaction. Never trust their words.)
+  
+*3) Everything has to be integrated into chat.*
+    Creates a false sense of face-to-face conversations.
+  
+*4) Anything done outside of chat is merely a temporary break from chat.*
+    They run out of things to talk about.
+  
+*5) Anything done outside of chat is used as fodder for more chat.*
+    People do stuff to talk about them later OR wait for friends to do something worth talking about.
+    Examples: sports, video games, movies, etc.
+
 2-week overnight success:
 ----------------------
 
-*Keep adding features and complete mU.*
-uniChat and chat bots are the core functionality. All other functionality
-is minor. The user just wants to stay in chat as much as possible.
-Websites are for exploration/archives related to uniChat/chat-bots. 
-In other words: short bursts of activity. 
-Prolonged activity/engagement is in uniChat w/ chat bots.  Nothing else
-matters to The Majority.
+Inbox/uniChat/chat bots are the core functionality. All other functionality
+is minor (ie non-prolonged activity). The user just wants to stay in 
+chat as much as possible. Nothing else matters to The Majority.
 
 Websites: Find new people to talk to. Record/search history. Find new things
-  and events to write about.
+  and events to write about. In other words: short bursts of activity. 
+  In the end it ends up in uniChat as: "look what I made".
+Life/school/work/charity/etc: something to talk about in uniChat.
 uniChat:  the end goal of The Majority.
 
   * uniChat
@@ -74,12 +98,11 @@ uniChat:  the end goal of The Majority.
       The use changes as you change: business card, reputation, status symbol, etc.
       The main use will be as a blog/journal/g+ alternative. The novelty is:
       magazine vs. blog.
+  * uni-lang
 
-Don't focus on megaUNI itself. Only the content/activities.
 This gets mU 2 waves of early adopters: 
   * computation thinkers (designers + coders)
   * personal publishers
-Another wave, court jesters of circle of friends, then comes in.
  
 
 Afraid?
