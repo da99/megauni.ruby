@@ -6,73 +6,58 @@ What's can you do with it?
 
 Uni-Lang is included for WWW artists.
 
-Short-term Success
-------------------
-
-Make it fun to create web apps for holding 20 **different**  conversations 
-at the same time.
-
-AJAX and HTML5 is more than enough to have fun with friends.
-Specialized apps are used for media creation (graphics, audio, etc.) are
-beyond the limitations of the browser. The main focus is on the
-Mass Market: conversations + media sharing.
-
-Long-term Success
-----------------
-
-Create *Uniac*: The Ultimate Computer System.
-WYSIWYG, scalable from one CPU to Galactic Scale, 
-Apps are obsolete, Factor/Pharo/etc.
-
-This will provide the profits for R&D and takeover of 95% of the 
-human market.  The remaining 5% is your competition/R&D.
-
-Abstractions
------------
-* Inbox
-  * Calendar
-* Websites
-  * Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
-* Chat Bots
-* Chat Rooms integrated with private conversations.
-* Addons
-* Lifes
-  * Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
-* Chat Bots
-  * The Majority like being told what to do within their frames of stimulation:
-    * Make a friend happy: do this
-    * Be polite: do this
-    * Get Smarter: play this
-    * rss/news feeds
-
-Logn-term success:
-------------------
-*Keep adding features and complete mU.*
-Don't focus on megaUNI itself. Only the content/activities.
-Another wave, court jesters of circle of friends, then comes in.
-
-Rules of the Social Universe:
------------------------------
-
-*1) It's not about "social". It's about talking, not learning.*
-    Entertainment, not learning. Their minds are only entertained when
-    they are talking to others. Preferably face-to-face.
-  
-*2) The Majority only cares about chat.*
-    Look at their actions/inaction. Never trust their words.)
-  
-*3) Everything has to be integrated into chat.*
-    Creates a false sense of face-to-face conversations.
-  
-*4) Anything done outside of chat is merely a temporary break from chat.*
-    They run out of things to talk about.
-  
-*5) Anything done outside of chat is used as fodder for more chat.*
-    People do stuff to talk about them later OR wait for friends to do something worth talking about.
-    Examples: sports, video games, movies, etc.
-
 2-week overnight success:
 ----------------------
+
+The BOTS, first generation:
+  * shopping & website updates
+    * auto-show when inactivity for 3 mins or less.
+  * productivity
+  * suggestions: shopping, etc.
+  * turn everything into a chat bot:
+  
+    Zine Bot: 
+      post stuff to magazine
+      alert when friend posts
+      
+    Alert Me features: 
+      new website features
+      person comes online
+    
+    Watup_Bot:
+      random thoughts
+      -------------------------------
+      What up?
+      @Hoppe_Bot What up?
+      @Hoppe_Bot Expand "Hoppe @ Turkey".
+      @Hoppe_Bot Gimme the 411 on "Hoppe @ Turkey".
+      
+      @Watup_Bot Write this down:
+      I just got fired! Yay!
+      ?Are you sad?
+        Hells no.
+      ?Why not?
+        I hated that job!
+
+      --------------------
+      Alternative stream user interface:
+        * Tell me more?
+        * What else?
+        * Ask a question.
+      ----------------------
+      Grow a Robot:
+        * religion, celebrity, etc.
+        * censor, vote, etc. on content
+        * q&a from audience
+      ------------------------
+      Superstitions:
+        * predictions, vote, spooky
+        * based on location, age, etc.
+      --------------------------
+      Fight bot:
+        * people fighting and you butting in.
+
+
 
 Inbox/uniChat/chat bots are the core functionality. All other functionality
 is minor (ie non-prolonged activity). The user just wants to stay in 
@@ -104,6 +89,75 @@ This gets mU 2 waves of early adopters:
   * computation thinkers (designers + coders)
   * personal publishers
  
+
+Short-term Success
+------------------
+
+Make it fun to create web apps for holding 20 **different**  conversations 
+at the same time.
+
+AJAX and HTML5 is more than enough to have fun with friends.
+Specialized apps are used for media creation (graphics, audio, etc.) are
+beyond the limitations of the browser. The main focus is on the
+Mass Market: conversations + media sharing.
+
+Long-term Success
+----------------
+
+Create *Uniac*: The Ultimate Computer System.
+WYSIWYG, scalable from one CPU to Galactic Scale, 
+Apps are obsolete, Factor/Pharo/etc.
+
+This will provide the profits for R&D and takeover of 95% of the 
+human market.  The remaining 5% is your competition/R&D.
+
+*Keep adding features and complete mU.*
+Don't focus on megaUNI itself. Only the content/activities.
+Another wave, court jesters of circle of friends, then comes in.
+
+*UniChat*
+1) Text-based activities
+2) NES 64 graphics
+3) business services
+4) Croquet version of megaUNI
+
+Abstractions
+-----------
+* Inbox
+  * Calendar
+* Websites
+  * Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
+* Chat Bots
+* Chat Rooms integrated with private conversations.
+* Addons
+* Lifes
+  * Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
+* Chat Bots
+  * The Majority like being told what to do within their frames of stimulation:
+    * Make a friend happy: do this
+    * Be polite: do this
+    * Get Smarter: play this
+    * rss/news feeds
+
+Rules of the Social Universe:
+-----------------------------
+
+*1) It's not about "social". It's about talking, not learning.*
+    Entertainment, not learning. Their minds are only entertained when
+    they are talking to others. Preferably face-to-face.
+  
+*2) The Majority only cares about chat.*
+    Look at their actions/inaction. Never trust their words.)
+  
+*3) Everything has to be integrated into chat.*
+    Creates a false sense of face-to-face conversations.
+  
+*4) Anything done outside of chat is merely a temporary break from chat.*
+    They run out of things to talk about.
+  
+*5) Anything done outside of chat is used as fodder for more chat.*
+    People do stuff to talk about them later OR wait for friends to do something worth talking about.
+    Examples: sports, video games, movies, etc.
 
 Afraid?
 ------
