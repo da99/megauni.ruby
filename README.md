@@ -153,12 +153,17 @@ Abstractions
   * labels + savable filters
     * flexibility to sort people however you want: 
       by group/importance, multi-group, etc.
-* Inbox
+* Inbox 
+  * High Priority, Low Time Preference
   * Calendar
 * Websites
   * Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
+  * Homepage as self-expression
+    latest column, color schemes, templates, BOTS/pre-recorded conversations,
+    quizzes, surveys/compatibility tests, fan applications, more-to-come
 * Chat Bots
-* Chat Rooms integrated with private conversations.
+* Chat Rooms integrated with private conversations/IM
+  * Low Priority, High Time Preference
 * Addons
 * Lifes
   * Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
