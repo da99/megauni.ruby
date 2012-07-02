@@ -10,12 +10,7 @@ Uni-Lang is included for WWW artists.
 ----------------------
 
 The BOTS, first generation:
-  * shopping & website updates
-    * auto-show when inactivity for 3 mins or less.
   * productivity
-  * suggestions: shopping, etc.
-  * turn everything into a chat bot:
-  
     Zine Bot: 
       post stuff to magazine
       alert when friend posts
@@ -23,39 +18,66 @@ The BOTS, first generation:
     Alert Me features: 
       new website features
       person comes online
-    
-    Watup_Bot:
-      random thoughts
-      -------------------------------
-      What up?
-      @Hoppe_Bot What up?
-      @Hoppe_Bot Expand "Hoppe @ Turkey".
-      @Hoppe_Bot Gimme the 411 on "Hoppe @ Turkey".
       
-      @Watup_Bot Write this down:
-      I just got fired! Yay!
-      ?Are you sad?
-        Hells no.
-      ?Why not?
-        I hated that job!
+  * turn everything into a chat bot:
+    
+    random thoughts
+    -------------------------------
+    Watup_Bot: Record a conversation:
+    
+    @Hoppe_Bot What up?
+    @Hoppe_Bot Expand "Hoppe @ Turkey".
+    @Hoppe_Bot Gimme the 411 on "Hoppe @ Turkey".
+    
+    @Watup_Bot Write this down:
+    I just got fired! Yay!
+    ?Are you sad?
+      Hells no.
+    ?Why not?
+      I hated that job!
 
-      --------------------
-      Alternative stream user interface:
-        * Tell me more?
-        * What else?
-        * Ask a question.
-      ----------------------
-      Grow a Robot:
-        * religion, celebrity, etc.
-        * censor, vote, etc. on content
-        * q&a from audience
-      ------------------------
-      Superstitions:
-        * predictions, vote, spooky
-        * based on location, age, etc.
-      --------------------------
-      Fight bot:
-        * people fighting and you butting in.
+    --------------------
+    Alternative stream user interface:
+      * Tell me more?
+      * What else?
+      * Ask a question.
+    ----------------------
+    Grow a Robot:
+      * religion, celebrity, etc.
+      * censor, vote, etc. on content
+      * q&a from audience
+    ------------------------
+    Superstitions:
+      * predictions, vote, spooky
+      * based on location, age, etc.
+    --------------------------
+    Fight bot:
+      * people fighting and you butting in.
+    --------------------------
+    Suggestion bot:
+      * make friends smile
+      * help someone out
+      * shopping, new bots, new websites, website updates, etc.
+        * auto-show when inactivity for 3 mins or less.
+    
+    --------------------------
+    Smarty Bot: Smartys show off.
+      * Questions: quora/metafilter/SO + fun/surprise
+      * based on age, location, hobbies, etc.
+      * save answer: @Smarty_Bot Follow it.
+    --------------------------
+    Pundit Bot:
+      * Controversy
+    --------------------------
+    Pop Quiz Bot
+    Friend Survey Bot
+    --------------------------
+    Emergency sale: Help find someone the best price/quality
+    deal on surgery.  Best prevention practice.
+      * Digi_Granny
+      * Handy_Bot
+      * MedVac
+    --------------------------
 
 
 
@@ -123,6 +145,10 @@ Another wave, court jesters of circle of friends, then comes in.
 
 Abstractions
 -----------
+* Label the World
+  * labels + savable filters
+    * flexibility to sort people however you want: 
+      by group/importance, multi-group, etc.
 * Inbox
   * Calendar
 * Websites
