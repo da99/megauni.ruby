@@ -37,46 +37,50 @@ The BOTS, first generation:
       I hated that job!
 
     --------------------
+    Interactive Bots as Magazine:
+    * tell users about new bots, lots of them
+    * content submitted by users
+    * comments: text, love, hate, like, meh
+    --------------------
     Alternative stream user interface:
-      * Tell me more?
-      * What else?
-      * Ask a question.
+    * Tell me more?
+    * What else?
+    * Ask a question.
     ----------------------
     Grow a Robot:
-      * religion, celebrity, etc.
-      * censor, vote, etc. on content
-      * q&a from audience
+    * religion, celebrity, etc.
+    * censor, vote, etc. on content
+    * q&a from audience
     ------------------------
     Superstitions:
-      * predictions, vote, spooky
-      * based on location, age, etc.
+    * predictions, vote, spooky
+    * based on location, age, etc.
     --------------------------
     Fight bot:
-      * people fighting and you butting in.
+    * people fighting and you butting in.
     --------------------------
     Suggestion bot:
-      * make friends smile
-      * help someone out
-      * shopping, new bots, new websites, website updates, etc.
-        * auto-show when inactivity for 3 mins or less.
-    
+    * make friends smile
+    * help someone out
+    * shopping, new bots, new websites, website updates, etc.
+      * auto-show when inactivity for 3 mins or less.
     --------------------------
     Smarty Bot: Smartys show off.
-      * Questions: quora/metafilter/SO + fun/surprise
-      * based on age, location, hobbies, etc.
-      * save answer: @Smarty_Bot Follow it.
+    * Questions: quora/metafilter/SO + fun/surprise
+    * based on age, location, hobbies, etc.
+    * save answer: @Smarty_Bot Follow it.
     --------------------------
     Pundit Bot:
-      * Controversy
+    * Controversy
     --------------------------
     Pop Quiz Bot
     Friend Survey Bot
     --------------------------
     Emergency sale: Help find someone the best price/quality
     deal on surgery.  Best prevention practice.
-      * Digi_Granny
-      * Handy_Bot
-      * MedVac
+    * Digi_Granny
+    * Handy_Bot
+    * MedVac
     --------------------------
 
 
