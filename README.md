@@ -149,21 +149,56 @@ Another wave, court jesters of circle of friends, then comes in.
 
 Abstractions
 -----------
-* Label the World
-  * labels + savable filters
-    * flexibility to sort people however you want: 
-      by group/importance, multi-group, etc.
+      
+* SpamGuard
+  * Who can comment or contact you? Strangers vs. Friends vs. Specified List
+  * settings based on article, event, website, life
+
 * Inbox 
-  * High Priority, Low Time Preference
-  * Calendar
+
+  * Subscriptions
+    * changable subscription settings: 
+      * mail/news/context(projects, events), weekly/daily/instant, main thread/sub-threads
+      * defaults: mail, instant, main thread only
+      
+  * Labels
+    * messages, people
+    * savable filters
+    
+  * mail, message as logic+UI
+    * labels/filters => folders
+    * filter messages based on labeled people, labeled messages
+    * comments => threaded comments => subscriptions
+      * auto-labeling
+      * auto-subscribe to tree section upon commenting
+      
+  * News
+    * broadcast messages, low priority
+    * news => subscriptions => changable settings
+  * Calendar/Events: reminders/anniversarys, events
+  * Projects: Collaboration
+
+* lifes
+  * labels+filters => groups, intersections, importance
+    
 * Websites
+  * Q&A 
+  * wiki/collaboration, helping others
+  
+* Life Websites
   * Labels + News, Random, Encyclopedia, Q&A/Thanks/Fights, etc.
-  * Homepage as self-expression
-    latest column, color schemes, templates, BOTS/pre-recorded conversations,
-    quizzes, surveys/compatibility tests, fan applications, more-to-come
-* Chat Bots
-* Chat Rooms integrated with private conversations/IM
+  * Homepage as *self-expression*
+    text: stream: magazine (livejournal), random thoughts (tumblr/tweeter, pininterest),
+                  BOTS/pre-recorded conversations,
+                  quizzes, surveys/compatibility tests, fan applications,
+                  more-to-come
+    visual: color schemes, templates, stream, lifes
+    
+* Chat
+  * IRC + IM + Chat Rooms + Bots
   * Low Priority, High Time Preference
+  * Low Priority, Low Time Pref.
+  * High Priority, High Time Pref.
 * Addons
 * Lifes
   * Friend-types: Best Friends, Acquaintances, Almost Strangers, Strangers
