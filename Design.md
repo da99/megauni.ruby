@@ -4,24 +4,52 @@
   Thread = Conversation = Message = Content = Object: logic + meta data(parend\_id) + content(title, body)
     |   (website | news article | event | project | private | random thought | magazine article | message/comment)
     | 
+    | Authen. -> Authorization.
+    | 
     CREATE:
-    |     Validation -> Subscription -> Read Authorization -> Sorting -> Notification
-    |          |                                                |
-    |          |                                         |----------------|
-    |          |                                      INBOX | CHAT/BOT | Website 
-    |          |                                        /                  \
-    |          |                                Mail | Event | River        River
-    |          |
-    |         Permission to comment on parent
+    |     Validation:
+    |       * Permission to comment on parent
+    |       * Permission to create post
     | 
     READ:
-    |   Authen. -> Authorization.
     | 
     UPDATE:
-    |   Authen. -> Authorization. -> Validation -> Create/Trash notification
+    |     Validation:
+    |       * Permission to edit post.
+    |       * Permission for new parent_id?
+    |       * Is new unique field unique?
     | 
     Trash:
         Authen. -> Authorization. -> Trash Notification
+                                       | |
+                                       \ /
+      |----------------------------------------------------------------------|
+      |                                                                      |
+      \      An internal note on changes: added/removed people for read      /
+       \  or edit capabilities, publish date changed, etc.                  /
+        \                                                                  /
+         |----------------------------------------------------------------|
+                                       | |
+                                       \ /
+      |----------------------------------------------------------------------|
+      |                                                                      |
+      \   Related records are retrieved + Change Note +                      /
+       \   Author. to read message is found  +                              /
+        \   Should notif. be Crt/Updt/Del?                                 /
+         |----------------------------------------------------------------|
+                                Sorting
+                                    |
+                             |----------------|
+                          INBOX | CHAT/BOT | Website 
+                            /                  \
+                    Mail | Event | River        River
+                                       | |
+                                       \ /
+      |----------------------------------------------------------------------|
+      |                                                                      |
+      \            Notification is generated and                            /  
+       \         saved to data store.                                      /
+         |----------------------------------------------------------------|
                                
                               
             -------------------------- \
