@@ -117,7 +117,7 @@ end # === helpers
 
 
 before do 
-	halt('Unknown error.') if request.path_info =~ /awstats.pl/
+  halt('Unknown error.') if request.path_info =~ /awstats.pl/
   require_ssl! unless ['/', '/rss.xml', '/test', '/log-out', '/favicon.ico', '/robots.txt'].include?(request.path_info)
   halt('Unknown error') if FailedAttempts.too_many?(remote_addr)
 end
