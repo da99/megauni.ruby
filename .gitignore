@@ -4,23 +4,23 @@ secret*
 
 # A few more files used only for development
 # and not important.
-webrat.log
-configs/config.ru.rb
-doc/*
-templates/*/mustache/*
-coverage/*
-spec/coverage
-test/coverage
-.sass-cache
-views/skins/jinx/sass/.sass-cache/*
+/webrat.log
+/configs/config.ru.rb
+/doc/*
+/templates/*/mustache/*
+/coverage/
+/spec/coverage
+/test/coverage
+/.sass-cache
+/views/skins/jinx/sass/.sass-cache/
 
 # Ignore these files too.
-tags
-tmp/*
-log
-tmp
-db/*.sqlite3
-db/data.yml
+/tags
+/tmp/
+/log/
+/tmp/
+/db/*.sqlite3
+/db/data.yml
 
 # Ignore VIM swap files.
 *.swp
@@ -37,5 +37,5 @@ db/data.yml
 shoes2.run
 shoes-and-a-shotgun.rb
 
-.bundle/*
-vendor/*
+/.bundle/
+/vendor/
