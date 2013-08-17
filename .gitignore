@@ -39,3 +39,4 @@ shoes-and-a-shotgun.rb
 
 /.bundle/
 /vendor/
+.sass-cache/
