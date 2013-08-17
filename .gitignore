@@ -4,19 +4,18 @@ secret*
 
 # A few more files used only for development
 # and not important.
-doc/*
-coverage/*
-spec/coverage
-test/coverage
-.sass-cache
-views/skins/jinx/sass/.sass-cache/*
+/doc/
+/coverage/
+/spec/coverage
+/test/coverage
+.sass-cache/
+
 
 # Ignore these files too.
-tmp/*
-log
-tmp
-db/*.sqlite3
-db/data.yml
+/tmp/
+/log/
+/db/*.sqlite3
+/db/data.yml
 
 # Ignore VIM swap files.
 *.swp
@@ -29,6 +28,6 @@ db/data.yml
 \#*
 
 # Ignore Shoes and Shotgun
-shoes2.run
-shoes-and-a-shotgun.rb
+/shoes2.run
+/shoes-and-a-shotgun.rb
 
