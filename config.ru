@@ -12,10 +12,9 @@ rescue
           <h1>Super Duper Mega Fail</h1>
           <h2>Check it.</h2>
         </body>
-      </html>      
+      </html>
     ~ )
   }
 end
-    
 run Sinatra::Application
 
