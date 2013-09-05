@@ -137,19 +137,30 @@ get('/') do
   %~
     <html>
       <head>
-        <title>Go to hell you socialist pig.</title>
+        <title>$? == 0</title>
         <style type="text/css">
         body {
           background: #f7f7f7;
           font-family: Ubuntu, Segoe UI, Helvetica, sans-serif;
           padding: 20px;
         }
+        a:link, a:visited {
+          padding: 0 2px;
+        }
+        a:hover {
+          background: #E43000;
+          color: #fff;
+        }
         </style>
       </head>
       <body>
+      <!--
         <p>Humanity is a bunch of retarded primates who only want to play with their
         <a href="http://www.brainyquote.com/quotes/quotes/h/hlmencke137243.html">own poop all day long</a>.</p>
-        <p>That's why they will never understand the genius of
+      //-->
+        <p>
+        While this website is finish being built, watch some geniuses ponder
+        the past and the future:<br />
         <a href="http://www.youtube.com/watch?v=KdnGPQaICjk">Ted Nelson</a>
         and <a href="http://www.youtube.com/watch?v=FvmTSpJU-Xc">Alan Kay</a>.
         </p>
