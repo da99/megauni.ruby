@@ -1,5 +1,6 @@
 
 source 'https://rubygems.org'
 
-gem 'sequel'
+gem 'unicorn'
+gem 'sinatra'
 
