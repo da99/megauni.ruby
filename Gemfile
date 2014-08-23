@@ -1,15 +1,6 @@
 
 source 'https://rubygems.org'
-
-group :production do
-  gem 'term-ansicolor'
-  gem 'sinatra'
-  gem 'term-ansicolor'
-  gem 'rake'
-  gem 'thin'
-  gem 'mustache'
-  gem 'Dex'
-end
+ruby '2.1.2'
 
 group :development do
   gem 'shotgun'
@@ -22,8 +13,15 @@ group :development do
   gem 'rack-test'
 end
 
-ruby '2.1.2'
 gem 'foreman'
 gem 'cuba'
 gem 'rack-protection'
 gem 'unicorn'
+gem 'sinatra'
+
+gem 'term-ansicolor'
+gem 'sinatra'
+gem 'term-ansicolor'
+gem 'rake'
+gem 'mustache'
+gem 'Dex'

@@ -4,6 +4,7 @@ secret*
 
 # A few more files used only for development
 # and not important.
+
 /webrat.log
 /configs/config.ru.rb
 /doc/*
@@ -19,6 +20,18 @@ secret*
 /tmp/
 /log/
 /tmp/
+
+/doc/
+/coverage/
+/spec/coverage
+/test/coverage
+.sass-cache/
+
+
+# Ignore these files too.
+/tmp/
+/log/
+
 /db/*.sqlite3
 /db/data.yml
 
@@ -28,12 +41,16 @@ secret*
 
 # Ignore Gedit backup files.
 *.*~
+
 *.pyc
+
+
 
 # Ignore Emacs backup files.
 \#*
 
 # Ignore Shoes and Shotgun
+
 shoes2.run
 shoes-and-a-shotgun.rb
 
@@ -75,3 +92,8 @@ build/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+
+/shoes2.run
+/shoes-and-a-shotgun.rb
+
+

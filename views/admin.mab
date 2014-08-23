@@ -1,0 +1,67 @@
+xhtml_transitional {
+
+  head {
+    title mab_data[:title]
+  }
+
+  body {
+    ul {
+      li { a('Log-out', :href=>"/log-out") }
+      li { a('RSS', :href=>"http://#{env['HTTP_HOST']}/rss.xml") }
+    }
+    
+    if !mab_data[:mini_issues].empty?
+      p.title "Mini-issues:"
+      ul {
+        mab_data[:mini_issues].each { |i| 
+          li {
+            p.title i[:title]
+            pre { i[:body] }
+            a.resolve('Mark as resolved.', :href=>"/mini/resolve/#{i[:id]}")
+          }
+        }
+      }
+    end
+    
+    p.title "Unresolved:"
+    ul {
+      if mab_data[:issues].empty?
+        li.empty "No issues posted."
+      else
+        mab_data[:issues].each { |i| 
+          li {
+            p.project "#{i[:app_name]} - #{i[:environment]}"
+            p.datetime i[:created_at]
+            p.user_agent { i[:user_agent] }
+            p.path_info i.path_info
+            p.title i.title
+            pre { i.body }
+            pre { i.environment }
+            pre { i.ip_address }
+            a.resolve('Mark as resolved.', :href=>"/resolve/#{i[:id]}")
+          }
+        }
+      end
+    }
+    
+    if !mab_data[:resolved].empty?
+      p.title "Resolved:"
+      ul {
+
+        mab_data[:resolved].each { |i| 
+          li {
+            p.project "#{i[:app_name]} - #{i[:environment]}"
+            p.user_agent { i[:user_agent] }            
+            p.path_info i[:path_info]
+            p.title i[:title]
+            pre { i[:body] }
+            a.resolve('Mark as unresolved.', :href=>"/unresolve/#{i[:id]}")
+          }
+        }
+
+      }  
+    end  
+
+  } # === body
+
+} # === tag! :html
