@@ -1,5 +1,5 @@
 
-source :rubygems
+source 'https://rubygems.org'
 
 group :production do
   gem 'term-ansicolor'
@@ -21,3 +21,9 @@ group :development do
   gem 'pry'
   gem 'rack-test'
 end
+
+ruby '2.1.2'
+gem 'foreman'
+gem 'cuba'
+gem 'rack-protection'
+gem 'unicorn'
