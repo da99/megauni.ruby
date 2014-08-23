@@ -1,3 +1,3 @@
 
-require 'da'
-run Sinatra::Application
+require './da'
+run Cuba
