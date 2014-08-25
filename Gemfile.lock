@@ -8,7 +8,7 @@ GEM
     bacon (1.2.0)
     coderay (1.1.0)
     colored (1.2)
-    da99_rack_middleware (1.0.0)
+    da99_rack_middleware (1.0.1)
       rack-protection (> 1.5)
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)

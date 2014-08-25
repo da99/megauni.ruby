@@ -10,7 +10,7 @@ end
 class Mu_Archive
 
   Perma = 301
-  Public_Dir = 'Public/heroku-mongo'
+  Public_Dir = 'Public/megauni-mongo'
 
   def initialize new_app
     @app = new_app

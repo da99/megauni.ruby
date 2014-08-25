@@ -3,7 +3,7 @@
 # 
 
 (0..200).to_a.each { |i|
-  cmd = %! bin/archive -nH -np -P ./public/heroku-mongo http://www.megauni.com/mess/#{i}/ !
+  cmd = %! bin/archive -nH -np -P ./Public/megauni-mongo http://www.megauni.com/mess/#{i}/ !
   puts cmd
   system %! #{cmd} --wait 3 2>&1 !
 }

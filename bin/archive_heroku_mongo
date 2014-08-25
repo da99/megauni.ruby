@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # -*- ruby -*-
-# 
+#
 
 require "mongo"
 require "json"
@@ -20,15 +20,15 @@ db.collection_names.each { |name|
   coll = db.collection(name)
 
   File.write(file, coll.find.to_a.to_json)
-  
+
   puts "Wrote: #{file}"
-  
+
 }
 
 def archive_ids *colls
   files = []
   colls.each { |name|
-    
+
     files <<  "#{DIR}/#{name}_ids.txt"
     f = files.last
 
@@ -54,7 +54,7 @@ archive_ids("Clubs", "Messages")
 
 Hash[ "data/Clubs_ids.txt" => "uni", "data/Messages_ids.txt" => "mess"].each { |k,v|
   File.read(k).split.each { |id|
-    cmd = %! bin/archive -nH -np -P ./public/heroku-mongo http://www.megauni.com/#{v}/#{id}/ !
+    cmd = %! bin/archive -nH -np -P ./Public/megauni-mongo http://www.megauni.com/#{v}/#{id}/ !
     puts cmd
     system %! #{cmd} 2>&1 !
   }
