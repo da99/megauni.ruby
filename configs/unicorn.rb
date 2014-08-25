@@ -16,8 +16,8 @@ preload_app false
 
 # Are we using REE? Yes? 
 # Then let's use it's garbage collecting features.
-GC.respond_to?(:copy_on_write_friendly=) and
-    GC.copy_on_write_friendly = true
+# GC.respond_to?(:copy_on_write_friendly=) and
+    # GC.copy_on_write_friendly = true
 
 
 # 

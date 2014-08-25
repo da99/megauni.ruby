@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# -*- bash -*-
+#
+#
+set -u -e -o pipefail
+
+source bin/env
+
+
+# === Stop the server at the end
+trap "bin/server stop" EXIT
+
+# === Start server:
+echo "Starting server..."
+bin/server start
+
+# === Finally, run the tests.
+files="$(find specs/ -maxdepth 1 -type f -iname "*.rb" -and -not -iname "helpers.rb")"
+if [[ -z "$files" ]]; then
+  colorize yellow "No tests found." 1>&2
+  exit 0
+else
+  bundle exec bacon specs/libs/main.rb $files "$@"
+fi
+
+
