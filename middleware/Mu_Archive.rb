@@ -2,7 +2,7 @@ require 'mustache'
 
 def Mu_Archive path_info
   p = path_info
-  
+
   if p == '/help/'
     return Mu_Archive.join("/uni/megauni/index.html")
   end
@@ -36,12 +36,12 @@ class Mu_Archive
 
     path_info = new_env['PATH_INFO']
     orig = @app.call(new_env)
-    
+
     return orig unless orig.first.to_s == "404"
-    
+
     f = Mu_Archive(path_info)
     return orig unless f
-    
+
     r = Rack::Response.new
     r.body= [ File.read(f) ]
     r.finish

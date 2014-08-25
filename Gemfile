@@ -9,7 +9,7 @@ group :development do
 end
 
 gem 'foreman'
-gem 'cuba'
-gem 'rack-protection'
+gem 'sinatra'
 gem 'unicorn'
-gem 'awesome_print'
+gem 'mustache'
+gem 'da99_rack_middleware'

@@ -1,9 +1,7 @@
 
 require './megauni'
 
-
-# === Protective
-
-run Cuba
+# === Finally, start the app.
+run Sinatra::Application
 
 
