@@ -1,17 +1,5 @@
 require 'mustache'
 
-def Mu_Archive path_info
-  p = path_info
-
-  if p == '/help/'
-    return Mu_Archive.join("/uni/megauni/index.html")
-  end
-
-  archive       = Mu_Archive.join path_info
-  archive_index = Mu_Archive.join path_info, "/index.html"
-
-  [archive, archive_index].detect { |f| File.file? f }
-end # === def Mu_Archive
 
 def Mu_Archive_Read path_info, vals = Hash[]
   content = File.read( Mu_Archive path_info )
@@ -22,11 +10,7 @@ end
 class Mu_Archive
 
   Perma = 301
-  Dir   = "public/heroku-mongo"
-
-  def self.join *args
-    File.join( Dir, *args )
-  end
+  Public_Dir = 'Public/heroku-mongo'
 
   def initialize new_app
     @app = new_app
@@ -39,17 +23,29 @@ class Mu_Archive
 
     return orig unless orig.first.to_s == "404"
 
-    f = Mu_Archive(path_info)
+    f = archive_path(path_info)
     return orig unless f
 
     r = Rack::Response.new
-    r.body= [ File.read(f) ]
+    r.headers['Content-Type'] = 'text/html'
+    r.body = [ File.read(f) ]
     r.finish
-
-    # r = Rack::Response.new
-    # r.body= [ File.read(f) ]
-    # r.finish
   end
+
+  def archive_path path_info
+
+    case path_info
+    when '/help/'.freeze
+      File.join(Public_Dir, '/uni/megauni/index.html'.freeze)
+    when '/'.freeze
+      File.join(Public_Dir, 'index.html'.freeze)
+    else
+      archive       = File.join Public_Dir, path_info
+      archive_index = File.join Public_Dir, path_info, "/index.html"
+
+      [archive, archive_index].detect { |f| File.file? f }
+    end
+  end # === def Mu_Archive
 
 end # === class
 

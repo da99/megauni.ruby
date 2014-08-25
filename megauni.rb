@@ -25,11 +25,11 @@ use Da99_Rack_Middleware
  case name
  when 'Public_Files'
    use Public_Files, [
-     'public/busy-noise',
-     'public/my-egg-timer',
-     'public/styles',
-     'public/skins',
-     Mu_Archive::Dir,
+     'Public/busy-noise',
+     'Public/my-egg-timer',
+     'Public/styles',
+     'Public/skins',
+     'Public/heroku-mongo',
      Surfer_Hearts_Archive::Dir
    ]
  else
