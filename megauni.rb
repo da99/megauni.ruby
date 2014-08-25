@@ -1,8 +1,9 @@
 # === The most basic stuff first... ===
 
 require 'sinatra'
-require 'da99_rack_middleware'
+disable :logging
 
+require 'da99_rack_middleware'
 use Da99_Rack_Middleware
 
 # -------------- NEWER CODE -----------------------------

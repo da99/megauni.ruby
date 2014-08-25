@@ -4,6 +4,8 @@
 #
 set -u -e -o pipefail
 
+export PORT=4567
+export RACK_ENV="production"
 bundle exec foreman "$@"
 
 
