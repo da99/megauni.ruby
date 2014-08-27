@@ -78,13 +78,28 @@ a img {
 
 ul.nav_bar {
   display: block;
-  list-style-type: none; }
+  list-style-type: none;
+  display: block;
+  list-style-type: none;
+  padding: 0 0 15px 0;
+  text-align: center; 
+}
+  ul.nav_bar li {
+    padding: 4px 0 0 0;
+  }
   ul.nav_bar li a {
-    font-size: 12px;
     font-family: 'Nimbus Sans L','segoe ui',sans-serif; }
   ul.nav_bar li.selected {
-    font-size: 12px;
     font-weight: bold; }
+
+
+  ul.nav_bar li a {
+    font-family: 'Nimbus Sans L','segoe ui',sans-serif; }
+  ul.nav_bar li.selected {
+    font-weight: bold; }
+  ul.nav_bar li.selected {
+    color: #185dad;
+    text-transform: lowercase; }
 
 a:link, a:visited {
   padding: 2px 4px;
@@ -208,7 +223,6 @@ h2 {
   font-size: 180%; }
 
 h3 {
-  font-size: 12px;
   color: #185dad;
   padding: 0;
   text-align: center;
@@ -217,7 +231,6 @@ h3 {
   font-weight: bold; }
 
 h4 {
-  font-size: 12px;
   color: #185dad;
   padding: 0;
   text-transform: uppercase;
@@ -255,7 +268,6 @@ div.form {
 form.hidden {
   display: none; }
 form label, form div.title {
-  font-size: 12px;
   text-transform: uppercase;
   font-weight: bold;
   color: #185dad;
@@ -305,7 +317,6 @@ div.message, div.club {
   margin: 0 0 10px 0;
   border-bottom: 1px dashed #003860; }
   div.message div.pending span, div.message div.accepted span, div.message div.declined span, div.club div.pending span, div.club div.accepted span, div.club div.declined span {
-    font-size: 12px;
     padding: 0 4px;
     text-transform: uppercase;
     font-weight: bold; }
@@ -333,7 +344,7 @@ div.message, div.club {
       font-size: 100%; }
 
 body {
-  background: white url(http://megauni.s3.amazonaws.com/bg.gif);
+  background: white url(http://megauni.s3.amazonaws.com/bg_overlay.gif);
   padding: 0; }
 
 #pretension {
@@ -359,22 +370,17 @@ body {
   #pretension h4 span.title {
     color: #333333; }
   #pretension #coming_soon {
-    font-size: 12px;
     text-align: center;
     text-transform: uppercase; }
 
 #middle {
-  border-radius: 0 0 20px 20px;
-  -moz-border-radius: 0 0 20px 20px;
-  -webkit-border-radius: 0 0 20px 20px;
   padding: 10px 5px;
   border-bottom: 0px solid #f00919;
-  width: 250px;
+  min-width: 300px;
+  width: 50%;
+  font-size: x-large;
   text-align: center;
-  position: absolute;
-  top: 0;
-  left: 120px;
-  background: white url(http://megauni.s3.amazonaws.com/bg_overlay.gif) 0px 0; }
+}
   #middle input.text {
     width: 200px; }
 
@@ -394,21 +400,6 @@ body {
     #intro #search_club_form fieldset {
       padding-bottom: 0; }
 
-ul.nav_bar {
-  display: block;
-  list-style-type: none;
-  padding: 0 0 15px 0;
-  text-align: center; }
-  ul.nav_bar li a {
-    font-size: 12px;
-    font-family: 'Nimbus Sans L','segoe ui',sans-serif; }
-  ul.nav_bar li.selected {
-    font-size: 12px;
-    font-weight: bold; }
-  ul.nav_bar li.selected {
-    color: #185dad;
-    text-transform: lowercase; }
-
 strong {
   background: #185dad;
   color: white;
@@ -417,4 +408,6 @@ strong {
 
 #footer {
   color: #666666;
-  font-size: 12px; }
+}
+
+
