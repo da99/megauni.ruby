@@ -13,9 +13,8 @@ case "$@" in
   start)
     if [[ -n "$pid" ]]
     then
-      echo "Stopping..."
+      echo "Stopping server..."
       bin/server stop
-      sleep 1
     fi
 
     dev_opts=''

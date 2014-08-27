@@ -29,13 +29,20 @@ describe :Control_Bad_Requests do
     end
   }
 
-  it_redirects 301, "/manager/status/", 'http://www.honoringhomer.net/'
+  it "redirects w/ 301: /manager/status/ -> http://www.honoringhomer.net/" do
+    get "/manager/status/"
+    redirects_to "http://www.honoringhomer.net/"
+  end
 
   it "redirects 'head /manager/status/' to http://www.honoringhomer.net/" do
     head "/manager/status/"
     redirects_to 301, "http://www.honoringhomer.net/"
   end
 
-  it_redirects PERM, "/admin/spaw/spacer.gif", BING_URL
+  it "redirects w/#{PERM} /admin/spaw/spacer.gif -> #{BING_URL}" do
+    get "/admin/spaw/spacer.gif"
+    http_code.should == PERM
+    redirect_url.should == BING_URL
+  end
 
 end # === class Test_Control_Bad_Requests
