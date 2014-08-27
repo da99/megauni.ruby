@@ -1,11 +1,17 @@
 # controls/Clubs.rb
 
-describe :Control_Clubs_Read do
+describe "Old Pages:" do
 
-  %w{ salud meno-osteo back-pain  uni/mike-in-tokyo-rogers uni/liberty }.each { |name|
+  it "renders /salud" do
+    get "/salud"
+    last_response.status.should == 200
+    html.should.match /Jabon/
+  end
+
+  %w{ meno-osteo back-pain  uni/mike-in-tokyo-rogers uni/liberty }.each { |name|
     it "renders /#{name}" do
-      get "/#{name}/"
-      assert_equal 200, last_response.status
+      get "/#{name}"
+      last_response.status.should == 200
     end
   }
 

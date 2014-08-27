@@ -56,11 +56,6 @@ describe :Control_Hellos do
     should_render
   end
 
-  it "renders /salud/" do
-    get '/salud/'
-    should_render
-  end
-
   it 'render /rss.xml as xml' do
     get '/rss.xml'
     assert_equal 200, last_response.status
