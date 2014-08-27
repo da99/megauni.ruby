@@ -2,10 +2,14 @@
 # -*- bash -*-
 #
 #
+if [[ -n "$IS_DEV" ]]; then
+  export JAR="tmp/cookies.txt"
+  export PORT=4567
+  export PID="tmp/thin.pid"
+  export LOG="tmp/log.txt"
+else
+  # set a default value for IS_DEV
+  export IS_DEV=""
+fi
 
-export JAR="tmp/cookies.txt"
-export PORT=4567
-export PID="tmp/thin.pid"
-export LOG="tmp/log.txt"
 export RACK_ENV="production"
-

@@ -2,9 +2,9 @@
 # -*- bash -*-
 #
 #
+source bin/env
 set -u -e -o pipefail
 
-source bin/env
 pid="$(pgrep -f 'unicorn master' || echo '')"
 
 
