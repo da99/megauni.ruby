@@ -20,9 +20,18 @@ class Bacon::Context
 
   attr_reader :html, :http_code, :redirect_url
 
+  def header key, val
+    @header ||= {}
+    @header[key] = val
+  end
+
   def get path
+    headers = (@header || {}).
+      map { |pair| "--header \"#{pair.first}: #{pair.last}\""}.
+    join(' ')
+
     url = "http://localhost:#{ENV['PORT']}#{path}"
-    raw = `bin/get -w '%{http_code} %{redirect_url}' "#{url}"`
+    raw = `bin/get #{headers} -w '%{http_code} %{redirect_url}' "#{url}"`
 
     lines         = raw.split("\n")
     info          = raw.split("\n").pop.sub(/(\d\d\d) /, '')
@@ -34,11 +43,11 @@ class Bacon::Context
 
   def redirects_to *args
     case
-    when 1
+    when args.size == 1
       path, code = args
-    when 2 && args.first.is_a?(String)
+    when args.size == 2 && args.first.is_a?(String)
       path, code = args
-    when 2 && args.first.is_a?(Numeric)
+    when args.size == 2 && args.first.is_a?(Numeric)
       code, path = args
     else
       fail "Unknown args: #{args.inspect}"

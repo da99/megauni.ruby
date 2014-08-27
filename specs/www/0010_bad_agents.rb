@@ -36,14 +36,14 @@ describe :Control_Bad_Agents do
   it "redirect to #{BING_URL} if user agent is TwengaBot-Discover and page is missing" do
     ua = 'TwengaBot-Discover (http://www.twenga.fr/bot-discover.html)'
     header 'USER_AGENT', ua
-    get '/some/missin/page/'
+    get '/some/missin/page'
     redirects_to PERM, BING_URL
   end
 
   it "redirect to #{BING_URL} if Sosospider and file is CSS" do
     header 'USER_AGENT', "Sosospider+(+http://help.soso.com/webspider.htm)"
     get "/stylesheets/en-us/hellos_list.css"
-    assert_redirect BING_URL
+    redirects_to BING_URL
   end
 
   it "redirects all user agents ' F.cking ' to #{BING_URL}" do
