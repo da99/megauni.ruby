@@ -32,13 +32,24 @@ class Bacon::Context
     @redirect_url = info.empty? ? '' : info
   end # === def get
 
-  def redirects_to path, code = nil
+  def redirects_to *args
+    case
+    when 1
+      path, code = args
+    when 2 && args.first.is_a?(String)
+      path, code = args
+    when 2 && args.first.is_a?(Numeric)
+      code, path = args
+    else
+      fail "Unknown args: #{args.inspect}"
+    end
+
     http_code.should == code if code
 
     if path[/^\//]
-      @redirect_url.sub(/https?:\/\/localhost:\d+/, '').should == path
+      redirect_url.sub(/https?:\/\/localhost:\d+/, '').should == path
     else
-      @redirect_url.should == path
+      redirect_url.should == path
     end
   end
 

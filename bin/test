@@ -23,7 +23,6 @@ if [[ -z "$files" ]]; then
   colorize yellow "No tests found." 1>&2
   exit 0
 else
-  echo $files
   bundle exec bacon specs/libs/main.rb $files "$@"
 fi
 
