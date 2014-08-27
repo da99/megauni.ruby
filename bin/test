@@ -32,7 +32,6 @@ fi
 trap "bin/server stop" EXIT
 
 # === Start server:
-echo "Starting server..."
 bin/server start
 bundle exec bacon specs/libs/main.rb $files "$@"
 

@@ -6,11 +6,6 @@ set -u -e -o pipefail
 
 source bin/env
 
-opts=""
-if [[ "$@" == *-w* ]]
-then
-  opts="$opts -o /dev/null "
-fi
 
 #
 # Example
@@ -20,7 +15,6 @@ curl \
   --cookie-jar $JAR            \
   --cookie     $JAR            \
   -s                           \
-  $opts                        \
   "$@"
 
 
