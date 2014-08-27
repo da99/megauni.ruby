@@ -8,7 +8,15 @@ describe "Old Pages:" do
     html.should.match /Jabon/
   end
 
-  %w{ meno-osteo back-pain  uni/mike-in-tokyo-rogers uni/liberty }.each { |name|
+  %w{
+      meno-osteo back-pain  uni/mike-in-tokyo-rogers uni/liberty 
+      arthritis back-pain cancer child-care computer dementia
+      depression flu hair health heart hiv housing
+      meno-osteo preggers 
+  }.uniq.each { |name|
+    it_redirects PERM, "/uni/#{name}/",   "/#{name}"
+    it_redirects PERM, "/clubs/#{name}/", "/#{name}"
+
     it "renders /#{name}" do
       get "/#{name}"
       last_response.status.should == 200
@@ -26,16 +34,10 @@ describe "Old Pages:" do
     end
   }
 
-  it 'not show follow club link to strangers.' do
-    get "/arthritis"
-    assert_equal nil, last_response.body["follow"]
-    assert_equal 200, last_response.status
-  end
-
-  it 'redirect /child_care/clubs/child_care/ to /child-care/' do
-    get '/child_care/clubs/child_care/'
+  it 'redirect /child_care/clubs/child_care/ to /child-care' do
+    get '/child_care/clubs/child_care'
     follow_redirect!
-    assert_equal '/child-care/', last_request.fullpath
+    assert_equal '/child-care', last_request.fullpath
   end
 
   it 'redirect /back_pain/clubs/back_pain/ to /clubs/back_pain/' do
@@ -61,13 +63,6 @@ describe "Old Pages:" do
     assert_redirect "/search/", 301
   end
 
-  %w{ menopause osteoporosis }.each { |k|
-    it "redirects /search/ for menopause to /meno-osteo/" do
-      post "/search/", :keyword=>k
-      assert_redirect "/meno-osteo/", PERM
-    end
-  }
-
   it 'shows full list of clubs for /search/{filename}/' do
     keyword = 'factor' + rand(1000).to_s
     post "/search/", :keyword=>keyword
@@ -80,26 +75,6 @@ describe "Old Pages:" do
     post "/search/", :keyword=>"meno-osteo"
     assert_redirect "/meno-osteo/", PERM
   end
-
-  it "displays /sports/"  do
-    get "/sports/"
-    last_response.should.be.ok
-  end
-
-  %w{ 
-    arthritis back-pain cancer child-care computer dementia
-    depression flu hair health heart hiv housing
-    meno-osteo preggers 
-  }.each { |name|
-
-    it_redirects PERM, "/uni/#{name}/",   "/#{name}/"
-    it_redirects PERM, "/clubs/#{name}/", "/#{name}/"
-
-    it "renders /#{name}/" do
-      get "/#{name}/"
-      last_response.should.be.ok
-    end
-  }
 
 end # === class Test_Control_Clubs_Read
 

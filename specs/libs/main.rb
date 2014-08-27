@@ -71,7 +71,9 @@ class Bacon::Context
                          o = OpenStruct.new
                          o.status = http_code
                          o.body   = html
-                         o.ok     = http_code == 200
+                         def o.ok?
+                           status == 200
+                         end
                          o
                        end
   end
