@@ -8,17 +8,28 @@ PERM     = 301
 TEMP     = 302
 BING_URL = 'http://www.mises.org/'
 
+def it_redirects code, path, new_path
+  it "redirects w/ #{code} #{path} -> #{new_path}" do
+    get path
+    redirects_to new_path, code
+  end
+end
+
+
 class Bacon::Context
 
-  attr_reader :http_code, :redirect_url
+  attr_reader :html, :http_code, :redirect_url
 
   def get path
     url = "http://localhost:#{ENV['PORT']}#{path}"
     raw = `bin/get -w '%{http_code} %{redirect_url}' "#{url}"`
-    last_line     = raw.split("\n").last.split
-    @http_code    = last_line.shift.to_i
-    @redirect_url = last_line.join ' '
-    @redirect_url = nil if redirect_url.empty?
+
+    lines         = raw.split("\n")
+    info          = raw.split("\n").pop.sub(/(\d\d\d) /, '')
+
+    @html         = lines.join "\n"
+    @http_code    = $1.to_i
+    @redirect_url = info.empty? ? '' : info
   end # === def get
 
   def redirects_to path, code = nil
@@ -32,13 +43,5 @@ class Bacon::Context
   end
 
 end # === class
-
-
-def it_redirects code, path, new_path
-  it "redirects w/ #{code} #{path} -> #{new_path}" do
-    get path
-    redirects_to new_path, code
-  end
-end
 
 

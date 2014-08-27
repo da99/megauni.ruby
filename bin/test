@@ -14,11 +14,16 @@ echo "Starting server..."
 bin/server start
 
 # === Finally, run the tests.
-files="$(find specs/www -maxdepth 1 -type f -iname "*.rb" )"
+files="$( find specs/www -maxdepth 1 -type f -regextype posix-extended -regex '.*[0-9]{4}.*'$@'.*\.rb' )"
+if [[ ! -f "$files" ]]; then
+  files="$(find specs/www -maxdepth 1 -type f -iname "*.rb" )"
+fi
+
 if [[ -z "$files" ]]; then
   colorize yellow "No tests found." 1>&2
   exit 0
 else
+  echo $files
   bundle exec bacon specs/libs/main.rb $files "$@"
 fi
 
