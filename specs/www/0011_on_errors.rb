@@ -1,13 +1,13 @@
 
 describe "Custom 404" do
-  
+
   it "displays link to egg timers" do
-    get "/missing-page/"
-    last_response.status.should == 404
-    last_response.body.should.match %r!"/my-egg-timer/">!
-    last_response.body.should.match %r!"/busy-noise/">!
+    get "/missing-page"
+    http_code.should == 404
+    html.should.match %r!"/my-egg-timer/">!
+    html.should.match %r!"/busy-noise/">!
   end
-  
+
   it "displays location" do
     get "/missing-page/"
     last_response.status.should == 404
@@ -31,17 +31,17 @@ describe "Custom 404" do
 end # === 404
 
 describe "Custom 500" do
-  
+
   it "displays location" do
     raise_errors_false { get "/raise-error-test/" }
     last_response.status.should == 500
     last_response.body.should.match %r!document.writeln\(window.location.href\);!
   end
-  
+
 end # === Custom 500
 
 describe "Custom non-404, non-500" do
-  
+
   it "does not record 401 errors to exception log" do
     raise_errors_false {
       e = last_exception
@@ -57,13 +57,13 @@ describe "Custom non-404, non-500" do
       last_exception[:message].should == "506 /set-status/506/"
     }
   end
-  
+
   it "does not alter body" do
-    raise_errors_false { 
-    
+    raise_errors_false {
+
       get("/set-status/505/")
       .body.should == "Error for test: 505"
-    
+
     }
   end
 
