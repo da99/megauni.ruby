@@ -3,7 +3,7 @@
 describe :Control_Clubs_Read do
 
   %w{ salud meno-osteo back-pain  uni/mike-in-tokyo-rogers uni/liberty }.each { |name|
-    it "renders /#{name}/" do
+    it "renders /#{name}" do
       get "/#{name}/"
       assert_equal 200, last_response.status
     end
@@ -12,16 +12,16 @@ describe :Control_Clubs_Read do
   %w{ back-pain meno-osteo }.each { |right|
     wrong = right.sub('-', '_')
 
-    it "redirects /#{wrong}/ to /#{right}/" do
-      get "/#{wrong}/"
+    it "redirects /#{wrong} to /#{right}" do
+      get "/#{wrong}"
       follow_redirect!
-      assert_equal "/#{right}/", last_request.path_info
-      assert_equal 200, last_response.status
+      last_request.path_info.should == "/#{right}"
+      last_response.status.should == 200
     end
   }
 
   it 'not show follow club link to strangers.' do
-    get "/arthritis/"
+    get "/arthritis"
     assert_equal nil, last_response.body["follow"]
     assert_equal 200, last_response.status
   end

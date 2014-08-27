@@ -42,6 +42,7 @@ class Bacon::Context
     @html         = lines.join "\n"
     @http_code    = $1.to_i
     @redirect_url = info.empty? ? '' : info
+    last_response
   end # === def get
 
   def redirects_to *args
@@ -70,6 +71,7 @@ class Bacon::Context
                          o = OpenStruct.new
                          o.status = http_code
                          o.body   = html
+                         o.ok?    = http_code == 200
                          o
                        end
   end
