@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# -*- bash -*-
+#
+#
+
+export JAR="tmp/cookies.txt"
+export PORT=4567
+export PID="tmp/thin.pid"
+export LOG="tmp/log.txt"
+export RACK_ENV="production"
+

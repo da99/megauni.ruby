@@ -6,7 +6,6 @@ set -u -e -o pipefail
 
 source bin/env
 
-
 # === Stop the server at the end
 trap "bin/server stop" EXIT
 
@@ -15,7 +14,7 @@ echo "Starting server..."
 bin/server start
 
 # === Finally, run the tests.
-files="$(find specs/ -maxdepth 1 -type f -iname "*.rb" -and -not -iname "helpers.rb")"
+files="$(find specs/www -maxdepth 1 -type f -iname "*.rb" )"
 if [[ -z "$files" ]]; then
   colorize yellow "No tests found." 1>&2
   exit 0

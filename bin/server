@@ -4,9 +4,37 @@
 #
 set -u -e -o pipefail
 
-export PORT=4567
-export RACK_ENV="production"
-bundle exec foreman "$@"
+source bin/env
+pid="$(pgrep -f 'unicorn master' || echo '')"
+
+
+case "$@" in
+
+  start)
+    if [[ -n "$pid" ]]
+    then
+      echo "Stopping..."
+      bin/server stop
+      sleep 1
+    fi
+    bundle exec foreman start
+    ;;
+
+  stop)
+    if [[ -n "$pid" ]]
+    then
+      kill "$pid"
+    else
+      echo "No pid found."
+    fi
+    ;;
+
+  *)
+    echo "Unrecognized command: $@" 1>&2
+    exit 1
+    ;;
+
+esac
 
 
 

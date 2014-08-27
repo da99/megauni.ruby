@@ -7,7 +7,7 @@ describe :Control_Bad_Agents do
     get '/get_orders_list.php'
     redirects_to BING_URL
   end
-  
+
   it "redirect any deep path (/.+/.+/index.php) to #{BING_URL}" do
     get '/Site_old/administrator/index.php'
     redirects_to BING_URL
@@ -26,10 +26,10 @@ describe :Control_Bad_Agents do
 
   it( 'redirect any user agent containing "Yahoo! Slurp/" and ' +
        'looking for path start with /SlurpConfirm404' ) do
-    
+
     header 'USER_AGENT', 'Mozilla/5.0 (compatible; Yahoo! Slurp/3.0; http://help.yahoo.com/help/us/ysearch/slurp)'
     get '/SlurpConfirm404/drodgers.htm'
-    
+
     redirects_to BING_URL
   end
 
