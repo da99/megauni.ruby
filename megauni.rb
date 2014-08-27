@@ -58,5 +58,10 @@ end # === post search
   end
 }
 
+if ENV['IS_DEV']
+  get '/raise-error-for-test' do
+    something
+  end
+end
 
 

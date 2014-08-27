@@ -1,6 +1,7 @@
 
 
 
+require 'ostruct'
 require 'Bacon_Colored'
 require 'pry'
 
@@ -26,6 +27,8 @@ class Bacon::Context
   end
 
   def get path
+    @last_response = nil
+
     headers = (@header || {}).
       map { |pair| "--header \"#{pair.first}: #{pair.last}\""}.
     join(' ')
@@ -60,6 +63,15 @@ class Bacon::Context
     else
       redirect_url.should == path
     end
+  end
+
+  def last_response
+    @last_response ||= begin
+                         o = OpenStruct.new
+                         o.status = http_code
+                         o.body   = html
+                         o
+                       end
   end
 
 end # === class
