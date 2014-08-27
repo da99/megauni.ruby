@@ -8,34 +8,34 @@ class Custom_Errors
 
   def call e
     orig = @app.call e
-    
+
     case orig.first
     when 401, 100..399
       orig
     else
-      keys = %w{ 
-        rack.request.query_hash 	
-        rack.request.query_string 	
-        rack.url_scheme 	
-        HTTP_REFERER 
-        HTTP_USER_AGENT 	
-        HTTP_HOST 	
-        HTTP_ACCEPT 	
-        HTTP_ACCEPT_LANGUAGE 	
-        PATH_INFO 	
-        QUERY_STRING 	
-        REMOTE_ADDR 	
-        REQUEST_METHOD 	
-        REQUEST_PATH 	
-        REQUEST_URI 	
-        SCRIPT_NAME 	
-        SERVER_NAME 	
-        SERVER_PROTOCOL 	
-      } 
-      
-      excp = if e['sinatra.error'] 
+      keys = %w{
+        rack.request.query_hash
+        rack.request.query_string
+        rack.url_scheme
+        HTTP_REFERER
+        HTTP_USER_AGENT
+        HTTP_HOST
+        HTTP_ACCEPT
+        HTTP_ACCEPT_LANGUAGE
+        PATH_INFO
+        QUERY_STRING
+        REMOTE_ADDR
+        REQUEST_METHOD
+        REQUEST_PATH
+        REQUEST_URI
+        SCRIPT_NAME
+        SERVER_NAME
+        SERVER_PROTOCOL
+      }
+
+      excp = if e['sinatra.error']
                e['sinatra.error']
-             else 
+             else
                temp = @e_klass.new("#{orig.first} #{e['REQUEST_URI']}")
                temp.set_backtrace caller
                temp
@@ -52,22 +52,22 @@ class Custom_Errors
                  m
                end
              end
-      
-      
+
+
       if excp.is_a?(Sinatra::NotFound)
         aux[:message] = "#{orig.first} #{aux['REQUEST_URI']}"
       end
-      
+
       Dex.insert excp, aux
-      
+
       status  = orig.first
       headers = orig[1]
       body    = get_body(orig.first) || orig.last
       headers.delete 'Content-Length'
-      
+
       [status, headers, body]
     end
-    
+
   end # === def call e
 
   def get_body num
@@ -75,5 +75,5 @@ class Custom_Errors
     return nil unless File.exists?(file)
     [ File.read(file) ]
   end
-  
+
 end # === class Custom_Errors

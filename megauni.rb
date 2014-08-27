@@ -52,6 +52,11 @@ post "/search/" do
   end
 end # === post search
 
+[403,404,500].each { |num|
+  error num do
+    File.read("Public/#{num}.html")
+  end
+}
 
 
 

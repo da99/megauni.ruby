@@ -34,7 +34,7 @@ class Bacon::Context
     raw = `bin/get #{headers} -w '%{http_code} %{redirect_url}' "#{url}"`
 
     lines         = raw.split("\n")
-    info          = raw.split("\n").pop.sub(/(\d\d\d) /, '')
+    info          = lines.pop.sub(/(\d\d\d) /, '')
 
     @html         = lines.join "\n"
     @http_code    = $1.to_i
