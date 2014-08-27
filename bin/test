@@ -6,29 +6,29 @@ set -u -e -o pipefail
 
 source bin/env
 
+# === Finally, run the tests.
+if [[ "$@" == *\ * ]]; then # it has options e.g.: -n string
+  files=""
+else
+  files="$( find specs/www -maxdepth 1 -type f -regextype posix-extended -regex '.*[0-9]{4}.*'$@'.*\.rb' )"
+  if [[ -f "$files" ]]; then
+    shift
+  else
+    files="$(find specs/www -maxdepth 1 -type f -iname "*.rb" )"
+    if [[ -z "$files" ]]; then
+      colorize yellow "No tests found." 1>&2
+      exit 0
+    fi
+  fi
+fi
+
+
 # === Stop the server at the end
 trap "bin/server stop" EXIT
 
 # === Start server:
 echo "Starting server..."
 bin/server start
-
-# === Finally, run the tests.
-if [[ "$@" == *\ * ]]; then # it has options e.g.: -n string
-  files=""
-else
-  files="$( find specs/www -maxdepth 1 -type f -regextype posix-extended -regex '.*[0-9]{4}.*'$@'.*\.rb' )"
-fi
-
-if [[ ! -f "$files" ]]; then
-  files="$(find specs/www -maxdepth 1 -type f -iname "*.rb" )"
-fi
-
-if [[ -z "$files" ]]; then
-  colorize yellow "No tests found." 1>&2
-  exit 0
-else
-  bundle exec bacon specs/libs/main.rb $files "$@"
-fi
+bundle exec bacon specs/libs/main.rb $files "$@"
 
 
