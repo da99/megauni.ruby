@@ -132,7 +132,7 @@ var EggClock = {
                                   return false;  
                                 var player_html = (Browser.Engine.trident) ? 
                                                             '' : 
-                                                            '<p class="cached_buzzer">*<object  type="application/x-shockwave-flash" data="/media/button_player/button/musicplayer_f6.swf?&autoplay=false&repeat=false&song_url=http://megauni.s3.amazonaws.com/beeping.mp3"  width="43"  height="20" > <param name="movie"  value="/media/button_player/button/musicplayer_f6.swf?&autoplay=true&repeat=false&song_url=http://megauni.s3.amazonaws.com/beeping.mp3" /><img src="/media/loading.gif" width="43" height="11" alt="*" /></object></p>';
+                                                            '<p class="cached_buzzer">*<object  type="application/x-shockwave-flash" data="/busy-noise/media/button_player/button/musicplayer_f6.swf?&autoplay=false&repeat=false&song_url=http://megauni.s3.amazonaws.com/beeping.mp3"  width="43"  height="20" > <param name="movie"  value="/busy-noise/media/button_player/button/musicplayer_f6.swf?&autoplay=true&repeat=false&song_url=http://megauni.s3.amazonaws.com/beeping.mp3" /><img src="/busy-noise/media/loading.gif" width="43" height="11" alt="*" /></object></p>';
                                                         
                                 $('alarm_holder').set( 'html', player_html);
                                 return true;
@@ -159,9 +159,9 @@ var EggClock = {
                           } else {
                           
                             player_html += '    <p>*';
-                            player_html += '      <object  type="application/x-shockwave-flash" data="/media/button_player/button/musicplayer_f6.swf?&autoplay=true&repeat=true&song_url=http://megauni.s3.amazonaws.com/beeping.mp3"  width="43"  height="20" >';
-                            player_html += '       <param name="movie"  value="/media/button_player/button/musicplayer_f6.swf?&autoplay=true&repeat=true&song_url=http://megauni.s3.amazonaws.com/beeping.mp3" />';
-                            player_html += '       <img src="/media/loading.gif" width="43" height="11" alt="*" />';
+                            player_html += '      <object  type="application/x-shockwave-flash" data="/busy-noise/media/button_player/button/musicplayer_f6.swf?&autoplay=true&repeat=true&song_url=http://megauni.s3.amazonaws.com/beeping.mp3"  width="43"  height="20" >';
+                            player_html += '       <param name="movie"  value="/busy-noise/media/button_player/button/musicplayer_f6.swf?&autoplay=true&repeat=true&song_url=http://megauni.s3.amazonaws.com/beeping.mp3" />';
+                            player_html += '       <img src="/busy-noise/media/loading.gif" width="43" height="11" alt="*" />';
                             player_html += '      </object>';
                             player_html += '    </p>';
 
