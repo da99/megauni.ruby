@@ -153,7 +153,7 @@ class Mu_Archive_Redirect
       return redirect('/busy-noise/moving.html')
     end
 
-    if path_info =~ %r!\A/(uni|clubs)/(#{Old_Topics.join('|')})/\Z!
+    if path_info =~ %r!\A/(uni|clubs)/(#{Old_Topics.join('|')})/?\Z!
       return redirect("/#{$2}")
     end
 

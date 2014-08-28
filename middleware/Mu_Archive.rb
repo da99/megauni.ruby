@@ -39,14 +39,18 @@ class Mu_Archive
     when '/'.freeze
       File.join(Public_Dir, 'index.html'.freeze)
     else
-      archive       = File.join Public_Dir, path_info
-      archive_index = File.join Public_Dir, path_info, "/index.html"
-
-      [archive, archive_index].detect { |f| File.file? f }
+      [
+        File.join(Public_Dir, path_info),
+        File.join(Public_Dir, path_info) + '.html',
+        File.join(Public_Dir, path_info, "/index.html")
+      ].detect { |f| File.file? f }
     end
   end # === def Mu_Archive
 
 end # === class
 
-__END__
+
+
+
+
 
