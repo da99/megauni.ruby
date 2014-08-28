@@ -87,7 +87,11 @@ class Bacon::Context
       fail "Unknown args: #{args.inspect}"
     end
 
-    http_code.should == code if code
+    if code
+      http_code.should == code 
+    else
+      [301, 302, 303].should.include http_code
+    end
 
     if path[/^\//]
       redirect_url.sub(/https?:\/\/localhost:\d+/, '').should == path

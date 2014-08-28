@@ -11,8 +11,6 @@ use Da99_Rack_Middleware
 
    Surfer_Hearts_Archive
 
-   Redirect_Mobile
-
    Mu_Archive_Redirect
 
    Mu_Archive

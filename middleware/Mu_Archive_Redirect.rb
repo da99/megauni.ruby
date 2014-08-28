@@ -91,8 +91,12 @@ class Mu_Archive_Redirect
 
     end # if ua
 
-    if path_info == '/help'
-      return redirect '/', 302
+    if %w{ /help /help/m /m }.include? path_info
+      return redirect '/', 303
+    end
+
+    if path_info == '/salud/m' || path_info[/\/salud[a-z]+/i]
+      return redirect('/salud', 303)
     end
 
     # ===============================================================================
