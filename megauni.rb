@@ -46,6 +46,10 @@ use Da99_Rack_Middleware
   end
 }
 
+get '/' do
+  File.read('Public/index.html')
+end
+
 if ENV['IS_DEV']
   get '/raise-error-for-test' do
     something

@@ -32,19 +32,11 @@ class Mu_Archive
   end
 
   def archive_path path_info
-
-    case path_info
-    when '/help/'.freeze
-      File.join(Public_Dir, '/uni/megauni/index.html'.freeze)
-    when '/'.freeze
-      File.join(Public_Dir, 'index.html'.freeze)
-    else
-      [
-        File.join(Public_Dir, path_info),
-        File.join(Public_Dir, path_info) + '.html',
-        File.join(Public_Dir, path_info, "/index.html")
-      ].detect { |f| File.file? f }
-    end
+    [
+      File.join(Public_Dir, path_info),
+      File.join(Public_Dir, path_info) + '.html',
+      File.join(Public_Dir, path_info, "/index.html")
+    ].detect { |f| File.file? f }
   end # === def Mu_Archive
 
 end # === class
