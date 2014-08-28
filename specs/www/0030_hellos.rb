@@ -5,7 +5,7 @@ describe '/' do
 
   it 'show homepage: /' do
     get '/'
-    assert_equal 200, last_response.status
+    http_code.should == 200
   end
 
   it 'respond to HEAD /salud' do

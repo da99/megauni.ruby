@@ -19,14 +19,25 @@ end
 
 class Bacon::Context
 
-  attr_reader :html, :http_code, :redirect_url, :last_request, :content_type, :raw_output
+  attr_reader :html, :http_code,
+    :curl_cmd,
+    :redirect_url, :last_request, :content_type, :raw_output
 
   def header key, val
     @header ||= {}
     @header[key] = val
   end
 
+  def head path
+    http_method 'HEAD', path
+  end
+
   def get path
+    http_method 'GET', path
+  end
+
+  def http_method meth, path
+    meth_opt = "-X #{meth}"
     @last_response = nil
     @last_request = begin
                       o = OpenStruct.new
@@ -45,7 +56,8 @@ class Bacon::Context
             "http://localhost:#{ENV['PORT']}#{path}"
           end
 
-    raw = `bin/get #{headers} -w '\n%{http_code}||%{redirect_url}||%{content_type}' "#{url}"`
+    @curl_cmd = %^bin/get #{headers} #{meth_opt} -w '\n%{http_code}||%{redirect_url}||%{content_type}' "#{url}"^
+    raw = `#{curl_cmd}`
 
     @raw_output = raw
     lines         = raw.split("\n")
@@ -53,7 +65,7 @@ class Bacon::Context
 
     @html         = lines.join "\n"
     @http_code    = info.shift.to_i
-    @redirect_url = (info.shift).sub(/https?:\/\/.+:\d+/i, '')
+    @redirect_url = (info.shift || '').sub(/https?:\/\/.+:\d+/i, '')
     @content_type = info.last
     last_response
   end # === def get
