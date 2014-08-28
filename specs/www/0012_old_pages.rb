@@ -9,7 +9,9 @@ describe "Old Pages:" do
   end
 
   %w{
-      meno-osteo back-pain  uni/mike-in-tokyo-rogers uni/liberty 
+      meno-osteo back-pain
+      mike-in-tokyo-rogers
+      liberty
       arthritis back-pain cancer child-care computer dementia
       depression flu hair health heart hiv housing
       meno-osteo preggers 
