@@ -91,6 +91,10 @@ class Mu_Archive_Redirect
 
     end # if ua
 
+    if path_info == '/help'
+      return redirect '/', 302
+    end
+
     # ===============================================================================
     # Continue only if all other middleware return 404
     # ===============================================================================

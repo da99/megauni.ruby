@@ -23,26 +23,9 @@ describe '/' do
     http_code.should == 200
   end
 
-  it "renders /sitemap.xml as xml" do
-    get '/sitemap.xml' 
-    http_code.should == 200
-    content_type.should == 'application/xml;charset=utf-8'
+  it "redirects w/ 302 /help to /" do
+    get '/help'
+    redirects_to 302, '/'
   end
 
-  it "renders /help/" do
-    get '/help/'
-    should_render
-  end
-
-  it 'render /rss.xml as xml' do
-    get '/rss.xml'
-    assert_equal 200, last_response.status
-    assert_equal 'application/xml;charset=utf-8', last_response.content_type
-  end
-
-  it "redirects /rss/ to /rss.xml" do
-    get '/rss/'
-    assert_redirect "/rss.xml"
-  end
-  
 end # === class Test_Control_Hellos
