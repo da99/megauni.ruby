@@ -1,12 +1,2 @@
 User-agent: *
-Disallow: /log-in/
-User-agent: *
-Disallow: /login/
-User-agent: *
-Disallow: /signin/
-User-agent: *
-Disallow: /sign-in/
-User-agent: *
-Disallow: /sign-up/
-User-agent: *
-Disallow: /signup/
+Disallow: /
