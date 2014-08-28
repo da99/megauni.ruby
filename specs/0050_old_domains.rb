@@ -2,35 +2,12 @@
 
 describe :Control_Old_Apps_Read do
 
-
-# 
-#
-# Note: when setting 'SERVER_NAME', the value 
-# changes back to the default, 'example.org', 
-# after a redirect. 
-# 
-# This means you won't be able to have multiple 
-# redirects if settings a 'SERVER_NAME', because
-# it would not reflect real-world conditions.
-#
-#
-
   it 'shows a moving message for www.myeggtimer.com' do
     domain = 'www.myeggtimer.com'
     get '/', {}, { 'HTTP_HOST'=> domain }
     follow_redirect!
     last_response.body.should.match /over to the new address/
   end 
-
-  it 'redirect /timer/ to /busy-noise/' do
-    get '/timer/'
-    assert_redirect '/busy-noise/'
-  end
-
-  it 'redirect /myeggtimer%5C/ to /myeggtimer/' do
-    get '/myeggtimer%5C/'
-    assert_redirect "/myeggtimer/"
-  end
 
   it 'should redirect www.busynoise.com/ to /busy-noise/moving.html' do
     domain = 'www.busynoise.com'
@@ -68,18 +45,6 @@ describe :Control_Old_Apps_Read do
     get '/salud/robots.txt'
     follow_redirect!
     assert_equal '/robots.txt', last_request.fullpath
-  end
-
-  it 'redirect /skins/jinx/css/main_show.css to /stylesheets/en-us/Hellos_list.css' do
-    get '/skins/jinx/css/main_show.css'
-    follow_redirect!
-    assert_equal "/stylesheets/en-us/Hellos_list.css", last_request.fullpath
-  end
-
-  it 'redirect /skins/jinx/css/news_show.css to /stylesheets/en-us/Hellos_list.css' do
-    get '/skins/jinx/css/news_show.css'
-    follow_redirect!
-    assert_equal "/stylesheets/en-us/Hellos_list.css", last_request.fullpath
   end
 
   it 'redirect any 404 url ending in /+/ to ending /' do

@@ -142,4 +142,18 @@ describe :Control_Surfer_Hearts_Read do
     it_redirects PERM, "/news/by_date/2007/#{mo}/", "/blog/2007/#{mo}/"
     it_redirects PERM, "/clubs/hearts/by_date/2007/#{mo}/", "/blog/2007/#{mo}/"
   }
+
+  it 'redirect /skins/jinx/css/main_show.css to /stylesheets/en-us/Hellos_list.css' do
+    get '/skins/jinx/css/main_show.css'
+    follow_redirect!
+    assert_equal "/stylesheets/en-us/Hellos_list.css", last_request.fullpath
+  end
+
+  it 'redirect /skins/jinx/css/news_show.css to /stylesheets/en-us/Hellos_list.css' do
+    get '/skins/jinx/css/news_show.css'
+    follow_redirect!
+    assert_equal "/stylesheets/en-us/Hellos_list.css", last_request.fullpath
+  end
+
+
 end # === class Test_Control_Club_Hearts_Read

@@ -2,6 +2,20 @@
 
 describe "Old Pages:" do
 
+  # === timers ==========================================
+
+  it 'redirect /timer/ to /busy-noise/' do
+    get '/timer/'
+    redirects_to '/busy-noise'
+  end
+
+  it 'redirect /myeggtimer%5C/ to /myeggtimer/' do
+    get '/myeggtimer%5C/'
+    assert_redirect "/myeggtimer/"
+  end
+
+  # === heroku-mongo ====================================
+
   it "renders /salud" do
     get "/salud"
     last_response.status.should == 200
