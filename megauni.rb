@@ -35,22 +35,6 @@ use Da99_Rack_Middleware
 
 }
 
-post "/club-search/" do
-  redirect to("/search/"), Perma
-end
-
-post "/search/" do 
-  name = params['name'] || params['keyword']
-  retro = "/#{name}/"
-  redirect(to("/#{name}/"), Perma) if Mu_Archive(retro)
-
-  case name
-  when %r!menop..se!, %r!ost[eo]+p[oris]+!
-    redirect to("/meno-osteo/"), Perma
-  else
-    Mu_Archive_Read "/search/index.html", :name=>name
-  end
-end # === post search
 
 [403,404,500].each { |num|
   error num do
