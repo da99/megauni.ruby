@@ -14,8 +14,8 @@ describe "Old Pages:" do
       depression flu hair health heart hiv housing
       meno-osteo preggers 
   }.uniq.each { |name|
-    it_redirects PERM, "/uni/#{name}/",   "/#{name}"
-    it_redirects PERM, "/clubs/#{name}/", "/#{name}"
+    it_redirects PERM, "/uni/#{name}",    "/#{name}"
+    it_redirects PERM, "/clubs/#{name}",  "/#{name}"
 
     it "renders /#{name}" do
       get "/#{name}"
@@ -48,19 +48,20 @@ describe "Old Pages:" do
 
   # ================ Club Search ===========================
 
-  it "redirects /uni/ to /search/" do
+  it "redirects /uni/ to /" do
     get '/uni/'
-    assert_redirect "/search/"
+    assert_redirect "/"
   end
 
-  it "redenrs GET /search/" do
+  it "redirects /search/ to /" do
     get "/search/"
-    last_response.should.be.ok
+    follow_redirect!
+    redirect_url.should == '/'
   end
 
-  it "redirects /club-search/ to /search/ (both using POST)" do
-    post "/club-search/", :keyword=>"factor"
-    assert_redirect "/search/", 301
+  it "redirects /club-search/ to /" do
+    get "/club-search/"
+    redirects_to "/", 301
   end
 
   it 'shows full list of clubs for /search/{filename}/' do

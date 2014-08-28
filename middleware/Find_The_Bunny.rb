@@ -3,28 +3,7 @@ require './models/Mu_Router'
 class Find_The_Bunny
 
   VALID_HTTP_VERBS = %w{ HEAD GET POST PUT DELETE }
-  Old_Topics = %w{
-    arthritis
-    back-pain
-    cancer
-    child-care
-    computer
-    dementia
-    depression
-    economy
-    flu
-    hair
-    health
-    heart
-    hiv
-    housing
-    music
-    meno-osteo
-    news
-    preggers
-    sports
-  }
-  
+
   URL_REGEX = Hash[
     :id       => '[a-zA-Z\-\d]+',
     :filename => '[a-zA-Z0-9\-\_\+]+',
@@ -32,7 +11,7 @@ class Find_The_Bunny
     :digits   => '[0-9]+',
     :old_topics => "#{Old_Topics.join('|')}"
   ]
-  
+
   private # ==================================================
   def redirect new_url
     response = Rack::Response.new
@@ -49,14 +28,14 @@ class Find_The_Bunny
     new_env['the.app.meta'] ||= {}
     results = Mu_Router.detect(new_env)
     return(@app.call(new_env)) if results
-    
+
     if new_env['redirect_to']
       return redirect(new_env['redirect_to'])
     end
-    
+
     raise Uni_App::HTTP_404, "Not found: #{new_env['REQUEST_METHOD']} #{new_env['PATH_INFO']}"
   end
 
-  
+
 
 end # === Find_The_Bunny
