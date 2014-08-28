@@ -19,7 +19,7 @@ end
 
 class Bacon::Context
 
-  attr_reader :html, :http_code, :redirect_url, :last_request, :content_type
+  attr_reader :html, :http_code, :redirect_url, :last_request, :content_type, :raw_output
 
   def header key, val
     @header ||= {}
@@ -45,8 +45,9 @@ class Bacon::Context
             "http://localhost:#{ENV['PORT']}#{path}"
           end
 
-    raw = `bin/get #{headers} -w '%{http_code}||%{redirect_url}||%{content_type}' "#{url}"`
+    raw = `bin/get #{headers} -w '\n%{http_code}||%{redirect_url}||%{content_type}' "#{url}"`
 
+    @raw_output = raw
     lines         = raw.split("\n")
     info          = lines.pop.split '||'
 
