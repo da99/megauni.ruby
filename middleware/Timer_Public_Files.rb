@@ -7,7 +7,7 @@ class Timer_Public_Files
 
   def call e
     orig = @app
-    if e['PATH_INFO'][/^\/(my-egg-timer|busy-noise)\/.+/]
+    if !e['PATH_INFO']['favicon.ico'] && e['PATH_INFO'][/^\/(my-egg-timer|busy-noise)\/.+/]
       Rack::Builder.new do
         use Rack::Static,
           :urls=>["/busy-noise", '/my-egg-timer'],
