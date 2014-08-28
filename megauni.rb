@@ -3,6 +3,9 @@
 require 'sinatra'
 disable :logging
 
+require './middleware/Timer_Public_Files'
+use Timer_Public_Files
+
 require './middleware/My_Egg_Timer_Redirect'
 use My_Egg_Timer_Redirect
 
