@@ -14,7 +14,7 @@ describe "Old Pages:" do
       liberty
       arthritis back-pain cancer child-care computer dementia
       depression flu hair health heart hiv housing
-      meno-osteo preggers 
+      preggers 
   }.uniq.each { |name|
     it_redirects PERM, "/uni/#{name}",    "/#{name}"
     it_redirects PERM, "/clubs/#{name}",  "/#{name}"
@@ -39,31 +39,31 @@ describe "Old Pages:" do
   it 'redirect /child_care/clubs/child_care/ to /child-care' do
     get '/child_care/clubs/child_care'
     follow_redirect!
-    assert_equal '/child-care', last_request.fullpath
+    last_request.fullpath.should == '/child-care'
   end
 
   it 'redirect /back_pain/clubs/back_pain/ to /clubs/back_pain/' do
     get '/back_pain/clubs/back_pain/'
     follow_redirect!
-    assert_equal '/back-pain/', last_request.fullpath
+    last_request.fullpath.should == '/back-pain/'
   end
 
   # ================ Club Search ===========================
 
-  it "redirects /uni/ to /" do
-    get '/uni/'
-    assert_redirect "/"
+  it "redirects /uni to /" do
+    get '/uni'
+    redirect_url.should == '/'
   end
 
-  it "redirects /search/ to /" do
-    get "/search/"
+  it "redirects /search to /" do
+    get "/search"
     follow_redirect!
     redirect_url.should == '/'
   end
 
   it "redirects /club-search/ to /" do
     get "/club-search/"
-    redirects_to "/", 301
+    redirect_url.should == '/'
   end
 
   it 'shows full list of clubs for /search/{filename}/' do

@@ -54,15 +54,8 @@ class Mu_Archive_Redirect
 
     %w{ back.pain meno.osteo child.care }.each { |wrong|
       right = wrong.gsub('.', '-')
-      if path_info =~ %r"/#{wrong}/clubs/#{wrong}/(.+)?"
-        return redirect("/#{right}/#{$1}")
-      end
-    }
-
-    %w{ back-pain meno-osteo child-care }.each { |right|
-      wrong = right.sub '-', '_'
-      if path_info =~ %r!#{wrong}!
-        return redirect( path_info.gsub(wrong,right) )
+      if path_info[ %r"/(uni|club)?/?#{wrong}" ]
+        return redirect("/#{right}")
       end
     }
 

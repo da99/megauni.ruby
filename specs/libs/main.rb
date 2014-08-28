@@ -19,7 +19,7 @@ end
 
 class Bacon::Context
 
-  attr_reader :html, :http_code, :redirect_url
+  attr_reader :html, :http_code, :redirect_url, :last_request
 
   def header key, val
     @header ||= {}
@@ -28,12 +28,23 @@ class Bacon::Context
 
   def get path
     @last_response = nil
+    @last_request = begin
+                      o = OpenStruct.new
+                      o.path_info = path.sub(/https?:\/\/.+:\d+/i, '')
+                      o.full_path = path
+                      o
+                    end
 
     headers = (@header || {}).
       map { |pair| "--header \"#{pair.first}: #{pair.last}\""}.
     join(' ')
 
-    url = "http://localhost:#{ENV['PORT']}#{path}"
+    url = if path[/https?:\/\//i]
+            path
+          else
+            "http://localhost:#{ENV['PORT']}#{path}"
+          end
+
     raw = `bin/get #{headers} -w '%{http_code} %{redirect_url}' "#{url}"`
 
     lines         = raw.split("\n")
@@ -44,6 +55,11 @@ class Bacon::Context
     @redirect_url = info.empty? ? '' : info
     last_response
   end # === def get
+
+  def follow_redirect!
+    fail "Can't redirect on #{http_code.inspect}" unless [301, 302].include?(http_code)
+    get(redirect_url)
+  end
 
   def redirects_to *args
     case
@@ -71,6 +87,7 @@ class Bacon::Context
                          o = OpenStruct.new
                          o.status = http_code
                          o.body   = html
+                         o.full_path = redirect_url
                          def o.ok?
                            status == 200
                          end
