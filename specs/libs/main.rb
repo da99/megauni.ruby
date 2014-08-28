@@ -41,7 +41,7 @@ class Bacon::Context
     @last_response = nil
     @last_request = begin
                       o = OpenStruct.new
-                      o.path_info = path.sub(/https?:\/\/.+:\d+/i, '')
+                      o.path_info = path.sub(/^https?:\/\/.+:\d+/i, '')
                       o.fullpath  = path
                       o
                     end
@@ -50,22 +50,29 @@ class Bacon::Context
       map { |pair| "--header \"#{pair.first}: #{pair.last}\""}.
     join(' ')
 
-    url = if path[/https?:\/\//i]
+    url = if path[/^https?:\/\//i]
             path
           else
             "http://localhost:#{ENV['PORT']}#{path}"
           end
 
-    @curl_cmd = %^bin/get #{headers} #{meth_opt} -w '\n%{http_code}||%{redirect_url}||%{content_type}' "#{url}"^
+    tmp_file = "/tmp/megauni.tmp.#{rand(100)}"
+    @curl_cmd = %^bin/get -o #{tmp_file} #{headers} #{meth_opt} -w '\n%{http_code}||%{redirect_url}||%{content_type}' "#{url}"^
     raw = `#{curl_cmd}`
 
-    @raw_output = raw
+    @raw_output   = if File.exists?(tmp_file)
+                      content = File.read(tmp_file)
+                      `rm #{tmp_file}`
+                      content
+                    else
+                      nil
+                    end
     lines         = raw.split("\n")
     info          = lines.pop.split '||'
 
     @html         = lines.join "\n"
     @http_code    = info.shift.to_i
-    @redirect_url = (info.shift || '').sub(/https?:\/\/.+:\d+/i, '')
+    @redirect_url = (info.shift || '').sub(/^https?:\/\/.+:\d+/i, '')
     @content_type = info.last
     last_response
   end # === def get
@@ -94,7 +101,7 @@ class Bacon::Context
     end
 
     if path[/^\//]
-      redirect_url.sub(/https?:\/\/localhost:\d+/, '').should == path
+      redirect_url.sub(/^https?:\/\/localhost:\d+/, '').should == path
     else
       redirect_url.should == path
     end
