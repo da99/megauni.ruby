@@ -12,11 +12,7 @@ class My_Egg_Timer_Redirect
   end
 
   def call e
-    path_info = e['PATH_INFO']
-    if path_info[/\/myeggtimer%../]
-      return redirect('/myeggtimer', 301)
-    end
-
+    return redirect('/myeggtimer', 301) if e['PATH_INFO'][/\/myeggtimer%../]
     @app.call e
   end
 
