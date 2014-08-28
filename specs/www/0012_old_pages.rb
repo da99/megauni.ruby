@@ -4,14 +4,14 @@ describe "Old Pages:" do
 
   # === timers ==========================================
 
-  it 'redirect /timer/ to /busy-noise/' do
-    get '/timer/'
+  it 'redirect /timer to /busy-noise' do
+    get '/timer'
     redirects_to '/busy-noise'
   end
 
-  it 'redirect /myeggtimer%5C/ to /myeggtimer/' do
-    get '/myeggtimer%5C/'
-    assert_redirect "/myeggtimer/"
+  it 'redirect /myeggtimer%5C to /myeggtimer' do
+    get '/myeggtimer%5C'
+    redirects_to "/myeggtimer"
   end
 
   # === heroku-mongo ====================================

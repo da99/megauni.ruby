@@ -3,6 +3,9 @@
 require 'sinatra'
 disable :logging
 
+require './middleware/My_Egg_Timer_Redirect'
+use My_Egg_Timer_Redirect
+
 require 'da99_rack_middleware'
 use Da99_Rack_Middleware
 

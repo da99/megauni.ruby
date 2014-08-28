@@ -23,9 +23,9 @@ describe '/' do
     http_code.should == 200
   end
 
-  it "redirects w/ 302 /help to /" do
+  it "redirects w/ 303 /help to /" do
     get '/help'
-    redirects_to 302, '/'
+    redirects_to 303, '/'
   end
 
 end # === class Test_Control_Hellos
