@@ -17,7 +17,6 @@ class Mu_Archive
   end
 
   def call new_env
-
     path_info = new_env['PATH_INFO']
     orig = @app.call(new_env)
 

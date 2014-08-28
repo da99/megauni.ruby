@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# -*- bash -*-
+#
+#
+set -u -e -o pipefail
+
+dir="$1"
+
+for orig in "$dir"/*/index.html
+do
+  basename="$(basename "$(dirname $orig)")"
+  mv -n $orig "$(dirname $dir)"/$basename.index
+done
+
+
