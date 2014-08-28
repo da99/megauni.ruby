@@ -5,11 +5,24 @@
 set -u -e -o pipefail
 
 dir="$1"
+for orig in "$dir"/*.index
+do
+  new_file=${orig/.index/.html}
+  mv -n $orig $new_file
+done
+
+exit 0
 
 for orig in "$dir"/*/index.html
 do
   basename="$(basename "$(dirname $orig)")"
-  mv -n $orig "$(dirname $dir)"/$basename.index
+  # echo mv -n $orig "$dir"/$basename.index
+  new_file="$dir"/$basename.index
+  if [[ -f "$new_file" ]]
+  then
+    echo $new_file
+    diff $orig $new_file || echo "no diff"
+  fi
 done
 
 
