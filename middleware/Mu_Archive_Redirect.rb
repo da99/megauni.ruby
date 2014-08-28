@@ -161,7 +161,7 @@ class Mu_Archive_Redirect
     return redirect("/rss.xml") if path_info === '/rss/'
     return redirect("/heart_link/57") if path_info['surfboard-usb']
 
-    orig
+    o
   end
 
   private

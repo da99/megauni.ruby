@@ -57,7 +57,6 @@ class Bacon::Context
       fail "Unknown args: #{args.inspect}"
     end
 
-    pry
     http_code.should == code if code
 
     if path[/^\//]
