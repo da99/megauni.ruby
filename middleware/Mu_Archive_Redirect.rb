@@ -33,10 +33,6 @@ class Mu_Archive_Redirect
   end
 
   def call e
-
-    o = @app.call(e)
-    return o unless o.first == 404
-
     path_info = e['PATH_INFO']
     user_agent = e['HTTP_USER_AGENT'] || ""
 
@@ -45,43 +41,6 @@ class Mu_Archive_Redirect
         return redirect(BING_URL)
       end
     }
-
-    # Example: /child_care/clubs/child_care
-    if path_info[%r!/(.+)/clubs?/(.+)/?$!] && $1==$2
-      puts $1
-      target = $1.downcase.gsub('_','-')
-      return redirect("/#{target}")
-    end
-
-    return redirect('/') if ['/club-search', '/search', '/clubs', '/uni', '/uni'].include?(path_info)
-    return redirect( '/busy-noise' ) if path_info[TIMER_REGEX]
-    return redirect( '/myeggtimer' ) if path_info[MYEGGTIMER_REGEX]
-    return redirect("http://www.honoringhomer.net/") if path_info == '/manager/status'
-    return redirect("/blog", 302) if '/heart_links/by_category/new' == path_info
-    return redirect(BING_URL) if "/admin/spaw/spacer.gif" == path_info
-
-    %w{ back.pain meno.osteo child.care }.each { |wrong|
-      right = wrong.gsub('.', '-')
-      if path_info[ /#{wrong}/ ]
-        new_path = path_info.
-          gsub(/#{wrong}/, right).
-        sub(/^\/(uni|club)s?/i, '')
-        return redirect( new_path )
-      end
-    }
-
-    if path_info === '/' && e['HTTP_METHOD'] === 'POST'
-      return redirect( e['HTTP_REFERER'] || '/my-egg-timer/' )
-    end
-
-    if path_info == '/member/' && %w{HEAD GET}.include?(e['HTTP_METHOD'])
-      return redirect('/')
-    end
-
-    # =========== WRONG URLS ==============================
-    if path_info == '/templates/'
-      return redirect('/')
-    end
 
     # =========== BAD AGENTS ==============================
     if [
@@ -131,6 +90,51 @@ class Mu_Archive_Redirect
       end
 
     end # if ua
+
+    # ===============================================================================
+    # Continue only if all other middleware return 404
+    # ===============================================================================
+    o = @app.call(e)
+    return o unless o.first == 404
+
+
+    # Example: /child_care/clubs/child_care
+    if path_info[%r!/(.+)/clubs?/(.+)/?$!] && $1==$2
+      puts $1
+      target = $1.downcase.gsub('_','-')
+      return redirect("/#{target}")
+    end
+
+    return redirect('/') if ['/club-search', '/search', '/clubs', '/uni', '/uni'].include?(path_info)
+    return redirect( '/busy-noise' ) if path_info[TIMER_REGEX]
+    return redirect( '/myeggtimer' ) if path_info[MYEGGTIMER_REGEX]
+    return redirect("http://www.honoringhomer.net/") if path_info == '/manager/status'
+    return redirect("/blog", 302) if '/heart_links/by_category/new' == path_info
+    return redirect(BING_URL) if "/admin/spaw/spacer.gif" == path_info
+
+    %w{ back.pain meno.osteo child.care }.each { |wrong|
+      right = wrong.gsub('.', '-')
+      if path_info[ /#{wrong}/ ]
+        new_path = path_info.
+          gsub(/#{wrong}/, right).
+        sub(/^\/(uni|club)s?/i, '')
+        return redirect( new_path )
+      end
+    }
+
+    if path_info === '/' && e['HTTP_METHOD'] === 'POST'
+      return redirect( e['HTTP_REFERER'] || '/my-egg-timer/' )
+    end
+
+    if path_info == '/member/' && %w{HEAD GET}.include?(e['HTTP_METHOD'])
+      return redirect('/')
+    end
+
+    # =========== WRONG URLS ==============================
+    if path_info == '/templates/'
+      return redirect('/')
+    end
+
 
 
     # =====================================================
