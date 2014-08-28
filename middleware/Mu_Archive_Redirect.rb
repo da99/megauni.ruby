@@ -46,6 +46,14 @@ class Mu_Archive_Redirect
       end
     }
 
+    # Example: /child_care/clubs/child_care
+    if path_info[%r!/(.+)/clubs?/(.+)/?$!] && $1==$2
+      puts $1
+      target = $1.downcase.gsub('_','-')
+      return redirect("/#{target}")
+    end
+
+    return redirect('/') if ['/club-search', '/search', '/clubs', '/uni', '/uni'].include?(path_info)
     return redirect( '/busy-noise' ) if path_info[TIMER_REGEX]
     return redirect( '/myeggtimer' ) if path_info[MYEGGTIMER_REGEX]
     return redirect("http://www.honoringhomer.net/") if path_info == '/manager/status'

@@ -36,47 +36,35 @@ describe "Old Pages:" do
     end
   }
 
-  it 'redirect /child_care/clubs/child_care/ to /child-care' do
+  it 'redirects /child_care/clubs/child_care to /child-care' do
     get '/child_care/clubs/child_care'
-    follow_redirect!
-    last_request.fullpath.should == '/child-care'
+    http_code.should == 301
+    redirect_url.should == '/child-care'
   end
 
-  it 'redirect /back_pain/clubs/back_pain/ to /clubs/back_pain/' do
-    get '/back_pain/clubs/back_pain/'
-    follow_redirect!
-    last_request.fullpath.should == '/back-pain/'
+  it 'redirect /back_pain/clubs/back_pain to /back-pain' do
+    get '/back_pain/clubs/back_pain'
+    http_code.should == 301
+    redirect_url.should == '/back-pain'
   end
 
   # ================ Club Search ===========================
 
   it "redirects /uni to /" do
     get '/uni'
+    http_code.should == 301
     redirect_url.should == '/'
   end
 
   it "redirects /search to /" do
     get "/search"
-    follow_redirect!
+    http_code.should == 301
     redirect_url.should == '/'
   end
 
-  it "redirects /club-search/ to /" do
-    get "/club-search/"
+  it "redirects /club-search to /" do
+    get "/club-search"
     redirect_url.should == '/'
-  end
-
-  it 'shows full list of clubs for /search/{filename}/' do
-    keyword = 'factor' + rand(1000).to_s
-    post "/search/", :keyword=>keyword
-    r = last_response
-    r.status.should == 200
-    r.body.should.match %r!arthritis!i
-  end
-
-  it 'redirect to club profile page if only one club found' do
-    post "/search/", :keyword=>"meno-osteo"
-    assert_redirect "/meno-osteo/", PERM
   end
 
 end # === class Test_Control_Clubs_Read

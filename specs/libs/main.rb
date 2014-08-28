@@ -31,7 +31,7 @@ class Bacon::Context
     @last_request = begin
                       o = OpenStruct.new
                       o.path_info = path.sub(/https?:\/\/.+:\d+/i, '')
-                      o.full_path = path
+                      o.fullpath  = path
                       o
                     end
 
@@ -52,7 +52,7 @@ class Bacon::Context
 
     @html         = lines.join "\n"
     @http_code    = $1.to_i
-    @redirect_url = info.empty? ? '' : info
+    @redirect_url = (info.empty? ? '' : info).sub(/https?:\/\/.+:\d+/i, '')
     last_response
   end # === def get
 
@@ -85,9 +85,9 @@ class Bacon::Context
   def last_response
     @last_response ||= begin
                          o = OpenStruct.new
-                         o.status = http_code
-                         o.body   = html
-                         o.full_path = redirect_url
+                         o.status   = http_code
+                         o.body     = html
+                         o.fullpath = redirect_url
                          def o.ok?
                            status == 200
                          end
