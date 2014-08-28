@@ -50,6 +50,10 @@ get '/' do
   File.read('Public/index.html')
 end
 
+get '/busy-noise' do
+  File.read('Public/busy-noise/index.html')
+end
+
 if ENV['IS_DEV']
   get '/raise-error-for-test' do
     something
