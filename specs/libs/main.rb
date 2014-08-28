@@ -67,10 +67,10 @@ class Bacon::Context
                     else
                       nil
                     end
-    lines         = raw.split("\n")
-    info          = lines.pop.split '||'
 
-    @html         = lines.join "\n"
+    @html         = @raw_output
+
+    info          = raw.split("\n").last.split '||'
     @http_code    = info.shift.to_i
     @redirect_url = (info.shift || '').sub(/^https?:\/\/.+:\d+/i, '')
     @content_type = info.last

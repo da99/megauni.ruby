@@ -4,8 +4,8 @@ describe "Custom 404" do
   it "displays link to egg timers" do
     get "/missing-page"
     http_code.should == 404
-    html.should.match %r!"/my-egg-timer/">!
-    html.should.match %r!"/busy-noise/">!
+    html.should.match %r!"/my-egg-timer">!
+    html.should.match %r!"/busy-noise">!
   end
 
   it "displays location" do
