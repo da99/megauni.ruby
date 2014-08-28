@@ -18,14 +18,9 @@ describe :Control_Bad_Requests do
     http_code.should == 400
   end
 
-  it "redirects w/ 301: /manager/status/ -> http://www.honoringhomer.net/" do
-    get "/manager/status/"
+  it "redirects w/ 301: /manager/status -> http://www.honoringhomer.net/" do
+    get "/manager/status"
     redirects_to "http://www.honoringhomer.net/"
-  end
-
-  it "redirects 'head /manager/status/' to http://www.honoringhomer.net/" do
-    head "/manager/status/"
-    redirects_to 301, "http://www.honoringhomer.net/"
   end
 
   it "redirects w/#{PERM} /admin/spaw/spacer.gif -> #{BING_URL}" do
