@@ -50,6 +50,10 @@ get '/' do
   File.read('Public/index.html')
 end
 
+get '/my-egg-timer' do
+  File.read('Public/my-egg-timer/index.html')
+end
+
 get '/busy-noise' do
   File.read('Public/busy-noise/index.html')
 end

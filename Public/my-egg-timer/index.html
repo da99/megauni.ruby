@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
   <head>
@@ -11,20 +11,53 @@
     <meta name="verify-v1" content="Wp9FL8DBzIbuxKpR7/S/90/5jqUlkCyz6aVWLK4CIVo=" />
     <meta name="generator" content="Fog Creek CityDesk 2.0.25" />
 <meta name="citydesk" content="528C1C12/1" />
+<style type="text/css">
+
+#intro {
+  display: none;
+}
+
+#add_stuff {
+  visibility: none;
+  display: none;
+}
+
+#the_end {
+  text-align: left;
+  background: #fff;
+  padding: 5pt;
+  margin: 0 auto;
+  width: 530px;
+}
+#the_end { background: #fff; padding: 0 3px; }
+#the_end p {
+  font-family: sans-serif;
+  padding: 5pt 5pt;
+  font-weight: normal;
+  font-size: large;
+}
+#the_end p.note {
+  border: 1px dashed #000;
+  border-width: 1px 0;
+}
+#the_end ul li {
+  padding: 2pt 0;
+}
+</style>
 <title>megauni.com/my-egg-timer - Homepage</title>
-	
+
     <link rel="stylesheet" type="text/css" href="/my-egg-timer/stylesheets/default.css?v=07.04.2009.07.15.04" title="i-luv-u" media="screen" />
     <script type="text/javascript" src="/my-egg-timer/javascripts/mootools.js?v=07.04.2009.07.15.04"></script><!-- insert MooTools -->
     <script type="text/javascript" src="/my-egg-timer/javascripts/persist-js/persist-min.js?v=07.04.2009.07.15.04"></script><!-- insert the uber-cool PersisJS data store. -->
     <script type="text/javascript" src="/my-egg-timer/javascripts/pages/index.js?v=07.04.2009.09.28.04"></script><!-- insert the index.js file. -->
-    
+
     <!--[if lte IE 6]>
-    
+
     <style type="text/css">
-    
-    	#add_stuff { 
+
+    	#add_stuff {
     		width: 265px;
-    		overflow: auto;	
+    		overflow: auto;
     		float: none;
     		position: absolute;
     		top: 0;
@@ -33,92 +66,85 @@
     	#add_stuff div.resize_column {
     		display: none;
     	}
-    	#current_time { 
+    	#current_time {
     		margin-left: 260px;
     	}
     	#all_my_stuff {
     		margin-left: 260px
     	}
     	#my_work div.island {
-    		
+
     		margin: 10px 0;
-    		
+
     	}
-    	
-#my_work div.island{
-    height: 100%
-}	
-	
+
+      #my_work div.island{
+          height: 100%
+      }
+
     </style>
     <![endif]-->
 
   </head>
 
   <body id="egg_body">
-   
-   <div id="egg_content">
-     	<div class="column" id="add_stuff">
 
-            <div class="resize_column">
-                <a id="expand_add_stuff" class="expand" href="#">--&gt;</a>
-                <a id="minimize_add_stuff" class="minimize" href="#"><-- Minimize</a>
-            </div>
-	      <div class="island" id="new_version">
-       	<div class="land">
-       		<p>
-       		  Post complaints at: <a href="http://eggtimer.posterous.com/">eggtimer.posterous.com</a>  
-       		</p>
-       	</div>
-       </div>
-	
-	   <h3>Add Your Work</h3> 
-	   
-	   <div class="island" id="create_note">
-	     <h4>Simple To-Do/Note:</h4>
-	     <div class="land">
+  <div id="egg_content">
+    <div class="column" id="add_stuff">
 
-			<div class="exposable">
-	           <form class="create_egg" id="form_note" action="/" method="post">
-	
-			
-				<div class="fieldset_block title_or_details">
-				    <fieldset>
-					  <label>Title and/or Details:</label>
-					  <textarea class="text name" name="title_and_details" rows="5" cols="10"></textarea>
-					</fieldset>
-				</div>
-				
-				<div class="submitted_msg">
-					This to-do/note has been saved and added to the list.
-				</div>
-	
-				<div class="buttons">
-					<button class="start">Save This</button>
-					<input type="hidden" value="note" name="egg_type" />
-					
-				</div>
-			
-			   </form>
-			</div><!-- end hidable -->
-			
-			<div class="nudity_control">
-				<a class="expose" href="#">[Click to expand.]</a>
-				<a class="cover_up" href="#">[Minimize]</a>
-			</div>
+      <div class="resize_column">
+        <a id="expand_add_stuff" class="expand" href="#">--&gt;</a>
+        <a id="minimize_add_stuff" class="minimize" href="#"><-- Minimize</a>
+      </div>
 
-	     </div>
-	   </div>
-	   <!-- end create_note -->
-	   
-	   
-	   <div class="island" id="create_countdown">
-	     <h4>Countdown:</h4>
-	     <div class="land">
+      <h3>Add Your Work</h3>
+
+      <div class="island" id="create_note">
+        <h4>Simple To-Do/Note:</h4>
+        <div class="land">
+
+          <div class="exposable">
+            <form class="create_egg" id="form_note" action="/" method="post">
 
 
-           <form class="create_egg" id="form_countdown" action="/" method="post">
-		
-			<div class="fieldset_block time_units_block">
+              <div class="fieldset_block title_or_details">
+                <fieldset>
+                  <label>Title and/or Details:</label>
+                  <textarea class="text name" name="title_and_details" rows="5" cols="10"></textarea>
+                </fieldset>
+              </div>
+
+              <div class="submitted_msg">
+                This to-do/note has been saved and added to the list.
+              </div>
+
+              <div class="buttons">
+                <button class="start">Save This</button>
+                <input type="hidden" value="note" name="egg_type" />
+
+              </div>
+
+            </form>
+          </div><!-- end hidable -->
+
+          <div class="nudity_control">
+            <a class="expose" href="#">[Click to expand.]</a>
+            <a class="cover_up" href="#">[Minimize]</a>
+          </div>
+
+        </div>
+      </div>
+      <!-- end create_note -->
+
+
+      <div class="island" id="create_countdown">
+        <h4>Countdown:</h4>
+        <div class="land">
+
+
+          <form class="create_egg" id="form_countdown" action="/" method="post">
+
+            <div class="fieldset_block time_units_block">
 			  <div class="title">Type in units:</div>
 			   <fieldset>
 				  <input maxlength="3" value="0" name="days" />
@@ -139,16 +165,16 @@
 				  <label>Secs.</label>
 			   </fieldset>
 			</div>
-		
-		
-		
+
+
+
 			<div class="fieldset_block title_or_details">
 			    <fieldset>
 				  <label>Title and/or Details:</label>
 				  <textarea class="text name" name="title_and_details" rows="5" cols="10">Dinner is ready.</textarea>
 			    </fieldset>
 			</div>
-			
+
 			<div class="submitted_msg">
 				Countdown event has been saved and added to the list.
 			</div>
@@ -157,22 +183,22 @@
 				<button class="start">Start Countdown</button>
 				<input type="hidden" value="countdown" name="egg_type" />
 			</div>
-		
+
 		   </form>
 
 
 	     </div>
 	   </div>
 	   <!-- end create_countdown -->
-	   
+
 	   <div class="island" id="create_alarm">
 	     <h4>Alarm:</h4>
 	     <div class="land">
 
 
 		<form class="create_egg" id="form_alarm" action="/" method="post">
-		
-		
+
+
 			<div class="fieldset_block time_units_block">
 			  <div class="title">Select Time:</div>
 			   <fieldset>
@@ -222,21 +248,21 @@
 			<div class="submitted_msg">
 				Alarm event has been saved and added to the list.
 			</div>
-			
+
 			<div class="buttons">
 				<button class="start" id="set_date_countdown">Start Alarm</button>
 				<input type="hidden" value="alarm" name="egg_type" />
 			</div>
-		
+
 		</form>
 
 
 	     </div>
 	   </div>
-	   <!-- end create_alarm -->  
+	   <!-- end create_alarm -->
        <div class="island" id="tips">
        	<div class="land">
-       		 
+
        	</div>
        </div>
        <!-- end contact  -->
@@ -244,7 +270,7 @@
 	<!-- end add_stuff -->
 
 
-   
+
      <div id="current_time">
         <h3>Current Time:</h3>
         <div id="big_datetime">
@@ -257,36 +283,80 @@
 
 
      <div id="all_my_stuff">
-	
+
+
+
+  <div id="my_work" class="column">
+    <h3 >Your Tasks</h3>
+
+    <div id="my_tasks">
+      <!-- tasks go here my friend -->
+    </div>
+    <!-- end my_tasks -->
+
+
+  </div>
+  <!-- end my_work.column -->
+
+
 	<div class="system_message" id="intro">
-	  <h3>(egg timer + alarm + mini to-do list) and ringing sound when time's up</h3>
-	  
-	  <div class="full_features">
-	  	<h3>Latest Features:</h3>
-		<ul>
-			<li>Multiple Items: The latest version of myEggTimer.com allows you to keep track of more than one event.</li>
-			<li>Pausing: You can pause countdowns.</li>
-			<li>Do you sometimes accidentally close your browser?&nbsp; No problem.&nbsp; Just come back to myEggTimer.com and your tasks will still be there.</li>
-			
-		</ul>
-	  </div>
 	</div>
 	<!-- end intro.empty_msg -->
-	
 
-	
-	<div id="my_work" class="column">
-	   <h3 >Your Tasks</h3>
-	
-       <div id="my_tasks">
-       	<!-- tasks go here my friend -->
-	   </div>
-	   <!-- end my_tasks -->
-	</div>
-	<!-- end my_work.column -->
-	
-     </div>
-     <!-- end all_my_stuff -->
+  <div id="the_end">
+    <p>
+    Due to time constrainsts, I won't be able to maintain this page.
+    (It's for technical and time reasons. Cost is not an issue since the hosting is free.)
+    </p>
+    <p>So I will have to shut it down.</p>
+    <p>Here are some alternatives I found. I have no assoc. w/ them. If you have
+    suggestions on better timers out there, please post them in the comments below.
+    </p>
+
+    <ul style="padding: 0 0 0 30px;">
+      <li style="padding: 2pt;"><a href="https://www.google.com/search?q=+timer">Google Timer</a> -- for web browsers. Google has it's own timer.</li>
+      <li style="padding: 2pt;"><a href="https://play.google.com/store/apps/details?id=com.gau.go.launcherex.gowidget.timer&hl=en">OK Timer</a>
+      -- for Android phones. No ads &amp; free. I use this one every week.</li>
+      <li style="padding: 2pt;"><a href="https://play.google.com/store/apps/details?id=com.absoluteattention.timer&hl=en">Digital Timer</a>
+      -- for Android phones. It's colorful, has no ads &amp; it's free.</li>
+    </ul>
+
+
+    <p>
+    Thanks again for using this old timer. I still have no idea how it can even run
+    since it has not been updated in over 5 years.
+    </p>
+    <p class='note'>
+    <span>I'm also available on Twitter:</span>
+    <a href='http://twitter.com/un_i_'>@un_i_</a>
+    </p>
+
+    <!-- |||||||||||||||| DISQUS |||||||||||||||||||||||||||||| -->
+    <div id="the_comments">
+
+
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'my-egg-timer'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+       dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+       })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div><!-- the comments -->
+    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+  </div>
+  <!-- ||||||||| the_end ||||||||||||| -->
+
+
+</div>
+<!-- end all_my_stuff -->
 
 
 
@@ -295,14 +365,14 @@
 
 <div id="dom_templates">
 
-	   <div class="island task note egg_template_note">	     
+	   <div class="island task note egg_template_note">
 	     <div class="undo_block">
 	     	<div>You have deleted to-do note: <span class="short_title"></span></div>
 	     	<a href="#undo" class="undo">Undo deletion.</a>
 	     </div>
-	     
+
 	     <div class="control_panel">
-	     	
+
 	         <div class="buttons">
 	           <a href="#mark_as_done" class="mark_as_done">Mark as done</a>
 	           <a href="#reset" class="reset">Reset</a>
@@ -313,13 +383,13 @@
 	           <button class="edit">Delete</button>
 	           //-->
 	         </div>
-	         
+
 		     <!-- end div.buttons -->
 		    <div class="time_status_in_words">Done</div>
-		     
+
 	     </div>
 	     <!-- end control_panel -->
-	     
+
 	     <div class="summary">
 	     	<div class="setting">To-Do/Note:</div>
 	     	<h4></h4>
@@ -327,15 +397,15 @@
 	     <!-- end summary -->
 	   </div>
 	   <!-- end template for note -->
-	   
-	   
+
+
 	   <div class="island task countdown egg_template_countdown">
 	     <div class="undo_block">
 	     	<div>You have deleted countdown: <span class="short_title"></span></div>
 	     	<a href="#undo" class="undo">Undo deletion.</a>
 	     </div>
 	     <div class="control_panel">
-	     
+
 	         <div class="buttons">
 	           <a href="#pause" class="pause">Pause</a>
 	           <a href="#play" class="play">Play</a>
@@ -344,35 +414,35 @@
 	           <a href="#delete" class="edit">Delete</a>
 	         </div>
 		     <!-- end div.buttons -->
-		     
+
 		     <div class="time_status"><span class="number">* * * *</span></div>
 		     <!-- end time_status -->
-		     
+
 		     <div class="buzzer_option buzzer_selected">
 		     	<input type="checkbox" checked="checked" value="true" name="sound_alarm" /> Ring when done.
 		     </div>
-		     
+
 		     <div class="time_status_in_words"></div>
 
 
-		     
+
 	     </div>
 	     <!-- end control_panel -->
-	     
 
-	     
+
+
 	     <div class="summary">
 	     	<div class="setting"></div>
-	     
+
 	     	<h4></h4>
-	     
+
 	     </div>
 	     <!-- end summary -->
 
-	     
+
 	   </div>
 	   <!-- end egg_template_countdown -->
-	   
+
 	   <div class="island task alarm egg_template_alarm">
 	     <div class="undo_block">
 	     	<div>You have deleted alarm: <span class="short_title"></span></div>
@@ -383,42 +453,42 @@
 	           <a href="#play" class="play">Play</a>
 	           <a href="#mark_as_done" class="mark_as_done">Mark as done</a>
 	           <a href="#reset" class="reset">Reset</a>
-	           <a href="#delete" class="edit">Delete</a>	          
+	           <a href="#delete" class="edit">Delete</a>
 	         </div>
 		     <!-- end div.buttons -->
 		     <div class="time_status"><span class="number">* * * *</span></div>
 		     <!-- end time_status -->
-		     
-		     
-		     
-		     
+
+
+
+
 		     <div class="buzzer_option buzzer_selected">
 		     	<input type="checkbox" checked="checked" value="true" name="sound_alarm" /> Ring when done.
 		     </div>
-		     
-		     <div class="time_status_in_words"></div>
-		     
 
-		     
+		     <div class="time_status_in_words"></div>
+
+
+
 	     </div>
 	     <!-- end control_panel -->
-	     
 
-	     
+
+
 	     <div class="summary">
 	     	<div class="setting"></div>
-	     
+
 	     	<h4></h4>
-	     
+
 	     </div>
 	     <!-- end summary -->
 
-	     
+
 	   </div>
 	   <!-- end egg_template_alarm -->
-	   
-	   
-	   
+
+
+
 </div><!-- end dom_templates -->
 
 
@@ -426,7 +496,7 @@
 	<div class="decorative_padding"></div>
 	<div id="alarm_holder"></div>
 
-	
+
 </div><!-- end alarm_wall -->
 
 
