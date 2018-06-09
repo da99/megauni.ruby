@@ -4,7 +4,7 @@
 
 set -u -e
 dir=/var/log
-sv_name=miniuni
+sv_name=megauni.ruby
 
 mkdir -p         $dir/$sv_name
 exec svlogd -ttt $dir/$sv_name
