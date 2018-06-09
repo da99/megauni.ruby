@@ -26,7 +26,7 @@ fi
 cd /deploy/apps/megauni.ruby/Public
 cd "$(realpath $PWD)"
 cd ..
-sudo -u deployer bundle install --path vendor/bundle
+sudo -u deployer bundle install --without development:test --path vendor/bundle --binstubs vendor/bundle/bin --deployment
 
 cmd="bundle exec ruby megauni.rb"
 echo "=== Starting @ $(date): bundle exec ruby megauni.rb"
