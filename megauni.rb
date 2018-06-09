@@ -9,8 +9,10 @@ use Timer_Public_Files
 require './middleware/My_Egg_Timer_Redirect'
 use My_Egg_Timer_Redirect
 
-require 'da99_rack_middleware'
-use Da99_Rack_Middleware
+require 'da99_rack_protect'
+use Da99_Rack_Protect do |mid|
+  mid.config :host, :localhost, 'www.megauni.com'
+end
 
 # -------------- NEWER CODE -----------------------------
 %w{

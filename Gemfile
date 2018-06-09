@@ -1,15 +1,10 @@
 
 source 'https://rubygems.org'
-ruby '2.1.2'
+ruby '2.5.1'
 
-group :development do
-  gem 'Bacon_Colored'
-  gem 'Bacon_Rack'
-  gem 'pry'
-end
 
-gem 'foreman'
+gem 'eventmachine'
+gem 'thin'
 gem 'sinatra'
-gem 'unicorn'
 gem 'mustache'
-gem 'da99_rack_middleware'
+gem 'da99_rack_protect'

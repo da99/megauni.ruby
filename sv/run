@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+#
+
+set -u -e
+exec 2>&1
+
+
+if ! which ruby ; then
+  xbps-install -S -y ruby ruby-devel
+fi
+
+if ! which bundle ; then
+  gem install bundler
+fi
+
+cd /deploy/apps/megauni.ruby/Public
+cd "$(realpath $PWD)"
+cd ..
+sudo -u www-deployer bundle install --path vendor/bundle
+
+cmd="bundle exec ruby megauni.rb"
+echo "=== Starting @ $(date): bundle exec ruby megauni.rb"
+export RACK_ENV=production
+export PORT=3350
+exec chpst -u www-deployer -U www-deployer $cmd
